@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>博客初识</title>
+    <url>/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/</url>
+    <content><![CDATA[<p>开始尝试写博客啦</p>
+<a id="more"></a>
+
+<h2 id="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。"><a href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。" class="headerlink" title="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。"></a>很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。</h2><pre><code>#include&lt;iostream&gt;
+using namespace std;
+int main()
+{
+    cout&lt;&lt;&quot;Hello,world!&quot;;
+    return 0;
+}</code></pre>]]></content>
+      <categories>
+        <category>测试</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/01/09/hello-world/</url>
+    <content><![CDATA[<p>Welcome!</p>
+<a id="more"></a>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>测试</category>
+      </categories>
+  </entry>
+</search>
