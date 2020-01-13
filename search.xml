@@ -1,16 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++基础知识1</title>
+    <url>/2020/01/13/C++%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%861/</url>
+    <content><![CDATA[<p>摘要：在本篇博客里主要讲了C++的一些基础知识，主要有类的概念、类的成员、构造函数和析构函数等。并用代码举例说明构造函数和析构函数的调用顺序。</p>
+<a id="more"></a>
+
+<p>C++是完全包容C的，它与C的不同之处在于C++是面向对象的语言，而C是面向过程的。什么是面向过程？即分析出实现需求所需要的步骤，通过函数一步步实现这些步骤，依次调用函数即可。什么是面向对象？我们将繁琐的步骤，通过行为、功能模块化。创建了对象这一概念。而要体现面向对象这一思想，类是很关键的一个部分。</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>将一类事物的共同特性抽象出来，包括了数据结构和算法，数据结构表示了共同属性，算法即函数表示了它们的行为。将它们封装构成了一个类。这有点类似于C语言中的<code>struct</code>结构，但是又是不一样的，<code>struct</code>只包括了数据结构即成员变量，而类还包含了成员函数。</p>
+<h3 id="类的成员"><a href="#类的成员" class="headerlink" title="类的成员"></a>类的成员</h3><p>类的成员包括成员变量和成员函数。成员又包括私有成员和公共成员。私有成员只能通过成员函数内部访问，但是不能在该类之外通过其他函数对私有成员进行访问。公共成员都可以进行访问。<br>一般在类中只定义成员变量和成员函数以及它们的类型（公共还是私有），数据一般定义为私有，函数定义为公共的。<br>创建类的关键字为<code>class</code>或<code>struct</code>,<code>class</code>中未说明的成员类型为私有，<code>struct</code>中未说明的成员类型为公共。</p>
+<pre><code>class student
+{
+    string sname;
+    public:
+    void showname();
+}</code></pre><p>如上面代码所示，我们定义了函数<code>showname()</code>为公共类型，而对数据变量<code>sname</code>并没有说明，此时默认它是私有的，只能由内部的成员函数访问。而在<code>struct</code>中则正好相反，未说明则为公共的。</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>在类的成员函数中，首先就要先学习构造函数。构造函数用于当类创建一个对象时，对该对象进行初始化。构造函数是没有返回值类型的。如果不自定义构造函数，编译器生成一个默认构造函数（无参数）。它不做任何操作，无作用。</p>
+<pre><code>class clock
+{
+    public:
+     clock(int newh,int newm,int news);
+     void settime(int newh,int newm,int news);
+     void showtime();
+    private:
+     int hour,minute,second;
+};
+clock::clock(int newh,int newm,int news)
+{
+    hour=newh;
+    minute=newm;
+    second=news;
+}
+void clock::settime(int newh,int newm,int news)
+{
+    hour=newh;
+    minute=newm;
+    second=news;
+}
+void clock::showtime()
+{
+    cout&lt;&lt;hour&lt;&lt;&quot;:&quot;&lt;&lt;minute&lt;&lt;&quot;:&quot;&lt;&lt;second;
+}
+int main()
+{
+    int a,b,c;
+    clock r(0,0,0);
+    cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+    r.settime(a,b,c);
+    r.showtime();
+    return 0;
+}</code></pre><p>在上面所示的代码中，我定义了一个时钟类，构造函数传入了3个参数，用于初始化时间。成员变量为时、分、秒，定义为私有的，成员函数有构造函数、设置时间函数、显示时间函数，定义为公共的，这样我们对其调用。<br><strong>一个类里可以有多个构造函数，根据需求自定义和调用</strong>。复制构造函数是一种特殊的构造函数，它由编译器调用来完成一些基于同一类的其他对象的构建及初始化。例如在上面的代码中，如果我们再创建一个clock对象r1，就可以调用默认的复制构造函数，使它与r相同：</p>
+<pre><code>clock r1(r);</code></pre><h3 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h3><p>名字与类名相同，但在前面多了一个~符号，没有返回值类型。<strong>一个类只能有一个析构函数，且没有参数</strong>。若定义类时不写析构函数，则编译器生成缺省析构函数。当对数组进行析构函数定义时，数组的每个元素都会调用一次析构函数，构造函数同理。先被构造的函数最后被释放，每生成一个对象的同时必会调用构造函数，在作用域结束时会调用析构函数。</p>
+<pre><code>class student
+{
+    public:
+        student();
+        ~student();
+        void setnameage(string,int);
+        void showname();
+        void showage();
+    private:    
+        int age;
+        string s;
+};
+student::student()
+{
+    cout&lt;&lt;&quot;构造函数调用了&quot;&lt;&lt;endl;
+}
+student::~student()
+{
+    cout&lt;&lt;&quot;析构函数调用了&quot;&lt;&lt;endl;
+}
+void student::setnameage(string ss,int newage)
+{
+    s=ss;
+    age=newage;
+}
+void student::showname()
+{
+    cout&lt;&lt;s&lt;&lt;endl;
+}
+void student::showage()
+{
+    cout&lt;&lt;age&lt;&lt;endl;
+}
+int main()
+{
+    string s;
+    int a;
+    student s1;
+    cin&gt;&gt;s&gt;&gt;a;
+    s1.setnameage(s,a);
+    s1.showname();
+    s1.showage();
+    return 0;
+}</code></pre><p>上面代码的运行结果如下：<br><img src="https://i.loli.net/2020/01/13/RfKcNU1atTCdPnG.png" alt=""></p>
+<p>由结果可知，当创建了对象s1的那一刻，就已经调用了构造函数，然后才是输入，输出，当运行到<code>return 0</code>时，对象s1消失，因此调用了析构函数，程序结束。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>C语言知识强化</title>
     <url>/2020/01/11/C%E8%AF%AD%E8%A8%80%E7%9F%A5%E8%AF%86%E5%BC%BA%E5%8C%96/</url>
     <content><![CDATA[<p>摘要：对已经学习过的C语言知识中一些比较特殊的地方进行强化记忆，主要有强制转换、全局变量、指针函数和函数指针、静态局部变量以及结构体等方面。</p>
 <a id="more"></a>
 
 <p>在本篇博客里我将会对C语言中的一些知识进行再次介绍，这些知识对以后的学习也很有帮助。</p>
-<h2 id="1-强制转换"><a href="#1-强制转换" class="headerlink" title="1.强制转换"></a>1.强制转换</h2><p>C语言中的强制转换即在变量前面用括号声明你想要转换成的类型，这种方法简单实用，但是却无法说明转换的安全性。举例如下（将float类型的变量c转换为int型）：</p>
+<h2 id="强制转换"><a href="#强制转换" class="headerlink" title="强制转换"></a>强制转换</h2><p>C语言中的强制转换即在变量前面用括号声明你想要转换成的类型，这种方法简单实用，但是却无法说明转换的安全性。举例如下（将float类型的变量c转换为int型）：</p>
 <pre><code>float c=2.5;
 cout&lt;&lt;(int)c;</code></pre><p>这种情况下输出的值为2，也可以看出在编译器里不是四舍五入的。前面提到过转换的安全性，即强制类型转换是有风险的不是想转换就能随便转换的，在后面C++知识的学习中，将会有一节专门讲强制类型转换，依靠<code>static_cast</code>、<code>interpret_cast</code>、<code>const_cast</code>、 <code>dynamic_cast</code>四种，它们比C语言的这种更加安全和功能具体。</p>
-<h2 id="2-全局变量"><a href="#2-全局变量" class="headerlink" title="2.全局变量"></a>2.全局变量</h2><p>变量分为局部与全局，局部变量又可称之为内部变量。由某对象或某个函数所创建的变量通常都是局部变量，只能被内部引用，而无法被其它对象或函数引用。<br>全局变量既可以是某对象函数创建，也可以是在本程序任何地方创建。全局变量是可以被本程序所有对象或函数引用。只有定义为全局变量，void子函数作用的值才会传递到main函数里。定义完全局变量后，函数里就不再定义。</p>
+<h2 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h2><p>变量分为局部与全局，局部变量又可称之为内部变量。由某对象或某个函数所创建的变量通常都是局部变量，只能被内部引用，而无法被其它对象或函数引用。<br>全局变量既可以是某对象函数创建，也可以是在本程序任何地方创建。全局变量是可以被本程序所有对象或函数引用。只有定义为全局变量，void子函数作用的值才会传递到main函数里。定义完全局变量后，函数里就不再定义。</p>
 <pre><code>void exchange(int m,int n)
 {
     int p=0;
@@ -37,8 +138,8 @@ int main()
     cout&lt;&lt;a&lt;&lt;endl&lt;&lt;b;
     return 0;
 }</code></pre><p>这时，主函数以及exchange函数中的a、b都为全局变量定义的a、b，会随之改变。需要强调的一点是，当一个变量既是局部变量又是全局变量时，局部变量会屏蔽作用范围的全局变量。由于在C++中引入了类的概念，变量被封装在类中，对别的类不可见，相当于抛弃了全局变量。</p>
-<h2 id="3-指针函数和函数指针"><a href="#3-指针函数和函数指针" class="headerlink" title="3.指针函数和函数指针"></a>3.指针函数和函数指针</h2><p>指针是指向变量的地址。指针一般与数组用在一起。数组名也相当于指向数组第一个元素的指针，但是它不能被改变。指针函数的意思是函数传入的参数为指针变量。如<code>void change(int *p)</code>，当我们调用指针函数时直接把指针当参数输入即可<code>change(p)</code>。函数指针指的是一个函数它的返回值是指针类型的。即<code>int *p(int x,int y)</code>。</p>
-<h2 id="4-静态局部变量"><a href="#4-静态局部变量" class="headerlink" title="4.静态局部变量"></a>4.静态局部变量</h2><p>静态局部变量的关键字为<code>static</code>，静态局部变量在函数里定义，但是它跟局部变量不同，局部变量会随着函数的结束而释放，当静态局部变量不会，它只定义一次，而且不会被重新赋值和消失直到整个程序结束。</p>
+<h2 id="指针函数和函数指针"><a href="#指针函数和函数指针" class="headerlink" title="指针函数和函数指针"></a>指针函数和函数指针</h2><p>指针是指向变量的地址。指针一般与数组用在一起。数组名也相当于指向数组第一个元素的指针，但是它不能被改变。指针函数的意思是函数传入的参数为指针变量。如<code>void change(int *p)</code>，当我们调用指针函数时直接把指针当参数输入即可<code>change(p)</code>。函数指针指的是一个函数它的返回值是指针类型的。即<code>int *p(int x,int y)</code>。</p>
+<h2 id="静态局部变量"><a href="#静态局部变量" class="headerlink" title="静态局部变量"></a>静态局部变量</h2><p>静态局部变量的关键字为<code>static</code>，静态局部变量在函数里定义，但是它跟局部变量不同，局部变量会随着函数的结束而释放，当静态局部变量不会，它只定义一次，而且不会被重新赋值和消失直到整个程序结束。</p>
 <pre><code>void a()
 {
     int a=0;
@@ -56,7 +157,7 @@ int main()
     }
     return 0;
 }</code></pre><p>a的输出结果为1、1、1、1，b的输出结果为1、2、3、4。产生这种差别的原因就是a不是静态局部变量，当a函数结束，a也消失，而b不会消失，依然保持着自己的值。当再次调用a函数时，a重新被赋值为0，但b却不在赋值，它只会在第一次调用时赋值一次，因此b随着循环每次加1，而a总是变成0再加1。</p>
-<h2 id="5-结构体"><a href="#5-结构体" class="headerlink" title="5.结构体"></a>5.结构体</h2><p>结构体的关键字是<code>struct</code>，需要注意的是在C++中也有这个关键字，但是不再表示结构体，而是类，会在以后的学习中介绍。C语言中的结构体主要是把多个有关系的变量写在一个结构里，便于调用和赋值。如下所示：    </p>
+<h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><p>结构体的关键字是<code>struct</code>，需要注意的是在C++中也有这个关键字，但是不再表示结构体，而是类，会在以后的学习中介绍。C语言中的结构体主要是把多个有关系的变量写在一个结构里，便于调用和赋值。如下所示：    </p>
 <pre><code>struct student
 { 
     int id-num;
