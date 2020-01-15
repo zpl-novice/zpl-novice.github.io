@@ -46,19 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="开始尝试写博客啦">
+  <meta name="description" content="摘要：在本篇博客里主要讲了C++的一些基础知识，主要有类的概念、类的成员、构造函数和析构函数等。并用代码举例说明构造函数和析构函数的调用顺序。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客初识">
-<meta property="og:url" content="http://yoursite.com/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/index.html">
+<meta property="og:title" content="类及类的成员1">
+<meta property="og:url" content="http://yoursite.com/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="开始尝试写博客啦">
+<meta property="og:description" content="摘要：在本篇博客里主要讲了C++的一些基础知识，主要有类的概念、类的成员、构造函数和析构函数等。并用代码举例说明构造函数和析构函数的调用顺序。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-10T03:21:32.221Z">
-<meta property="article:modified_time" content="2020-01-10T03:32:07.859Z">
+<meta property="og:image" content="https://i.loli.net/2020/01/13/RfKcNU1atTCdPnG.png">
+<meta property="article:published_time" content="2020-01-13T10:06:32.599Z">
+<meta property="article:modified_time" content="2020-01-15T11:49:53.479Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/01/13/RfKcNU1atTCdPnG.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/">
+<link rel="canonical" href="http://yoursite.com/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/">
 
 
 <script id="page-configurations">
@@ -70,7 +72,7 @@
   };
 </script>
 
-  <title>博客初识 | zpl-novice</title>
+  <title>类及类的成员1 | zpl-novice</title>
   
 
 
@@ -200,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          博客初识
+          类及类的成员1
         </h1>
 
         <div class="post-meta">
@@ -222,18 +224,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-01-10 11:21:32 / 修改时间：11:32:07" itemprop="dateCreated datePublished" datetime="2020-01-10T11:21:32+08:00">2020-01-10</time>
+              <time title="创建时间：2020-01-13 18:06:32" itemprop="dateCreated datePublished" datetime="2020-01-13T18:06:32+08:00">2020-01-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-15 19:49:53" itemprop="dateModified" datetime="2020-01-15T19:49:53+08:00">2020-01-15</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index">
-                    <span itemprop="name">测试</span>
+                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">C++知识学习</span>
                   </a>
                 </span>
             </span>
@@ -244,7 +252,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>196</span>
+              <span>2.3k</span>
             </span>
 
         </div>
@@ -256,16 +264,100 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>开始尝试写博客啦</p>
+        <p>摘要：在本篇博客里主要讲了C++的一些基础知识，主要有类的概念、类的成员、构造函数和析构函数等。并用代码举例说明构造函数和析构函数的调用顺序。</p>
 <a id="more"></a>
 
-<h2 id="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。"><a href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。" class="headerlink" title="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。"></a>很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。</h2><pre><code>#include&lt;iostream&gt;
-using namespace std;
+<p>C++是完全包容C的，它与C的不同之处在于C++是面向对象的语言，而C是面向过程的。什么是面向过程？即分析出实现需求所需要的步骤，通过函数一步步实现这些步骤，依次调用函数即可。什么是面向对象？我们将繁琐的步骤，通过行为、功能模块化。创建了对象这一概念。而要体现面向对象这一思想，类是很关键的一个部分。</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>将一类事物的共同特性抽象出来，包括了数据结构和算法，数据结构表示了共同属性，算法即函数表示了它们的行为。将它们封装构成了一个类。这有点类似于C语言中的<code>struct</code>结构，但是又是不一样的，<code>struct</code>只包括了数据结构即成员变量，而类还包含了成员函数。</p>
+<h3 id="类的成员"><a href="#类的成员" class="headerlink" title="类的成员"></a>类的成员</h3><p>类的成员包括成员变量和成员函数。成员又包括私有成员和公共成员。私有成员只能通过成员函数内部访问，但是不能在该类之外通过其他函数对私有成员进行访问。公共成员都可以进行访问。<br>一般在类中只定义成员变量和成员函数以及它们的类型（公共还是私有），数据一般定义为私有，函数定义为公共的。<br>创建类的关键字为<code>class</code>或<code>struct</code>,<code>class</code>中未说明的成员类型为私有，<code>struct</code>中未说明的成员类型为公共。</p>
+<pre><code>class student
+{
+    string sname;
+    public:
+    void showname();
+}</code></pre><p>如上面代码所示，我们定义了函数<code>showname()</code>为公共类型，而对数据变量<code>sname</code>并没有说明，此时默认它是私有的，只能由内部的成员函数访问。而在<code>struct</code>中则正好相反，未说明则为公共的。</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>在类的成员函数中，首先就要先学习构造函数。构造函数用于当类创建一个对象时，对该对象进行初始化。构造函数是没有返回值类型的。如果不自定义构造函数，编译器生成一个默认构造函数（无参数）。它不做任何操作，无作用。</p>
+<pre><code>class clock
+{
+    public:
+     clock(int newh,int newm,int news);
+     void settime(int newh,int newm,int news);
+     void showtime();
+    private:
+     int hour,minute,second;
+};
+clock::clock(int newh,int newm,int news)
+{
+    hour=newh;
+    minute=newm;
+    second=news;
+}
+void clock::settime(int newh,int newm,int news)
+{
+    hour=newh;
+    minute=newm;
+    second=news;
+}
+void clock::showtime()
+{
+    cout&lt;&lt;hour&lt;&lt;&quot;:&quot;&lt;&lt;minute&lt;&lt;&quot;:&quot;&lt;&lt;second;
+}
 int main()
 {
-    cout&lt;&lt;&quot;Hello,world!&quot;;
+    int a,b,c;
+    clock r(0,0,0);
+    cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+    r.settime(a,b,c);
+    r.showtime();
     return 0;
-}</code></pre>
+}</code></pre><p>在上面所示的代码中，我定义了一个时钟类，构造函数传入了3个参数，用于初始化时间。成员变量为时、分、秒，定义为私有的，成员函数有构造函数、设置时间函数、显示时间函数，定义为公共的，这样我们对其调用。<br><strong>一个类里可以有多个构造函数，根据需求自定义和调用</strong>。复制构造函数是一种特殊的构造函数，它由编译器调用来完成一些基于同一类的其他对象的构建及初始化。例如在上面的代码中，如果我们再创建一个clock对象r1，就可以调用默认的复制构造函数，使它与r相同：</p>
+<pre><code>clock r1(r);</code></pre><h3 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h3><p>名字与类名相同，但在前面多了一个~符号，没有返回值类型。<strong>一个类只能有一个析构函数，且没有参数</strong>。若定义类时不写析构函数，则编译器生成缺省析构函数。当对数组进行析构函数定义时，数组的每个元素都会调用一次析构函数，构造函数同理。先被构造的函数最后被释放，每生成一个对象的同时必会调用构造函数，在作用域结束时会调用析构函数。</p>
+<pre><code>class student
+{
+    public:
+        student();
+        ~student();
+        void setnameage(string,int);
+        void showname();
+        void showage();
+    private:    
+        int age;
+        string s;
+};
+student::student()
+{
+    cout&lt;&lt;&quot;构造函数调用了&quot;&lt;&lt;endl;
+}
+student::~student()
+{
+    cout&lt;&lt;&quot;析构函数调用了&quot;&lt;&lt;endl;
+}
+void student::setnameage(string ss,int newage)
+{
+    s=ss;
+    age=newage;
+}
+void student::showname()
+{
+    cout&lt;&lt;s&lt;&lt;endl;
+}
+void student::showage()
+{
+    cout&lt;&lt;age&lt;&lt;endl;
+}
+int main()
+{
+    string s;
+    int a;
+    student s1;
+    cin&gt;&gt;s&gt;&gt;a;
+    s1.setnameage(s,a);
+    s1.showname();
+    s1.showage();
+    return 0;
+}</code></pre><p>上面代码的运行结果如下：<br><img src="https://i.loli.net/2020/01/13/RfKcNU1atTCdPnG.png" alt=""></p>
+<p>由结果可知，当创建了对象s1的那一刻，就已经调用了构造函数，然后才是输入，输出，当运行到<code>return 0</code>时，对象s1消失，因此调用了析构函数，程序结束。</p>
+
     </div>
 
     
@@ -280,7 +372,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/" title="博客初识">http://yoursite.com/2020/01/10/博客初始/</a>
+    <a href="http://yoursite.com/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/" title="类及类的成员1">http://yoursite.com/2020/01/13/类及类的成员1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -297,12 +389,12 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/09/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/01/11/C%E8%AF%AD%E8%A8%80%E7%9F%A5%E8%AF%86%E5%BC%BA%E5%8C%96/" rel="prev" title="C语言知识强化">
+      <i class="fa fa-chevron-left"></i> C语言知识强化
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/01/11/C%E8%AF%AD%E8%A8%80%E7%9F%A5%E8%AF%86%E5%BC%BA%E5%8C%96/" rel="next" title="C语言知识强化">
-      C语言知识强化 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" rel="next" title="类及类的成员2">
+      类及类的成员2 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -363,7 +455,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。"><span class="nav-number">1.</span> <span class="nav-text">很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类"><span class="nav-number">1.</span> <span class="nav-text">类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的成员"><span class="nav-number">1.1.</span> <span class="nav-text">类的成员</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">1.2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#析构函数"><span class="nav-number">1.3.</span> <span class="nav-text">析构函数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

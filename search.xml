@@ -1,8 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C++基础知识1</title>
-    <url>/2020/01/13/C++%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%861/</url>
+    <title>类及类的成员2</title>
+    <url>/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/</url>
+    <content><![CDATA[<p>摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。</p>
+<a id="more"></a>
+
+<p>在上一篇中已经讲过了类的概念，知道类包括成员变量和成员函数两部分，而在C的知识学习中，也学习过静态变量这一概念。同样的，当在定义类时，根据需求的不同，我们可以定义为静态成员变量和静态成员函数。</p>
+<h2 id="静态成员变量和静态成员函数"><a href="#静态成员变量和静态成员函数" class="headerlink" title="静态成员变量和静态成员函数"></a>静态成员变量和静态成员函数</h2><p>静态成员的关键字为<code>static</code>，静态成员变量就是在定义时前面加了 <code>static</code>关键字的成员变量；静态成员函数就是在声明时前面加了<code>static</code>关键字的成员函数。<br>普通成员变量为每个对象有各自的一份，而静态成员变量一共就一份，为所有对象共享。普通成员函数必须作用于某个对象(例如在上一篇时钟代码中的设置时间函数，访问方式为<code>r.settime()</code>)，而静态成员函数并不具体作用于某个对象。因此静态成员不需要通过对象就能访问，可以直接<code>clock::settime()</code>访问，通过类名而不需要通过对象。它的本质上是全局变量和全局函数，<strong>因此必须在定义类的文件中静态成员变量进行一次声明，否则不行</strong>。静态成员函数内部不能访问非静态成员变量，设置静态成员的目的，是为了将和某些类紧密相关的全局变量和全局函数写到类里面，形式上成为一个整体。</p>
+<h2 id="成员对象和封闭类"><a href="#成员对象和封闭类" class="headerlink" title="成员对象和封闭类"></a>成员对象和封闭类</h2><p>成员对象指的是一个类的成员变量是另一个类的对象。包含成员对象的类叫封闭类。比如封闭类汽车的成员变量有类轮胎的一个实例化对象和类引擎的一个实例化对象，这两个成员对象。封闭类需要自定义构造函数，不能再用默认构造函数，因为有些成员对象无法默认初始化。在定义封闭类的构造函数时，添加初始化列表：</p>
+<p><code>类名：：构造函数（参数表）：成员变量1（参数表），成员变量2（参数表）,…{     }</code></p>
+<p>当封闭类对象生成时，先执行所有成员对象的构造函数，再执行封闭类的构造函数。成员对象的构造函数调用顺序和成员对象在类中的声明顺序一致与在初始化列表中出现的顺序无关。当封闭类的对象消亡时，先执行封闭类的析构函数，再执行成员对象的析构函数。析构函数调用顺序和构造函数调用顺序相反。</p>
+<pre><code>class Engine
+{
+    private:
+        int price;
+    public:
+        Engine(int p)
+       {
+           price = p;
+           cout &lt;&lt; &quot;Engine constructor is called&quot; &lt;&lt; endl;
+        }
+        ~Engine()
+        {
+            cout &lt;&lt; &quot;Engine deconstructor is called&quot; &lt;&lt; endl;
+        }
+};
+class tyer
+{
+    private :
+        int width, length;
+    public:
+        tyer(int w, int l) :width(w), length(l)
+        {
+            cout &lt;&lt; &quot;tyer constructor is called&quot; &lt;&lt; endl;
+        };
+        ~tyer()
+        {
+            cout &lt;&lt; &quot;tyer destructor is called&quot; &lt;&lt; endl;
+        }
+};
+class car
+{
+    private :
+        tyer ty;
+        Engine en;
+        int color;
+    public:
+        car(int col, int p, int w, int l);
+        ~car()
+        {
+            cout &lt;&lt; &quot;car deconstructor is called&quot; &lt;&lt; endl;
+        }
+};
+car::car(int col, int p, int w, int l) :color(col), en(p), ty(w, l)
+{
+    cout &lt;&lt; &quot;car constructor is called&quot; &lt;&lt; endl;
+}
+int main()
+{
+    car car1(2, 1, 4, 5);
+    return 0;
+}</code></pre><h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>在C++中，一个类中可以有<code>public、protected、private</code>三种属性的成员，通过对象可以访问<code>public</code>成员，只有本类中的函数可以访问本类的 <code>private</code>成员。现在，我们来介绍一种例外情况——友元（<code>friend</code>）。借助友元（<code>friend</code>），可以使得其他类中的成员函数以及全局范围内的函数访问当前类的<code>private</code>成员。就相当于我是你的朋友，有些你的东西我也可以借用。<br>友元包括友元函数和友元类。一个类的友元函数可以访问该类的私有成员。若A是B的友元类，则A的所有成员函数都可以访问B的私有成员。</p>
+<pre><code>class A
+{
+    private:
+        int a;
+    public:
+        A(int);
+        void show();
+        friend void add(A); 
+ } ;
+ A::A(int b)
+ {
+     a=b;
+ }
+ void A::show()
+ {
+     cout&lt;&lt;a;
+ }
+ void add(A A1)
+ {
+     int b;
+     b=A1.a+1;
+     cout&lt;&lt;b&lt;&lt;endl;
+ }
+ int main()
+ {
+     A A1(4);
+     add(A1);
+     A1.show();
+     return 0;
+ }</code></pre><p>如上面代码所示，我定义了一个类A，又定义了一个友元函数<code>add()</code>，使得它可以访问A的私有成员。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>类及类的成员1</title>
+    <url>/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/</url>
     <content><![CDATA[<p>摘要：在本篇博客里主要讲了C++的一些基础知识，主要有类的概念、类的成员、构造函数和析构函数等。并用代码举例说明构造函数和析构函数的调用顺序。</p>
 <a id="more"></a>
 
@@ -138,8 +235,24 @@ int main()
     cout&lt;&lt;a&lt;&lt;endl&lt;&lt;b;
     return 0;
 }</code></pre><p>这时，主函数以及exchange函数中的a、b都为全局变量定义的a、b，会随之改变。需要强调的一点是，当一个变量既是局部变量又是全局变量时，局部变量会屏蔽作用范围的全局变量。由于在C++中引入了类的概念，变量被封装在类中，对别的类不可见，相当于抛弃了全局变量。</p>
-<h2 id="指针函数和函数指针"><a href="#指针函数和函数指针" class="headerlink" title="指针函数和函数指针"></a>指针函数和函数指针</h2><p>指针是指向变量的地址。指针一般与数组用在一起。数组名也相当于指向数组第一个元素的指针，但是它不能被改变。指针函数的意思是函数传入的参数为指针变量。如<code>void change(int *p)</code>，当我们调用指针函数时直接把指针当参数输入即可<code>change(p)</code>。函数指针指的是一个函数它的返回值是指针类型的。即<code>int *p(int x,int y)</code>。</p>
-<h2 id="静态局部变量"><a href="#静态局部变量" class="headerlink" title="静态局部变量"></a>静态局部变量</h2><p>静态局部变量的关键字为<code>static</code>，静态局部变量在函数里定义，但是它跟局部变量不同，局部变量会随着函数的结束而释放，当静态局部变量不会，它只定义一次，而且不会被重新赋值和消失直到整个程序结束。</p>
+<h2 id="指针函数和函数指针"><a href="#指针函数和函数指针" class="headerlink" title="指针函数和函数指针"></a>指针函数和函数指针</h2><p>指针是指向变量的地址。指针一般与数组用在一起。数组名也相当于指向数组第一个元素的指针，但是它不能被改变。指针函数的意思是函数传入的参数为指针变量。如<code>void change(int *p)</code>，当我们调用指针函数时直接把指针当参数输入即可<code>change(p)</code>。函数指针指的是一个函数它的返回值是指针类型的。即<code>int *p(int x,int y)</code>。下面是一个指针函数的例子，与上面的比较可知，它能避免定义全局变量的同时使交换起作用：</p>
+<pre><code>void change(int *q1,int *q2)
+{
+    int temp;
+    temp=*q1;
+    *q1=*q2;
+    *q2=temp;
+}
+int main()
+{
+    int a,b,*p1,*p2;
+    cin&gt;&gt;a&gt;&gt;b;
+    p1=&amp;a;
+    p2=&amp;b;
+    change(p1,p2);
+    cout&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b;
+    return 0;
+ } </code></pre><h2 id="静态局部变量"><a href="#静态局部变量" class="headerlink" title="静态局部变量"></a>静态局部变量</h2><p>静态局部变量的关键字为<code>static</code>，静态局部变量在函数里定义，但是它跟局部变量不同，局部变量会随着函数的结束而释放，当静态局部变量不会，它只定义一次，而且不会被重新赋值和消失直到整个程序结束。</p>
 <pre><code>void a()
 {
     int a=0;
