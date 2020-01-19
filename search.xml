@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>类及类的成员3</title>
+    <url>/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/</url>
+    <content><![CDATA[<p>摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。</p>
+<a id="more"></a>
+
+<p>C++是从C发展而来的，而在C语言中是没有类的概念的，C语言中的函数都是全局函数，C++中则有成员函数，所以问题来了，成员函数在C中该如何表达？C中用<code>struct</code>结构体可以将类表示出来，而成员函数则需要借助this指针。</p>
+<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><p>this指针指向了成员函数作用的对象，在成员函数执行的过程中，正是通过this指针才能找到对象所在的地址，因而也就能找到对象的所有非静态成员变量的地址。<br>C++ 规定，在非静态成员函数内部可以直接使用<code>this</code>关键字，<code>this</code>就代表指向该函数所作用的对象的指针。我们以下面运算符重载的代码中的一部分为例：</p>
+<pre><code>complex&amp; complex::operator+(const complex &amp;s1)
+{
+    real=real+s1.real;
+    image=image+s1.image;
+    return *this ;
+ } </code></pre><p>return应该返回的是函数的返回值类型<code>complex&amp;</code>，所以此时this指针指向的对象就是<code>complex</code>的一个对象的引用（返回对象同理）。这里的<code>this-&gt;real</code>和<code>real</code>是等价的。</p>
+<h2 id="常量对象和常量成员函数"><a href="#常量对象和常量成员函数" class="headerlink" title="常量对象和常量成员函数"></a>常量对象和常量成员函数</h2><p>假如不希望某些东西被修改，可以使用<code>const</code>关键字进行限定。C++中，<code>const</code>可以用来修饰对象、成员变量和成员函数。<br>在类的成员函数说明后面加<code>const</code>，const成员函数可以使用类中的所有成员变量，但是不能修改它们的值，这种措施主要还是为了保护数据而设置的。const成员函数也称为常量成员函数。需要强调的是，必须在成员函数的声明和定义处同时加上<code>const</code>关键字。</p>
+<pre><code>class sample
+{
+    public:
+        int value;
+        void getvalue() const;    
+};
+void sample::getvalue() const
+{
+    value=0;  //出错，不能改变变量的值 
+}</code></pre><p><code>const</code>的位置不同，表示的含义也不同，函数开头的<code>const</code>用来修饰函数的返回值，表示返回值是<code>const</code>类型，也就是不能被修改。函数头部的结尾加上<code>const</code>表示常量成员函数，这种函数只能读取成员变量的值，而不能修改成员变量的值。<br>定义对象时同样可以定义为常量对象，这样对象初始化以后就不会再改变。<br>常量成员变量就和普通的const变量相似。</p>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><p>前面我们已经学过函数重载的概念，一个类中可以有多个构造函数，它们也是通过重载实现的。函数重载可以让一个函数有多种功能，在不同情况下实现不同的操作。运算符重载也是相同的道理，使运算符具有不同的功能。<br>C++本身已经对运算符进行了重载，比如我们进行<code>int</code>型数据相加时，直接调用加号就行。但是当我们使两个对象相加时，该怎么办呢？例如我们定义了复数类的两个对象，使它们相加，只用加号是无法实现的。这时候就需要我们自己对运算符重载，使得复数的实部和实部相加，虚部和虚部相加。<br>运算符重载可以重载为成员函数，普通函数和友元函数。声明格式一般为：</p>
+<p><code>返回值类型 operator 运算符 (形参表)</code><br>以下面的代码为例，可知运算符重载的方法和作用：</p>
+<pre><code>class complex
+{
+    public:
+        int real,image;
+        complex(int,int);
+        ~complex();
+        complex&amp; operator+(const complex&amp;);
+        complex&amp; operator-(const complex&amp;);
+        void showcomplex();
+};
+complex::complex(int a=0,int b=0)
+{
+    real=a;
+    image=b;
+}
+complex::~complex()
+{
+}
+complex&amp; complex::operator+(const complex &amp;s1)
+{
+    real=real+s1.real;
+    image=image+s1.image;
+    return *this ;
+ } 
+ complex&amp; complex::operator-(const complex &amp;s2)
+ {
+     real=real-s2.real;
+     image=image-s2.image;
+     return *this;
+ }
+ void complex::showcomplex()
+ {
+     cout&lt;&lt;real&lt;&lt;&quot;+j&quot;&lt;&lt;image&lt;&lt;endl;
+ }
+int main()
+{
+    complex s1(2,3);
+    complex s2(3,4);
+    complex s3,s4;
+    s3=s1+s2;
+    s3.showcomplex();
+    s4=s3-s2;
+    s4.showcomplex();
+    return 0;
+} </code></pre><p>代码的运行结果为:<br><img src="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png" alt=""><br>可见通过运算符重载，实现了复数类对象的运算。上面讲的只是简单的加减乘除运算符的重载。在下篇博客里，将会针对运算符重载深入研究，讲解赋值运算符、流输入和流输出运算符等其他运算符重载的用法。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>类及类的成员2</title>
     <url>/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/</url>
     <content><![CDATA[<p>摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。</p>
@@ -290,7 +367,7 @@ mike.name[10]=mike;</code></pre><p>C语言中还有很多的知识和技巧，�
     <content><![CDATA[<p>开始尝试写博客啦</p>
 <a id="more"></a>
 
-<h2 id="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。"><a href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，也希望我的水平不断提高。" class="headerlink" title="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。"></a>很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，也希望我的水平不断提高。</h2><pre><code>#include&lt;iostream&gt;
+<h2 id="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，希望我的水平不断提高。"><a href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，希望我的水平不断提高。" class="headerlink" title="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，希望我的水平不断提高。"></a>很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，希望我的水平不断提高。</h2><pre><code>#include&lt;iostream&gt;
 using namespace std;
 int main()
 {
