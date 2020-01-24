@@ -46,23 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="摘要：上一篇博客当中已经讲了什么是运算符重载，并且介绍了加减乘除等运算符如何重载及它们的用法。在本篇博客当中将会继续就运算符重载进行深入介绍，主要有赋值运算符的重载、流插入和流提取运算符、自加自减运算符以及函数调用（）运算符的重载。">
+  <meta name="description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="运算符重载">
-<meta property="og:url" content="http://yoursite.com/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/index.html">
+<meta property="og:title" content="继承和派生">
+<meta property="og:url" content="http://yoursite.com/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：上一篇博客当中已经讲了什么是运算符重载，并且介绍了加减乘除等运算符如何重载及它们的用法。在本篇博客当中将会继续就运算符重载进行深入介绍，主要有赋值运算符的重载、流插入和流提取运算符、自加自减运算符以及函数调用（）运算符的重载。">
+<meta property="og:description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/21/kVxI5OW4FAGDiY3.png">
-<meta property="og:image" content="https://i.loli.net/2020/01/21/qrTbeNRiX8tMdlx.png">
-<meta property="og:image" content="https://i.loli.net/2020/01/21/TvjEFWsxKgYHlbV.png">
-<meta property="article:published_time" content="2020-01-21T08:53:21.063Z">
-<meta property="article:modified_time" content="2020-01-21T10:28:52.082Z">
+<meta property="og:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
+<meta property="article:published_time" content="2020-01-24T04:43:10.083Z">
+<meta property="article:modified_time" content="2020-01-24T07:30:56.722Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/21/kVxI5OW4FAGDiY3.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/">
+<link rel="canonical" href="http://yoursite.com/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
 
 
 <script id="page-configurations">
@@ -74,7 +72,7 @@
   };
 </script>
 
-  <title>运算符重载 | zpl-novice</title>
+  <title>继承和派生 | zpl-novice</title>
   
 
 
@@ -204,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -217,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          运算符重载
+          继承和派生
         </h1>
 
         <div class="post-meta">
@@ -228,7 +226,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-21 16:53:21 / 修改时间：18:28:52" itemprop="dateCreated datePublished" datetime="2020-01-21T16:53:21+08:00">2020-01-21</time>
+              <time title="创建时间：2020-01-24 12:43:10 / 修改时间：15:30:56" itemprop="dateCreated datePublished" datetime="2020-01-24T12:43:10+08:00">2020-01-24</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,7 +246,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
+              <span>2k</span>
             </span>
 
         </div>
@@ -260,57 +258,54 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：上一篇博客当中已经讲了什么是运算符重载，并且介绍了加减乘除等运算符如何重载及它们的用法。在本篇博客当中将会继续就运算符重载进行深入介绍，主要有赋值运算符的重载、流插入和流提取运算符、自加自减运算符以及函数调用<code>（）</code>运算符的重载。</p>
+        <p>摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。</p>
 <a id="more"></a>
 
-<p>在众多的运算符当中，不是所有的都可以被重载，只有一部分可以，下面是可以被重载的运算符列表：<br><img src="https://i.loli.net/2020/01/21/kVxI5OW4FAGDiY3.png" alt=""><br>可以看到，上篇博客中讲的是双目算术运算符的重载，本篇将会讲解其他类型的运算符重载，比如赋值运算符等。不同的运算符重载具有不同的功能。</p>
-<h2 id="赋值运算符重载"><a href="#赋值运算符重载" class="headerlink" title="赋值运算符重载"></a>赋值运算符重载</h2><p>在赋值运算符重载中，我将会讲解<code>=</code>这个运算符，从名字就可以看出来，重载的功能主要是赋值，但特殊的地方在于它两边的类型可以不匹配。例如将一个<code>int</code>类型变量赋值给一个<code>complex</code>对象，将一个<code>char*</code>类型的字符串赋值给一个字符串对象或者将一个对象赋值给另一个对象等。需要注意的一点是，赋值运算符<code>=</code>只能重载为成员函数。继续以上篇博客中的代码为例，添加赋值运算符<code>=</code>的重载代码如下：</p>
-<pre><code>complex&amp; complex::operator=(const complex &amp;s3)
- {
-     real=s3.real;
-     image=s3.image;
-     return *this;
- }</code></pre><p>主函数：</p>
-<pre><code>int main()
+<p>类并不是孤立的存在的，不同的类之间有着不同的关系，正如前面所讲过的友元类。假如已经定义了一个动物类，里面有动物的成员变量和成员函数，此时若要再定义一个哺乳动物类该怎么办？可以看出，哺乳动物属于动物，它也具有动物类的所有特性。因此只需要继承动物类即可。<br>继承：在定义一个新的类B时，如果该类与某个已有的类A相似（B拥有A的全部特点），那么就可以把A作为一个基类，而把B作为基类的一个派生类。派生类是通过对基类进行修改和扩充得到的。在派生类中，可以扩充新的成员变量和成员函数。派生类一经定义后，可以独立使用，不依赖于基类。继承代表了 is a 关系。<strong>派生类成员函数不能访问基类的私有成员</strong>。<br>根据上面的概念可知，派生类是由基类派生而来，因此基类的成员变量和成员函数在派生类也有。一般情况下，在派生类里的指的是派生类定义的成员，若要访问基类的（公共的）同名成员变量和成员函数，需要加上基类名，即<code>base::I</code>、<code>base::func()</code>。<br>派生类的定义格式为：<br><code>class 派生类名：public 基类名</code><br>这里的<code>public</code>也可以换为<code>protected</code>和<code>private</code>，它们表示了继承类型，但我们通常使用的都是<code>public</code>继承。一个基类可以派生出多个派生类。<br>前面讲过公有成员和私有成员，这里讲一下保护成员（protected）。它与私有成员不同的地方在于它可以被派生类的成员函数访问。其他访问方式与私有成员相同。  </p>
+<h2 id="派生类构造函数"><a href="#派生类构造函数" class="headerlink" title="派生类构造函数"></a>派生类构造函数</h2><p>派生类的其他成员函数如前面所讲的定义即可，但构造函数略有不同，因为派生类是继承基类而来，所以在派生类的构造函数中要先去调用基类的构造函数。如果不调用基类构造函数，因为派生类成员函数不能调用基类私有成员，无法实现初始化。派生类的构造函数定义为：<br><code>派生类名（成员变量1，2，3...）：基类构造函数（成员变量1，2...）</code><br>成员变量1，2，3为形参名，以下面代码为例：</p>
+<pre><code>class base
 {
-    complex s1(2,3);
-    complex s2(3,4);
-    complex s3,s4;
-    s3=s1+s2;
-    s3.showcomplex();
-    s4=s3-s2;
-    s4.showcomplex();
-    s4=s2;
-    s4.showcomplex();
-    return 0;
-} </code></pre><p>运行结果为：<br><img src="https://i.loli.net/2020/01/21/qrTbeNRiX8tMdlx.png" alt=""><br>可见将对象s2成功赋值给了s4。若是想要将数据赋给对象只需要修改参数即可。</p>
-<h2 id="流插入和流提取运算符重载"><a href="#流插入和流提取运算符重载" class="headerlink" title="流插入和流提取运算符重载"></a>流插入和流提取运算符重载</h2><p>在介绍这部分知识之前，先提出一个问题，为什么<code>cout&lt;&lt;5</code>、<code>cin&gt;&gt;a</code>能够成立，能够在编译器里运行？按照C语言当中学习的知识，我们想要输出一个东西时，会用<code>printf</code>关键字，要输入一个东西时，会用<code>scanf</code>关键字。在C++中为什么用<code>cout&lt;&lt;</code>、<code>cin&gt;&gt;</code>可以实现上述功能呢？<br><code>cout</code>是在<code>iostream</code>中定义的，<code>ostream</code>类的对象。<code>&lt;&lt;</code>能用在<code>cout</code>上是因为在<code>iostream</code>里对<code>&lt;&lt;</code>进行了重载。</p>
-<pre><code>ostream&amp; ostream::operator&lt;&lt;(int n)
+    private:
+        int n;
+    public:
+        base(int i=0):n(i)
+        {
+            cout&lt;&lt;&quot;基类构造&quot;&lt;&lt;endl&lt;&lt;n&lt;&lt;endl;
+        }
+        ~base()
+        {
+            cout&lt;&lt;&quot;基类析构&quot;&lt;&lt;endl;
+        }
+        void print();
+};
+void base::print()
 {
-    ....//输出n的代码
-    return *this;
-}</code></pre><p>为什么返回值类型为<code>ostream&amp;</code>？这是因为这样可以实现连续输出，如<code>cout&lt;&lt;5&lt;&lt;4</code>。当然只有这个重载是不够的，因为这样只能实现输出数字，而<code>cout&lt;&lt;&quot;hello&quot;</code>是也成立的，因此还要有：</p>
-<pre><code>ostream&amp; ostream::operator&lt;&lt;(const char* s)
+    cout&lt;&lt;n&lt;&lt;endl;
+}
+class derive:public base
 {
-    ....//输出s的代码
-    return *this;
-}</code></pre><p>等等适用于各种情况的代码。当然我们自己也是可以继续对<code>&lt;&lt;</code>进行重载的，使得它能够满足我们输出的需要。</p>
-<h2 id="自加自减运算符的重载"><a href="#自加自减运算符的重载" class="headerlink" title="自加自减运算符的重载"></a>自加自减运算符的重载</h2><p>递增运算符<code>++</code>和递减运算符<code>--</code>是C++语言中两个重要的一元运算符。它们有前缀和后缀两种用法。继续上面的例子，演示如何使用递增运算符重载。</p>
-<pre><code>complex&amp; complex::operator++()
- {
-     real=real+1;
-     return *this;
- }</code></pre><p>我重载<code>++</code>运算符的作用为使复数的实部加1。仔细观察代码，我们可以发现与其他运算符的重载不同，因为不涉及其他对象，所以无参数。当重载为后缀的时候有一个参数，但是是无意义的，只是用来说明为后缀运算符而已。</p>
-<h2 id="函数调用运算符重载"><a href="#函数调用运算符重载" class="headerlink" title="函数调用运算符重载"></a>函数调用运算符重载</h2><p>函数调用运算符<code>()</code>可以被重载用于类的对象。如果类重载了函数调用运算符，则我们可以像使用函数一样使用该类的对象。继续以上面代码为例：</p>
-<pre><code>complex&amp; complex::operator()(int a,int b,int c)
- {
-     real=a+b+c;
-     image=a-b-c;
-     return *this;
- }</code></pre><p>主函数里：</p>
-<pre><code>s4=s4(3,2,1);
-s4.showcomplex();</code></pre><p>输出结果为：<br><img src="https://i.loli.net/2020/01/21/TvjEFWsxKgYHlbV.png" alt=""><br>可以看到，以调用函数的方式调用了对象，调用对象实际上是在运行重载的调用运算符。函数调用运算符必须是成员函数。一个类可以定义多个不同版本的调用运算符，相互之间应该在参数数量或类型上有所区别。如果类定义了调用运算符，则该类的对象称作函数对象。因为可以调用这种对象，所以我们说这些对象的“行为像函数一样”。在后面会讲到有关函数对象的知识。  </p>
-<p>还有很多的运算符可以进行重载，它们的功能也各不相同，在此就不一一介绍，运算符重载是很重要的一个部分，对程序的编写有很大帮助。</p>
+    public:
+        int a;
+        derive(int i=0,int j=0);
+        ~derive()
+        {
+            cout&lt;&lt;&quot;继承类析构&quot;&lt;&lt;endl;
+        }
+};
+derive::derive(int i,int j):base(i)
+{
+    a=j;
+    cout&lt;&lt;&quot;继承类构造&quot;&lt;&lt;endl&lt;&lt;a&lt;&lt;endl;
+}
+int main()
+{
+  derive b(2,1);
+  b.print();
+  return 0;
+}</code></pre><p>可以看到，在代码的构造函数和析构函数中，都输出是属于哪个类的。在派生类的构造函数中，定义了两个形参i和j，第一形参i是基类构造函数中的参数，派生类新增加的成员变量a用形参j赋值，这样就实现了派生类的构造函数。而派生类也有基类的成员函数，因此派生类对象b可以调用<code>print()</code>函数输出。运行结果为:<br><img src="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png" alt=""><br>在结果中我们也可以看到构造函数和析构函数的调用顺序，<strong>先构造的后析构，先基类构造再派生类构造</strong>。<br>假如我们定义基类对象为b，派生类对象为d：  </p>
+<pre><code>base b;
+derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code>b=d</code>。而反过来不行，这也是反映了前面所说的 is a 关系。<br>2.派生类对象可以初始化基类引用，即<code>base &amp;br=d</code>。<br>3.派生类对象的地址可以赋值给基类指针，即<code>base *pd=d</code>。  </p>
+<h2 id="直接基类和间接基类"><a href="#直接基类和间接基类" class="headerlink" title="直接基类和间接基类"></a>直接基类和间接基类</h2><p>上面所讲一个类可以派生出多个类。而派生类也可以作为基类再派生。如动物类可以派生出哺乳动物类，而哺乳动物类又可以派生出人类。这样，动物类和哺乳动物类都是人类的基类。哺乳动物类是直接基类，动物类是间接基类。声明派生类时，只需列出它的直接基类。但是派生类的成员包括自己定义、直接基类、间接基类的所有成员。<br>上面介绍了继承和派生的概念，类与类之间可能是继承关系，但如果一个类的对象是另一个类的成员呢？这属于什么关系？以圆类为例，圆有两个重要的成员，圆心和半径。而圆心是一个点，它属于点类的一个对象。此时定义圆类和点类为复合关系，<strong>复合关系一般把大的类声明为另一个类的友元</strong>。<br>面向对象的三个特征：封装、继承、多态。在下篇中将会进入到多态的学习，多态使得C++变的非常灵活，大大提高效率，是非常重要的一部分。</p>
 
     </div>
 
@@ -326,7 +321,7 @@ s4.showcomplex();</code></pre><p>输出结果为：<br><img src="https://i.loli.
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" title="运算符重载">http://yoursite.com/2020/01/21/运算符重载/</a>
+    <a href="http://yoursite.com/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/" title="继承和派生">http://yoursite.com/2020/01/24/继承和派生/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -343,13 +338,10 @@ s4.showcomplex();</code></pre><p>输出结果为：<br><img src="https://i.loli.
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" rel="prev" title="类及类的成员3">
-      <i class="fa fa-chevron-left"></i> 类及类的成员3
+    <a href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="prev" title="运算符重载">
+      <i class="fa fa-chevron-left"></i> 运算符重载
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/" rel="next" title="继承和派生">
-      继承和派生 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -409,7 +401,7 @@ s4.showcomplex();</code></pre><p>输出结果为：<br><img src="https://i.loli.
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#赋值运算符重载"><span class="nav-number">1.</span> <span class="nav-text">赋值运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流插入和流提取运算符重载"><span class="nav-number">2.</span> <span class="nav-text">流插入和流提取运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自加自减运算符的重载"><span class="nav-number">3.</span> <span class="nav-text">自加自减运算符的重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数调用运算符重载"><span class="nav-number">4.</span> <span class="nav-text">函数调用运算符重载</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#派生类构造函数"><span class="nav-number">1.</span> <span class="nav-text">派生类构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接基类和间接基类"><span class="nav-number">2.</span> <span class="nav-text">直接基类和间接基类</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
