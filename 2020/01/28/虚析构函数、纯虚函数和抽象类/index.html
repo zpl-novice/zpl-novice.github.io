@@ -19,7 +19,7 @@
 <script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    hostname: new URL('http://yoursite.com').hostname,
+    hostname: new URL('https://zpl-novice.github.io').hostname,
     root: '/',
     scheme: 'Gemini',
     version: '7.7.0',
@@ -49,7 +49,7 @@
   <meta name="description" content="摘要：本篇将会对上篇所讲得虚函数再做介绍，主要讲解了虚析构函数和纯虚函数的概念以及为什么要使用它们，通过虚析构函数的学习也能更好的理解内存泄漏的知识。而纯虚函数则能让我们更好的理解多态和使用多态。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虚析构函数、纯虚函数和抽象类">
-<meta property="og:url" content="http://yoursite.com/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/index.html">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/index.html">
 <meta property="og:site_name" content="zpl-novice">
 <meta property="og:description" content="摘要：本篇将会对上篇所讲得虚函数再做介绍，主要讲解了虚析构函数和纯虚函数的概念以及为什么要使用它们，通过虚析构函数的学习也能更好的理解内存泄漏的知识。而纯虚函数则能让我们更好的理解多态和使用多态。">
 <meta property="og:locale" content="zh_CN">
@@ -61,7 +61,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2020/01/28/pbCiPWYJXxGKTFe.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/">
 
 
 <script id="page-configurations">
@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -344,7 +344,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/" title="虚析构函数、纯虚函数和抽象类">http://yoursite.com/2020/01/28/虚析构函数、纯虚函数和抽象类/</a>
+    <a href="https://zpl-novice.github.io/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/" title="虚析构函数、纯虚函数和抽象类">https://zpl-novice.github.io/2020/01/28/虚析构函数、纯虚函数和抽象类/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
