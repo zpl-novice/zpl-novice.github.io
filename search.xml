@@ -1,6 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>函数模板、类模板和模板类</title>
+    <url>/2020/02/03/%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E3%80%81%E7%B1%BB%E6%A8%A1%E6%9D%BF%E5%92%8C%E6%A8%A1%E6%9D%BF%E7%B1%BB/</url>
+    <content><![CDATA[<p>摘要：本篇将进入有关泛型编程相关知识的介绍，泛型程序设计可以减少很多重复的代码，而模板又是泛型编程的基础。通过函数模板、类模板和模板类的学习能够更好的了解泛型程序的概念，也为后面将要学习的标准模板库（STL）打下基础。</p>
+<a id="more"></a>
+<p>假如编写一个程序实现两个整数的交换，这是很简单的，定义一个中间变量，然后交换两个整数即可。现在要求对程序进行修改，使得既能实现整数的交换，又能实现小数的交换，那应该怎么办？是不是必须要对上面的交换函数进行重载，使得输入参数为小数也可以，若要求再实现字符的交换呢？能不能一个函数实现上面的所有要求，而不能根据每一个要求写一个函数？这就是泛型编程所要实现的，<strong>编写一般化并可重复使用的算法，其效率与针对某特定数据类型而设计的算法相同</strong>。泛型即是指具有在多种数据类型上皆可操作的含义。</p>
+<h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><p>模板是创建泛型类或函数的蓝图或公式。模板有类模板和函数模板。针对上面问题，可以用函数模板来解决。</p>
+<pre><code>template&lt;class 类型参数1，class 类型参数2  ...&gt;
+返回值类型 模板名（形参表）
+{
+    函数体
+}</code></pre><p>其中类型参数是自定义的，比如实现上述要求的交换，只有一个类型参数，用T表示即可。具体实现代码如下：  </p>
+<pre><code>template&lt;class T&gt;
+void Swap(T&amp;x,T&amp;y)
+{
+    T tem;
+    tem=x;
+    x=y;
+    y=tem;
+ } 
+ int main()
+ {
+     int a=2,b=3;
+     Swap(a,b);
+     cout&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b&lt;&lt;endl;
+     double c=2.1,d=3.1;
+     Swap(c,d);
+     cout&lt;&lt;c&lt;&lt;&quot; &quot;&lt;&lt;d&lt;&lt;endl;
+    string s1,s2;
+     s1=&quot;hello&quot;;
+     s2=&quot;world&quot;;
+     Swap(s1,s2);
+     cout&lt;&lt;s1&lt;&lt;&quot; &quot;&lt;&lt;s2&lt;&lt;endl;
+     return 0;
+ }</code></pre><p>可以看到上面利用一个函数模板就实现了多种数据结构的交换。这大大减少了重复代码的编写，提高程序效率。若有两个类型参数，只需要多定义一个即可，如下：  </p>
+<pre><code>using namespace std;
+print(int a,int b)
+{
+    cout&lt;&lt;&quot;普通函数优先级最高&quot;&lt;&lt;endl; 
+}
+template&lt;class T&gt;
+void print(T a,T b)
+{
+    cout&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b&lt;&lt;endl;    
+}
+template&lt;class T1,class T2&gt;
+void print(T1 a,T2 b)
+{
+    cout&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b&lt;&lt;endl;    
+}
+int main()
+{
+    int x=1,y=2;
+    double z1=3.1,z2=5.2;
+    string s=&quot;hello&quot;;
+    print(x,y);
+    print(z1,z2);
+    print(x,z1);
+    print(s,x);
+    return 0;
+}</code></pre><p>由上面的代码可以看出，<strong>函数模板可以重载，只要他们的形参表不同即可</strong>。代码中重载了<code>print</code>函数，使它能实现同类型数据的打印和不同数据类型的打印。那么函数调用的顺序是什么样的呢？运行结果如下：<br><img src="https://i.loli.net/2020/02/03/aECSeydDQn3NPU9.png" alt=""><br>从结果也能看出，函数的调用顺序为：<br>1.普通函数<br>2.参数完全匹配的模板函数<br>3.实参经过类型转换后能够匹配的普通函数<br>若经过上面3个顺序还找不到则报错。  </p>
+<h2 id="类模板和模板类"><a href="#类模板和模板类" class="headerlink" title="类模板和模板类"></a>类模板和模板类</h2><p>正如定义函数模板一样，也可以定义类模板。在定义类的时候给它一个或多个参数，这些参数表示不同的数据类型，在调用类模板时指定参数，由编译系统根据参数提供的数据类型自动产生相应的模板类。编译器由类模板生成类的过程叫做类模板的实例化。由实例化得到的类叫模板类。函数模板可以作为类模板成员。  </p>
+<pre><code>template&lt;class T&gt;
+class A
+{
+      public:
+        T a,b;
+      void change();
+      template&lt;class T1&gt;
+      void func(T1 t)
+      {
+          cout&lt;&lt;t&lt;&lt;endl;
+       } 
+};    
+template&lt;class T&gt;
+void A&lt;T&gt;::change()
+{
+    T &amp;x=a;
+    T &amp;y=b;
+    T tem;
+    tem=x;
+    x=y;
+    y=tem;
+}
+int main()
+{
+    A&lt;double&gt;a;
+    a.func(&apos;Z&apos;);
+    a.a=3.2;
+    a.b=5.1;
+    a.change();
+    cout&lt;&lt;a.a&lt;&lt;&quot; &quot;&lt;&lt;a.b&lt;&lt;endl;
+    return 0;
+}</code></pre><p>上面代码中定义了一个类模板A，它的成员中有一个函数模板，用来交换两个数，当在类模板外定义函数时，需要加上<code>template</code>。<strong>类模板使得类的实现不关注数据元素的具体类型，而只关注类所需要实现的功能</strong>。在主函数里，实例化了一个类模板的double对象，模板类a，然后定义它的成员变量。当需要进行整型的功能时，只需要改变类模板A的参数即可。<br>本篇讲的函数模板和类模板都是C++很重要的一部分，在下篇中将会讲解一下string类。string类就是一个模板类，它具有很广泛的应用。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>文件和流</title>
     <url>/2020/01/31/%E6%96%87%E4%BB%B6%E5%92%8C%E6%B5%81/</url>
     <content><![CDATA[<p>摘要：今天将介绍如何从文件读取流和写入流。需要用到的类有iostream和fstream，通过对文件流的学习能更清楚的理解C++是如何读取信息和写入信息的。</p>
