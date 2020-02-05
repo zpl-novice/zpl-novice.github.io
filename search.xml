@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>模板类之string类</title>
+    <url>/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/</url>
+    <content><![CDATA[<p>摘要：在数据结构里有一个部分为串（或字符串），它是非常常用的一个数据类型。C++中，string类对应的就是实现字符串相关的各种功能。通过对string类的学习，使得解决字符串有关问题时更加方便快捷。</p>
+<a id="more"></a>
+<p>上篇中已经学习过类模板有关的知识，在本篇将就string类举例进行介绍。<code>&lt;string&gt;</code>是C++标准程序库中的一个头文件，定义了C++标准中的字符串的基本模板类<code>std::basic_string</code>及相关的模板类实例。string是以char作为模板参数的模板类实例，把字符串的内存管理责任由string负责而不是由编程者负责，大大减轻了C语言风格的字符串的麻烦。<code>std::basic_string</code>提供了大量的字符串操作函数，如比较、连接、搜索、替换、获得子串等。并可与C语言风格字符串双向转换。<code>std::basic_string</code>属于C++ STL容器类，用户自定义的类也可以作为它的模板参数，因此也适用C++ STL Algorithm库。<br>string类的成员函数如下：<br><img src="https://i.loli.net/2020/02/05/nDozMjdgFTuX4Vy.png" alt=""><br>这里只介绍一些常用的成员函数。</p>
+<h2 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h2><p>按照以前所学的对类的对象赋值，string类的格式如下：  </p>
+<pre><code>string s1(&quot;hello&quot;);</code></pre><p>即令字符串s1的内容为hello，但在string类里还有其他的赋值方式，比如：  </p>
+<pre><code>string s1=&quot;hello&quot;;
+string s2(8,&apos;x&apos;);</code></pre><h2 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h2><p>如果要访问字符串中的字符，需要用到的成员函数为<code>at()</code>，例如逐个访问并输出string对象中的字符代码为：  </p>
+<pre><code>for(int i=0;i&lt;s1.length();i++)
+{
+    cout&lt;&lt;s1.at(i)&lt;&lt;&quot; &quot;;
+}</code></pre><h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>用<code>+</code>运算符或者<code>append()</code>函数可以实现字符串之间的拼接。例如若将字符串s1和字符串s2拼在一起：  </p>
+<pre><code>string s1,s2;
+s1=&quot;hello&quot;;
+s2=&quot; world&quot;;
+s1=s1+s2; //用+运算符实现
+s1.append(s2);  //用append函数</code></pre><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>若要删除字符串中的某些字符，需要用到<code>erase()</code>函数，函数输入的参数为下标，表示去掉该下标及以后的字符。例如我们要使hello world字符串只剩下hello，则：  </p>
+<pre><code>string s1=&quot;hello world&quot;;
+s1.erase(5);</code></pre><p>需要说明的是该函数只能实现删除字符串后面一部分的功能。</p>
+<h2 id="子串"><a href="#子串" class="headerlink" title="子串"></a>子串</h2><p>由上面所述，假如要求得到的不是hello而是world，这样不能用删除函数，应该怎么办？有一个成员函数名字为<code>substr()</code>，它的作用是得到字符串中的一部分，即子串。需要输入两个参数，第一个参数表示下标，第二个参数表示从该下标开始，你想要往后得到的字符个数。</p>
+<pre><code>string s1=&quot;hello world&quot;;
+s1.substr(6,5);</code></pre><p>这样就能得到子串world。</p>
+<h2 id="寻找"><a href="#寻找" class="headerlink" title="寻找"></a>寻找</h2><p>若需要在字符串中找到需要的字符的位置，应该怎么办？这个问题是很常见的，需要用到的成员函数为<code>find()</code>，输入参数为想要查询的字符或字符串，返回结果为该字符或字符串在给定的字符串中第一次出现的位置。它是从前往后找的，第一次找到即返回。若要求从后往前找，则成员函数为<code>rfind()</code>。例如若要查到ll在hello world中第一次出现的位置：  </p>
+<pre><code>string s1=&quot;hello world&quot;;
+s1.find(&quot;ll&quot;);</code></pre><p>除此之外，<code>find_first_of(&quot;abc&quot;)</code>函数表示的是查找abc中任意一个字符第一次出现的位置。<code>find_first_not_of(&quot;abc&quot;)</code>表示的是查找不是abc这3个字符的其他字符第一次出现的位置。</p>
+<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><p>假如字符串中某些地方需要替换，这时候就需要用到成员函数<code>replace()</code>，例如将字符串heloo world变成hello world。</p>
+<pre><code>string s1=&quot;heloo world&quot;;
+s1.replace(3,1,&quot;l&quot;);</code></pre><p>表示的意思为将字符串s1中下标3开始后的一个字符替换为字符l。</p>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>若要在字符串中插入字符则需要用到成员函数<code>insert()</code>，输入参数为插入位置的下标和要插入的字符。就用上面连接里面的例子：</p>
+<pre><code>string s1,s2;
+s1=&quot;hello&quot;;
+s2=&quot; world&quot;;
+s1.insert(5,s2);</code></pre><p>这样将s2插入到s1后面，实现了连接，当然也可以插入到中间和前面，由我们自己定义。</p>
+<p>最后将上面所将的成员函数进行一下汇总，放在代码中为： </p>
+<pre><code>#include&lt;string&gt;
+using namespace std;
+int main()
+{
+    string s1,s2;
+    s1=&quot;Hell0 world&quot;;
+    for(int i=0;i&lt;s1.length();i++)
+    {
+        cout&lt;&lt;s1.at(i)&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    cout&lt;&lt;s1.find(&quot;ll&quot;)&lt;&lt;endl;
+    s2=s1.substr(6,5);
+    cout&lt;&lt;s2&lt;&lt;endl;
+    cout&lt;&lt;s1.append(s2)&lt;&lt;endl;
+    cout&lt;&lt;s1.erase(11,5)&lt;&lt;endl;
+    cout&lt;&lt;s1.replace(6,5,&quot;ZPL&quot;)&lt;&lt;endl;
+    cout&lt;&lt;s1.insert(9,&quot;HHH&quot;)&lt;&lt;endl;
+    return 0; 
+ } </code></pre><p>运行结果为：<br><img src="https://i.loli.net/2020/02/05/1jSoqHuXc2fEpNO.png" alt=""><br>string类是非常实用的一个模板类，掌握并能运用它的常用的成员函数是很有必要的。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>函数模板、类模板和模板类</title>
     <url>/2020/02/03/%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E3%80%81%E7%B1%BB%E6%A8%A1%E6%9D%BF%E5%92%8C%E6%A8%A1%E6%9D%BF%E7%B1%BB/</url>
     <content><![CDATA[<p>摘要：本篇将进入有关泛型编程相关知识的介绍，泛型程序设计可以减少很多重复的代码，而模板又是泛型编程的基础。通过函数模板、类模板和模板类的学习能够更好的了解泛型程序的概念，也为后面将要学习的标准模板库（STL）打下基础。</p>
