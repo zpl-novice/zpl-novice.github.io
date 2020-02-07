@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>标准模板库（STL)</title>
+    <url>/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/</url>
+    <content><![CDATA[<p>摘要：本篇将开始进入到标准模板库（STL）的学习。STL是非常实用的模板库，我将会从标准模板库的概念、组成、应用等方面对其进行介绍。由于STL中的知识很多，因此本篇将会只介绍其中的一部分。</p>
+<a id="more"></a>
+<p>前面已经学习过模板的知识。而标准模板库（STL）就是一些常用数据结构和算法的模板的集合。STL由容器、算法和迭代器三部分组成。其中<br>容器：可容纳各种数据类型的通用数据结构，是类模板；<br>迭代器：可用于依次存取容器中元素，类似于指针；<br>算法：用来操作容器中的元素的函数模板。<br><strong>算法本身与他们操作的数据的类型无关，因此他们可以从简单数组到高度复杂容器的任何数据结构上使用</strong>。  </p>
+<h1 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h1><p>容器包括三部分，顺序容器、关联容器和容器适配器。</p>
+<h2 id="顺序容器"><a href="#顺序容器" class="headerlink" title="顺序容器"></a>顺序容器</h2><p>顺序容器包括<code>vector</code>、<code>deque</code>、<code>list</code>三种。为什么叫顺序容器，因为容器并非是排好序的，元素的插入位置同元素的值无关，而是由元素的添加到容器中的次序决定的。<br><code>vector</code>表示的是动态数组，元素在内存连续存放，随机存取任何元素都能在常数时间完成。在尾端增删元素具有较佳的性能。<br><img src="https://i.loli.net/2020/02/07/cdN9ojTvuqCgEaP.png" alt=""><br>它的特点是在<strong>尾部</strong>添加速度很快，在中间插入慢。所有STL算法都能对<code>vector</code>操作。在以前的学习中，当我们定义数组时，必须要给定它的内存大小。然而很多情况下，我们是不知道数组的大小的，而且数组大小也会变化。在动态数组<code>vector</code>中，它的大小会自动变化，不需要我们再去设定。<br>构造函数初始化的成员函数有：<br><img src="https://i.loli.net/2020/02/07/AzSLRPmyqF5Iphc.png" alt=""><br>其他常见的成员函数有：<br><img src="https://i.loli.net/2020/02/07/OcPkAtCRiJxqEj4.png" alt=""><br>下面以简单的代码为例说明动态数组的用法：  </p>
+<pre><code>int main()
+{
+    vector&lt;int&gt; v;
+    v.push_back(2);
+    v.push_back(0);
+    v.push_back(2);
+    v.push_back(0);
+    v.push_back(5);
+    v.pop_back();
+    cout&lt;&lt;v.size()&lt;&lt;endl;
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>可以看到，创建一个空的int型动态数组v，依次向里面输入2、0、2、0、5，然后删除末尾元素5，返回容器中元素的个数，再依次将各个元素输出。  </p>
+<p><code>deque</code>表示的是双向队列，元素在内存连续存放。随机存取任何元素都能在常数时间完成（但次于<code>vector</code>）。在<strong>两端增删元素</strong>具有较佳的性能。（大部分情况下是常数时间，但在需要重新增加内存时时间会增加，vector同理）。<br><img src="https://i.loli.net/2020/02/07/Dnz3vmBUWFSHOCh.png" alt=""><br>所有适用于<code>vector</code>上的操作，都适用于<code>deque</code>。除此之外，<code>deque</code>还有<code>push_front()</code>(将元素插入到队列的头部）和<code>pop_front()</code>（删除头部的元素）操作。  </p>
+<p><code>list</code>即熟悉的双向链表，元素在内存不连续存放。因为是链表，所以不支持随机存取。但是在任何位置增删元素都能在时间常数完成。前面两个的迭代器是随机访问迭代器，而<code>list</code>的是双向迭代器。<br><img src="https://i.loli.net/2020/02/07/LWIPCDex7bHdVKt.png" alt=""><br><code>list</code>的成员函数有：<br><img src="https://i.loli.net/2020/02/07/EWhcaYkCbe4nxHm.png" alt=""><br>可以看到它的成员函数与前面的<code>vector</code>、<code>deque</code>还是有些区别的。其中第三个<code>sort()</code>函数是<code>list</code>自己定义的排序函数。举例代码如下：  </p>
+<pre><code>int main()
+{
+    list&lt;int&gt; l1,l2;
+    l1.push_back(1);l1.push_back(5);l1.push_back(3);
+    l1.push_front(2);l1.push_front(4);
+    l2.push_back(10);l2.push_back(20);l2.push_back(30);
+    list&lt;int&gt;::iterator i;
+    for(i=l1.begin();i!=l1.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    l1.sort();
+    for(i=l1.begin();i!=l1.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    l1.merge(l2);
+    l1.reverse();
+    for(i=l1.begin();i!=l1.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>其中有关迭代器的知识会在接下来介绍，在这里只需将其当成指针即可。可见定义了两个链表l1和l2，<br>输入数据使l1变为1 5 3 2 4，l2变为10 20 30。将l1输出，然后调用<code>sort()</code>函数对l1进行排序并输出。将两个链表合并，再将其翻转输出。最后运行结果为：<br><img src="https://i.loli.net/2020/02/07/E28fB5buUdjcHGO.png" alt="">  </p>
+<p>在本篇中讲解了标准模板库的概念以及容器中的顺序容器这一部分，在下篇中将会继续进入关联容器和容器适配器的学习。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>模板类之string类</title>
     <url>/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/</url>
     <content><![CDATA[<p>摘要：在数据结构里有一个部分为串（或字符串），它是非常常用的一个数据类型。C++中，string类对应的就是实现字符串相关的各种功能。通过对string类的学习，使得解决字符串有关问题时更加方便快捷。</p>
