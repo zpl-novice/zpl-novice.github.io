@@ -1,6 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>STL之关联容器和容器适配器</title>
+    <url>/2020/02/09/STL%E4%B9%8B%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%B9%E5%99%A8%E9%80%82%E9%85%8D%E5%99%A8/</url>
+    <content><![CDATA[<p>摘要：本篇继续上一篇的学习，将会对STL的容器中的关联容器和容器适配器进行介绍。容器具有非常强大的功能，熟练使用它们能给我们提供很大的方便。</p>
+<a id="more"></a>
+<h1 id="关联容器"><a href="#关联容器" class="headerlink" title="关联容器"></a>关联容器</h1><p>上篇中已经介绍过顺序容器，即元素的插入位置同元素的值无关，而是由元素的添加到容器中的次序决定的。而关联容器却跟顺序容器不同，关联容器中，元素是排序的。插入任何元素，都按相应的<strong>排序规则</strong>来确定其位置。在查找时具有非常好的性能，通常以平衡二叉树方式实现，插入和检索的时间都是O（log（N））(折半查找)。关联容器包括<code>set</code>， <code>multiset</code>，<code>map</code>，<code>multimap</code>。<br>关联容器中除了各容器都有的函数外，还支持以下成员函数：<br><img src="https://i.loli.net/2020/02/09/SQMOUGPrt98XAcD.png" alt="">  </p>
+<h2 id="set和multiset"><a href="#set和multiset" class="headerlink" title="set和multiset"></a>set和multiset</h2><p><code>set</code>和<code>multiset</code>的头文件都是<code>&lt;set&gt;</code>，表示的意思为集合。它们的区别在于<code>set</code>中不允许有相同元素，而<code>multiset</code>允许有相同元素。所以当在set中插入已有的元素时，忽略插入。示例代码如下：  </p>
+<pre><code>int main()
+{
+    int a[4]={3,2,1,5};
+    set&lt;int&gt; st(a,a+4);
+    set&lt;int&gt;::iterator i;
+    for(i=st.begin();i!=st.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    st.insert(4);
+    st.insert(3);
+    for(i=st.begin();i!=st.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+ } </code></pre><p>定义了一个<code>set</code>对象st，一个数组为3 2 1 5，然后将数组输入到st中，然后将st中的元素输出。由下面的结果可以看到，<code>set</code>会自动对数据进行排序（默认为从小到大），变成了1 2 3 5。然后再插入4和3，将插入后的st输出，结果为1 2 3 4 5.可以看出对插入的数据4进行了排序，而3是已有的元素，忽略插入。<br><img src="https://i.loli.net/2020/02/09/6zetijN2WykparA.png" alt="">  </p>
+<h2 id="map和multimap"><a href="#map和multimap" class="headerlink" title="map和multimap"></a>map和multimap</h2><p><code>map</code>和<code>multimap</code>的头文件都是<code>&lt;map&gt;</code>。<code>map</code>与<code>set</code>的不同在于<code>map</code>中只能存放对象，而且<code>map</code>中存放的元素有且仅有两个成员变量，一个为<code>first</code>，一个为<code>second</code>，<code>map</code>根据<code>first</code>的值对元素进行从小到大排序，并可快速的根据<code>first</code>来检索元素。<code>map</code>同<code>multimap</code>的不同在于是否允许相同<code>first</code>值的元素。示例代码如下：  </p>
+<pre><code>template&lt;class Key,class Value&gt;
+ostream &amp; operator&lt;&lt;(ostream &amp; o,const pair&lt;Key,Value&gt; &amp;p)
+{
+    o&lt;&lt;&quot;(&quot;&lt;&lt;p.first&lt;&lt;&quot;,&quot;&lt;&lt;p.second&lt;&lt;&quot;)&quot;;
+    return o;
+}
+int main()
+{
+    typedef map&lt;int,double,less&lt;int&gt; &gt; mmid;
+    mmid pairs;
+    pairs.insert(make_pair(15,99.3));
+    pairs.insert(mmid::value_type(20,20.5));
+    mmid::iterator i;
+    cout&lt;&lt;pairs.count(15)&lt;&lt;endl;
+    cout&lt;&lt;pairs.count(10)&lt;&lt;endl;
+    for(i=pairs.begin();i!=pairs.end();i++)
+    {
+        cout&lt;&lt; *i;
+    }
+    return 0;
+}</code></pre><p>这里先介绍以下<code>pair</code>模板类，<code>pair</code>模板定义了两个公共成员变量，<code>first</code>和<code>second</code>，<code>map</code>和<code>multimap</code>容器里放着的都是<code>pair</code>模板类的对象。因此在输入数据的时候用<code>make_pair()</code>来输入，定义的<code>map</code>中第一个成员变量为<code>int</code>型，第二个为<code>double</code>型。输入了两组数据15 99.3和20 20.5，当查询15的数量时，看的是<code>first</code>的值，有一个。当查询10的数量时，没有。因为<code>map</code>中存放的是对象，而对象是不能直接输出的，所以重载了<code>&lt;&lt;</code>运算符，使得输出对象的<code>first</code>和<code>second</code>值。运行结果为：<br><img src="https://i.loli.net/2020/02/09/vCdkzUaDNOWuf1q.png" alt="">  </p>
+<h1 id="容器适配器"><a href="#容器适配器" class="headerlink" title="容器适配器"></a>容器适配器</h1><p>容器适配器包括<code>stack</code>，<code>queue</code>，<code>priority_queue</code>3种。<code>stack</code>和<code>queue</code>基于<code>deque</code>实现，<code>priority_queue</code>基于<code>vector</code>实现。为什么叫容器适配器？举个例子，手机充电的时候需要电源适配器来把220v的交流电转换成较低电压的直流电以供手机充电使用，220v的电压太高了，我们不需要那么高的电压，而且高电压还有可能产生其他很多不良后果。基础的容器类型就相当于那220v的电压，经过适配器转换后才成为了我们需要的低电压（<code>stack</code>，<code>queue</code>，<code>priority_queue</code>）。你完全可以在<code>deque</code>上按照<code>stack</code>的方式工作，但是<code>deque</code>太强大了，它提供了远超过<code>stack</code>操作（<code>empty</code>, <code>size</code>,<code>pop</code>,<code>top</code>,<code>push</code>）所需的各种接口，你可以小心翼翼地在<code>deque</code>上只使用那几种操作来模拟一个栈，但是你很有可能一失误来个<code>push_front()</code>之类的操作，你小心翼翼模拟的栈就毁了。所以，我们需要适配器来做一下转换，只保留基础类型提供的接口中的一部分，保留的这部分操作对于你所需要的数据结构来说已经足够了。</p>
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><p><code>stack</code>即栈，头文件为<code>&lt;stack&gt;</code>。栈是项的有限序列，并满足序列中被删除、检索和修改的项只能是最近插入序列的项（栈顶的项）。栈是后进先出结构，Last in first out，简称LIFO。<br><img src="https://i.loli.net/2020/02/09/Xaqpeg9xKARtMTS.png" alt=""> </p>
+<p>栈的成员函数有：<br>成员函数<code>push</code>：用于将一个新的整数插入到top<br>成员函数<code>pop</code>：用于移出top的整数<br>成员函数<code>empty</code>：用于判断是否为空<br>成员函数<code>top</code>：输出栈顶的整数<br>成员函数<code>size</code>：返回栈中元素的个数<br>示例代码如下：  </p>
+<pre><code>int main()
+{
+    stack&lt;int&gt; s;
+    cout&lt;&lt;s.empty()&lt;&lt;endl;
+    s.push(3);s.push(2);s.push(5);s.push(1);s.push(4);
+    cout&lt;&lt;s.empty()&lt;&lt;endl;
+    cout&lt;&lt;s.size()&lt;&lt;endl;
+    cout&lt;&lt;s.top()&lt;&lt;endl;
+    s.pop();
+    cout&lt;&lt;s.top();
+    return 0;
+}</code></pre><p>定义了一个空栈s，判断其是否为空，显然是空栈，所以会输出1。输入数据3 2 5 1 4，再判断栈是否为空，此时不为空，输出0，输出栈中元素的个数5，将栈顶的元素移去，次数栈中变为3 2 5 1，再输出栈顶的元素1。</p>
+<h2 id="queue和priority-queue"><a href="#queue和priority-queue" class="headerlink" title="queue和priority_queue"></a>queue和priority_queue</h2><p><code>queue</code>和<code>priority_queue</code>表示的是队列和优先级队列，头文件都是<code>&lt;queue&gt;</code>。插入只可以在尾部进行，删除、检索和修改只允许从头部进行。队列是先进先出的，First in first out，简称FIFO。优先级队列中最高优先级元素总是第一个出列，相当于对输入的数据进行了排序。<br><img src="https://i.loli.net/2020/02/09/gRUsCp3MmioBHvS.png" alt=""><br>示例代码如下：  </p>
+<pre><code>int main()
+{
+    priority_queue&lt;double&gt; pq;
+    pq.push(3.2);
+    pq.push(9.8);
+    pq.push(5.4);
+    cout&lt;&lt;pq.top()&lt;&lt;endl;
+    pq.pop();
+    cout&lt;&lt;pq.top();
+    return 0;
+}</code></pre><p>定义了一个<code>double</code>型优先级队列pq，向队列输入数据3.2，9.8，5.4。因为是优先级队列，默认按从大到小的优先级排序。所以当输出队头时为9.8，这时候移去队头元素，再输出新的队头为5.4。结果如下：<br><img src="https://i.loli.net/2020/02/09/uLXciGyRxzp67Dq.png" alt="">  </p>
+<p>至此就简单的介绍完了STL中容器的相关知识，在下一篇博客中将会开始进入到迭代器的学习，不同的容器有不同的迭代器，熟练掌握迭代器对于使用容器是非常重要的。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>标准模板库（STL)</title>
     <url>/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/</url>
     <content><![CDATA[<p>摘要：本篇将开始进入到标准模板库（STL）的学习。STL是非常实用的模板库，我将会从标准模板库的概念、组成、应用等方面对其进行介绍。由于STL中的知识很多，因此本篇将会只介绍其中的一部分。</p>
