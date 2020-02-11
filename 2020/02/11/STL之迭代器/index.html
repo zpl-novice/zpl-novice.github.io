@@ -46,19 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="开始尝试写博客啦">
+  <meta name="description" content="摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客初识">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/index.html">
+<meta property="og:title" content="STL之迭代器">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="开始尝试写博客啦">
+<meta property="og:description" content="摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-10T03:21:32.221Z">
-<meta property="article:modified_time" content="2020-01-19T05:33:50.080Z">
+<meta property="og:image" content="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png">
+<meta property="article:published_time" content="2020-02-11T07:22:00.125Z">
+<meta property="article:modified_time" content="2020-02-11T10:00:46.049Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/">
 
 
 <script id="page-configurations">
@@ -70,7 +72,7 @@
   };
 </script>
 
-  <title>博客初识 | zpl-novice</title>
+  <title>STL之迭代器 | zpl-novice</title>
   
 
 
@@ -200,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          博客初识
+          STL之迭代器
         </h1>
 
         <div class="post-meta">
@@ -222,24 +224,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-01-10 11:21:32" itemprop="dateCreated datePublished" datetime="2020-01-10T11:21:32+08:00">2020-01-10</time>
+              <time title="创建时间：2020-02-11 15:22:00 / 修改时间：18:00:46" itemprop="dateCreated datePublished" datetime="2020-02-11T15:22:00+08:00">2020-02-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-19 13:33:50" itemprop="dateModified" datetime="2020-01-19T13:33:50+08:00">2020-01-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index">
-                    <span itemprop="name">测试</span>
+                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">C++知识学习</span>
                   </a>
                 </span>
             </span>
@@ -250,7 +246,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>195</span>
+              <span>1.8k</span>
             </span>
 
         </div>
@@ -262,16 +258,51 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>开始尝试写博客啦</p>
+        <p>摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。</p>
 <a id="more"></a>
-
-<h2 id="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，希望我的水平不断提高。"><a href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，希望我的水平不断提高。" class="headerlink" title="很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，希望我的水平不断提高。"></a>很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，希望我的水平不断提高。</h2><pre><code>#include&lt;iostream&gt;
-using namespace std;
-int main()
+<p>迭代器用于指向顺序容器和关联容器中的元素，它的用法和指针类似。迭代器有<code>const</code>和非<code>const</code>两种，这两种都能读取它指向的元素，其中非<code>const</code>迭代器还可以修改其指向的元素，这也与指针相似。定义一个容器类的迭代器的方法是：<br><code>容器类名::iterator 变量名;</code> 或 <code>容器类名::const_iterator 变量名;</code><br>例如：<br><code>vector&lt;int&gt;::iterator i;</code>    </p>
+<p><code>set&lt;double&gt;::const_iterator j;</code><br>而当访问一个迭代器所指向的元素时，与指针相同， <code>*迭代器变量名</code></p>
+<h2 id="随机访问迭代器"><a href="#随机访问迭代器" class="headerlink" title="随机访问迭代器"></a>随机访问迭代器</h2><p>顺序容器中的<code>vector</code>、<code>deque</code>用的迭代器是随机访问迭代器，随机访问迭代器的意思即可以直接访问想要位置的元素。示例如下：  </p>
+<pre><code>int main()
 {
-    cout&lt;&lt;&quot;Hello,world!&quot;;
+    vector&lt;int&gt; v;
+    vector&lt;int&gt;::const_iterator i;                   //const迭代器 
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    i=v.begin()+2;
+    cout&lt;&lt;*i&lt;&lt;endl;
+    for(i=v.begin();i&lt;v.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }  
+    vector&lt;int&gt;::iterator j;                     //非const迭代器  修改元素的值 
+    for(j=v.begin();j&lt;v.end();j++)
+    {
+        *j=5;
+    }
+    for(i=v.begin();i&lt;v.end();i++)
+    {
+        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+    }
     return 0;
-}</code></pre>
+}</code></pre><p>从代码中可以看到，定义了一个空的动态数组v，输入数据变成1 2 3 4，还定义了一个指向动态数组的迭代器，因为<code>vector</code>用的是随机访问迭代器，可以直接访问想要位置的元素，所以当想要访问v中第3个元素时，令<code>i=v.begin()+2;cout&lt;&lt;*i&lt;&lt;endl;</code>即可。只有<strong>随机访问迭代器</strong>可以这样，其他的迭代器是不能用<code>+</code>运算符的。若想修改v中元素的值，定义了非const迭代器，使得v中元素全部变成5，再输出，运行结果如下：<br><img src="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png" alt=""><br>这里再介绍以下反向迭代器，从名字可知，迭代器的顺序进行了反向，即默认迭代器是从头到尾，而方向迭代器是从尾到头。对上面代码进行添加：  </p>
+<pre><code>vector&lt;int&gt;::reverse_iterator r;                //反向迭代器 
+for(r=v.rbegin();r!=v.rend();r++)
+{
+    cout&lt;&lt;*r&lt;&lt;&quot; &quot;;
+}</code></pre><p>输出的结果就为4 3 2 1。</p>
+<h2 id="双向迭代器"><a href="#双向迭代器" class="headerlink" title="双向迭代器"></a>双向迭代器</h2><p>上面已经说到顺序容器中的<code>vector</code>、<code>deque</code>使用的是随机访问迭代器，而顺序容器中还有一个链表<code>list</code>，它和关联容器都使用的是双向迭代器。双向迭代器便不能直接访问第i个元素，而只能从头到后逐个访问。将上篇中<code>set</code>容器的部分代码拿出来如下：</p>
+<pre><code>int a[4]={3,2,1,5};
+set&lt;int&gt; st(a,a+4);
+set&lt;int&gt;::iterator i;   //双向迭代器
+for(i=st.begin();i!=st.end();i++)
+{
+    cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+}</code></pre><p>虽然定义的形式是相同的，但是这里的迭代器是双向迭代器，在for循环的条件可以看到，是<code>i!=st.end()</code>，这里只能这么定义，而不能用<code>i&lt;st.end()</code>，随机访问迭代器两种形式都可以。</p>
+<p>顺序容器和关联容器的迭代器都已经讲了，而容器适配器是不支持迭代器的。同样的，因为容器迭代器的限制，某些算法例如排序（sort）、二分查找（binary_search）需要通过随机访问迭代器来访问容器中的元素，那么<code>list</code>和关联容器就不支持该算法。前面讲<code>list</code>的时候讲过，它有自己定义的排序（sort）算法，就是来解决这个问题的。<br>本篇主要介绍了STL中的迭代器，在下篇将会介绍STL算法，算法是非常复杂的一部分，后面数据结构与算法的学习中还会对算法进行更深入的研究，在这里只简单介绍STL中的部分算法。</p>
+
     </div>
 
     
@@ -286,7 +317,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/" title="博客初识">https://zpl-novice.github.io/2020/01/10/博客初始/</a>
+    <a href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/" title="STL之迭代器">https://zpl-novice.github.io/2020/02/11/STL之迭代器/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -303,13 +334,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/09/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/02/09/STL%E4%B9%8B%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%B9%E5%99%A8%E9%80%82%E9%85%8D%E5%99%A8/" rel="prev" title="STL之关联容器和容器适配器">
+      <i class="fa fa-chevron-left"></i> STL之关联容器和容器适配器
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/11/C%E8%AF%AD%E8%A8%80%E7%9F%A5%E8%AF%86%E5%BC%BA%E5%8C%96/" rel="next" title="C语言知识强化">
-      C语言知识强化 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -369,7 +397,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced-road-，希望我的水平不断提高。"><span class="nav-number">1.</span> <span class="nav-text">很开心成功搭建了博客并开始初次尝试写博客，我会将已经学习过、正在学习和即将要学习的东西都整理记录在博客上。我把签名改为进阶之路（Advanced road)，希望我的水平不断提高。</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机访问迭代器"><span class="nav-number">1.</span> <span class="nav-text">随机访问迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双向迭代器"><span class="nav-number">2.</span> <span class="nav-text">双向迭代器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
