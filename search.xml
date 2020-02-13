@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>STL算法</title>
+    <url>/2020/02/13/STL%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍STL的最后一个部分：算法。算法对于程序是非常重要的，在STL中，我们需要用容器来实现需求，而作用在这些容器上的算法则必须要求了解才行。本篇博客会介绍STL中算法的种类以及它们的功能。</p>
+<a id="more"></a>
+<p>STL算法就是一个个函数模板，它们大多数在头文件<code>&lt;algorithm&gt;</code>中定义。STL中提供能在各种容器中通用的算法，比如查找、排序等。<br>算法通过迭代器来操纵容器中的元素，许多算法可以对容器中的一个局部区间进行操作，因此需要两个参数，一个是起始元素的迭代器，一个是终止元素的后面一个元素的迭代器。比如排序、查找等算法。<br>有些算法是返回一个迭代器，比如<code>find()</code>算法：在容器中查找一个元素，并返回一个指向该元素的迭代器。<br>前面已经说过，算法并不是STL特有的，算法可以处理容器，也可以处理普通数组。  </p>
+<h2 id="不变序列算法"><a href="#不变序列算法" class="headerlink" title="不变序列算法"></a>不变序列算法</h2><p>该类算法不会修改算法所作用的容器或对象，适用于顺序容器和关联容器，时间复杂度都是O(n)。<br><code>min</code> :求两个对象中较小的<br><code>max</code> :求两个对象中较大的<br><code>min_element</code> :求区间中的最小值<br><code>max_element</code> :求区间中的最大值<br><code>count</code> :计算区间中等于某值的区间个数<br><code>find</code> :在区间中查找等于某值的元素<br><code>search</code> :在区间中查找另一个区间第一次出现的位置<br><code>equal</code> :判断两区间是否相等<br><code>mismatch</code> :逐个比较两个区间中的元素，返回第一次发生不相等的元素的位置<br>上面只是列举了一部分，在这里选择<code>find()</code>算法简单介绍，因为查找算法是非常常用的。<code>find()</code>算法的定义为：</p>
+<pre><code>template&lt;class InIt,class T&gt;
+InIt find(InIt first,InIt last,const T&amp; val);</code></pre><p>first和last这两个参数都是容器的迭代器，它们给出了容器中的查找区间起点和终点[first，last）。区间的起点是位于查找范围之中的，而终点不是。find在[first,last）查找等于val的元素。<br>函数返回值是一个迭代器。如果找到，则该迭代器指向被找到的元素。如果找不到，则该迭代器等于last。示例如下：  </p>
+<pre><code>p=find(v.begin(),v.end(),3)；  //查找v中等于3的元素的迭代器
+if(p!=v.end())
+{
+    cout&lt;&lt;*p;
+}
+if(p==v.end())
+{
+     cout&lt;&lt;”not find”;
+}</code></pre><p>在容器v中查找等于3的元素的迭代器，然后赋值给迭代器p，如果查找不到，则把v中最后一个元素的迭代器赋值给p，判断p是否为最后一个元素的迭代器，不是则说明v中有等于3的元素，输出。否则则输出找不到。</p>
+<h2 id="变值算法"><a href="#变值算法" class="headerlink" title="变值算法"></a>变值算法</h2><p>此类算法会修改源区间或目标区间元素的值。<strong>值被修改的那个区间，不可以是属于关联容器的</strong>。<br><code>for_each</code> :对区间中的每个元素都做某种操作<br><code>copy</code> :赋值一个区间到别处<br><code>transform</code> :将一个区间的元素变形后拷贝到另一个区间<br><code>fill</code> :用某个值填充区间<br><code>generate</code> :用某个操作的结果填充区间<br><code>replace</code> :将区间中的某个值替换成另一个值<br>这里说一下<code>copy()</code>算法，定义为：</p>
+<pre><code>ostream_iterator&lt;int&gt; output(cout,&quot;&quot;);
+copy(v.begin(),v.end(),output);</code></pre><p>定义了一个<code>ostream_iterator&lt;int&gt;</code>对象，可以通过cout输出以“”（空格）分割的一个个整数。然后在<code>copy()</code>里调用output，导致v的内容在cout上输出。</p>
+<h2 id="删除算法"><a href="#删除算法" class="headerlink" title="删除算法"></a>删除算法</h2><p>删除算法用于删除一个容器中的某些元素。但是需要说明的是，<strong>删除不会使容器中的元素减少</strong>。将所有应该被删除的元素看成空位子，用留下的元素从后往前移，依次去填空位子，元素往前移后，它原来的位置也是空位子，由后面的元素补上，最后没有被填上的空位子，维持其原来的值不变。删除算法不应作用于关联容器。<br><code>remove</code> :删除区间中等于某个值的元素<br><code>remove_if</code> :删除区间中满足某种条件的元素<br><code>unique</code> :删除区间中连续相等的元素，只留下一个<br><code>unique_copy</code> :拷贝区间到另一个区间，连续相等的元素只拷贝一个<br>算法复杂度都是O(n)。</p>
+<h2 id="变序算法"><a href="#变序算法" class="headerlink" title="变序算法"></a>变序算法</h2><p>变序算法改变容器中元素的顺序，但是不改变元素的值。变序算法不适用关联容器，算法复杂度都是O(n)。<br><code>reverse</code> :颠倒区间的前后次序<br><code>reverse_copy</code> :把一个区间颠倒后的结果拷贝到另一个区间，源区间不变<br><code>ratate</code> :将区间进行循环左移<br><code>random_shuffle</code> :随机打乱区间中的元素<br><code>next_permumation</code> :对区间中的元素进行全排列<br>这里说明一个<code>random_shuffle</code>算法，定义为：</p>
+<pre><code>template&lt;class Ranlt&gt;
+void random_shuffle(Ranlt first,Ranlt last);</code></pre><p>随机打乱[first,last)中的元素，适用于能随机访问的容器。</p>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><p>比上面的变序算法复杂度更高，一般是O(nlong(n))。排序算法需要随机访问迭代器的支持，不适用关联容器和<code>list</code>。<br><code>sort</code> :将区间从小到大排列<br><code>stable_sort</code> :将区间从小到大排列，并保持相等元素间的相对次序<br><code>partial_sort</code> :对区间部分排序，直到最小的n个元素就位<br><code>partial_sort_copy</code> :将区间前n个元素的排序结果拷贝到别处<br><code>nth_element</code> :对区间部分排序，使得第n小的元素就位，而且比它小的都在它前面，比它大的都在它后面<br>显然<code>sort()</code>算法是最常用的，若定义为：</p>
+<pre><code>template&lt;class Ranlt&gt;
+void sort(Ranlt first,Ranlt last);</code></pre><p>表示的是按升序排列，判断x是否应该比y靠前，就看<code>x&lt;y</code>是否为true。若定义为：  </p>
+<pre><code>template&lt;class Ranlt,class Pred&gt;
+void sort(Ranlt first,Ranlt last,Pred pr);</code></pre><p>则按升序排列，判断x是否应该比y靠前，就看pr(x,y)是否为true。前面讲容器的时候已经举例过<code>sort()</code>算法，这里就不再过多说明。 </p>
+<h2 id="有序区间算法"><a href="#有序区间算法" class="headerlink" title="有序区间算法"></a>有序区间算法</h2><p>要求所操纵的区间是已经从小到大排好序的，需要随机访问迭代器的支持，因此有序区间算法不能用于关联容器和<code>list</code>。<br><code>binary_search</code> :判断区间中是否包含某个元素<br><code>includes</code> :判断是否一个区间中的每个元素，都在另一个区间中<br><code>lower_bound</code> :查找最后一个不小于某值的元素的位置<br><code>upper_bound</code> :查找第一个大于某值的元素的位置<br><code>equal_range</code> :同时获取<code>lower_bound</code>和<code>upper_bound</code><br><code>merge</code> :合并两个有序区间到第三个区间  </p>
+<p>本篇大概介绍了STL中常见的一些算法以及它们所适用的容器，算法非常重要，STL中的算法都是已经编写好的函数模板，直接调用即可，但有时很多算法根据需求的不同需要我们自己去写，关于算法后续的学习会在数据结构与算法中再介绍。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>STL之迭代器</title>
     <url>/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
     <content><![CDATA[<p>摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。</p>
