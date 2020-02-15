@@ -46,21 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
+  <meta name="description" content="摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="继承和派生">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/index.html">
+<meta property="og:title" content="C++ 11新特性1">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
+<meta property="og:description" content="摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
-<meta property="article:published_time" content="2020-01-24T04:43:10.083Z">
-<meta property="article:modified_time" content="2020-01-24T07:30:56.722Z">
+<meta property="og:image" content="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png">
+<meta property="article:published_time" content="2020-02-15T06:08:07.830Z">
+<meta property="article:modified_time" content="2020-02-15T09:32:08.393Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/">
 
 
 <script id="page-configurations">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>继承和派生 | zpl-novice</title>
+  <title>C++ 11新特性1 | zpl-novice</title>
   
 
 
@@ -202,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          继承和派生
+          C++ 11新特性1
         </h1>
 
         <div class="post-meta">
@@ -226,7 +226,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-24 12:43:10 / 修改时间：15:30:56" itemprop="dateCreated datePublished" datetime="2020-01-24T12:43:10+08:00">2020-01-24</time>
+              <time title="创建时间：2020-02-15 14:08:07 / 修改时间：17:32:08" itemprop="dateCreated datePublished" datetime="2020-02-15T14:08:07+08:00">2020-02-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,7 +246,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
+              <span>3.5k</span>
             </span>
 
         </div>
@@ -258,54 +258,98 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。</p>
+        <p>摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。</p>
 <a id="more"></a>
-
-<p>类并不是孤立的存在的，不同的类之间有着不同的关系，正如前面所讲过的友元类。假如已经定义了一个动物类，里面有动物的成员变量和成员函数，此时若要再定义一个哺乳动物类该怎么办？可以看出，哺乳动物属于动物，它也具有动物类的所有特性。因此只需要继承动物类即可。<br>继承：在定义一个新的类B时，如果该类与某个已有的类A相似（B拥有A的全部特点），那么就可以把A作为一个基类，而把B作为基类的一个派生类。派生类是通过对基类进行修改和扩充得到的。在派生类中，可以扩充新的成员变量和成员函数。派生类一经定义后，可以独立使用，不依赖于基类。继承代表了 is a 关系。<strong>派生类成员函数不能访问基类的私有成员</strong>。<br>根据上面的概念可知，派生类是由基类派生而来，因此基类的成员变量和成员函数在派生类也有。一般情况下，在派生类里的指的是派生类定义的成员，若要访问基类的（公共的）同名成员变量和成员函数，需要加上基类名，即<code>base::I</code>、<code>base::func()</code>。<br>派生类的定义格式为：<br><code>class 派生类名：public 基类名</code><br>这里的<code>public</code>也可以换为<code>protected</code>和<code>private</code>，它们表示了继承类型，但我们通常使用的都是<code>public</code>继承。一个基类可以派生出多个派生类。<br>前面讲过公有成员和私有成员，这里讲一下保护成员（protected）。它与私有成员不同的地方在于它可以被派生类的成员函数访问。其他访问方式与私有成员相同。  </p>
-<h2 id="派生类构造函数"><a href="#派生类构造函数" class="headerlink" title="派生类构造函数"></a>派生类构造函数</h2><p>派生类的其他成员函数如前面所讲的定义即可，但构造函数略有不同，因为派生类是继承基类而来，所以在派生类的构造函数中要先去调用基类的构造函数。如果不调用基类构造函数，因为派生类成员函数不能调用基类私有成员，无法实现初始化。派生类的构造函数定义为：<br><code>派生类名（成员变量1，2，3...）：基类构造函数（成员变量1，2...）</code><br>成员变量1，2，3为形参名，以下面代码为例：</p>
-<pre><code>class base
+<p>1998年是C++标准委员会成立的第一年，以后每五年视实际需要更新一次标准，它开发于1998年并于2003年更新，统称为C++ 98或者C++ 03，国际标准化组织于2011年9月1号出版发布ISO/IEC 14882:2011，称为C++ 11。相比于C++98/03，C++ 11则带来了数量可观的变化，其中包含了约140个新特性，以及对C++03标准中约600个缺陷的修正，这使得C++ 11更像是从C++ 98/03中孕育出的一种新语言。相比较而言，C++ 11能更好地用于系统开发和库开发、语法更加泛华和简单化、更加稳定和安全，不仅功能更强大，而且能提升程序员的开发效率。   </p>
+<h2 id="统一的初始化"><a href="#统一的初始化" class="headerlink" title="统一的初始化"></a>统一的初始化</h2><p>初始化是程序必不可少的，不管是一个简单的数组，还是一个对象，我们都需要对其建立时进行初始化。而在以前的定义中，若要定义一个动态数组v，其中的元素为1 2 3 4 5，定义如下：  </p>
+<pre><code>vector&lt;int&gt; v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+v.push_back(4);
+v.push_back(4);</code></pre><p>可以看到是很麻烦的，而在C++ 11中，我们可以像初始化普通数组一样去初始化自定义类型，用<code>{}</code>进行初始化，如：</p>
+<pre><code>vector&lt;int&gt; v{1,2,3,4,5};
+int arr[3]{1,2,3};
+string s{&quot;hello&quot;};
+int *p=new int[20]{1,2,3};</code></pre><p>即使在类里面也可以省略构造函数，对成员变量默认初始值：  </p>
+<pre><code>class B
 {
-    private:
+    public:
+        int m=20;
         int n;
-    public:
-        base(int i=0):n(i)
-        {
-            cout&lt;&lt;&quot;基类构造&quot;&lt;&lt;endl&lt;&lt;n&lt;&lt;endl;
-        }
-        ~base()
-        {
-            cout&lt;&lt;&quot;基类析构&quot;&lt;&lt;endl;
-        }
-        void print();
+};</code></pre><p>用统一的初始化方法使得语法更加简单，提高了效率，非常的实用。</p>
+<h2 id="auto和decltype关键字"><a href="#auto和decltype关键字" class="headerlink" title="auto和decltype关键字"></a>auto和decltype关键字</h2><p>在C语言中也有auto关键字，使用auto关键字的变量，称为自动变量，是具有自动存储器的局部变量。而在C++ 11中，它被赋予了新的含义，作为一个新的类型指示符来指示编译器，编译器可以自动判断变量的类型。示例如下：  </p>
+<pre><code>auto i=100;         // i是int
+auto p= new A();    //p是A*
+auto k=34343LL;    //k是long long
+map&lt;string,int,greater&lt;string&gt;&gt; mp;
+for(auto i=mp.begin;i!=map.end();++i)
+cout&lt;&lt;i-&gt;first&lt;&lt;”,”&lt;&lt;i-&gt;second;  </code></pre><p>迭代器i的类型是<code>map&lt;string,int,greater&lt;string&gt;&gt;::iterator</code>，使用auto自动定义类型就可以不用再写这么长的代码来定义了。当然这只是auto的简单用法，它还有更大的作用。</p>
+<pre><code>class A
+{
 };
-void base::print()
+A operator+(int n,A &amp;a)
 {
-    cout&lt;&lt;n&lt;&lt;endl;
+    return a;
 }
-class derive:public base
+template&lt;class T1,class T2&gt;
+auto add(T1 x,T2 y)-&gt;decltype(x+y)
 {
-    public:
-        int a;
-        derive(int i=0,int j=0);
-        ~derive()
-        {
-            cout&lt;&lt;&quot;继承类析构&quot;&lt;&lt;endl;
-        }
-};
-derive::derive(int i,int j):base(i)
-{
-    a=j;
-    cout&lt;&lt;&quot;继承类构造&quot;&lt;&lt;endl&lt;&lt;a&lt;&lt;endl;
-}
+    return x+y;
+ } 
 int main()
+{ 
+    auto d=add(100,0.5);        
+    auto k=add(100,A());       
+    return 0;
+}</code></pre><p>代码中定义了一个类A，然后重载了<code>+</code>运算符，重载为普通函数，使得<code>n+A的对象</code>返回值为A的对象，又定义了一个函数模板，函数为<code>add</code>，使两个T1和T2类型的变量相加，由于并不知道相加后返回值是什么类型，所以使用auto关键字。<code>-&gt;decltype(x+y)</code>表示的也是返回值类型，decltype关键字会在下面介绍。在主函数里使用<code>add</code>函数将100和0.5加起来，显然结果是100.5，所以d应该是double型的变量。然后将100与A对象加起来，由于前面重载了<code>+</code>运算符，所以结果为A的对象，k是A类型。通过这段代码可以看到auto关键字在函数编写上有很大的作用，在很多情况下我们是无法确定返回值类型的，尤其在遇到模板相关时，这时，使用auto关键字就会带来很大的方便。<br>decltype关键字的作用是求表达式的类型。示例如下：  </p>
+<pre><code>int i;
+double t; 
+structA{double x;}; 
+const A* a=new A();
+
+decltype(a) x1; //x1是A*类型
+decltype(i) x2; //x2是int类型
+decltype(a-&gt;X) x3; //x3是double类型</code></pre><p>x2的类型由<code>decltype(i)</code>决定，i是int型，所以x2是int类型，其他同理。</p>
+<h2 id="智能指针和空指针"><a href="#智能指针和空指针" class="headerlink" title="智能指针和空指针"></a>智能指针和空指针</h2><p>首先介绍一下空指针，平常定义指针为空时：</p>
+<pre><code>int *p=NULL;</code></pre><p>在C++ 11新特性里增加了空指针nullptr，定义时：</p>
+<pre><code>int *p=nullptr;</code></pre><p>其实这里的两个指针p是相等的，而空指针的作用是使得更能体现指针的特征。同时空指针可以转换成布尔变量，输出的结果为false。</p>
+<pre><code>bool b=nullptr;  //b=false</code></pre><p>智能指针shared_ptr的头文件为<code>&lt;memory&gt;</code>，通过shared_ptr的构造函数，可以让shared_ptr对象托管一个new运算符返回的指针。写法如下：</p>
+<pre><code>shared_ptr&lt;T&gt; ptr(new T);</code></pre><p>其中T可以是int，char，类名等各种类型。此后ptr就可以像<code>T*</code>类型的指针一样来使用，即*ptr就是用new动态分配的那个对象，而且不必操心释放内存的事。多个shared_ptr对象可以同时托管一个指针，系统会维护一个托管计数。当无shared_ptr托管该指针时，delete该指针。shared_ptr对象不能托管指向动态分配的数组的指针，否则程序运行会出错。具体示例如下：  </p>
+<pre><code>struct A
 {
-  derive b(2,1);
-  b.print();
-  return 0;
-}</code></pre><p>可以看到，在代码的构造函数和析构函数中，都输出是属于哪个类的。在派生类的构造函数中，定义了两个形参i和j，第一形参i是基类构造函数中的参数，派生类新增加的成员变量a用形参j赋值，这样就实现了派生类的构造函数。而派生类也有基类的成员函数，因此派生类对象b可以调用<code>print()</code>函数输出。运行结果为:<br><img src="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png" alt=""><br>在结果中我们也可以看到构造函数和析构函数的调用顺序，<strong>先构造的后析构，先基类构造再派生类构造</strong>。<br>假如我们定义基类对象为b，派生类对象为d：  </p>
-<pre><code>base b;
-derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code>b=d</code>。而反过来不行，这也是反映了前面所说的 is a 关系。<br>2.派生类对象可以初始化基类引用，即<code>base &amp;br=d</code>。<br>3.派生类对象的地址可以赋值给基类指针，即<code>base *pd=d</code>。  </p>
-<h2 id="直接基类和间接基类"><a href="#直接基类和间接基类" class="headerlink" title="直接基类和间接基类"></a>直接基类和间接基类</h2><p>上面所讲一个类可以派生出多个类。而派生类也可以作为基类再派生。如动物类可以派生出哺乳动物类，而哺乳动物类又可以派生出人类。这样，动物类和哺乳动物类都是人类的基类。哺乳动物类是直接基类，动物类是间接基类。声明派生类时，只需列出它的直接基类。但是派生类的成员包括自己定义、直接基类、间接基类的所有成员。<br>上面介绍了继承和派生的概念，类与类之间可能是继承关系，但如果一个类的对象是另一个类的成员呢？这属于什么关系？以圆类为例，圆有两个重要的成员，圆心和半径。而圆心是一个点，它属于点类的一个对象。此时定义圆类和点类为复合关系，<strong>复合关系一般把大的类声明为另一个类的友元</strong>。<br>面向对象的三个特征：封装、继承、多态。在下篇中将会进入到多态的学习，多态使得C++变的非常灵活，大大提高效率，是非常重要的一部分。</p>
+    int n;
+    A(int m=0):n(m)
+    {
+    }
+    ~A()
+    {
+        cout&lt;&lt;n&lt;&lt;&quot;  ~A&quot;&lt;&lt;endl;
+    }
+ } ;
+ int main()
+ {
+     A* p=new A(2);
+     shared_ptr&lt;A&gt; ptr1(p);    //ptr1托管A(2) 
+     cout&lt;&lt;ptr1-&gt;n&lt;&lt;endl;
+     shared_ptr&lt;A&gt; ptr2(ptr1);  //ptr2也托管A(2)
+     cout&lt;&lt;(*ptr2).n&lt;&lt;endl;
+     A* p1=new A(3);
+     shared_ptr&lt;A&gt; ptr3(p1);   //ptr3托管A(3)
+     cout&lt;&lt;ptr3-&gt;n&lt;&lt;endl;
+     ptr2.reset();            //ptr2放弃托管A(2)
+    if(!ptr2)
+    {
+        cout&lt;&lt;&quot;ptr2 is null&quot;&lt;&lt;endl;
+     } 
+    ptr2=ptr3;               //ptr2托管A(3)
+    cout&lt;&lt;ptr2-&gt;n&lt;&lt;endl;
+    shared_ptr&lt;A&gt; ptr4;
+ //    ptr4.reset(p);            // 不增加托管计数，会使得释放2次，出错 
+     cout&lt;&lt;&quot;end&quot;&lt;&lt;endl;
+     return 0;
+ }</code></pre><p>定义了一个类A，成员变量n，然后构造函数和析构函数。在主函数里定义指针p指向new出的A(2)，然后用智能指针定义ptr1托管p，即ptr1指向A(2)，输出n值验证。然后定义了智能指针ptr2，也托管A(2)，这是A(2)的托管计数为2。又定义了一个指针p1指向A(3)，智能指针ptr3托管A(3)，这是令ptr2放弃托管A(2)，判断一下它为空指针，再令其托管A(3)。这样到最后相当于ptr1托管A(2)，ptr2和ptr3托管A(3)。因此最后结束的时候删除A(2)和A(3)。运行结果为：<br><img src="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png" alt=""><br>智能指针中需要注意一点，可以看到上面代码中的被注释掉的一句<code>ptr4.reset(p);</code>，这句的意思是使ptr4托管p即ptr4指向A(2)，但是编译器却认为这个p与ptr1托管的p是不同的，即不增加托管次数，将它们当作两个指针。所以当结束的时候，A(2)就会被删除2次，因此出错。</p>
+<p>在下篇中将会继续对C++ 11新特性进行介绍，比如右值引用、move语义、Lambda表达式等，它们也都有着很大的作用。</p>
 
     </div>
 
@@ -321,7 +365,7 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/" title="继承和派生">https://zpl-novice.github.io/2020/01/24/继承和派生/</a>
+    <a href="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/" title="C++ 11新特性1">https://zpl-novice.github.io/2020/02/15/C++11新特性1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -338,13 +382,10 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="prev" title="运算符重载">
-      <i class="fa fa-chevron-left"></i> 运算符重载
+    <a href="/2020/02/13/STL%E7%AE%97%E6%B3%95/" rel="prev" title="STL算法">
+      <i class="fa fa-chevron-left"></i> STL算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/26/%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81/" rel="next" title="虚函数和多态">
-      虚函数和多态 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +445,7 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#派生类构造函数"><span class="nav-number">1.</span> <span class="nav-text">派生类构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接基类和间接基类"><span class="nav-number">2.</span> <span class="nav-text">直接基类和间接基类</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#统一的初始化"><span class="nav-number">1.</span> <span class="nav-text">统一的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#auto和decltype关键字"><span class="nav-number">2.</span> <span class="nav-text">auto和decltype关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#智能指针和空指针"><span class="nav-number">3.</span> <span class="nav-text">智能指针和空指针</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

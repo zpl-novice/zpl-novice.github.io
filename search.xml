@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++ 11新特性1</title>
+    <url>/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。</p>
+<a id="more"></a>
+<p>1998年是C++标准委员会成立的第一年，以后每五年视实际需要更新一次标准，它开发于1998年并于2003年更新，统称为C++ 98或者C++ 03，国际标准化组织于2011年9月1号出版发布ISO/IEC 14882:2011，称为C++ 11。相比于C++98/03，C++ 11则带来了数量可观的变化，其中包含了约140个新特性，以及对C++03标准中约600个缺陷的修正，这使得C++ 11更像是从C++ 98/03中孕育出的一种新语言。相比较而言，C++ 11能更好地用于系统开发和库开发、语法更加泛华和简单化、更加稳定和安全，不仅功能更强大，而且能提升程序员的开发效率。   </p>
+<h2 id="统一的初始化"><a href="#统一的初始化" class="headerlink" title="统一的初始化"></a>统一的初始化</h2><p>初始化是程序必不可少的，不管是一个简单的数组，还是一个对象，我们都需要对其建立时进行初始化。而在以前的定义中，若要定义一个动态数组v，其中的元素为1 2 3 4 5，定义如下：  </p>
+<pre><code>vector&lt;int&gt; v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+v.push_back(4);
+v.push_back(4);</code></pre><p>可以看到是很麻烦的，而在C++ 11中，我们可以像初始化普通数组一样去初始化自定义类型，用<code>{}</code>进行初始化，如：</p>
+<pre><code>vector&lt;int&gt; v{1,2,3,4,5};
+int arr[3]{1,2,3};
+string s{&quot;hello&quot;};
+int *p=new int[20]{1,2,3};</code></pre><p>即使在类里面也可以省略构造函数，对成员变量默认初始值：  </p>
+<pre><code>class B
+{
+    public:
+        int m=20;
+        int n;
+};</code></pre><p>用统一的初始化方法使得语法更加简单，提高了效率，非常的实用。</p>
+<h2 id="auto和decltype关键字"><a href="#auto和decltype关键字" class="headerlink" title="auto和decltype关键字"></a>auto和decltype关键字</h2><p>在C语言中也有auto关键字，使用auto关键字的变量，称为自动变量，是具有自动存储器的局部变量。而在C++ 11中，它被赋予了新的含义，作为一个新的类型指示符来指示编译器，编译器可以自动判断变量的类型。示例如下：  </p>
+<pre><code>auto i=100;         // i是int
+auto p= new A();    //p是A*
+auto k=34343LL;    //k是long long
+map&lt;string,int,greater&lt;string&gt;&gt; mp;
+for(auto i=mp.begin;i!=map.end();++i)
+cout&lt;&lt;i-&gt;first&lt;&lt;”,”&lt;&lt;i-&gt;second;  </code></pre><p>迭代器i的类型是<code>map&lt;string,int,greater&lt;string&gt;&gt;::iterator</code>，使用auto自动定义类型就可以不用再写这么长的代码来定义了。当然这只是auto的简单用法，它还有更大的作用。</p>
+<pre><code>class A
+{
+};
+A operator+(int n,A &amp;a)
+{
+    return a;
+}
+template&lt;class T1,class T2&gt;
+auto add(T1 x,T2 y)-&gt;decltype(x+y)
+{
+    return x+y;
+ } 
+int main()
+{ 
+    auto d=add(100,0.5);        
+    auto k=add(100,A());       
+    return 0;
+}</code></pre><p>代码中定义了一个类A，然后重载了<code>+</code>运算符，重载为普通函数，使得<code>n+A的对象</code>返回值为A的对象，又定义了一个函数模板，函数为<code>add</code>，使两个T1和T2类型的变量相加，由于并不知道相加后返回值是什么类型，所以使用auto关键字。<code>-&gt;decltype(x+y)</code>表示的也是返回值类型，decltype关键字会在下面介绍。在主函数里使用<code>add</code>函数将100和0.5加起来，显然结果是100.5，所以d应该是double型的变量。然后将100与A对象加起来，由于前面重载了<code>+</code>运算符，所以结果为A的对象，k是A类型。通过这段代码可以看到auto关键字在函数编写上有很大的作用，在很多情况下我们是无法确定返回值类型的，尤其在遇到模板相关时，这时，使用auto关键字就会带来很大的方便。<br>decltype关键字的作用是求表达式的类型。示例如下：  </p>
+<pre><code>int i;
+double t; 
+structA{double x;}; 
+const A* a=new A();
+
+decltype(a) x1; //x1是A*类型
+decltype(i) x2; //x2是int类型
+decltype(a-&gt;X) x3; //x3是double类型</code></pre><p>x2的类型由<code>decltype(i)</code>决定，i是int型，所以x2是int类型，其他同理。</p>
+<h2 id="智能指针和空指针"><a href="#智能指针和空指针" class="headerlink" title="智能指针和空指针"></a>智能指针和空指针</h2><p>首先介绍一下空指针，平常定义指针为空时：</p>
+<pre><code>int *p=NULL;</code></pre><p>在C++ 11新特性里增加了空指针nullptr，定义时：</p>
+<pre><code>int *p=nullptr;</code></pre><p>其实这里的两个指针p是相等的，而空指针的作用是使得更能体现指针的特征。同时空指针可以转换成布尔变量，输出的结果为false。</p>
+<pre><code>bool b=nullptr;  //b=false</code></pre><p>智能指针shared_ptr的头文件为<code>&lt;memory&gt;</code>，通过shared_ptr的构造函数，可以让shared_ptr对象托管一个new运算符返回的指针。写法如下：</p>
+<pre><code>shared_ptr&lt;T&gt; ptr(new T);</code></pre><p>其中T可以是int，char，类名等各种类型。此后ptr就可以像<code>T*</code>类型的指针一样来使用，即*ptr就是用new动态分配的那个对象，而且不必操心释放内存的事。多个shared_ptr对象可以同时托管一个指针，系统会维护一个托管计数。当无shared_ptr托管该指针时，delete该指针。shared_ptr对象不能托管指向动态分配的数组的指针，否则程序运行会出错。具体示例如下：  </p>
+<pre><code>struct A
+{
+    int n;
+    A(int m=0):n(m)
+    {
+    }
+    ~A()
+    {
+        cout&lt;&lt;n&lt;&lt;&quot;  ~A&quot;&lt;&lt;endl;
+    }
+ } ;
+ int main()
+ {
+     A* p=new A(2);
+     shared_ptr&lt;A&gt; ptr1(p);    //ptr1托管A(2) 
+     cout&lt;&lt;ptr1-&gt;n&lt;&lt;endl;
+     shared_ptr&lt;A&gt; ptr2(ptr1);  //ptr2也托管A(2)
+     cout&lt;&lt;(*ptr2).n&lt;&lt;endl;
+     A* p1=new A(3);
+     shared_ptr&lt;A&gt; ptr3(p1);   //ptr3托管A(3)
+     cout&lt;&lt;ptr3-&gt;n&lt;&lt;endl;
+     ptr2.reset();            //ptr2放弃托管A(2)
+    if(!ptr2)
+    {
+        cout&lt;&lt;&quot;ptr2 is null&quot;&lt;&lt;endl;
+     } 
+    ptr2=ptr3;               //ptr2托管A(3)
+    cout&lt;&lt;ptr2-&gt;n&lt;&lt;endl;
+    shared_ptr&lt;A&gt; ptr4;
+ //    ptr4.reset(p);            // 不增加托管计数，会使得释放2次，出错 
+     cout&lt;&lt;&quot;end&quot;&lt;&lt;endl;
+     return 0;
+ }</code></pre><p>定义了一个类A，成员变量n，然后构造函数和析构函数。在主函数里定义指针p指向new出的A(2)，然后用智能指针定义ptr1托管p，即ptr1指向A(2)，输出n值验证。然后定义了智能指针ptr2，也托管A(2)，这是A(2)的托管计数为2。又定义了一个指针p1指向A(3)，智能指针ptr3托管A(3)，这是令ptr2放弃托管A(2)，判断一下它为空指针，再令其托管A(3)。这样到最后相当于ptr1托管A(2)，ptr2和ptr3托管A(3)。因此最后结束的时候删除A(2)和A(3)。运行结果为：<br><img src="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png" alt=""><br>智能指针中需要注意一点，可以看到上面代码中的被注释掉的一句<code>ptr4.reset(p);</code>，这句的意思是使ptr4托管p即ptr4指向A(2)，但是编译器却认为这个p与ptr1托管的p是不同的，即不增加托管次数，将它们当作两个指针。所以当结束的时候，A(2)就会被删除2次，因此出错。</p>
+<p>在下篇中将会继续对C++ 11新特性进行介绍，比如右值引用、move语义、Lambda表达式等，它们也都有着很大的作用。</p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>STL算法</title>
     <url>/2020/02/13/STL%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p>摘要：本篇将介绍STL的最后一个部分：算法。算法对于程序是非常重要的，在STL中，我们需要用容器来实现需求，而作用在这些容器上的算法则必须要求了解才行。本篇博客会介绍STL中算法的种类以及它们的功能。</p>
