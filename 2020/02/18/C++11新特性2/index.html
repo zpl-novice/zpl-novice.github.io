@@ -46,19 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。">
+  <meta name="description" content="摘要：本篇将继续对C++ 11的新特性进行讲解。主要内容有lambda表达式、右值引用和move语义，在讲解右值引用时也会对常见的左值引用、参数传递等方法做个总结。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="类及类的成员2">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/index.html">
+<meta property="og:title" content="C++11新特性2">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/02/18/C++11%E6%96%B0%E7%89%B9%E6%80%A72/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。">
+<meta property="og:description" content="摘要：本篇将继续对C++ 11的新特性进行讲解。主要内容有lambda表达式、右值引用和move语义，在讲解右值引用时也会对常见的左值引用、参数传递等方法做个总结。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-15T08:14:53.080Z">
-<meta property="article:modified_time" content="2020-01-15T12:39:53.784Z">
+<meta property="og:image" content="https://i.loli.net/2020/02/18/u8cf5729DLpxM4T.png">
+<meta property="article:published_time" content="2020-02-18T06:22:05.310Z">
+<meta property="article:modified_time" content="2020-02-18T10:45:30.189Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/02/18/u8cf5729DLpxM4T.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/02/18/C++11%E6%96%B0%E7%89%B9%E6%80%A72/">
 
 
 <script id="page-configurations">
@@ -70,7 +72,7 @@
   };
 </script>
 
-  <title>类及类的成员2 | zpl-novice</title>
+  <title>C++11新特性2 | zpl-novice</title>
   
 
 
@@ -200,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/18/C++11%E6%96%B0%E7%89%B9%E6%80%A72/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          类及类的成员2
+          C++11新特性2
         </h1>
 
         <div class="post-meta">
@@ -224,7 +226,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-15 16:14:53 / 修改时间：20:39:53" itemprop="dateCreated datePublished" datetime="2020-01-15T16:14:53+08:00">2020-01-15</time>
+              <time title="创建时间：2020-02-18 14:22:05 / 修改时间：18:45:30" itemprop="dateCreated datePublished" datetime="2020-02-18T14:22:05+08:00">2020-02-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,7 +246,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>3.6k</span>
             </span>
 
         </div>
@@ -256,95 +258,59 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。</p>
+        <p>摘要：本篇将继续对C++ 11的新特性进行讲解。主要内容有lambda表达式、右值引用和move语义，在讲解右值引用时也会对常见的左值引用、参数传递等方法做个总结。</p>
 <a id="more"></a>
-
-<p>在上一篇中已经讲过了类的概念，知道类包括成员变量和成员函数两部分，而在C的知识学习中，也学习过静态变量这一概念。同样的，当在定义类时，根据需求的不同，我们可以定义为静态成员变量和静态成员函数。</p>
-<h2 id="静态成员变量和静态成员函数"><a href="#静态成员变量和静态成员函数" class="headerlink" title="静态成员变量和静态成员函数"></a>静态成员变量和静态成员函数</h2><p>静态成员的关键字为<code>static</code>，静态成员变量就是在定义时前面加了 <code>static</code>关键字的成员变量；静态成员函数就是在声明时前面加了<code>static</code>关键字的成员函数。<br>普通成员变量为每个对象有各自的一份，而静态成员变量一共就一份，为所有对象共享。普通成员函数必须作用于某个对象(例如在上一篇时钟代码中的设置时间函数，访问方式为<code>r.settime()</code>)，而静态成员函数并不具体作用于某个对象。因此静态成员不需要通过对象就能访问，可以直接<code>clock::settime()</code>访问，通过类名而不需要通过对象。它的本质上是全局变量和全局函数，<strong>因此必须在定义类的文件中静态成员变量进行一次声明，否则不行</strong>。静态成员函数内部不能访问非静态成员变量，设置静态成员的目的，是为了将和某些类紧密相关的全局变量和全局函数写到类里面，形式上成为一个整体。</p>
-<h2 id="成员对象和封闭类"><a href="#成员对象和封闭类" class="headerlink" title="成员对象和封闭类"></a>成员对象和封闭类</h2><p>成员对象指的是一个类的成员变量是另一个类的对象。包含成员对象的类叫封闭类。比如封闭类汽车的成员变量有类轮胎的一个实例化对象和类引擎的一个实例化对象，这两个成员对象。封闭类需要自定义构造函数，不能再用默认构造函数，因为有些成员对象无法默认初始化。在定义封闭类的构造函数时，添加初始化列表：</p>
-<p><code>类名：：构造函数（参数表）：成员变量1（参数表），成员变量2（参数表）,…{     }</code></p>
-<p>当封闭类对象生成时，先执行所有成员对象的构造函数，再执行封闭类的构造函数。成员对象的构造函数调用顺序和成员对象在类中的声明顺序一致与在初始化列表中出现的顺序无关。当封闭类的对象消亡时，先执行封闭类的析构函数，再执行成员对象的析构函数。析构函数调用顺序和构造函数调用顺序相反。</p>
-<pre><code>class Engine
+<p>C++ 11中还有许多的特性，在这里我将选择其中几个再讲解。</p>
+<h2 id="右值引用和move语义"><a href="#右值引用和move语义" class="headerlink" title="右值引用和move语义"></a>右值引用和move语义</h2><p>前面已经讲过引用的概念，即相当于给对象一个别名。这里出现左值和右值。左值相当于一个标识非临时性对象的表达式。右值则是标识临时性对象的表达式，或者是一个不与任何对象相联系的值（如字面值常数1，2，3等）。举例如下：  </p>
+<pre><code>vector&lt;string&gt; arr(3); 
+const int x=2; 
+int y;   
+int z=x+y;  
+string str=&quot;foo&quot;;  
+vector&lt;string&gt; *ptr=&amp;arr;</code></pre><p>其中<code>arr</code>,<code>str</code>,<code>y</code>,<code>z</code>,<code>ptr</code>,<code>*ptr</code>都是左值，<code>x</code>也是左值，不过它是一个不可修改的左值。<strong>一般的法则是，如果程序中有一个变量名，那么它就是一个左值，而不管变量是否可修改</strong>。<br>其中<code>2</code>，<code>x+y</code>，<code>&quot;foo&quot;</code>, <code>str.sub(0,1)</code>都是右值，可以看到它们均为字面值，而不是变量名，<code>x+y</code>是一个右值，因为它的值是临时的，但是在被赋给<code>z</code>之前，它要被存放在某个地方。<strong>如果函数调用计算一个其值在调用前不存在并且一旦调用终止就不再存在的表达式，那么它很可能是一个右值，除非它在别处被复制</strong>。<br>在C++ 11中，左值引用是通过在某个类型后放置一个符号<code>&amp;</code>而被声明的，此时一个左值引用变成了它所引用对象的同义词（别名），如：</p>
+<pre><code>string  str=&quot;hell&quot;;  
+string &amp;rstr=str;</code></pre><p><code>rstr</code>是<code>str</code>的另一个名字，此时它们表示的是同一对象，<code>rstr==str</code>。<br>右值引用是通过在某个类型后放置一个符号<code>&amp;&amp;</code>而被声明的。右值引用与左值引用具有相同的特征，但右值引用也可以引用一个右值（即一个临时量），如：</p>
+<pre><code>string  str=&quot;hello&quot;;  
+string &amp;&amp;bad1=&quot;hello&quot;; 
+string &amp;&amp;bad2=str+&quot; &quot;;
+string &amp;&amp;sub=str.substr(0,4);</code></pre><p>在介绍了什么是左值引用和右值引用后，再来说一下它们的用途。左值引用用途：<br>1.给结构复杂的名称起别名，减少书写麻烦。<br>2.范围for循环。<br>若让一个vector对象的所有值都加1，for循环如下：  </p>
+<pre><code>for(int i=0;i&lt;arr.size();++i)
+{  
+    ++arr[i];
+}</code></pre><p>使用范围for循环更方便，但直接写是不行的，因为这样x是每一个值的拷贝，而不是本身：  </p>
+<pre><code>for( auto x : arr)
 {
-    private:
-        int price;
-    public:
-        Engine(int p)
-       {
-           price = p;
-           cout &lt;&lt; &quot;Engine constructor is called&quot; &lt;&lt; endl;
-        }
-        ~Engine()
-        {
-            cout &lt;&lt; &quot;Engine deconstructor is called&quot; &lt;&lt; endl;
-        }
-};
-class tyer
+    ++x;
+}</code></pre><p>这时就需要用到引用，引用的范围for循环如下：<br>    for( auto &amp;x : arr)<br>    {<br>        ++x;<br>    }<br>3.避免赋值<br>这是最重要的一点，当我们用引用时，传递的不再是一个复制品，而是本体。<br>许多语言，包括C和Java，都是用传值调用传递所有参数的：把实参复制到形参。但是，C++中的参数可能是些大的复杂的对象，这些对象复制起来效率很低，而且有时候我们也希望能够改变传递过来的值。于是有了C++中的3种参数传递机制，而C++ 11又添加了第四种：传右值引用。首先讲讲前3种参数传递机制，示例如下：  </p>
+<pre><code>double average(double a,double b);  
+void swap(double a,double b);
+string randomItem(vector&lt;string&gt; arr);//返回arr中的一个随机项</code></pre><p> 第一个可以用传值调用，比如求<code>x</code>和<code>y</code>的平均值，只需要<code>x</code>复制给<code>a</code>，<code>y</code>复制给<code>b</code>，返回平均值即可。<code>x</code>和<code>y</code>不需要改变。<br>但在第二个就不能用传值调用，而需要传引用。因为若传值调用，传的是<code>x</code>和<code>y</code>的复制，不论怎么样<code>x</code>，<code>y</code>都不会改变。<strong>我们希望的是通过函数交换<code>x</code>和<code>y</code>，而不是交换它们的复制品</strong>。<br>第三个只是想要查找而不改变，因此是传常量引用。<br>传值、传引用、传常量引用是C++的3种参数传递机制（这里都指的左值），它们有各自的用途，接下来说C++ 11添加的第四种，传右值引用。<br>传右值引用的核心概念在于右值中存储的是要销毁的临时量，像<code>x=rval</code>这样的表达式（<code>rval</code>是一个右值）可以通过移动（<code>move</code>）而不是复制来实现。移动一个对象的状态常常比复制它要容易的多。<br>在C++ 11中，如果赋值运算符的右边（或构造函数）是一个右值，那么当对象支持移动操作时我们能够自动的避免复制。vector是支持移动操作的。<br>但是很多情况下我们所见到的都是左值，那么应该怎么移动呢？这里需要讲一个函数<code>std::move</code>，<strong>它能将任何左值转换成右值。它是不移动数据的，只是使一个值易于移动</strong>。这样，我们可以重新编写交换函数，以右值引用的方式移动交换，如下：  </p>
+<pre><code>void swap(vector&lt;string&gt; &amp;x,vector&lt;string&gt; &amp;x)
 {
-    private :
-        int width, length;
-    public:
-        tyer(int w, int l) :width(w), length(l)
-        {
-            cout &lt;&lt; &quot;tyer constructor is called&quot; &lt;&lt; endl;
-        };
-        ~tyer()
-        {
-            cout &lt;&lt; &quot;tyer destructor is called&quot; &lt;&lt; endl;
-        }
-};
-class car
+    vector&lt;string&gt; tmp=std::move( x );
+    x=std::move( y );
+    y=std::move( tmp );
+}</code></pre><h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><p>前面已经讲过STL里<code>sort()</code>算法的定义如下：  </p>
+<pre><code>template&lt;class Ranlt,class Pred&gt;
+void sort(Ranlt first,Ranlt last,Pred pr);</code></pre><p>默认按升序排列，判断x是否应该比y靠前，就看pr(x,y)是否为true。假如我们要让容器中元素按从小到大排列，就要修改<code>pr()</code>函数的定义。可以看出还是比较麻烦的，那么有没有什么简单的办法来实现自定义比较呢？<br>C++ 11新特性中添加了lambda表达式，它本质上是一个函数，但是使我们可以不再去定义类和传统的函数那样麻烦，使得变的简化。lambda表达式的定义如下：  </p>
+<pre><code>[外部变量访问方式说明符]（参数表）-&gt;返回值类型{ 语句组}</code></pre><p>外部变量访问方式说明符表示了不同的含义：<br>[=] 以传值的形式使用所有外部变量<br>[&amp;] 以引用形式使用所有外部变量<br>[x,&amp;y] x以传值形式使用，y以引用形式使用<br>[=,&amp;x,&amp;y] x，y以引用形式，其他以传值形式使用<br>[&amp;,x,y] x，y以传值形式，其他以引用形式使用<br><code>-&gt;返回值类型</code> 也可以没有，没有则编译器自动判断返回值类型。举个例子：  </p>
+<pre><code>auto ff=[=,&amp;y,&amp;z](int n){
+cout&lt;&lt;x&lt;&lt;endl; y++;z++;return n*n;};</code></pre><p>x以传值形式，y,z以引用形式，如果输出ff(15)，则结果为225，且y，z都加1。接下来说一下它的应用，以上面的<code>sort()</code>函数为例，若想要实现数组元素按个位数从小到大排列，该怎么定义？代码如下：  </p>
+<pre><code>int main()
 {
-    private :
-        tyer ty;
-        Engine en;
-        int color;
-    public:
-        car(int col, int p, int w, int l);
-        ~car()
-        {
-            cout &lt;&lt; &quot;car deconstructor is called&quot; &lt;&lt; endl;
-        }
-};
-car::car(int col, int p, int w, int l) :color(col), en(p), ty(w, l)
-{
-    cout &lt;&lt; &quot;car constructor is called&quot; &lt;&lt; endl;
-}
-int main()
-{
-    car car1(2, 1, 4, 5);
+    auto m=[](double a,double b){return a+b;};
+    cout&lt;&lt;m(1.2,2.5)&lt;&lt;endl;
+    int a[4]{11,2,24,33};
+    sort(a,a+4);
+    for(int i=0;i&lt;4;i++)
+    {
+        cout&lt;&lt;a[i]&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    sort(a,a+4,[](int x,int y)-&gt;bool{return x%10&lt;y%10;});
+    for_each(a,a+4,[](int x){cout&lt;&lt;x&lt;&lt;&quot; &quot;;});
     return 0;
-}</code></pre><h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>在C++中，一个类中可以有<code>public、protected、private</code>三种属性的成员，通过对象可以访问<code>public</code>成员，只有本类中的函数可以访问本类的 <code>private</code>成员。现在，我们来介绍一种例外情况——友元（<code>friend</code>）。借助友元（<code>friend</code>），可以使得其他类中的成员函数以及全局范围内的函数访问当前类的<code>private</code>成员。就相当于我是你的朋友，有些你的东西我也可以借用。<br>友元包括友元函数和友元类。一个类的友元函数可以访问该类的私有成员。若A是B的友元类，则A的所有成员函数都可以访问B的私有成员。</p>
-<pre><code>class A
-{
-    private:
-        int a;
-    public:
-        A(int);
-        void show();
-        friend void add(A); 
- } ;
- A::A(int b)
- {
-     a=b;
- }
- void A::show()
- {
-     cout&lt;&lt;a;
- }
- void add(A A1)
- {
-     int b;
-     b=A1.a+1;
-     cout&lt;&lt;b&lt;&lt;endl;
- }
- int main()
- {
-     A A1(4);
-     add(A1);
-     A1.show();
-     return 0;
- }</code></pre><p>如上面代码所示，我定义了一个类A，又定义了一个友元函数<code>add()</code>，使得它可以访问A的私有成员。</p>
+}</code></pre><p>可以看到代码中共定义了3个lambda表达式，第一个是将两个变量相加。然后定义了一个数组<code>a[4]</code>，其中元素为11，2，24，33，然后调用<code>sort()</code>函数默认从小到大排序再输出，结果应该为2，11，24，33。接下来使用lambda表达式，使排序规则变为比较个位数的大小。可以看到返回值类型为布尔型，若x的个位数比y的个位数小则返回true。当排完序以后用<code>for_each()</code>函数操作输出，本身<code>for_each()</code>函数是不输出数据的，但我们定义lambda表达式，将其数据输出。最后运行结果为：<br><img src="https://i.loli.net/2020/02/18/u8cf5729DLpxM4T.png" alt=""><br>上面虽然只是简单的运用了lambda表达式，但是还是可以感觉到它比传统的再去定义类和函数要方便许多，lambda表达式也不仅限于在这些特定的算法中使用，因此它是非常好用的一个新特性。<br>到此就简单的介绍完了C++ 11的新特性，虽然只介绍了其中的一小部分，但可以看到C++ 11的变化还是很大的，它使得C++更加的全面，也提高了效率，正是不断的对C++进行更新，才使得C++经久不衰。</p>
 
     </div>
 
@@ -360,7 +326,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" title="类及类的成员2">https://zpl-novice.github.io/2020/01/15/类及类的成员2/</a>
+    <a href="https://zpl-novice.github.io/2020/02/18/C++11%E6%96%B0%E7%89%B9%E6%80%A72/" title="C++11新特性2">https://zpl-novice.github.io/2020/02/18/C++11新特性2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -377,13 +343,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/" rel="prev" title="类及类的成员1">
-      <i class="fa fa-chevron-left"></i> 类及类的成员1
+    <a href="/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/" rel="prev" title="C++ 11新特性1">
+      <i class="fa fa-chevron-left"></i> C++ 11新特性1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" rel="next" title="类及类的成员3">
-      类及类的成员3 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -443,7 +406,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#静态成员变量和静态成员函数"><span class="nav-number">1.</span> <span class="nav-text">静态成员变量和静态成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员对象和封闭类"><span class="nav-number">2.</span> <span class="nav-text">成员对象和封闭类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元"><span class="nav-number">3.</span> <span class="nav-text">友元</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#右值引用和move语义"><span class="nav-number">1.</span> <span class="nav-text">右值引用和move语义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda表达式"><span class="nav-number">2.</span> <span class="nav-text">lambda表达式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
