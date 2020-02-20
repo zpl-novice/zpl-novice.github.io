@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>强制类型转换和异常处理</title>
+    <url>/2020/02/20/%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<p>摘要：本篇要讲解的内容是强制类型转换和异常处理。在程序运行过程中会出现很多问题，有些特殊情况被称为异常，我们需要捕捉到异常并处理。在前面C语言中已经讲过强制类型转换，在本篇中将更进一步讲解C++中的各种强制类型转换。</p>
+<a id="more"></a>
+<h2 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h2><p>在C++中的强制类型转换有四种，分别是：<code>static_cast</code>， <code>reinterpret_cast</code>， <code>const_cast</code>，  <code>dynamic_cast</code>。下面将对这四种分别进行讲解。  </p>
+<h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><p>前面在C语言的强制类型转换中讲过，转换是有风险的，而C语言的强制类型转换无法反映风险。在C++中，<code>static_cast</code>用来进行比较“自然”和低风险的转换，比如整型和实数型、字符型之间互相转换。它不能在不同类型的指针之间互相转换，也不能用于整型和指针之间的互相转换，也不能用于不同类型的引用之间的转换。例如：  </p>
+<pre><code>int n;
+char *p=&quot;hello&quot;;
+n=static_cast&lt;int&gt;(3.14);  //n的值变为3
+n=static_cast&lt;int&gt;(p);     //编译错误，static_cast不能将指针转换成整型</code></pre><h3 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h3><p><code>reinterpret_cast</code>用于进行各种不同类型的指针之间的转换、不同类型引用之间转换、以及指针和能容纳下指针的整数类型之间的转换。转换的时候，执行的是逐个比特拷贝的操作。举例如下：  </p>
+<pre><code>class A
+{
+    public:
+        int i;
+        int j;
+        A(int n):i(n),j(n){}
+};
+int main()
+{
+    A a(100);
+    int &amp;r=reinterpret_cast&lt;int&amp;&gt;(a);  //强行让r引用a
+    r=200;                      //把a.i变成了200
+    cout&lt;&lt;a.i&lt;&lt;&quot;,&quot;&lt;&lt;a.j&lt;&lt;endl;  //输出200，100
+    return 0;
+}</code></pre><p>在内存里面按顺序存放了i和j，这是强制让r引用a，r就只指向了i，令r等于200，相当于修改了i，j没有改变。</p>
+<h3 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h3><p>用来进行去除<code>const</code>属性的转换。将<code>const</code>引用转换成同类型的非<code>const</code>引用，将<code>const</code>指针转换为同类型的非<code>const</code>指针。示例如下：  </p>
+<pre><code>const string s=&quot;Inception&quot;;         //本来只能赋给一个const的引用
+string &amp;p=const_cast&lt;string &amp;&gt;(s); //去除const属性，且能通过p修改s
+string *ps=const_cast&lt;string*&gt;(&amp;s);  </code></pre><h3 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h3><p><code>dynamic_cast</code>专门用于将多态基类的指针或引用，强制转换为派生类的指针或引用，而且能够检查转换的安全性。对于不安全的指针转换，转换结果返回NULL指针。<code>dynamic_cast</code>不能用于将非多态基类的指针或引用，强制转换为派生类的指针或引用（包含虚函数的基类是多态基类）。  </p>
+<pre><code>Base *pb=&amp; d;
+pd=dynamic_cast&lt;Derived*&gt;(pb);
+if(pd==NULL)
+{
+    cout&lt;&lt;&quot;unsafe dynamic_cast&quot;&lt;&lt;endl;
+}</code></pre><p>引用的强制转换不会为空，那该如何判断转换是否安全呢？不安全会抛出异常，因此需要进行异常处理。</p>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>程序运行中难免发生错误，引起这些异常情况的原因很多，我们希望能够发现异常。需要一种手段，把异常与函数的接口分开，并且能够区分不同的异常。在函数体外捕获所发生的异常，并提供更多的异常信息。C++异常处理的3个关键字为：<code>try</code>、<code>catch</code>、<code>throw</code>。<br><code>throw</code>: 当问题出现时，程序会抛出一个异常。这是通过使用<code>throw</code>关键字来完成的。<br><code>catch</code>: 在您想要处理问题的地方，通过异常处理程序捕获异常。<code>catch</code>关键字用于捕获异常。<br><code>try</code>: <code>try</code>块中的代码标识将被激活的特定异常。它后面通常跟着一个或多个<code>catch</code>块。<br>先在<code>try</code>块进行判断，是否抛出了异常，没有抛出，跳过<code>catch</code>块继续进行，抛出后直接转到<code>catch</code>块，<code>try</code>块不再运行。并且<code>catch</code>块以从上到下的顺序查找，只执行一次。<br>示例代码为：  </p>
+<pre><code>int divide(int a,int b)
+{
+    if(b==0)
+    {
+        throw 1;
+    }
+    else if(a==0)
+    {
+        throw 1.5;
+    }
+    else
+        return a/b;
+ } 
+ int main()
+ {
+     int m,n,p;
+     for(int i=0;i&lt;3;i++)
+     {
+         cin&gt;&gt;m&gt;&gt;n;
+         try{
+             p=divide(m,n);
+             cout&lt;&lt;p&lt;&lt;endl;
+            cout&lt;&lt;&quot;正常运行&quot;&lt;&lt;endl;
+         }
+         catch(int j)
+        {
+            cout&lt;&lt;&quot;被除数为零&quot;&lt;&lt;endl;     
+        }
+        catch(double j)
+        {
+            cout&lt;&lt;&quot;除数为零&quot;&lt;&lt;endl;     
+        }
+    }
+     return 0;
+ }</code></pre><p>从代码中可以看到，定义了一个函数用于两个数相除，设置了两种异常情况，一种是除数为零，一种是被除数为零，当被除数为零时，抛出异常，抛出的是整型异常 1。当除数为零时，抛出异常，抛出的是double型异常 1.5。在主函数里去捕获异常，若捕获到整型异常，输出<code>被除数为零</code>。若捕获到double型异常，输出<code>除数为零</code>。运行结果如下：<br><img src="https://i.loli.net/2020/02/20/W8pFhzYoyvGOLXT.png" alt=""><br>从结果中可以看到，当除数和被除数都不为零时，正常运行，跳过<code>catch</code>块，而当发生异常时，由<code>try</code>块直接跳到了<code>catch</code>块。<br>如果异常只是抛出没有被处理，就会被抛给上一层的函数（异常再抛出）。在C++中也定义了标准异常类，C++标准库中有一些类代表异常，这些类都是从<code>exception</code>类派生而来。在这里就不再具体介绍，需要的可以自行了解。  </p>
+]]></content>
+      <categories>
+        <category>C++知识学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>C++11新特性2</title>
     <url>/2020/02/18/C++11%E6%96%B0%E7%89%B9%E6%80%A72/</url>
     <content><![CDATA[<p>摘要：本篇将继续对C++ 11的新特性进行讲解。主要内容有lambda表达式、右值引用和move语义，在讲解右值引用时也会对常见的左值引用、参数传递等方法做个总结。</p>
