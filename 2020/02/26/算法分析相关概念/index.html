@@ -46,19 +46,19 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。">
+  <meta name="description" content="摘要：本篇将介绍一下在分析算法时所用到的一些知识。例如如何判断一个算法的好坏？怎么去计算算法的时间复杂度等等。通过本篇的介绍，能够更好的让我们对一个算法进行分析。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="类及类的成员2">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/index.html">
+<meta property="og:title" content="算法分析相关概念">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。">
+<meta property="og:description" content="摘要：本篇将介绍一下在分析算法时所用到的一些知识。例如如何判断一个算法的好坏？怎么去计算算法的时间复杂度等等。通过本篇的介绍，能够更好的让我们对一个算法进行分析。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-15T08:14:53.080Z">
-<meta property="article:modified_time" content="2020-01-15T12:39:53.784Z">
+<meta property="article:published_time" content="2020-02-26T09:13:34.558Z">
+<meta property="article:modified_time" content="2020-02-26T12:00:29.573Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
 
 
 <script id="page-configurations">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>类及类的成员2 | zpl-novice</title>
+  <title>算法分析相关概念 | zpl-novice</title>
   
 
 
@@ -200,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          类及类的成员2
+          算法分析相关概念
         </h1>
 
         <div class="post-meta">
@@ -224,7 +224,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-15 16:14:53 / 修改时间：20:39:53" itemprop="dateCreated datePublished" datetime="2020-01-15T16:14:53+08:00">2020-01-15</time>
+              <time title="创建时间：2020-02-26 17:13:34 / 修改时间：20:00:29" itemprop="dateCreated datePublished" datetime="2020-02-26T17:13:34+08:00">2020-02-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,8 +232,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -244,7 +244,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>1.7k</span>
             </span>
 
         </div>
@@ -256,95 +256,41 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。</p>
+        <p>摘要：本篇将介绍一下在分析算法时所用到的一些知识。例如如何判断一个算法的好坏？怎么去计算算法的时间复杂度等等。通过本篇的介绍，能够更好的让我们对一个算法进行分析。</p>
 <a id="more"></a>
-
-<p>在上一篇中已经讲过了类的概念，知道类包括成员变量和成员函数两部分，而在C的知识学习中，也学习过静态变量这一概念。同样的，当在定义类时，根据需求的不同，我们可以定义为静态成员变量和静态成员函数。</p>
-<h2 id="静态成员变量和静态成员函数"><a href="#静态成员变量和静态成员函数" class="headerlink" title="静态成员变量和静态成员函数"></a>静态成员变量和静态成员函数</h2><p>静态成员的关键字为<code>static</code>，静态成员变量就是在定义时前面加了 <code>static</code>关键字的成员变量；静态成员函数就是在声明时前面加了<code>static</code>关键字的成员函数。<br>普通成员变量为每个对象有各自的一份，而静态成员变量一共就一份，为所有对象共享。普通成员函数必须作用于某个对象(例如在上一篇时钟代码中的设置时间函数，访问方式为<code>r.settime()</code>)，而静态成员函数并不具体作用于某个对象。因此静态成员不需要通过对象就能访问，可以直接<code>clock::settime()</code>访问，通过类名而不需要通过对象。它的本质上是全局变量和全局函数，<strong>因此必须在定义类的文件中静态成员变量进行一次声明，否则不行</strong>。静态成员函数内部不能访问非静态成员变量，设置静态成员的目的，是为了将和某些类紧密相关的全局变量和全局函数写到类里面，形式上成为一个整体。</p>
-<h2 id="成员对象和封闭类"><a href="#成员对象和封闭类" class="headerlink" title="成员对象和封闭类"></a>成员对象和封闭类</h2><p>成员对象指的是一个类的成员变量是另一个类的对象。包含成员对象的类叫封闭类。比如封闭类汽车的成员变量有类轮胎的一个实例化对象和类引擎的一个实例化对象，这两个成员对象。封闭类需要自定义构造函数，不能再用默认构造函数，因为有些成员对象无法默认初始化。在定义封闭类的构造函数时，添加初始化列表：</p>
-<p><code>类名：：构造函数（参数表）：成员变量1（参数表），成员变量2（参数表）,…{     }</code></p>
-<p>当封闭类对象生成时，先执行所有成员对象的构造函数，再执行封闭类的构造函数。成员对象的构造函数调用顺序和成员对象在类中的声明顺序一致与在初始化列表中出现的顺序无关。当封闭类的对象消亡时，先执行封闭类的析构函数，再执行成员对象的析构函数。析构函数调用顺序和构造函数调用顺序相反。</p>
-<pre><code>class Engine
+<p>算法（algorithm)是为求解一个问题需要遵循的、被清楚的指定的简单指令的集合。对于一个问题，一旦某种算法给定并且被确定是正确的，那么重要的一步就是确定该算法将需要多少诸如时间或空间等的资源量的问题。一个程序的运行时间，依赖于算法的好坏和问题的输入规模。同一个问题的不同解决方法会花费的时间，内存各不相同。即使计算机在不停进步，有些算法依然需要花费大量时间，因此需要找到最优效率的算法。因此，一个算法的好坏或者性能由它的时间复杂度和空间复杂度决定。</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>算法的空间复杂度通过计算算法所需的存储空间实现，算法空间复杂度的公式为S(n)，n为问题的规模。通常的复杂度指的都是时间复杂度。因此这里不再对空间复杂度过多解释，只简单说一下，在以后遇到时会具体介绍。</p>
+<h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>算法的时间复杂度的分析就是针对每个输入规模值，计算基本运算的执行次数。某些情况下，基本运算的执行次数不仅取决于输入规模，还与输入值有关。简而言之，就是一个算法要花多长时间执行。即一个算法所有指令被执行的次数为T(n)。最佳情况时间复杂度称为B(n)，最差情况时间复杂度称为W(n)，平均情况时间复杂度为A(n), 对于一般的排序，讨论平均情况下的时间复杂度即可，但是对于电厂检测这种，就必须要考虑最差情况时间复杂度，因为出了差错是灾难性的。具体问题具体分析讨论哪种情况的时间复杂度。一般情况下，一个算法必须是O(nlogn)或者更佳时，我们才能假定它可以在可容忍时间内处理极大实例。一般在没有特殊说明的情况下，都是指最坏时间复杂度。<br>时间复杂度常用大O符号表示，T(n)是一个具体的函数，而大O表示则相当于时间复杂度的分级，常见的为:<br>O(1)、O(logn)、O(n)、O(nlogn)、O(n^2)、O(n^3)、O(2^n)、O(n!)<br>为什么要分这几类呢？，举个例子，对于时间复杂度为n和n^2的两种算法，显然当n足够大时，第一种的效率总是高于第二种。那么100n和0.01n^2呢？若只比较一些数，如100以内的，第一种花费的时间大于第二种，但只要n&gt;10000,第一种还是效率高于第二种，只是需要n的值更大了而已。所以我们需要比较的是它们的相对增长率。因此看最终结果，引入了阶的概念。低阶的效率最终都是高于高阶的。我们只需要按阶次划分时间复杂度即可，不再考虑系数，以T(n)的最高阶作为O(n)。<br>如何计算时间复杂度？分析算法的复杂度，关键是分析循环结构的运行情况。</p>
+<h3 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h3><p>一个for循环的运行时间至多是该for循环内部那些语句（包括测试）的运行时间乘以迭代的次数。例如：</p>
+<pre><code>for(int i=0;i&lt;n;i++)
 {
-    private:
-        int price;
-    public:
-        Engine(int p)
-       {
-           price = p;
-           cout &lt;&lt; &quot;Engine constructor is called&quot; &lt;&lt; endl;
-        }
-        ~Engine()
-        {
-            cout &lt;&lt; &quot;Engine deconstructor is called&quot; &lt;&lt; endl;
-        }
-};
-class tyer
+    cout&lt;&lt;i;
+}</code></pre><p>可以看到，输出语句执行了n次，还有一次判断语句(i=n)，总共执行了n+1次，复杂度为O(n)。</p>
+<h3 id="嵌套循环"><a href="#嵌套循环" class="headerlink" title="嵌套循环"></a>嵌套循环</h3><p>从里向外分析这些循环，在一组嵌套循环内部的一条语句总的运行时间为该语句的运行时间乘以该组所有的for循环的大小的乘积。 </p>
+<pre><code>for(int i=0;i&lt;n;i++)
 {
-    private :
-        int width, length;
-    public:
-        tyer(int w, int l) :width(w), length(l)
-        {
-            cout &lt;&lt; &quot;tyer constructor is called&quot; &lt;&lt; endl;
-        };
-        ~tyer()
-        {
-            cout &lt;&lt; &quot;tyer destructor is called&quot; &lt;&lt; endl;
-        }
-};
-class car
+    for(int j=o;j&lt;n;j++)
+    {
+        cout&lt;&lt;i;
+    }
+}</code></pre><p>可以看到有两个for循环，复杂度为O(n^2)。</p>
+<h3 id="顺序语句"><a href="#顺序语句" class="headerlink" title="顺序语句"></a>顺序语句</h3><p>将各个语句的运行时间求和即可。如将上面两个循环合并：</p>
+<pre><code>for(int i=0;i&lt;n;i++)
 {
-    private :
-        tyer ty;
-        Engine en;
-        int color;
-    public:
-        car(int col, int p, int w, int l);
-        ~car()
-        {
-            cout &lt;&lt; &quot;car deconstructor is called&quot; &lt;&lt; endl;
-        }
-};
-car::car(int col, int p, int w, int l) :color(col), en(p), ty(w, l)
-{
-    cout &lt;&lt; &quot;car constructor is called&quot; &lt;&lt; endl;
+    cout&lt;&lt;i;
 }
-int main()
+for(int i=0;i&lt;n;i++)
 {
-    car car1(2, 1, 4, 5);
-    return 0;
-}</code></pre><h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>在C++中，一个类中可以有<code>public、protected、private</code>三种属性的成员，通过对象可以访问<code>public</code>成员，只有本类中的函数可以访问本类的 <code>private</code>成员。现在，我们来介绍一种例外情况——友元（<code>friend</code>）。借助友元（<code>friend</code>），可以使得其他类中的成员函数以及全局范围内的函数访问当前类的<code>private</code>成员。就相当于我是你的朋友，有些你的东西我也可以借用。<br>友元包括友元函数和友元类。一个类的友元函数可以访问该类的私有成员。若A是B的友元类，则A的所有成员函数都可以访问B的私有成员。</p>
-<pre><code>class A
-{
-    private:
-        int a;
-    public:
-        A(int);
-        void show();
-        friend void add(A); 
- } ;
- A::A(int b)
- {
-     a=b;
- }
- void A::show()
- {
-     cout&lt;&lt;a;
- }
- void add(A A1)
- {
-     int b;
-     b=A1.a+1;
-     cout&lt;&lt;b&lt;&lt;endl;
- }
- int main()
- {
-     A A1(4);
-     add(A1);
-     A1.show();
-     return 0;
- }</code></pre><p>如上面代码所示，我定义了一个类A，又定义了一个友元函数<code>add()</code>，使得它可以访问A的私有成员。</p>
+    for(int j=o;j&lt;n;j++)
+    {
+        cout&lt;&lt;i;
+    }
+}</code></pre><p>因为取的是最高阶次，T(n)=n^2+n，复杂度仍为O(n^2)。</p>
+<h3 id="if-else语句"><a href="#if-else语句" class="headerlink" title="if/else语句"></a>if/else语句</h3><p>对于if/else语句：</p>
+<pre><code>if(condition)
+    s1
+else
+    s2</code></pre><p>运行时间从不超过判断的运行时间再加上s1和s2中运行时间长者的总的运行时间。<br>对于其他情形的分析也是看执行次数，如递归等等。分析一个算法的时间复杂度是非常重要的，它能体现算法的性能。在后续对算法的学习当中，复杂度是必不可少的。</p>
 
     </div>
 
@@ -360,7 +306,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" title="类及类的成员2">https://zpl-novice.github.io/2020/01/15/类及类的成员2/</a>
+    <a href="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" title="算法分析相关概念">https://zpl-novice.github.io/2020/02/26/算法分析相关概念/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -377,13 +323,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/" rel="prev" title="类及类的成员1">
-      <i class="fa fa-chevron-left"></i> 类及类的成员1
+    <a href="/2020/02/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%9D%E8%AF%86/" rel="prev" title="数据结构与算法初识">
+      <i class="fa fa-chevron-left"></i> 数据结构与算法初识
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" rel="next" title="类及类的成员3">
-      类及类的成员3 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -443,7 +386,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#静态成员变量和静态成员函数"><span class="nav-number">1.</span> <span class="nav-text">静态成员变量和静态成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员对象和封闭类"><span class="nav-number">2.</span> <span class="nav-text">成员对象和封闭类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元"><span class="nav-number">3.</span> <span class="nav-text">友元</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#空间复杂度"><span class="nav-number">1.</span> <span class="nav-text">空间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度"><span class="nav-number">2.</span> <span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">2.1.</span> <span class="nav-text">for循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套循环"><span class="nav-number">2.2.</span> <span class="nav-text">嵌套循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顺序语句"><span class="nav-number">2.3.</span> <span class="nav-text">顺序语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if-else语句"><span class="nav-number">2.4.</span> <span class="nav-text">if&#x2F;else语句</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
