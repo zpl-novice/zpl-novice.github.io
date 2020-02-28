@@ -46,27 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将开始进入到标准模板库（STL）的学习。STL是非常实用的模板库，我将会从标准模板库的概念、组成、应用等方面对其进行介绍。由于STL中的知识很多，因此本篇将会只介绍其中的一部分。">
+  <meta name="description" content="摘要：本篇将开始对数据结构进行学习。首先介绍一下什么是抽象数据类型，以及表的抽象数据类型是什么样的。怎么对表进行实现？最后将通过前面C++ STL中的容器对表做进一步的介绍。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="标准模板库（STL)">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/index.html">
+<meta property="og:title" content="抽象数据类型和表ADT">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将开始进入到标准模板库（STL）的学习。STL是非常实用的模板库，我将会从标准模板库的概念、组成、应用等方面对其进行介绍。由于STL中的知识很多，因此本篇将会只介绍其中的一部分。">
+<meta property="og:description" content="摘要：本篇将开始对数据结构进行学习。首先介绍一下什么是抽象数据类型，以及表的抽象数据类型是什么样的。怎么对表进行实现？最后将通过前面C++ STL中的容器对表做进一步的介绍。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/cdN9ojTvuqCgEaP.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/AzSLRPmyqF5Iphc.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/OcPkAtCRiJxqEj4.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/Dnz3vmBUWFSHOCh.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/LWIPCDex7bHdVKt.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/EWhcaYkCbe4nxHm.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/07/E28fB5buUdjcHGO.png">
-<meta property="article:published_time" content="2020-02-07T06:09:24.428Z">
-<meta property="article:modified_time" content="2020-02-07T10:17:57.859Z">
+<meta property="og:image" content="https://i.loli.net/2020/02/28/JbE5rBc2Rkh8jMo.png">
+<meta property="og:image" content="https://i.loli.net/2020/02/28/MV4WreUJCmEbk7o.png">
+<meta property="og:image" content="https://i.loli.net/2020/02/28/CRwTNfOPGzY1SpA.png">
+<meta property="og:image" content="https://i.loli.net/2020/02/28/EYMfZ9JdFhVmG5w.png">
+<meta property="article:published_time" content="2020-02-28T07:37:20.463Z">
+<meta property="article:modified_time" content="2020-02-28T10:55:13.618Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/02/07/cdN9ojTvuqCgEaP.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/02/28/JbE5rBc2Rkh8jMo.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/">
 
 
 <script id="page-configurations">
@@ -78,7 +75,7 @@
   };
 </script>
 
-  <title>标准模板库（STL) | zpl-novice</title>
+  <title>抽象数据类型和表ADT | zpl-novice</title>
   
 
 
@@ -208,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -221,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          标准模板库（STL)
+          抽象数据类型和表ADT
         </h1>
 
         <div class="post-meta">
@@ -232,7 +229,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-07 14:09:24 / 修改时间：18:17:57" itemprop="dateCreated datePublished" datetime="2020-02-07T14:09:24+08:00">2020-02-07</time>
+              <time title="创建时间：2020-02-28 15:37:20 / 修改时间：18:55:13" itemprop="dateCreated datePublished" datetime="2020-02-28T15:37:20+08:00">2020-02-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,8 +237,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -252,7 +249,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
+              <span>1.6k</span>
             </span>
 
         </div>
@@ -264,56 +261,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将开始进入到标准模板库（STL）的学习。STL是非常实用的模板库，我将会从标准模板库的概念、组成、应用等方面对其进行介绍。由于STL中的知识很多，因此本篇将会只介绍其中的一部分。</p>
+        <p>摘要：本篇将开始对数据结构进行学习。首先介绍一下什么是抽象数据类型，以及表的抽象数据类型是什么样的。怎么对表进行实现？最后将通过前面C++ STL中的容器对表做进一步的介绍。</p>
 <a id="more"></a>
-<p>前面已经学习过模板的知识。而标准模板库（STL）就是一些常用数据结构和算法的模板的集合。STL由容器、算法和迭代器三部分组成。其中<br>容器：可容纳各种数据类型的通用数据结构，是类模板；<br>迭代器：可用于依次存取容器中元素，类似于指针；<br>算法：用来操作容器中的元素的函数模板。<br><strong>算法本身与他们操作的数据的类型无关，因此他们可以从简单数组到高度复杂容器的任何数据结构上使用</strong>。  </p>
-<h1 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h1><p>容器包括三部分，顺序容器、关联容器和容器适配器。</p>
-<h2 id="顺序容器"><a href="#顺序容器" class="headerlink" title="顺序容器"></a>顺序容器</h2><p>顺序容器包括<code>vector</code>、<code>deque</code>、<code>list</code>三种。为什么叫顺序容器，因为容器并非是排好序的，元素的插入位置同元素的值无关，而是由元素的添加到容器中的次序决定的。<br><code>vector</code>表示的是动态数组，元素在内存连续存放，随机存取任何元素都能在常数时间完成。在尾端增删元素具有较佳的性能。<br><img src="https://i.loli.net/2020/02/07/cdN9ojTvuqCgEaP.png" alt=""><br>它的特点是在<strong>尾部</strong>添加速度很快，在中间插入慢。所有STL算法都能对<code>vector</code>操作。在以前的学习中，当我们定义数组时，必须要给定它的内存大小。然而很多情况下，我们是不知道数组的大小的，而且数组大小也会变化。在动态数组<code>vector</code>中，它的大小会自动变化，不需要我们再去设定。<br>构造函数初始化的成员函数有：<br><img src="https://i.loli.net/2020/02/07/AzSLRPmyqF5Iphc.png" alt=""><br>其他常见的成员函数有：<br><img src="https://i.loli.net/2020/02/07/OcPkAtCRiJxqEj4.png" alt=""><br>下面以简单的代码为例说明动态数组的用法：  </p>
-<pre><code>int main()
-{
-    vector&lt;int&gt; v;
-    v.push_back(2);
-    v.push_back(0);
-    v.push_back(2);
-    v.push_back(0);
-    v.push_back(5);
-    v.pop_back();
-    cout&lt;&lt;v.size()&lt;&lt;endl;
-    for(int i=0;i&lt;v.size();i++)
-    {
-        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
-    }
-    return 0;
-}</code></pre><p>可以看到，创建一个空的int型动态数组v，依次向里面输入2、0、2、0、5，然后删除末尾元素5，返回容器中元素的个数，再依次将各个元素输出。  </p>
-<p><code>deque</code>表示的是双向队列，元素在内存连续存放。随机存取任何元素都能在常数时间完成（但次于<code>vector</code>）。在<strong>两端增删元素</strong>具有较佳的性能。（大部分情况下是常数时间，但在需要重新增加内存时时间会增加，vector同理）。<br><img src="https://i.loli.net/2020/02/07/Dnz3vmBUWFSHOCh.png" alt=""><br>所有适用于<code>vector</code>上的操作，都适用于<code>deque</code>。除此之外，<code>deque</code>还有<code>push_front()</code>(将元素插入到队列的头部）和<code>pop_front()</code>（删除头部的元素）操作。  </p>
-<p><code>list</code>即熟悉的双向链表，元素在内存不连续存放。因为是链表，所以不支持随机存取。但是在任何位置增删元素都能在时间常数完成。前面两个的迭代器是随机访问迭代器，而<code>list</code>的是双向迭代器。<br><img src="https://i.loli.net/2020/02/07/LWIPCDex7bHdVKt.png" alt=""><br><code>list</code>的成员函数有：<br><img src="https://i.loli.net/2020/02/07/EWhcaYkCbe4nxHm.png" alt=""><br>可以看到它的成员函数与前面的<code>vector</code>、<code>deque</code>还是有些区别的。其中第三个<code>sort()</code>函数是<code>list</code>自己定义的排序函数。举例代码如下：  </p>
-<pre><code>int main()
-{
-    list&lt;int&gt; l1,l2;
-    l1.push_back(1);l1.push_back(5);l1.push_back(3);
-    l1.push_front(2);l1.push_front(4);
-    l2.push_back(10);l2.push_back(20);l2.push_back(30);
-    list&lt;int&gt;::iterator i;
-    for(i=l1.begin();i!=l1.end();i++)
-    {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-    }
-    cout&lt;&lt;endl;
-    l1.sort();
-    for(i=l1.begin();i!=l1.end();i++)
-    {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-    }
-    cout&lt;&lt;endl;
-    l1.merge(l2);
-    l1.reverse();
-    for(i=l1.begin();i!=l1.end();i++)
-    {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-    }
-    return 0;
-}</code></pre><p>其中有关迭代器的知识会在接下来介绍，在这里只需将其当成指针即可。可见定义了两个链表l1和l2，<br>输入数据使l1变为1 5 3 2 4，l2变为10 20 30。将l1输出，然后调用<code>sort()</code>函数对l1进行排序并输出。将两个链表合并，再将其翻转输出。最后运行结果为：<br><img src="https://i.loli.net/2020/02/07/E28fB5buUdjcHGO.png" alt="">  </p>
-<p>在本篇中讲解了标准模板库的概念以及容器中的顺序容器这一部分，在下篇中将会继续进入关联容器和容器适配器的学习。</p>
+<p>抽象数据类型（Abstract Data Type,ADT）是带有一组操作的一些对象的集合。抽象数据类型是数学的抽象，在ADT的定义中没有地方提到关于这组操作是如何实现的任何解释。抽象数据类型不仅仅指那些已经定义并实现的数据类型，还可以是自定义的数据类型，比如我们定义一个<code>point</code>的抽象数据类型，它有<code>x,y,z</code>三个整型变量。抽象数据类型体现了程序设计中问题分解、抽象和信息隐藏的特性。</p>
+<h2 id="表ADT"><a href="#表ADT" class="headerlink" title="表ADT"></a>表ADT</h2><p>表是零个或多个数据元素的有限序列。元素是有顺序的，第一个元素无前驱，最后一个元素无后继，其他每个元素都有且只有一个前驱和后继。表元素的个数n定义为表的长度，当n=0时，称为空表。在较复杂的表中，一个数据元素可以由若干个数据项组成。<br>根据表的特性，它有两种存储方式：顺序存储和链式存储。即用数组实现和链表实现。  </p>
+<h3 id="表的简单数组实现"><a href="#表的简单数组实现" class="headerlink" title="表的简单数组实现"></a>表的简单数组实现</h3><p>表的顺序存储是用一段地址连续的存储单元依次存储表中的数据元素。因此可以用数组来实现。虽然数组由固定容量所创建，但是<code>vector</code>类（其内部存储一个数组）在需要的时候可以使容量成倍的增长。这就解决了数组大小的弊端。<br>表有几种常见的操作。如依次输出整个表、清空整个表、查找某一个元素、插入元素、删除元素等等。用数组可以实现上面的所有操作。当遍历和查找时，数组实现花费时间很少，这正是我们所期望的，在常数时间就可完成。然后当插入和删除时，却潜藏着昂贵的开销。在最坏的情形下，从表的前端插入，需要将整个数组后移一个位置来空出空间，而删除第一个元素则需要将表中的所有元素前移一个位置，因此这两种操作的最坏情况为O(n)。如果插入和删除操作发生在表的尾端，则只需要花费O(1)的时间。<br>存在许多情形，表是通过在尾端进行插入操作建成的，此后只发生访问操作。在这种情况下，数组是表的一种恰当的实现。然而，如果插入和删除操作遍及整个实现的表，特别是在表的前端，那么数组就不是一种好的选择。此时需要另一种实现：链表。</p>
+<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><p>为了避免插入和删除的线性开销，我们需要保证表可以不连续存储，即链式存储。<br><img src="https://i.loli.net/2020/02/28/JbE5rBc2Rkh8jMo.png" alt=""><br>链表由一系列结点组成，这些结点不必在内存中相连。一个结点包括两部分：数据域和指针域。结点中只包含一个指针域叫做单链表。规定最后一个结点指针为空。<br>当链表用来查找时，必须从头开始一个个往后找，因此时间复杂度为O(n)，比较耗费时间。插入和删除时的时间复杂度也是O(n)，因为需要先找到第i个结点，再进行插入和删除。但是当频繁的插入删除时，显然效率更高。<br>删除操作通过修改一个next指针来实现。如图：<br><img src="https://i.loli.net/2020/02/28/MV4WreUJCmEbk7o.png" alt=""><br>而插入操作则需要生成一个新结点，然后修改两个指针来实现，如图：<br><img src="https://i.loli.net/2020/02/28/CRwTNfOPGzY1SpA.png" alt=""><br>可以看到，如果知道变动将要的地方，那么插入或从链表中删除一项的操作不需要移动很多的项。现在的链表中每一项有它自身的数据以及指针指向下一项，但却没有跟它的上一项有关的东西。因此我们可以对指针域进行修改，使每个结点有两个指针域，一个指向前驱，一个指向后继。这种链表叫双向链表。<br><img src="https://i.loli.net/2020/02/28/EYMfZ9JdFhVmG5w.png" alt="">  </p>
+<h2 id="C-中表的实现"><a href="#C-中表的实现" class="headerlink" title="C++中表的实现"></a>C++中表的实现</h2><p>在C++知识学习中讲过STL，STL中实现了很多常用的数据结构。本篇所将的表ADT就对应着STL中的<code>vector</code>和<code>list</code>类模板。<code>vector</code>提供表ADT的一种可增长数组实现。<code>list</code>则提供表ADT的双向链表实现。关于<code>vector</code>和<code>list</code>以及它们所包含的成员函数这里就不再介绍，在STL那几篇博客中都已经列出。当然我们也可以不用标准模板库中的<code>vector</code>和<code>list</code>，自己去写一个新的<code>vector</code>和<code>list</code>来实现上述的种种操作。根据不同的需求有不同的选择。<br>在下篇中将会讲另外两种数据结构栈ADT、队列ADT，它们的一部分知识也在STL中有过介绍，因此很多地方就不再详细说明。</p>
 
     </div>
 
@@ -329,7 +283,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/" title="标准模板库（STL)">https://zpl-novice.github.io/2020/02/07/标准模板库（STL）/</a>
+    <a href="https://zpl-novice.github.io/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/" title="抽象数据类型和表ADT">https://zpl-novice.github.io/2020/02/28/抽象数据类型和表ADT/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -346,13 +300,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/" rel="prev" title="模板类之string类">
-      <i class="fa fa-chevron-left"></i> 模板类之string类
+    <a href="/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" rel="prev" title="算法分析相关概念">
+      <i class="fa fa-chevron-left"></i> 算法分析相关概念
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/09/STL%E4%B9%8B%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%B9%E5%99%A8%E9%80%82%E9%85%8D%E5%99%A8/" rel="next" title="STL之关联容器和容器适配器">
-      STL之关联容器和容器适配器 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -412,7 +363,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#容器"><span class="nav-number">1.</span> <span class="nav-text">容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#顺序容器"><span class="nav-number">1.1.</span> <span class="nav-text">顺序容器</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#表ADT"><span class="nav-number">1.</span> <span class="nav-text">表ADT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表的简单数组实现"><span class="nav-number">1.1.</span> <span class="nav-text">表的简单数组实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表"><span class="nav-number">1.2.</span> <span class="nav-text">链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中表的实现"><span class="nav-number">2.</span> <span class="nav-text">C++中表的实现</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
