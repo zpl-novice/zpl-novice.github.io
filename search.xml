@@ -1,6 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>栈ADT和队列ADT</title>
+    <url>/2020/03/01/%E6%A0%88ADT%E5%92%8C%E9%98%9F%E5%88%97ADT/</url>
+    <content><![CDATA[<p>摘要：本篇将继续上一篇的讲解，对栈ADT和队列ADT作一下简单的介绍。因为有些相关的知识已经在C++ STL当中介绍过。所以本篇重点将会是介绍它们的应用。</p>
+<a id="more"></a>
+<h2 id="栈ADT"><a href="#栈ADT" class="headerlink" title="栈ADT"></a>栈ADT</h2><p>栈（stack）是一个带有限制的表。前面也说过它是后进先出的（LIFO），插入和删除只能在一个位置进行，即表的末端–栈顶（top）。<br>栈是一个表，任何能实现表的方法都能实现栈。<code>list</code>和<code>vector</code>都支持栈的操作，前面也已经讲过，因为它们的功能过于强大，所以才有了容器适配器。<br>栈的链表实现和数组实现与前面讲的表相似。在数组实现中，用下标为0的一端作栈底。<code>top</code>表示栈顶元素在数组中的位置，空栈的判定条件为<code>top=-1</code>。</p>
+<h3 id="栈的应用"><a href="#栈的应用" class="headerlink" title="栈的应用"></a>栈的应用</h3><p>1.平衡符号<br>编译器检查程序的语法错误，但是常常由于缺少一个符号而引起编译器上百行的诊断，因此我们希望有一个算法来检查符号。可以用栈来实现，比如<code>{[()]}</code>是合法的，而<code>{([)]}</code>是不合法的。<br>算法的实现原理为：做一个空栈，读入字符直到文件尾。如果字符是一个开放符号，则将其推入栈中。如果字符是一个封闭符号，则判断栈是否为空，为空则报错。否则将栈元素弹出，如果弹出的符号不是对应的开放符号也报错。在文件尾，如果栈非空报错。实现代码如下：  </p>
+<pre><code>int peidui(string &amp;s1,string &amp;s2)
+{
+    if(s1==&quot;{&quot;)
+    {
+        if(s2==&quot;}&quot;)
+        {
+            return 1;
+        }
+        else return 0;
+    }
+    if(s1==&quot;(&quot;)
+    {
+        if(s2==&quot;)&quot;)
+        {
+            return 1;
+        }
+        else return 0;
+    }
+    if(s1==&quot;[&quot;)
+    {
+        if(s2==&quot;]&quot;)
+        {
+            return 1;
+        }
+        else return 0;
+    }
+}
+int main()
+{
+    stack&lt;string&gt; s;
+    string s1;
+    string tem;
+    cin&gt;&gt;s1;
+    for(int i=0;i&lt;s1.length();i++)
+    {
+        tem=s1.at(i);
+        if(s1.at(i)==&apos;{&apos;||s1.at(i)==&apos;(&apos;||s1.at(i)==&apos;[&apos;)
+        {
+            s.push(tem);
+        }
+        else
+        {
+            if(s.empty()==1)
+            {
+                cout&lt;&lt;&quot;error&quot;;
+                return 0;
+            }
+            else
+            {
+                if(peidui(s.top(),tem)==1)
+                {
+                    s.pop();
+                }
+                else
+                {
+                    cout&lt;&lt;&quot;error&quot;;
+                    return 0;    
+                }
+            }
+        }
+    }
+    if(s.empty()==1)
+    {
+        cout&lt;&lt;&quot;true&quot;;
+    }
+    else
+    {
+        cout&lt;&lt;&quot;error&quot;;
+    }
+    return 0;
+ } </code></pre><p>可以看到，定义了一个配对函数用来判断两个符号是否是一对的。在栈里面按符号进行判断。运行结果为：<br><img src="https://i.loli.net/2020/03/01/nYejlxfZ8ky5Aap.png" alt=""><br><img src="https://i.loli.net/2020/03/01/3WAnj7HZxGKr8Cd.png" alt="">  </p>
+<p>2.逆波兰表达式<br>我们常用的表达式是中缀表达式，而逆波兰表达式又叫后缀表达式，波兰表达式则为前缀表达式。逆波兰表达式是操作数在前，再操作符号。举例如下：<br><code>1 + 2</code>的逆波兰表达式为<code>1 2 +</code><br><code>3 + 4 - 5</code>的逆波兰表达式为<code>3 4 + 5 -</code><br><code>2 * 3 + 7</code>的逆波兰表达式为<code>2 3 * 7 +</code><br>因此它的实现原理为：如果当前符号是数字，压栈。如果是运算符，弹出栈顶的两个元素并运算。再将运算结果压入栈中。直到扫描完整个字符串，栈里的就是结果。实现代码如下：  </p>
+<pre><code>int exchange(char s)
+{
+    switch(s)
+    {
+        case &apos;1&apos;: return 1;break;
+        case &apos;2&apos;: return 2;break;
+        case &apos;3&apos;: return 3;break;
+        case &apos;4&apos;: return 4;break;
+        case &apos;5&apos;: return 5;break;
+        case &apos;6&apos;: return 6;break;
+        case &apos;7&apos;: return 7;break;
+        case &apos;8&apos;: return 8;break;
+        case &apos;9&apos;: return 9;break;
+    }
+}
+int main()
+{
+    stack&lt;int&gt; s;
+    char str[20];
+    int a,b,c;
+    cin&gt;&gt;str;
+    for(int i=0;str[i]!=0;i++)
+    {
+        if(str[i]!=&apos;+&apos;&amp;&amp;str[i]!=&apos;-&apos;&amp;&amp;str[i]!=&apos;*&apos;&amp;&amp;str[i]!=&apos;/&apos;)
+        {
+            c=exchange(str[i]);
+            s.push(c);
+        }
+        else
+        {
+            a=s.top();
+            s.pop();
+            b=s.top();
+            s.pop();
+            switch(str[i])
+            {
+                case &apos;+&apos;: b=a+b;s.push(b);break;
+                case &apos;-&apos;: b=b-a;s.push(b);break;
+                case &apos;*&apos;: b=a*b;s.push(b);break;
+                case &apos;/&apos;: b=b/a;s.push(b);break;
+                default: cout&lt;&lt;&quot;error&quot;;
+            }
+        }
+    }
+    cout&lt;&lt;s.top();
+    return 0;
+}</code></pre><p>从代码中可以看到，为了方便定义了一个转换函数，将字符转换成数字。输入字符串，判断是否为运算符，不是则将其通过转换函数变成数字压栈。运行结果为：<br><img src="https://i.loli.net/2020/03/02/SDtsPnzbIoGXyWl.png" alt=""><br><img src="https://i.loli.net/2020/03/02/RDCoxXNhvQkP1gd.png" alt="">  </p>
+<h2 id="队列ADT"><a href="#队列ADT" class="headerlink" title="队列ADT"></a>队列ADT</h2><p>队列是一种先进先出的表，简称FIFO。允许插入的一端称为队尾，允许删除的一端称为队头。<br>队列也有两种实现方式，数组和链队列。对于数组实现，可以使队列的头尾相接，构成循环队列来解决假溢出问题（即数组中还有位置，但是队尾无位置）。</p>
+<h3 id="队列的应用"><a href="#队列的应用" class="headerlink" title="队列的应用"></a>队列的应用</h3><p>有许多算法使用队列给出高效运行时间。它们当中有些可以在图论中找到，后面的学习中会讨论它们。实际上，每一个实际生活中的排队都是一个队列。  </p>
+<p>表、栈和队列或许在全部计算机科学中是3个基本的数据结构，大量的例子证明了它们广泛的用途。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>抽象数据类型和表ADT</title>
     <url>/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/</url>
     <content><![CDATA[<p>摘要：本篇将开始对数据结构进行学习。首先介绍一下什么是抽象数据类型，以及表的抽象数据类型是什么样的。怎么对表进行实现？最后将通过前面C++ STL中的容器对表做进一步的介绍。</p>
