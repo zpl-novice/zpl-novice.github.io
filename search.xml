@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>二叉树知识2</title>
+    <url>/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/</url>
+    <content><![CDATA[<p>摘要：本篇继续上一篇对二叉树的学习。主要讲解如何用代码实现对二叉树的建立以及遍历，同时也会介绍一下树、森林和二叉树的转换。这些也是我们后面学习的基础，了解树这一结构是怎么通过程序来实现。</p>
+<a id="more"></a>
+<p>前面已经说过二叉树的存储。二叉树是由结点组成的，每个结点又包括一个数据位和两个指向其左右孩子的指针。因此对于结点的建立，我们可以用结构体来完成。  </p>
+<pre><code>typedef struct node
+{
+    char data;
+    node* lchild;
+    node* rchild;    
+ }node,*Node;</code></pre><p>可以看到，定义了一个结点结构<code>node</code>，还定义了一个指向该结构体的指针<code>Node</code>。<strong>二叉树建立和遍历过程中，需要不停的生成结点，赋值。因此需要修改指针的指向，指向新的结点</strong>。在我们创建的时候，若二叉树某个结点为空，那我们就令指针<code>Node</code>的引用为空。而如果<code>Node</code>的值是空的，那么自然就没有结构体<code>node</code>的地方了，这个结点就相当于没有了。<br>还有一个问题是怎么确定每个结点是否有左右孩子？为了解决这个问题，对二叉树进行扩展，将二叉树中每个结点的空指针引出一个虚结点，其值为一特定值，比如<code>#</code>。这种处理后的二叉树称为扩展二叉树，<strong>扩展二叉树可以做到一个遍历序列确定一棵二叉树</strong>。 </p>
+<p><img src="https://i.loli.net/2020/03/07/DCw4VPqRlJftyYT.png" alt=""><br>扩展后前序为：AB#D##C##。<br>接下来就是利用递归生成二叉树。代码如下：  </p>
+<pre><code>typedef struct node
+{
+    char data;
+    node* lchild;
+    node* rchild;    
+ }node,*Node;
+ void CBtree(Node &amp;T)
+ {
+     char data;
+     cin&gt;&gt;data;
+     if(data==&apos;#&apos;)
+     {
+         T=NULL;
+     }
+     else
+     {
+         T=new node;
+         T-&gt;data=data;
+         CBtree(T-&gt;lchild);
+         CBtree(T-&gt;rchild);
+     }
+ }
+ void print(Node T)
+ {
+     if(T != NULL)
+     {
+          print(T-&gt;lchild);
+          cout&lt;&lt;T-&gt;data;
+         print(T-&gt;rchild);
+    }
+ }
+ int main()
+ {
+     Node T;
+     CBtree(T);
+     print(T);
+     return 0;
+ }</code></pre><p>首先定义了一个创建树的函数<code>CBtree</code>，输入参数为结点结构指针的引用。然后输入前序顺序，根据顺序判断若字符是<code>#</code>，则表示是空结点，否则就新建一个结点，将读入的数据赋给这个新建的结点，然后递归去创建该结点的左子树和右子树。需要说明的是，<strong>这是以前序顺序来建立的二叉树，如果以中序和后序就需要换一下位置</strong>。<br>在遍历函数中，先判断树是否为空，若不为空，则递归遍历二叉树的左子树，再打印该结点数据，最后递归遍历右子树，可以看到这是中序遍历。以上篇中的二叉树为例：<br><img src="https://i.loli.net/2020/03/05/xu4q5W6TiM8Jh3X.png" alt=""><br>前序遍历顺序为：ABDGHCEIF。中序遍历顺序为：GDHBAEICF。将其变成扩展二叉树后前序遍历顺序为：ABDG##H###CE#I##F##。运行结果为：<br><img src="https://i.loli.net/2020/03/07/8rapH9dMsEXoIcT.png" alt=""><br>可见，成功的实现了二叉树的建立与遍历。若想要实现中序和后序遍历，只需修改代码为：  </p>
+<pre><code>//将二叉树按照中序输出
+void Print2(Node T)
+{
+    if(T != NULL)
+    {
+        Print2(T-&gt;lchild);
+        cout&lt;&lt;T-&gt;data;
+        Print2(T-&gt;rchild);
+    }
+}
+//将二叉树按照后序输出
+void Print3(Node T)
+{
+    if(T != NULL)
+    {
+            Print3(T-&gt;lchild);
+           Print3(T-&gt;rchild);
+        cout&lt;&lt;T-&gt;data;
+        }
+}</code></pre><p>接下来介绍一下树、森林和二叉树的转换。在前面对树的表示中，我们学过一种方法叫孩子兄弟表示法。这里复习一下：任意一个树，它的结点的第一个孩子和该结点的右兄弟如果存在就是唯一的。设置两个指针，分别指向该结点的第一个孩子和此结点的右兄弟，因为我们要转换成二叉树，所以规定左子树为第一个孩子，右子树为右边第一个兄弟，没有则为空。如下所示树：<br><img src="https://i.loli.net/2020/03/07/8F7xqEb42PActG9.png" alt=""><br>A的第一个孩子为B，无兄弟，因此转换后A为根结点，左孩子为B，无右孩子。B的第一个孩子为E，右边第一个兄弟为C，因此转换后左孩子为E，右孩子为C。E没有孩子，右边第一个兄弟为F，因此E的左孩子为空，右孩子为F…转换后：<br><img src="https://i.loli.net/2020/03/07/GOv7kqzYjSywAK5.png" alt=""><br>森林有多棵树，将每个树先转换成二叉树，然后将根结点连起来（根结点相当于兄弟）。<br><img src="https://i.loli.net/2020/03/07/W6xnXr1sK5fkFqH.png" alt=""><br>每棵树转换后为：<br><img src="https://i.loli.net/2020/03/07/zDVwTb3fLUWdjch.png" alt=""><br>合在一起：<br><img src="https://i.loli.net/2020/03/07/3Nb1uXEhjWpQtRd.png" alt=""><br>二叉树转换成树和森林，反过来即可。   </p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>二叉树知识1</title>
     <url>/2020/03/05/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%861/</url>
     <content><![CDATA[<p>摘要：本篇将进入二叉树的学习，二叉树是数据结构中的重点知识，它包含的内容很多，因此将会分为几篇来讲解。在本篇当中将会主要介绍什么是二叉树？二叉树有哪些特点？二叉树有什么性质？二叉树是如何存储的以及二叉树的遍历。</p>
