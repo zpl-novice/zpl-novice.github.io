@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>赫夫曼树和表达式树</title>
+    <url>/2020/03/09/%E8%B5%AB%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91/</url>
+    <content><![CDATA[<p>摘要：本篇将开始介绍一些二叉树的应用。赫夫曼树又称最优二叉树，赫夫曼编码大大减少了常规编码的长度。而表达式树则是数据为操作符和操作数的树，我们将会通过二叉树的形式再次介绍一下前面学习的用栈实现逆波兰表达式。</p>
+<a id="more"></a>
+<p>在我们的日常生活中，当我们下载或发送软件时，我们经常会做一件事：压缩。通过压缩发送再解压，以此来提高速度。那么压缩是如何做到不出错的呢？今天会介绍一种基本的编码方法：赫夫曼编码。  </p>
+<h2 id="赫夫曼树"><a href="#赫夫曼树" class="headerlink" title="赫夫曼树"></a>赫夫曼树</h2><p>美国数学家赫夫曼在1952年发明了赫夫曼编码，为了纪念他的成就，于是就把他在编码中用到的特殊二叉树称之为赫夫曼树，他的编码称为赫夫曼编码。我们平时所用的压缩和解压缩技术都是基于赫夫曼的研究之上发展而来。<br>二叉树中一个结点到另一个结点的路径的分支数目称为路径长度。<br><img src="https://i.loli.net/2020/03/09/VlraIpqeNikv69M.png" alt=""><br>树a中根结点到A路径长度为1，到B为2，到C为3，D和E都是4。树b中根结点到A和B路径长度为3，到C为2，D和E也是2。树的路径长度就是从树根到每一结点的路径长度之和。可以看到，叶结点是带权值的，结点的带权路径长度为路径长度与权值的乘积。<strong>树的带权路径长度(WPL)为树中所有叶子结点的带权路径长度之和</strong>。二叉树a的<code>WPL=5*1+15*2+40*3+30*4+10*4=315</code>。二叉树b的<code>WPL=5*3+15*3+40*2+30*2+10*2=220</code>。<br>假设有n个权值{w1，w2，…，wn}，构造一个有n个叶子结点的二叉树，其中带权路径长度WPL最小的二叉树称为赫夫曼树。那么该如何构造出赫夫曼树呢？<br>1.把有权值的叶子结点按照从小到大的顺序排列成一个有序序列，即：A 5，E 10, B 15, D 30, C 40。<br>2.取头两个权值最小的结点作为新结点N1的两个子结点，相对较小的为左孩子。新结点的权值为两个子结点的权值之和，N1 15。<br><img src="https://i.loli.net/2020/03/09/U2Yhor5ImuNKR3C.png" alt=""><br>3.将<strong>N1替换A和E</strong>，插入到有序序列中，再重新从小到大排列。即N1 15，B 15， D 30, C 40。<br>4.重复步骤2，生成新结点N2，权值为30。<br><img src="https://i.loli.net/2020/03/09/yFWMIXxnbSukaOr.png" alt=""><br>5.循环直到生成根结点T。<br><img src="https://i.loli.net/2020/03/09/o7PRq6zEwhuLXxB.png" alt="">)<img src="https://i.loli.net/2020/03/09/7Id5SyiYZsjlhVQ.png" alt="">  </p>
+<p>接下来介绍一下赫夫曼编码。假如要将BADCADFEED传输，若用二进制：<br><img src="https://i.loli.net/2020/03/09/TF9XLqcaPKJxvU2.png" alt=""><br>则为：001000011010000011101100100011，以3个一位解读，如果内容过多，会非常长。怎么改进呢？可以看到不同字母出现的频率是不一样的，假设 A 27,B 8,C 15,D 15,E 30,F 5，合起来正好100%。构造赫夫曼树：<br><img src="https://i.loli.net/2020/03/09/2VUv1gN7s6m5FKZ.png" alt=""><br>将权值左分支改为0，右分支改为1后：<br><img src="https://i.loli.net/2020/03/09/4kYvMUgqy8Cj7Ti.png" alt=""><br>可得：<br><img src="https://i.loli.net/2020/03/09/YPElNFXOzdtQaJi.png" alt=""><br>新编码：1001010010101001000111100。可以看到个数减少了，当解码的时候按照约定好的赫夫曼树解码即可。  </p>
+<h2 id="表达式树"><a href="#表达式树" class="headerlink" title="表达式树"></a>表达式树</h2><p>表达式树的树叶是操作数，如常数或变量名字，而其他的结点为操作符。如果操作都是二元（二目）的，则构成的树正好是二叉树。如图所示为一个表达式树的例子，<code>(a+b*c)+((d*e+f)*g)</code>。<br><img src="https://i.loli.net/2020/03/09/5SrgMIczDNAU9Qd.png" alt=""><br>如何求该树的值，就需要用到前面学习过的遍历。因为前面已经详细的介绍过二叉树的遍历，这里就不再介绍，而只是说明一下。<br>在构造表达式树时，就需要回忆一下前面学过的栈的应用：逆波兰表达式。构造表达式树的方法酷似逆波兰表达式。一次一个符号的读入表达式，如果符号是操作数，那么建立一个单结点树并将指向它的指针推入栈中，如果符号是操作数，那么就从栈中弹出指向两棵树的两个指针并形成一棵新的树，该树的根就是操作符，它的儿子为前面的两棵树，然后将指向这棵新树的指针压入栈中。<br>来看一个例子，设输入为：<code>a b + c d e + * *</code>。<br>前两个符号是操作数，因此创建两棵单结点树并将它们压入栈中。<br><img src="https://i.loli.net/2020/03/09/cz3ugnWLV91sBoG.png" alt=""><br>接着，<code>+</code>被读入，因此指向这两棵树的指针被弹出，一棵新的树形成，指向新树的指针被压入栈中。<br><img src="https://i.loli.net/2020/03/09/5jMCvEsihlAaOTb.png" alt=""><br>然后<code>c d e</code>被读入，在每个单结点树创建后，对应的指向树的指针被压入栈中。<br><img src="https://i.loli.net/2020/03/09/Od7Tc16iwtrUs25.png" alt=""><br>接下来读入<code>+</code>号，因此右边的两棵树合并。<br><img src="https://i.loli.net/2020/03/09/XMiWa5pRcA6DQLw.png" alt=""><br>继续进行，读入<code>*</code>，弹出两棵树的指针并形成一棵新的树，<code>*</code>为它的根。<br><img src="https://i.loli.net/2020/03/09/CXsoacyphSu12mf.png" alt=""><br>最后，读入最后一个符号，两棵树合并，而指向最后的树的指针被留在栈中。<br><img src="https://i.loli.net/2020/03/09/mbwR1jxOvDUyh5P.png" alt="">  </p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>二叉树知识2</title>
     <url>/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/</url>
     <content><![CDATA[<p>摘要：本篇继续上一篇对二叉树的学习。主要讲解如何用代码实现对二叉树的建立以及遍历，同时也会介绍一下树、森林和二叉树的转换。这些也是我们后面学习的基础，了解树这一结构是怎么通过程序来实现。</p>
