@@ -1,6 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>二叉查找树</title>
+    <url>/2020/03/11/%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91/</url>
+    <content><![CDATA[<p>摘要：二叉查找树又称二叉排序树。本篇将会介绍什么是二叉查找树，二叉查找树的优势是什么，如何建立一个二叉查找树及对它进行操作。通过本篇的学习也能够后面AVL树和伸展树打下基础。</p>
+<a id="more"></a>
+<p>我们经常会对数据进行查找，假如查找的数据是普通的顺序存储，插入操作就是将记录放在表的末端，给表记录数加一，删除操作可以是删除后，后面的记录往前移，也可以是要删除的元素与最后一个元素互换，表记录数减一，反正整个数据集也没什么顺序，这样的效率也不错。插入和删除操作对于顺序存储结构来说，效率是可以接受的，但是这样的表由于无序造成查找的效率很低。<br>如果查找的数据集是有序线性表，并且是顺序存储的，查找可以折半、插值、斐波那契等查找算法来实现，但是因为有序，在插入和删除操作上就要耗费大量的时间。<br>有没有一种既可以使得插入和删除效率不错，又可以比较高效率的实现查找的算法？举个例子，假设数据集只有一个数{62}，然后将88插入，于是数据集变成了{62,88}，还保持从小到大的顺序。再查找有没有58，没有则插入，可此时若用线性表的顺序存储结构，就要移动62和88，可不可以不移动？用二叉树结构来实现，将第一个数62定为根结点，第二个数88比它大，就把它做62的右子树，58比62小，让它做62的左子树。此时，58的插入并没有影响到62与88的关系。<br><img src="https://i.loli.net/2020/03/11/Lw6dI8QCx9hgUeB.png" alt=""><br>二叉查找树又称二叉排序树，它或者是一棵空树，或者是具有下列性质的二叉树：<br>1.若它的左子树不为空，则左子树上所有结点的值均小于它的跟结构的值。<br>2.若它的右子树不为空，则右子树上所有结点的值均大于它的跟结构的值。<br>3.它的左、右子树也分别为二叉查找树。<br><img src="https://i.loli.net/2020/03/11/91fHdgjw2OruKXL.png" alt=""><br>如上面的两棵树中，左边的树是查找树，右边的不是。<br>构造一棵二叉查找树的目的，并不是为了排序，而是为了提高查找和插入删除关键词的速度。<br>接下来介绍一下二叉查找树的一些操作，由于树的递归定义，通常是递归的编写这些操作的例程。因为二叉查找树的平均深度为为O(logn)，所以一般不必担心栈空间被用尽。  </p>
+<h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><p>首先判断当前结点的值是否为查找的值，如果是，直接返回。如果不是，比较当前结点的值与查找值的大小，因为二叉查找树的特点，若查找值大，则只需在当前结点的右子树查找即可。若查找值小，则只需在当前结点的左子树查找。如果最终还是查找不到，返回。  </p>
+<pre><code>int searchBST(Node &amp;T,int key) 
+ {
+     if(T!=NULL)
+     {
+         if(T-&gt;data==key)
+         {
+             cout&lt;&lt;&quot;find &quot;&lt;&lt;key&lt;&lt;endl;
+        }
+        else if(key&lt;T-&gt;data)
+        {
+             searchBST(T-&gt;lchild,key);
+        }
+        else if(key&gt;T-&gt;data)
+        {
+            searchBST(T-&gt;rchild,key);
+        }
+    }
+    else
+        cout&lt;&lt;&quot;can&apos;t find &quot;&lt;&lt;key&lt;&lt;endl;
+    return 0;
+ }</code></pre><h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p><strong>根据特性，插入的都是叶结点</strong>。首先判断结点是否为空，如果是，直接新生成一个结点即可。如果不是，判断当前结点的值与插入值的大小，因为二叉查找树的特点，若插入值大，则只需在当前结点的右子树插入即可。若插入值小，则只需在当前结点的左子树插入。  </p>
+<pre><code>int insertBST(Node &amp;T,int key) 
+{
+    if(T==NULL)
+    {
+        Node p;
+        p=new node;
+        p-&gt;data=key;
+        p-&gt;lchild=p-&gt;rchild=NULL;
+        T=p;
+        return 1;
+    }
+    else if(key&lt;T-&gt;data)
+    {
+        insertBST(T-&gt;lchild,key);
+    }
+    else 
+    {
+        insertBST(T-&gt;rchild,key);
+    }
+    return 0;
+}</code></pre><h2 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h2><p>在讲完插入之后，再来说明如何构造二叉查找树就很简单了。相当于一个个结点的插入，生成了一个二叉查找树。  </p>
+<pre><code>int a[10]={62,88,58,47,35,73,51,99,37,93};
+Node T=NULL;
+for(i=0;i&lt;10;i++)
+{
+    insertBST(T,a[i]);
+}</code></pre><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>删除操作相比较而言就有些麻烦。因为结点的位置不同，操作也不一样，假如要删除的结点为叶结点，直接删除即可，不影响二叉查找树的其他地方。若删除的结点只有左子树或右子树，这也比较容易，将该结点的左子树或右子树整体移动到该结点的位置，然后删除该结点即可。但若是要删除的结点既有左子树又有右子树，就会很麻烦。因此根据二叉查找树的特性，有一个比较好的方法是，找到要删除结点p的直接前驱或直接后继s（中序遍历），用s替换结点p，然后再删除此结点s。这样只改变了要删除结点的左子树或右子树，而不用全部操作，同时不影响二叉查找树的特点。  </p>
+<pre><code>void deleteBST(Node &amp;T,int key)
+{
+    if(T!=NULL)
+    {
+        if(T-&gt;data==key)
+        {
+            delete1(T);
+        }
+        else if(key&lt;T-&gt;data)
+        {
+            deleteBST(T-&gt;lchild,key);
+        }
+        else if(key&gt;T-&gt;data)
+        {
+            deleteBST(T-&gt;rchild,key);
+        }
+    }
+    else
+        cout&lt;&lt;&quot;can&apos;t find and delete &quot;&lt;&lt;key&lt;&lt;endl;
+}</code></pre><p>可以看到，在<code>deleteBST</code>函数中，与前面没有太大的区别使用递归，关键在于<code>delete1</code>函数。  </p>
+<pre><code>void delete1(Node &amp;T)
+{
+    Node q,s;
+    if(T-&gt;rchild==NULL)
+    {
+        q=T;
+        T=T-&gt;lchild;
+        delete q; 
+    }
+    if(T-&gt;lchild==NULL)
+    {
+        q=T;
+        T=T-&gt;rchild;
+        delete q; 
+    }
+    else 
+    {
+        q=T;
+        s=T-&gt;lchild;
+        while(s-&gt;rchild)
+        {
+            q=s;
+            s=s-&gt;rchild;
+        }
+        T-&gt;data=s-&gt;data;
+        if(q!=T)
+        {
+            q-&gt;rchild=s-&gt;lchild;
+        }
+        else
+        {
+            q-&gt;lchild=s-&gt;lchild;
+        }
+        delete s;
+    }
+}</code></pre><p>在该函数里判断了上述的3种情况并分别进行操作。  </p>
+<p>最后对上述操作做一个总结，在主函数里：  </p>
+<pre><code>int main()
+{
+    int i;
+    int a[10]={62,88,58,47,35,73,51,99,37,93};
+    Node T=NULL;
+    for(i=0;i&lt;10;i++)
+    {
+        insertBST(T,a[i]);
+    }
+    searchBST(T,58);
+    searchBST(T,100);
+    deleteBST(T,100);
+    deleteBST(T,58);
+    searchBST(T,58);
+    return 0;
+}</code></pre><p>构造了一棵二叉查找树，然后在树中查找58和100，显然58能够找到，100找不到，然后删除100和58，因为100查找不到，所以自然也无法删除，58被删除，当再次查找58时，也无法查找到。运行结果为：<br><img src="https://i.loli.net/2020/03/11/lQYHB54T8orziVU.png" alt="">  </p>
+<p>总之，二叉查找树是以链接的方式存储，保持了链接存储结构在执行插入和删除操作时不用移动元素的优点，只要找到合适的插入和删除位置后，仅需要修改链接指针即可。插入删除的时间性能比较好。而对于二叉查找树的查找，走的就是从根结点到要查找的结点的路径，其比较次数等于给定值的结点在二叉查找树的层数。极端情况下，最少为1次，即根结点就是要查找的结点，最多也不会超过树的深度。也就是说，二叉查找树的查找性能取决于二叉查找树的形状。可问题在于，二叉查找树的形状是不确定的。<br>例如如下两图，它们都是二叉查找树，数据元素也是相同的，但同样是查找结点99，左图只需要两次比较，而右图却需要10次。<br><img src="https://i.loli.net/2020/03/11/NfoGwPXZE5lmY4a.png" alt=""><br>也就是说，我们希望二叉查找树是比较平衡的，即其深度与完全二叉树相同，那么查找的时间复杂度也就为O(logn)，近似于折半查找，而不是最坏情况下的O(n)。因此如何让二叉查找树带有平衡条件，这就是我们接下来要学习的平衡二叉树(AVL)。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>赫夫曼树和表达式树</title>
     <url>/2020/03/09/%E8%B5%AB%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91/</url>
     <content><![CDATA[<p>摘要：本篇将开始介绍一些二叉树的应用。赫夫曼树又称最优二叉树，赫夫曼编码大大减少了常规编码的长度。而表达式树则是数据为操作符和操作数的树，我们将会通过二叉树的形式再次介绍一下前面学习的用栈实现逆波兰表达式。</p>
