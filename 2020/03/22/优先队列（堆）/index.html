@@ -46,21 +46,26 @@
   };
 </script>
 
-  <meta name="description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
+  <meta name="description" content="摘要：本篇将会简单介绍一下优先队列和堆的知识。通过本篇的介绍，大家也会对前面STL所学的优先级队列有更深的认识。堆是一种特殊的数据结构，它用来实现优先队列是最有效率的。本篇主要介绍什么是优先队列和堆，以及堆的基本操作。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="继承和派生">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/index.html">
+<meta property="og:title" content="优先队列（堆）">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/03/22/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%88%E5%A0%86%EF%BC%89/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
+<meta property="og:description" content="摘要：本篇将会简单介绍一下优先队列和堆的知识。通过本篇的介绍，大家也会对前面STL所学的优先级队列有更深的认识。堆是一种特殊的数据结构，它用来实现优先队列是最有效率的。本篇主要介绍什么是优先队列和堆，以及堆的基本操作。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
-<meta property="article:published_time" content="2020-01-24T04:43:10.083Z">
-<meta property="article:modified_time" content="2020-01-24T07:30:56.722Z">
+<meta property="og:image" content="https://i.loli.net/2020/03/22/X1kHNAKTGzuVOwI.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/22/vhQFtwcS5uAefOD.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/22/e1mbwYZMNtBvXsG.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/22/nyO6kVwIKc2ZTNq.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/22/DGNxuQsBXU8EIWF.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/22/cyFZD7d8B4kusx9.png">
+<meta property="article:published_time" content="2020-03-22T05:54:25.693Z">
+<meta property="article:modified_time" content="2020-03-22T06:04:00.305Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/03/22/X1kHNAKTGzuVOwI.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/03/22/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%88%E5%A0%86%EF%BC%89/">
 
 
 <script id="page-configurations">
@@ -72,7 +77,7 @@
   };
 </script>
 
-  <title>继承和派生 | zpl-novice</title>
+  <title>优先队列（堆） | zpl-novice</title>
   
 
 
@@ -202,7 +207,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/22/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%88%E5%A0%86%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +220,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          继承和派生
+          优先队列（堆）
         </h1>
 
         <div class="post-meta">
@@ -226,7 +231,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-24 12:43:10 / 修改时间：15:30:56" itemprop="dateCreated datePublished" datetime="2020-01-24T12:43:10+08:00">2020-01-24</time>
+              <time title="创建时间：2020-03-22 13:54:25 / 修改时间：14:04:00" itemprop="dateCreated datePublished" datetime="2020-03-22T13:54:25+08:00">2020-03-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,8 +239,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -246,7 +251,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
+              <span>1k</span>
             </span>
 
         </div>
@@ -258,54 +263,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。</p>
+        <p>摘要：本篇将会简单介绍一下优先队列和堆的知识。通过本篇的介绍，大家也会对前面STL所学的优先级队列有更深的认识。堆是一种特殊的数据结构，它用来实现优先队列是最有效率的。本篇主要介绍什么是优先队列和堆，以及堆的基本操作。</p>
 <a id="more"></a>
-
-<p>类并不是孤立的存在的，不同的类之间有着不同的关系，正如前面所讲过的友元类。假如已经定义了一个动物类，里面有动物的成员变量和成员函数，此时若要再定义一个哺乳动物类该怎么办？可以看出，哺乳动物属于动物，它也具有动物类的所有特性。因此只需要继承动物类即可。<br>继承：在定义一个新的类B时，如果该类与某个已有的类A相似（B拥有A的全部特点），那么就可以把A作为一个基类，而把B作为基类的一个派生类。派生类是通过对基类进行修改和扩充得到的。在派生类中，可以扩充新的成员变量和成员函数。派生类一经定义后，可以独立使用，不依赖于基类。继承代表了 is a 关系。<strong>派生类成员函数不能访问基类的私有成员</strong>。<br>根据上面的概念可知，派生类是由基类派生而来，因此基类的成员变量和成员函数在派生类也有。一般情况下，在派生类里的指的是派生类定义的成员，若要访问基类的（公共的）同名成员变量和成员函数，需要加上基类名，即<code>base::I</code>、<code>base::func()</code>。<br>派生类的定义格式为：<br><code>class 派生类名：public 基类名</code><br>这里的<code>public</code>也可以换为<code>protected</code>和<code>private</code>，它们表示了继承类型，但我们通常使用的都是<code>public</code>继承。一个基类可以派生出多个派生类。<br>前面讲过公有成员和私有成员，这里讲一下保护成员（protected）。它与私有成员不同的地方在于它可以被派生类的成员函数访问。其他访问方式与私有成员相同。  </p>
-<h2 id="派生类构造函数"><a href="#派生类构造函数" class="headerlink" title="派生类构造函数"></a>派生类构造函数</h2><p>派生类的其他成员函数如前面所讲的定义即可，但构造函数略有不同，因为派生类是继承基类而来，所以在派生类的构造函数中要先去调用基类的构造函数。如果不调用基类构造函数，因为派生类成员函数不能调用基类私有成员，无法实现初始化。派生类的构造函数定义为：<br><code>派生类名（成员变量1，2，3...）：基类构造函数（成员变量1，2...）</code><br>成员变量1，2，3为形参名，以下面代码为例：</p>
-<pre><code>class base
-{
-    private:
-        int n;
-    public:
-        base(int i=0):n(i)
-        {
-            cout&lt;&lt;&quot;基类构造&quot;&lt;&lt;endl&lt;&lt;n&lt;&lt;endl;
-        }
-        ~base()
-        {
-            cout&lt;&lt;&quot;基类析构&quot;&lt;&lt;endl;
-        }
-        void print();
-};
-void base::print()
-{
-    cout&lt;&lt;n&lt;&lt;endl;
-}
-class derive:public base
-{
-    public:
-        int a;
-        derive(int i=0,int j=0);
-        ~derive()
-        {
-            cout&lt;&lt;&quot;继承类析构&quot;&lt;&lt;endl;
-        }
-};
-derive::derive(int i,int j):base(i)
-{
-    a=j;
-    cout&lt;&lt;&quot;继承类构造&quot;&lt;&lt;endl&lt;&lt;a&lt;&lt;endl;
-}
-int main()
-{
-  derive b(2,1);
-  b.print();
-  return 0;
-}</code></pre><p>可以看到，在代码的构造函数和析构函数中，都输出是属于哪个类的。在派生类的构造函数中，定义了两个形参i和j，第一形参i是基类构造函数中的参数，派生类新增加的成员变量a用形参j赋值，这样就实现了派生类的构造函数。而派生类也有基类的成员函数，因此派生类对象b可以调用<code>print()</code>函数输出。运行结果为:<br><img src="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png" alt=""><br>在结果中我们也可以看到构造函数和析构函数的调用顺序，<strong>先构造的后析构，先基类构造再派生类构造</strong>。<br>假如我们定义基类对象为b，派生类对象为d：  </p>
-<pre><code>base b;
-derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code>b=d</code>。而反过来不行，这也是反映了前面所说的 is a 关系。<br>2.派生类对象可以初始化基类引用，即<code>base &amp;br=d</code>。<br>3.派生类对象的地址可以赋值给基类指针，即<code>base *pd=d</code>。  </p>
-<h2 id="直接基类和间接基类"><a href="#直接基类和间接基类" class="headerlink" title="直接基类和间接基类"></a>直接基类和间接基类</h2><p>上面所讲一个类可以派生出多个类。而派生类也可以作为基类再派生。如动物类可以派生出哺乳动物类，而哺乳动物类又可以派生出人类。这样，动物类和哺乳动物类都是人类的基类。哺乳动物类是直接基类，动物类是间接基类。声明派生类时，只需列出它的直接基类。但是派生类的成员包括自己定义、直接基类、间接基类的所有成员。<br>上面介绍了继承和派生的概念，类与类之间可能是继承关系，但如果一个类的对象是另一个类的成员呢？这属于什么关系？以圆类为例，圆有两个重要的成员，圆心和半径。而圆心是一个点，它属于点类的一个对象。此时定义圆类和点类为复合关系，<strong>复合关系一般把大的类声明为另一个类的友元</strong>。<br>面向对象的三个特征：封装、继承、多态。在下篇中将会进入到多态的学习，多态使得C++变的非常灵活，大大提高效率，是非常重要的一部分。</p>
+<p>前面在C++ STL的容器迭代器中讲过优先级队列。优先队列与一般队列不同的地方在于，一般队列都是先进先出的，而优先队列中优先级高的元素放在队头。举个例子，我们把作业发送到打印机中，按照一般的队列则一个个去完成这些作业。但若有一项作业特别重要，因此希望打印机先处理这项作业，就需要有优先级的概念。<br>优先队列最少具有两个功能：插入和删除最小的元素。<br>优先队列（priority queue）实现方法可以有很多种，如用链表、二叉查找树等，但这样要么增加查找时间，要么使功能过于复杂，因此靠堆（heap）这一数据结构来实现最为方便。<br>这里的堆指的都是二叉堆。<strong>堆是具有下列性质的完全二叉树：每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆；或者每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆</strong>。<br><img src="https://i.loli.net/2020/03/22/X1kHNAKTGzuVOwI.png" alt="">  </p>
+<h2 id="基本的堆操作"><a href="#基本的堆操作" class="headerlink" title="基本的堆操作"></a>基本的堆操作</h2><p>下面讲解以小顶堆为例。  </p>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p><strong>为将一个元素X插入堆中，我们在下一个可用位置创建一个空穴，否则堆将不是完全树</strong>。如果X可以放在该空穴中而不破坏堆的序，则插入完成。否则，就把空穴的父结点上的元素移入该空穴中，空穴就向上进了一步，继续该过程直到X能放入空穴为止。如下为将25插入堆中的例子，25比31小，所以空穴与31换位置，25还比21大，满足条件。将25放入空穴即可。<br><img src="https://i.loli.net/2020/03/22/vhQFtwcS5uAefOD.png" alt="">  </p>
+<h3 id="删除最小值"><a href="#删除最小值" class="headerlink" title="删除最小值"></a>删除最小值</h3><p><strong>删除以类似插入的方式处理</strong>。找出最小值是很简单的，根据堆的性质，即为根结点。删除的时候，用空穴代替根结点，由于少了一个元素，因此堆中最后一个元素X必须移动到该堆的某个地方。如果X能被放在空穴中，则删除完成，不过这一般不可能，因此将空穴的两个儿子中较小者移入空穴，这样空穴就往下推了一层，重复直至X能放入空穴。下面为一个删除的例子，删除了13后用空穴代替，31就要移动，但31不能放入空穴中，将空穴较小的孩子14与空穴交换，31还是不满足性质不能放入空穴，继续与19交换、26交换，最终31放入空穴中。<br><img src="https://i.loli.net/2020/03/22/e1mbwYZMNtBvXsG.png" alt=""><br><img src="https://i.loli.net/2020/03/22/nyO6kVwIKc2ZTNq.png" alt=""><br><img src="https://i.loli.net/2020/03/22/DGNxuQsBXU8EIWF.png" alt="">  </p>
+<h2 id="d堆"><a href="#d堆" class="headerlink" title="d堆"></a>d堆</h2><p>二叉堆是如此简单，以至于它们几乎总是用在需要优先队列的时候。d堆是二叉堆的简单推广，它恰像一个二叉堆，只是所有的结点都有d个儿子。如图所示的d堆是d=3时的情况。<br><img src="https://i.loli.net/2020/03/22/cyFZD7d8B4kusx9.png" alt="">  </p>
+<p>在后面要学习的排序算法中，有一种就是堆排序，到那时我会再详细介绍如何用程序实现堆并进行排序。</p>
 
     </div>
 
@@ -321,7 +286,7 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/" title="继承和派生">https://zpl-novice.github.io/2020/01/24/继承和派生/</a>
+    <a href="https://zpl-novice.github.io/2020/03/22/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%88%E5%A0%86%EF%BC%89/" title="优先队列（堆）">https://zpl-novice.github.io/2020/03/22/优先队列（堆）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -338,13 +303,10 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="prev" title="运算符重载">
-      <i class="fa fa-chevron-left"></i> 运算符重载
+    <a href="/2020/03/20/%E6%95%A3%E5%88%971/" rel="prev" title="散列">
+      <i class="fa fa-chevron-left"></i> 散列
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/26/%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81/" rel="next" title="虚函数和多态">
-      虚函数和多态 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +366,7 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#派生类构造函数"><span class="nav-number">1.</span> <span class="nav-text">派生类构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接基类和间接基类"><span class="nav-number">2.</span> <span class="nav-text">直接基类和间接基类</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本的堆操作"><span class="nav-number">1.</span> <span class="nav-text">基本的堆操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">1.1.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除最小值"><span class="nav-number">1.2.</span> <span class="nav-text">删除最小值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d堆"><span class="nav-number">2.</span> <span class="nav-text">d堆</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

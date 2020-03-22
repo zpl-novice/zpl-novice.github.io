@@ -46,12 +46,12 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将会讲解一种新的数据结构，散列。它通过关键字直接找到存储地址，因为散列的知识较多，所以我将会分为两篇对其进行介绍。在本篇中，将主要讲解什么是散列？怎么构造散列函数？怎么解决冲突？">
+  <meta name="description" content="摘要：本篇将会讲解一种新的数据结构，散列。它通过关键字直接找到存储地址，而不再进行比较。在本篇中，将主要讲解什么是散列？怎么构造散列函数？怎么解决冲突？散列的优点和用途是什么？散列与二叉树的不同。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="散列1">
+<meta property="og:title" content="散列">
 <meta property="og:url" content="https://zpl-novice.github.io/2020/03/20/%E6%95%A3%E5%88%971/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将会讲解一种新的数据结构，散列。它通过关键字直接找到存储地址，因为散列的知识较多，所以我将会分为两篇对其进行介绍。在本篇中，将主要讲解什么是散列？怎么构造散列函数？怎么解决冲突？">
+<meta property="og:description" content="摘要：本篇将会讲解一种新的数据结构，散列。它通过关键字直接找到存储地址，而不再进行比较。在本篇中，将主要讲解什么是散列？怎么构造散列函数？怎么解决冲突？散列的优点和用途是什么？散列与二叉树的不同。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2020/03/20/XqmZ9DidAN4YTyU.png">
 <meta property="og:image" content="https://i.loli.net/2020/03/20/zWwRXNLuxpMgP4n.png">
@@ -62,7 +62,7 @@
 <meta property="og:image" content="https://i.loli.net/2020/03/20/qRJWZoO4rXNLhdb.png">
 <meta property="og:image" content="https://i.loli.net/2020/03/20/8fxAXbyNFSEUOgo.png">
 <meta property="article:published_time" content="2020-03-20T08:08:43.077Z">
-<meta property="article:modified_time" content="2020-03-20T08:30:27.017Z">
+<meta property="article:modified_time" content="2020-03-22T03:03:54.422Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2020/03/20/XqmZ9DidAN4YTyU.png">
@@ -79,7 +79,7 @@
   };
 </script>
 
-  <title>散列1 | zpl-novice</title>
+  <title>散列 | zpl-novice</title>
   
 
 
@@ -222,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          散列1
+          散列
         </h1>
 
         <div class="post-meta">
@@ -231,10 +231,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-20 16:08:43 / 修改时间：16:30:27" itemprop="dateCreated datePublished" datetime="2020-03-20T16:08:43+08:00">2020-03-20</time>
+              <time title="创建时间：2020-03-20 16:08:43" itemprop="dateCreated datePublished" datetime="2020-03-20T16:08:43+08:00">2020-03-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-22 11:03:54" itemprop="dateModified" datetime="2020-03-22T11:03:54+08:00">2020-03-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -253,7 +259,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>3.1k</span>
             </span>
 
         </div>
@@ -265,7 +271,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将会讲解一种新的数据结构，散列。它通过关键字直接找到存储地址，因为散列的知识较多，所以我将会分为两篇对其进行介绍。在本篇中，将主要讲解什么是散列？怎么构造散列函数？怎么解决冲突？</p>
+        <p>摘要：本篇将会讲解一种新的数据结构，散列。它通过关键字直接找到存储地址，而不再进行比较。在本篇中，将主要讲解什么是散列？怎么构造散列函数？怎么解决冲突？散列的优点和用途是什么？散列与二叉树的不同。</p>
 <a id="more"></a>
 <p>在我们之前学习过的查找当中，都有一步不可避免的操作，比较。但是比较是否真的有必要？能不能直接通过关键字找到它的内存位置？也就是说，我们只需要通过某个函数f，使得存储位置=f(关键字)。那样我们可以通过<strong>查找关键字不需要比较就可获得需要记录的存储位置</strong>。这就是一种新的存储技术-散列。<br>散列是在记录的存储位置和它的关键字之间建立一个确定的对应关系f，使得每个关键字key对应一个存储位置f(key)。查找时，根据这个确定的对应关系找到给定值key的映射f(key)，若查找集合存在这个记录，则必定在f(key)的位置上。<strong>我们把这种对应关系f称为散列函数，又称为哈希(Hash)函数</strong>。采用散列技术将记录存储在一块连续的存储空间中，这块连续存储空间称为散列表或哈希表。那么关键字对应的记录存储位置称为散列地址。<br>散列是一种用于以<strong>常数平均时间执行插入、删除和查找的技术</strong>。表、树、图等几种结构，数据元素之间都存在着某种逻辑关系，可以用连线图示表示出来，而散列技术的记录之间不存在什么逻辑关系，它只与关键字有关联。但同样的，散列就实现不了其他数据结构的一些功能，它是主要面向查找的。<br>在理想情况下，每个关键字通过散列函数计算出来的地址都是不一样的，可现实中，时常会碰到<strong>两个不一样的关键字通过散列函数后地址是一样的，这种现象称为冲突</strong>。我们需要解决冲突。  </p>
 <h2 id="构造散列函数"><a href="#构造散列函数" class="headerlink" title="构造散列函数"></a>构造散列函数</h2><p>一个好的散列函数一般有两个原则：<br>1.计算简单<br>2.散列地址分布均匀<br>构造散列函数的方法有好几种，下面对其分别进行介绍。  </p>
@@ -277,7 +283,8 @@
 <h3 id="再散列函数法"><a href="#再散列函数法" class="headerlink" title="再散列函数法"></a>再散列函数法</h3><p>对于散列表，事先准备多个散列函数：<code>fi(key)=RHi(key) (i=1,2…,k)</code>。这里的RHi就是不同的散列函数，可以把前面说的各种方法都用上，每当散列地址发生冲突时，就换一个散列函数计算。这种方法能够使得关键字不产生聚集，但是相应的也增加了时间。  </p>
 <h3 id="链地址法"><a href="#链地址法" class="headerlink" title="链地址法"></a>链地址法</h3><p>对于冲突，可以不换地方，而用链表来解决。<strong>将所有关键字为同义词的记录存储在一个单链表中，我们称这种表为同义词子表，在散列表中只存储所有同义词子表的头指针</strong>。如对于上面的例子，表示如下：<br><img src="https://i.loli.net/2020/03/20/qRJWZoO4rXNLhdb.png" alt=""><br>链地址法对于可能会造成很多冲突的散列函数来说，提供了绝不会出现找不到地址的保障。当然这也就带来了查找时需要遍历单链表的性能损耗。  </p>
 <h3 id="公共溢出区法"><a href="#公共溢出区法" class="headerlink" title="公共溢出区法"></a>公共溢出区法</h3><p><strong>为所有冲突的关键字建立了一个公共的溢出区来存放</strong>。<br><img src="https://i.loli.net/2020/03/20/8fxAXbyNFSEUOgo.png" alt=""><br>在查找时，对给定值通过散列函数计算出散列地址后，先于基本表中的相应位置进行比对，如果相等，则查找成功。如果不相等，则到溢出区去进行顺序查找。  </p>
-<p>以上就是本篇的全部内容了，然而有关散列的知识却并没有讲完，将会在下一篇中继续介绍。</p>
+<p>如果没有冲突，散列查找将是所有查找中效率最高的，因为它的时间复杂度为O(1)。但在实际的应用中，冲突是不可避免的，因此散列查找的平均查找长度取决于下面3个因素：<br>1.散列函数是否均匀。散列函数的好坏直接影响着出现冲突的频繁程度。<br>2.处理冲突的方法。相同的关键字和散列函数，处理冲突的方法不同，平均查找长度也不同。<br>3.散列表的装填因子。散列表装填因子=填入表中的记录个数/散列表长度。它标志着散列表装满的程度，当填入表中的记录个数越多，装填因子越大，产生冲突的可能性就越大。<br>前面讲过的二叉查找树也能实现插入和查找功能。虽然它的时间复杂度为O(logn)，但是二叉查找树还支持那些需要序从而功能更强大的例程。<strong>使用散列表不可能找出最小元素</strong>。<br>散列有着丰富的应用：<br>1.编译器使用散列表跟踪源代码中声明的变量。<br>2.散列表在任何图论问题中都有用。<br>3.散列表可用在为游戏编制的程序中。<br>4.可用于在线拼写检验程序。  </p>
+<p>本篇主要讲解了有关散列的各种知识，在后续的学习中也会继续对散列进行学习。  </p>
 
     </div>
 
@@ -293,7 +300,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/20/%E6%95%A3%E5%88%971/" title="散列1">https://zpl-novice.github.io/2020/03/20/散列1/</a>
+    <a href="https://zpl-novice.github.io/2020/03/20/%E6%95%A3%E5%88%971/" title="散列">https://zpl-novice.github.io/2020/03/20/散列1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -313,7 +320,10 @@
     <a href="/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/" rel="prev" title="多路查找树（B树）">
       <i class="fa fa-chevron-left"></i> 多路查找树（B树）
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/22/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%88%E5%A0%86%EF%BC%89/" rel="next" title="优先队列（堆）">
+      优先队列（堆） <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -389,7 +399,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -441,7 +451,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">72k</span>
+    <span title="站点总字数">74k</span>
 </div>
 
         
