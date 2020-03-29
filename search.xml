@@ -1,6 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>排序算法1</title>
+    <url>/2020/03/29/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%951/</url>
+    <content><![CDATA[<p>摘要：排序是我们生活中经常会面对的问题。如果整个排序工作能够在主存中完成，为内部排序。如果不能在主存中完成而必须在磁盘上完成的排序为外部排序。我总共会介绍7种排序算法，本篇将会对其中4种排序算法介绍，冒泡排序、选择排序、插入排序、希尔排序。剩下的其他排序算法将会在下一篇中给出介绍。</p>
+<a id="more"></a>
+<p>7种排序算法，按照复杂度分为两类，冒泡、选择、插入排序属于简单算法，而希尔排序、堆排序、归并排序、快速排序属于改进算法。  </p>
+<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p>冒泡是一种交换排序，它的基本思想就是两两相邻记录的元素，如果反序则交换，直到没有反序的为止。<br><img src="https://i.loli.net/2020/03/29/SjtJ3V45s8fx1kh.png" alt=""><br><strong>从后序开始，两两比较，将较小的数字如同气泡一样慢慢浮到上面，因此称其为冒泡算法</strong>。如上图所示，为i=1时，从最后一个元素2开始，与它相邻的元素比较交换，最终选择出了最小的元素1，交换到了最上面。它的优点在于2也被交换到了较上面。<br>冒泡排序实现代码如下：</p>
+<pre><code>template&lt;class T&gt;
+void bubblesort(vector&lt;T&gt; &amp;v)
+{
+    for(int i=0;i&lt;v.size();i++)
+    {
+        T tem;
+        int j;
+        for(j=v.size()-1;j&gt;i;j--)
+        {
+            if(v[j]&lt;v[j-1])
+            {
+                tem=v[j];
+                v[j]=v[j-1];
+                v[j-1]=tem;
+            }
+        }
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,4,7,1,5,8,6};
+    bubblesort(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>将其写成了模板函数的形式，使用嵌套循环，从最后开始两两交换。对其时间复杂度进行分析，显然最坏的情况下，即<strong>逆序情况，需要进行n(n-1)/2次比较，因此时间复杂度为O(n^2)</strong>。  </p>
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><p>冒泡排序的思想是不断的比较交换，通过交换完成最终的排序，而选择排序则是通过n-i次的比较，选出关键字最小的元素并和第i个记录交换。即它们的区别在于比较的次数是一样多的，但选择排序交换的次数少。<br><img src="https://i.loli.net/2020/03/29/nhz7ioXbLGEw1KH.png" alt=""><br>上图为i=1时，即从9开始，对9以后的元素与9比较并找出最小值，然后把最小值与9交换。可以看到9之后的元素都比9小，选择其中最小的1交换。<br>选择排序实现代码为：  </p>
+<pre><code>template&lt;class T&gt;
+void selectsort(vector&lt;T&gt; &amp;v)
+{
+    for(int i=0;i&lt;v.size();i++)
+    {
+        T min=v[i];
+        int j,p;
+        for(j=i+1;j&lt;v.size();j++)
+        {
+            if(v[j]&lt;min)
+            {
+                min=v[j];
+                p=j;
+            }
+        }
+        v[p]=v[i];
+        v[i]=min;
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,4,7,1,5,8,6};
+    selectsort(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>可以看到，关键地方在于找到最小值，然后交换。对其时间复杂度进行分析，第i趟排序需要n-i次的比较，即总共n(n-1)/2比较次数，<strong>时间复杂度为O(n^2)。尽管与冒泡排序时间复杂度相同，但是选择排序性能上还是略优于冒泡排序</strong>。</p>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p>插入排序由n-1趟排序组成。对于p=0到p=n-1趟，<strong>插入排序保证从位置0到位置p上的元素为已排序状态</strong>。示例如下：<br><img src="https://i.loli.net/2020/03/29/vU5rdQFxshiflaN.png" alt=""><br>关键在于先找到要插入的位置，然后<strong>将受到影响的元素（插入位置之后的元素）全都向后移一位</strong>，后移操作即从最后开始每一个元素都等于上一个元素的值。插入位置的元素值替换为插入元素即可。重复n-1次。从上图可以看到，第3次插入时，将51插入到前面已排好序的元素中，找到它的位置为34之后，64之前，将其插入，64后移一位。<br>插入排序实现代码为：  </p>
+<pre><code>template&lt;class T&gt;
+void insertsort(vector&lt;T&gt; &amp;v)
+{
+    for(int i=0;i&lt;v.size();i++)
+    {
+        T tem;
+        tem=v[i];
+        int j;
+        for(j=i;j&gt;0&amp;&amp;v[j-1]&gt;tem;j--)
+        {
+            v[j]=v[j-1];
+        }
+        v[j]=tem;
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,4,7,1,5,8};
+    insertsort(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>对其时间复杂度进行分析，嵌套循环并且每个最大为n次，即<strong>时间复杂度为O(n^2)。插入排序比冒泡排序和选择排序性能要好一些</strong>。</p>
+<h2 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h2><p>希尔排序是D.L.Shell于1959年提出来的一种排序算法，在这之前的排序算法的时间复杂度基本上都是O(n^2)的，希尔排序算法是突破这个时间复杂度的第一批算法之一。<br>它通过比较相距一定间隔的元素来工作，各趟比较所用的距离随着算法的进行而减小，直到只比较相邻元素的最后一趟为止。希尔排序使用一个序列h1,h2,h3…，叫做增量序列。只要h1=1，任何增量序列都是可行的。在使用增量hk的一趟排序后，对于每一个i都有a[i]&lt;=a[i+hk]，所有相隔hk的元素都被排序。<br><img src="https://i.loli.net/2020/03/29/LxueIQMcbA23gpW.png" alt=""><br>如图，在增量为5时，从35开始往后，将其与前面和它相隔增量的元素比较交换，如35比81小，交换。17比94小，交换…。<strong>关键点在于当进行a[j]与a[j-hk]的交换后，还需要判断v[j-hk]是否还需要再与之前的元素进行交换</strong>。如在1排序时，首先28与12交换，变成了12，28，11…，这时对11进行交换时，它先与28交换，交换完之后还比12小，再次交换，变成11，12，28…。<br>希尔排序实现代码为：  </p>
+<pre><code>template&lt;class T&gt;
+void shellsort(vector&lt;T&gt; &amp;v)
+{
+    for(int i=v.size()/2;i&gt;0;i=i/2)
+    {
+        T tem;
+        for(int j=i;j&lt;v.size();j++)
+        {
+            while(v[j]&lt;v[j-i])
+            {
+                tem=v[j];
+                v[j]=v[j-i];
+                v[j-i]=tem;
+                if(v[j-i]&lt;v[j-2*i]&amp;&amp;j-2*i&gt;=0)
+                {
+                    j=j-i;
+                }
+            }
+        }
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,4,7,1,5,8};
+    shellsort(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>虽然代码中有很多循环，但是最大并不是进行n次的，实际上，<strong>希尔排序的时间复杂度与选择的增量序列有关</strong>。而这个增量序列是我们自己选择的，如在代码中我选择增量最大为数组长度的一半，然后每次减小一半，直到变为1。<strong>一种比较好的选择方式是1，3，7…，2^k-1，时间复杂度为O(n^3/2)</strong>。这突破了传统的O(n^2)。</p>
+<p>本篇就先介绍这4种排序算法，其中冒泡、选择、插入都是简单算法，时间复杂度为O(n^2)。希尔排序则进行改进，达到了O(n^3/2)。在下篇中将介绍算法时间复杂度变成了O(nlogn)。性能更加优化。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>优先队列（堆）</title>
     <url>/2020/03/22/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%EF%BC%88%E5%A0%86%EF%BC%89/</url>
     <content><![CDATA[<p>摘要：本篇将会简单介绍一下优先队列和堆的知识。通过本篇的介绍，大家也会对前面STL所学的优先级队列有更深的认识。堆是一种特殊的数据结构，它用来实现优先队列是最有效率的。本篇主要介绍什么是优先队列和堆，以及堆的基本操作。</p>
