@@ -60,7 +60,7 @@
 <meta property="og:image" content="https://i.loli.net/2020/03/22/DGNxuQsBXU8EIWF.png">
 <meta property="og:image" content="https://i.loli.net/2020/03/22/cyFZD7d8B4kusx9.png">
 <meta property="article:published_time" content="2020-03-22T05:54:25.693Z">
-<meta property="article:modified_time" content="2020-03-22T06:04:00.305Z">
+<meta property="article:modified_time" content="2020-03-31T05:05:31.567Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2020/03/22/X1kHNAKTGzuVOwI.png">
@@ -229,10 +229,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-22 13:54:25 / 修改时间：14:04:00" itemprop="dateCreated datePublished" datetime="2020-03-22T13:54:25+08:00">2020-03-22</time>
+              <time title="创建时间：2020-03-22 13:54:25" itemprop="dateCreated datePublished" datetime="2020-03-22T13:54:25+08:00">2020-03-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-31 13:05:31" itemprop="dateModified" datetime="2020-03-31T13:05:31+08:00">2020-03-31</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -251,7 +257,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
+              <span>1.8k</span>
             </span>
 
         </div>
@@ -269,8 +275,46 @@
 <h2 id="基本的堆操作"><a href="#基本的堆操作" class="headerlink" title="基本的堆操作"></a>基本的堆操作</h2><p>下面讲解以小顶堆为例。  </p>
 <h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p><strong>为将一个元素X插入堆中，我们在下一个可用位置创建一个空穴，否则堆将不是完全树</strong>。如果X可以放在该空穴中而不破坏堆的序，则插入完成。否则，就把空穴的父结点上的元素移入该空穴中，空穴就向上进了一步，继续该过程直到X能放入空穴为止。如下为将25插入堆中的例子，25比31小，所以空穴与31换位置，25还比21大，满足条件。将25放入空穴即可。<br><img src="https://i.loli.net/2020/03/22/vhQFtwcS5uAefOD.png" alt="">  </p>
 <h3 id="删除最小值"><a href="#删除最小值" class="headerlink" title="删除最小值"></a>删除最小值</h3><p><strong>删除以类似插入的方式处理</strong>。找出最小值是很简单的，根据堆的性质，即为根结点。删除的时候，用空穴代替根结点，由于少了一个元素，因此堆中最后一个元素X必须移动到该堆的某个地方。如果X能被放在空穴中，则删除完成，不过这一般不可能，因此将空穴的两个儿子中较小者移入空穴，这样空穴就往下推了一层，重复直至X能放入空穴。下面为一个删除的例子，删除了13后用空穴代替，31就要移动，但31不能放入空穴中，将空穴较小的孩子14与空穴交换，31还是不满足性质不能放入空穴，继续与19交换、26交换，最终31放入空穴中。<br><img src="https://i.loli.net/2020/03/22/e1mbwYZMNtBvXsG.png" alt=""><br><img src="https://i.loli.net/2020/03/22/nyO6kVwIKc2ZTNq.png" alt=""><br><img src="https://i.loli.net/2020/03/22/DGNxuQsBXU8EIWF.png" alt="">  </p>
+<p>关于堆的实现代码如下所示：</p>
+<pre><code>template&lt;class T&gt;
+void buildheap(vector&lt;T&gt; &amp;v)
+{
+    for(int i=v.size()/2-1;i&gt;=0;i--)
+    {
+        adjust_heap(v,i,v.size());
+    }
+}
+template&lt;class T&gt;
+void adjust_heap(vector&lt;T&gt; &amp;v,int i,int n)
+{
+    T tem;
+    if(2*i+1&lt;n&amp;&amp;v[2*i+1]&gt;v[i])
+    {
+        tem=v[i];
+        v[i]=v[2*i+1];
+        v[2*i+1]=tem;
+        adjust_heap(v,2*i+1,n);
+    }
+    if(2*i+2&lt;n&amp;&amp;v[2*i+2]&gt;v[i])
+    {
+        tem=v[i];
+        v[i]=v[2*i+2];
+        v[2*i+2]=tem;
+        adjust_heap(v,2*i+2,n);
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,5,1,8,6,4,7};
+    buildheap(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>可以看到，代码中包含两个函数<code>buildheap()</code>和<code>adjust_heap()</code>，根据二叉堆的特点，当我们对其进行调整时，只需要调整<strong>非叶节点</strong>即可，而二叉堆是完全二叉树，所以非叶节点的个数为结点总数除以2再减一（根结点从零开始），调整过程中，判断该结点的左孩子或右孩子是否大于该结点，若有比该结点大的，交换。<strong>需要注意的时，当交换以后还需要再次进行判断交换完的结点是否满足二叉堆特点，否则再次调整</strong>。这样才能保证交换不破坏二叉堆的特性。上述代码的运行结果为8 6 7 2 5 1 4。可见，构建成功了一个二叉堆。关于删除和插入这里不再实现。</p>
 <h2 id="d堆"><a href="#d堆" class="headerlink" title="d堆"></a>d堆</h2><p>二叉堆是如此简单，以至于它们几乎总是用在需要优先队列的时候。d堆是二叉堆的简单推广，它恰像一个二叉堆，只是所有的结点都有d个儿子。如图所示的d堆是d=3时的情况。<br><img src="https://i.loli.net/2020/03/22/cyFZD7d8B4kusx9.png" alt="">  </p>
-<p>在后面要学习的排序算法中，有一种就是堆排序，到那时我会再详细介绍如何用程序实现堆并进行排序。</p>
+<p>在后续学习中，会学到堆排序，还会用到二叉堆的知识。在那里会发现堆在排序中的应用。</p>
 
     </div>
 
@@ -385,7 +429,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -437,7 +481,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">77k</span>
+    <span title="站点总字数">80k</span>
 </div>
 
         

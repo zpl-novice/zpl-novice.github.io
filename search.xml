@@ -1,9 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>排序算法2</title>
+    <url>/2020/03/31/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%952/</url>
+    <content><![CDATA[<p>摘要：本篇将继续对排序算法进行介绍，上一篇讲解了3种基本算法和希尔排序算法，本篇将介绍堆排序和归并排序，而最后一种快速排序将在下一篇中进行介绍。堆排序和归并排序的时间复杂度都为O(nlogn)，它们各有特点，都有很高的效率。</p>
+<a id="more"></a>
+<p>本篇将会介绍时间复杂度达到O(nlogn)的两种算法堆排序和归并排序。  </p>
+<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>前面已经学习过二叉堆的知识，堆排序利用二叉堆的性质，根结点为最大值，将其与最后一个元素互换位置，再去掉最后一个元素，对剩下元素重新构建成二叉堆。这样就能实现排序。<br><img src="https://i.loli.net/2020/03/31/c8SYT4BhKsGUpuj.png" alt=""><br>如上面所示的二叉堆，根结点为97最大值，将其与最后一个元素31互换位置。然后对去掉97的这些结点重新构建二叉堆，如下图。<br><img src="https://i.loli.net/2020/03/31/8OLsNWwXEDAhbtg.png" alt=""><br>这样再把59拿出来，一直下去就可以实现堆排序了。<br>具体实现代码就是对前面二叉堆的代码进行了简单修改：</p>
+<pre><code>template&lt;class T&gt;
+void buildheap(vector&lt;T&gt; &amp;v)
+{
+    for(int i=v.size()/2-1;i&gt;=0;i--)
+    {
+        adjust_heap(v,i,v.size());
+    }
+    for(int j=v.size()-1;j&gt;0;j--)
+    {
+        T tem=v[j];
+        v[j]=v[0];
+        v[0]=tem;
+        adjust_heap(v,0,j);
+    }
+}
+template&lt;class T&gt;
+void adjust_heap(vector&lt;T&gt; &amp;v,int i,int n)
+{
+    T tem;
+    if(2*i+1&lt;n&amp;&amp;v[2*i+1]&gt;v[i])
+    {
+        tem=v[i];
+        v[i]=v[2*i+1];
+        v[2*i+1]=tem;
+        adjust_heap(v,2*i+1,n);
+    }
+    if(2*i+2&lt;n&amp;&amp;v[2*i+2]&gt;v[i])
+    {
+        tem=v[i];
+        v[i]=v[2*i+2];
+        v[2*i+2]=tem;
+        adjust_heap(v,2*i+2,n);
+    }
+}
+int main()
+{
+//    vector&lt;int&gt; v{2,5,1,8,6,4,7};
+    vector&lt;double&gt; v{2.55,2.35,1.7,-8,6.3,7.4,7.4};
+    buildheap(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>从代码中可以看到，在构建了二叉堆以后，将最后一个元素与根结点交换位置，然后去掉最后一个元素重构二叉堆，直到所有元素排序完成。运行结果为：<br><img src="https://i.loli.net/2020/03/31/7tq8e61bTXRDSwW.png" alt=""><br>对其时间复杂度进行分析，<strong>整个构建堆的时间复杂度为O(n)，每次取记录重建的时间复杂度为O(nlogn)，所以总体的时间复杂度为O(nlogn)</strong>。它在性能上远远好于前面讲过的简单算法。</p>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p>归并在数据结构中的定义是将两个或两个以上的有序表合成一个新的有序表。分而治之的思想。将一个数组分为两部分，对两部分分别排序，然后归并。子数组同时也是这样递归进行的。<br><img src="https://i.loli.net/2020/03/31/VSu5IWP4TmOpdlG.png" alt=""><br>在合并时，如下所示：<br><img src="https://i.loli.net/2020/03/31/uAq8Tc6nNLMbJR3.png" alt=""><br>A和B中的较小者被复制到C中，另一个则与较小者的下一个元素比较，直到一个表复制完后，将另一个表中剩余部分复制到C中。如1与2先比较，1较小复制到C中第一个位置上，然后2再与13比较，将2复制到第二个位置上…。<br>归并排序的实现代码为：  </p>
+<pre><code>template&lt;class T&gt;
+void mergesort(vector&lt;T&gt; &amp;v)
+{
+    vector&lt;T&gt; tem(v.size());
+    msort(v,tem,0,v.size()-1);
+}
+template&lt;class T&gt;
+void msort(vector&lt;T&gt; &amp;v,vector&lt;T&gt; &amp;tem,int left,int right)
+{
+    if(left&lt;right)
+    {
+        int center=(left+right)/2;
+        msort(v,tem,left,center);
+        msort(v,tem,center+1,right);
+        merge(v,tem,left,center+1,right);
+    }
+}
+template&lt;class T&gt;
+void merge(vector&lt;T&gt; &amp;v,vector&lt;T&gt; &amp;tem,int left,int center1,int right)
+{
+    int leftpos=left;
+    int leftend=center1-1;
+    int rightpos=center1;
+    int tempos=leftpos;
+    int num=right-left+1;
+    while(leftpos&lt;=leftend&amp;&amp;rightpos&lt;=right)
+    {
+        if(v[leftpos]&lt;=v[rightpos])
+        {
+            tem[tempos]=v[leftpos];
+            tempos++;
+            leftpos++;    
+        }
+        else
+        {
+            tem[tempos]=v[rightpos];
+            tempos++;
+            rightpos++;
+        }
+    }
+    while(leftpos&lt;=leftend)
+    {
+        tem[tempos]=v[leftpos];
+        tempos++;
+        leftpos++;
+    }
+    while(rightpos&lt;=right)
+    {
+        tem[tempos]=v[rightpos];
+        tempos++;
+        rightpos++;
+    }
+    for(int i=0;i&lt;num;i++,--right)
+    {
+        v[right]=tem[right];
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,5,1,8,6,4,7};
+    mergesort(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>可以看到，代码略微有些复杂，主要包括3个函数，总体函数<code>mergesort()</code>、分割函数<code>msort()</code>和合并函数<code>merge()</code>。总体的流程如最上面的图所示，<strong>先是不停的分割直到分割成两位或1位为止，然后对其合并，直到最后合并成一个完整有序数组</strong>。合并过程上面也已经介绍过，主要有3种情况进行判断。<br>归并排序的最坏情形时间运行为O(nlogn)，它比较占用内存，但是效率高且稳定。  </p>
+<p>在下一篇将会介绍快速排序，它是非常常见而且很重要的一种排序算法。  </p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>排序算法1</title>
     <url>/2020/03/29/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%951/</url>
-    <content><![CDATA[<p>摘要：排序是我们生活中经常会面对的问题。如果整个排序工作能够在主存中完成，为内部排序。如果不能在主存中完成而必须在磁盘上完成的排序为外部排序。我总共会介绍7种排序算法，本篇将会对其中4种排序算法介绍，冒泡排序、选择排序、插入排序、希尔排序。剩下的其他排序算法将会在下一篇中给出介绍。</p>
+    <content><![CDATA[<p>摘要：排序是我们生活中经常会面对的问题。如果整个排序工作能够在主存中完成，为内部排序。如果不能在主存中完成而必须在磁盘上完成的排序为外部排序。我总共会介绍7种排序算法，本篇将会对其中4种排序算法介绍，冒泡排序、选择排序、插入排序、希尔排序。剩下的其他排序算法将会在下几篇中给出介绍。</p>
 <a id="more"></a>
 <p>7种排序算法，按照复杂度分为两类，冒泡、选择、插入排序属于简单算法，而希尔排序、堆排序、归并排序、快速排序属于改进算法。  </p>
 <h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p>冒泡是一种交换排序，它的基本思想就是两两相邻记录的元素，如果反序则交换，直到没有反序的为止。<br><img src="https://i.loli.net/2020/03/29/SjtJ3V45s8fx1kh.png" alt=""><br><strong>从后序开始，两两比较，将较小的数字如同气泡一样慢慢浮到上面，因此称其为冒泡算法</strong>。如上图所示，为i=1时，从最后一个元素2开始，与它相邻的元素比较交换，最终选择出了最小的元素1，交换到了最上面。它的优点在于2也被交换到了较上面。<br>冒泡排序实现代码如下：</p>
@@ -138,8 +264,46 @@ int main()
 <h2 id="基本的堆操作"><a href="#基本的堆操作" class="headerlink" title="基本的堆操作"></a>基本的堆操作</h2><p>下面讲解以小顶堆为例。  </p>
 <h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p><strong>为将一个元素X插入堆中，我们在下一个可用位置创建一个空穴，否则堆将不是完全树</strong>。如果X可以放在该空穴中而不破坏堆的序，则插入完成。否则，就把空穴的父结点上的元素移入该空穴中，空穴就向上进了一步，继续该过程直到X能放入空穴为止。如下为将25插入堆中的例子，25比31小，所以空穴与31换位置，25还比21大，满足条件。将25放入空穴即可。<br><img src="https://i.loli.net/2020/03/22/vhQFtwcS5uAefOD.png" alt="">  </p>
 <h3 id="删除最小值"><a href="#删除最小值" class="headerlink" title="删除最小值"></a>删除最小值</h3><p><strong>删除以类似插入的方式处理</strong>。找出最小值是很简单的，根据堆的性质，即为根结点。删除的时候，用空穴代替根结点，由于少了一个元素，因此堆中最后一个元素X必须移动到该堆的某个地方。如果X能被放在空穴中，则删除完成，不过这一般不可能，因此将空穴的两个儿子中较小者移入空穴，这样空穴就往下推了一层，重复直至X能放入空穴。下面为一个删除的例子，删除了13后用空穴代替，31就要移动，但31不能放入空穴中，将空穴较小的孩子14与空穴交换，31还是不满足性质不能放入空穴，继续与19交换、26交换，最终31放入空穴中。<br><img src="https://i.loli.net/2020/03/22/e1mbwYZMNtBvXsG.png" alt=""><br><img src="https://i.loli.net/2020/03/22/nyO6kVwIKc2ZTNq.png" alt=""><br><img src="https://i.loli.net/2020/03/22/DGNxuQsBXU8EIWF.png" alt="">  </p>
+<p>关于堆的实现代码如下所示：</p>
+<pre><code>template&lt;class T&gt;
+void buildheap(vector&lt;T&gt; &amp;v)
+{
+    for(int i=v.size()/2-1;i&gt;=0;i--)
+    {
+        adjust_heap(v,i,v.size());
+    }
+}
+template&lt;class T&gt;
+void adjust_heap(vector&lt;T&gt; &amp;v,int i,int n)
+{
+    T tem;
+    if(2*i+1&lt;n&amp;&amp;v[2*i+1]&gt;v[i])
+    {
+        tem=v[i];
+        v[i]=v[2*i+1];
+        v[2*i+1]=tem;
+        adjust_heap(v,2*i+1,n);
+    }
+    if(2*i+2&lt;n&amp;&amp;v[2*i+2]&gt;v[i])
+    {
+        tem=v[i];
+        v[i]=v[2*i+2];
+        v[2*i+2]=tem;
+        adjust_heap(v,2*i+2,n);
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,5,1,8,6,4,7};
+    buildheap(v);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>可以看到，代码中包含两个函数<code>buildheap()</code>和<code>adjust_heap()</code>，根据二叉堆的特点，当我们对其进行调整时，只需要调整<strong>非叶节点</strong>即可，而二叉堆是完全二叉树，所以非叶节点的个数为结点总数除以2再减一（根结点从零开始），调整过程中，判断该结点的左孩子或右孩子是否大于该结点，若有比该结点大的，交换。<strong>需要注意的时，当交换以后还需要再次进行判断交换完的结点是否满足二叉堆特点，否则再次调整</strong>。这样才能保证交换不破坏二叉堆的特性。上述代码的运行结果为8 6 7 2 5 1 4。可见，构建成功了一个二叉堆。关于删除和插入这里不再实现。</p>
 <h2 id="d堆"><a href="#d堆" class="headerlink" title="d堆"></a>d堆</h2><p>二叉堆是如此简单，以至于它们几乎总是用在需要优先队列的时候。d堆是二叉堆的简单推广，它恰像一个二叉堆，只是所有的结点都有d个儿子。如图所示的d堆是d=3时的情况。<br><img src="https://i.loli.net/2020/03/22/cyFZD7d8B4kusx9.png" alt="">  </p>
-<p>在后面要学习的排序算法中，有一种就是堆排序，到那时我会再详细介绍如何用程序实现堆并进行排序。</p>
+<p>在后续学习中，会学到堆排序，还会用到二叉堆的知识。在那里会发现堆在排序中的应用。</p>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
