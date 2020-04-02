@@ -1,6 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>排序算法3</title>
+    <url>/2020/04/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%953/</url>
+    <content><![CDATA[<p>摘要：本篇主要讲解快速排序算法并对前面讲的所有的排序算法进行一个总结。快速排序一直是实践中已知最快的排序算法，只有对它进行了深入学习才算是真正的学了排序算法。后序还有其他算法如桶排序、基数排序和外部排序算法等，将在下一篇中进行讲解。</p>
+<a id="more"></a>
+<p>快速排序算法被列为20世纪十大算法之一。快速排序与归并排序一样，也是用了分而治之的思想。快速排序的基本思想是通过一趟排序将待排记录分割成独立的两部分，其中一部分的关键字均比另一部分小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。<br>它的技巧是：<br>将某个数当作分割元素，从第二个数开始，向右寻找大于等于第一个数的数，从最后一个数开始，向左寻找小于等于第一个数的数，直到它们交叉，并将分割元素与最终这两个数里较小的交换位置。<br><strong>快排算法的每一步都相当于将一个数归位。迭代n次，最终将所有数归位。</strong><br>将选取的分割元素称为枢纽元，如下所示，选择第一个元素50为枢纽元，然后从10往后，20往前寻找比50小和大的数，10比50小，跳过，90比50大，选择90，另一边选择20，然后将20与90交换，继续寻找，这样一边下来可以将数组分为比50大的一组和比50小的一组。再在子数组中快排。<br><img src="https://i.loli.net/2020/04/02/igLIY1XvQEUa3jR.png" alt=""><br>下面直接来看实现代码：  </p>
+<pre><code>template&lt;class T&gt;
+void quicksort(vector&lt;T&gt; &amp;v,int left,int right)
+{
+    if(left&lt;right)
+    {
+        int pivot;
+        pivot=qsort(v,left,right);
+        quicksort(v,left,pivot-1);
+        quicksort(v,pivot+1,right);
+    }
+} 
+template&lt;class T&gt;
+int qsort(vector&lt;T&gt; &amp;v,int left,int right)
+{
+    int pivotkey;
+    T tem;
+    pivotkey=left;
+    while(left&lt;right)
+    {
+        left=left+1;
+        while(left&lt;right&amp;&amp;v[left]&lt;v[pivotkey])
+        {
+            left++;
+        }
+        while(left&lt;right&amp;&amp;v[right]&gt;v[pivotkey])
+        {
+            right--;
+        }
+        tem=v[right];
+        v[right]=v[left];
+        v[left]=tem;
+    }
+    if(v[left]&gt;v[pivotkey])
+    {
+        tem=v[left-1];
+        v[left-1]=v[pivotkey];
+        v[pivotkey]=tem;
+        return left-1;
+    }
+    else
+    {
+        tem=v[left];
+        v[left]=v[pivotkey];
+        v[pivotkey]=tem;
+        return left;
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,5,1,8,6,4,7};
+    quicksort(v,0,v.size()-1);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;
+}</code></pre><p>代码中主要包含函数<code>quicksort()</code>和它调用的函数<code>qsort()</code>，<code>qsort()</code>的功能是选择枢纽元，将数组排序成小于枢纽元、枢纽元、大于枢纽元的三部分，然后返回枢纽元。而<code>quicksort()</code>则是通过递归不断调用排序，最终实现整体排序。<strong>其中有一些细节地方需要注意，比如临界情况、枢纽元最终位置等</strong>。<br>对其时间复杂度进行分析，显然与枢纽元的选择有关。如果每次选择的数都偏中间，就如同平衡二叉树一样，得到<strong>最佳的时间复杂度为O(nlogn)，但如果选择的枢纽元为两端值，则时间复杂度能达到O(n^2)。但是快速排序的平均时间复杂度为O(nlogn)</strong>。因此，快速排序法的执行速度和分割元素所在的位置有密切的关系。当分割最平均时，快速排序执行的最快，相反则最慢。  </p>
+<h2 id="快排的优化"><a href="#快排的优化" class="headerlink" title="快排的优化"></a>快排的优化</h2><p>首先就是对枢纽元的选择进行优化。<strong>常见的选择是将第一个元素当作枢纽元，但是这是错误的方式</strong>。如果输入是随机的还能接受，如果是预排序或者反序的，时间复杂度可能达到O(n^2)。比较好的方法是随机选取，或者<strong>三数中值法，即比较首位、末位和中间元素大小，选择中位数来当枢纽元</strong>。<br>下面是三数中值法的代码，只需要对<code>qsort()</code>函数进行修改。  </p>
+<pre><code>int pivotkey;
+T tem;
+int center;                       //三数中值法 
+center=(left+right)/2;
+if(v[left]&gt;v[right])
+{
+    tem=v[right];
+    v[right]=v[left];
+    v[left]=tem;
+}
+if(v[center]&gt;v[right])
+{
+    tem=v[right];
+    v[right]=v[center];
+    v[center]=tem;
+}
+if(v[center]&gt;v[left])
+{
+    tem=v[left];
+    v[left]=v[center];
+    v[center]=tem;
+}
+pivotkey=left;</code></pre><p>通过三次比较大小，就将中位数移动到了最左边，然后令枢纽元为最左边的元素即可。<br>另一个优化的地方就是对递归的优化，之前已经讲解过，迭代的性能比递归要好，因此可以将递归改换成迭代。  </p>
+<p>到此已经讲了7种排序算法，这7种全部都是内部排序，希尔排序相当于插入排序的升级，堆排序相当于选择排序的升级，而快速排序则是前面认为最慢的冒泡排序的升级。<br><img src="https://i.loli.net/2020/04/02/dpiu2K1kPCDnTeL.png" alt=""><br>从平均情况来看，显然最后3种算法要胜过希尔排序，并远远胜过前3种。但是从最好情况来看，冒泡排序更胜一筹，因此使用哪种算法是不固定的，需要具体情况来分析。没有十全十美的算法。  </p>
+<p>在下一篇中将会讲解桶排序和基数排序，它们的时间复杂度甚至能达到O(n），但是限制条件是很大的，需要我们了解，同时外部排序的知识也会简单讲解。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>排序算法2</title>
     <url>/2020/03/31/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%952/</url>
     <content><![CDATA[<p>摘要：本篇将继续对排序算法进行介绍，上一篇讲解了3种基本算法和希尔排序算法，本篇将介绍堆排序和归并排序，而最后一种快速排序将在下一篇中进行介绍。堆排序和归并排序的时间复杂度都为O(nlogn)，它们各有特点，都有很高的效率。</p>
