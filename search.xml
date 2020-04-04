@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>图的基本知识</title>
+    <url>/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<p>摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。</p>
+<a id="more"></a>
+<p>线性表中数据元素是线性关系，都是只有一个直接前驱和直接后继，在树中数据之间有着明显的层次关系。图是一种比线性表和树更复杂的数据结构。在图形结构中，结点之间的关系可以是任意的，图中任意两个元素之间都可能相关。<br>图是由顶点的有穷非空集合和顶点之间的边的集合组成，通常表示为：G（V，E），其中G表示一个图，V是图G中顶点的集合，E是图G中边的集合。<br><img src="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png" alt=""><br>线性表中数据元素叫元素，树中则叫结点，而在图中叫顶点。有空表和空树，但是没有空图这个概念，即<strong>在图结构中，不允许没有顶点</strong>。顶点之间的逻辑关系用边来表示。<br>下面来讲解图的一些基本概念：<br>无向边是指两个顶点之间的边没有方向，(vi,vj)表示。任意的边都是无向边的图为无向图，如下所示。<br><img src="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png" alt=""><br>有向边则是两个顶点之间的边有方向，也称为弧。&lt;vi,vj&gt;表示，其中vi称为弧尾，vj称为弧头。任意的边都是有向边的图为有向图，如下所示，A,D之间的边为&lt;A,D&gt;。<br><img src="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png" alt=""><br><strong>不存在顶点到自身的边，且同一条边不重复出现的图称为简单图</strong>，我们后面要学习的基本都是简单图。<br>在无向图中，如果任意两个顶点之间都存在边，则称为无向完全图。<br><img src="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png" alt=""><br>根据无向完全图的定义可得，N个顶点，共有<code>N*(N-1)/2</code>条边。<br>在有向图中，如果任意两个顶点之间都存在方向互为相反的两条弧，则称为有向完全图。<br><img src="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png" alt=""><br>根据有向完全图的定义可得，N个顶点，共有<code>N*(N-1)</code>条边。<br>与图的边或弧相关的数叫做权。这种带权的图通常称为网。权可以表示一个顶点到另一个顶点的距离或耗费。如下所示：<br><img src="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png" alt=""><br>如果一个图的顶点和边都是另一个图的顶点和边的集合的子集，则这个图为另一个图的子图。如下所示，右边的图为左边图的子图。 </p>
+<p><img src="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png" alt="">  </p>
+<p>顶点V的度是和V相关联的边的数目。在有向图中，以顶点v为头的弧的数目称为v的入度，以顶点v为尾的弧的数目称为v的出度。<strong>V的度等于出度与入度之和</strong>。<br>路径的长度是路径上边或弧的数目。到自身的路径为回路，<strong>回路中各顶点只出现一次的叫简单回路</strong>。<br>如果图中任意两个顶点都是连通的（即有路径从一个顶点到另一个顶点），则为连通图。下图左边不是连通图，右边是。<br><img src="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png" alt=""><br>一个连通图的生成树是一个极小的连通子图，它含有图中全部的n个顶点，但只有足以构成一棵树的n-1条边。如果一个有向图恰有一个顶点的入度为0，其余顶点的入度均为1，则是一棵有向树。一个有向图的生成森林由若干棵有向树组成，含有图中全部顶点，但只有足以构成若干棵不相交的有向树的弧。如下图1的生成森林为图2和图3。<br><img src="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png" alt="">  </p>
+<h2 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h2><h3 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h3><p>图由顶点和边或弧两部分组成。合在一起比较困难，用两个结构来存储。<br>图的邻接矩阵存储方式是用两个数组来表示图。一个一维数组存储图中顶点信息，一个二维数组（称为邻接矩阵）存储图中边或弧的信息。设图G有n个顶点，则邻接矩阵是一个n*n的方阵。<br><img src="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png" alt=""><br><img src="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png" alt=""><br><img src="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png" alt=""><br>邻接矩阵对于边数相对顶点较少的图，对空间会很大浪费。  </p>
+<h3 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h3><p>参考树的孩子表示法。<br>数组与链表相结合的存储方法称为邻接表。<br><img src="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png" alt=""><br>在有向图中，若以顶点为弧尾来存储，则为邻接表（方便查找出度）。若以顶点为弧头来存储，为逆邻接表（方便查找入度）。<br><img src="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png" alt="">  </p>
+<h3 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h3><p>边集数组由两个一维数组组成。一个存储顶点的信息，一个存储边的信息。<br><img src="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png" alt="">  </p>
+<p>此外，还有将邻接表与逆邻接表结合，既能得到出度又能得到入度的十字链表表示法，以及对无向图邻接表进行优化的邻接多重表表示法等。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>排序算法4</title>
     <url>/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/</url>
     <content><![CDATA[<p>摘要：本篇是排序算法的最后一篇，将主要讲解基于常数时间运行的桶排序和基数排序，以及外部排序算法。到此就对排序算了进行了一个完整的讲解，不同的排序算法有不同的特点。</p>

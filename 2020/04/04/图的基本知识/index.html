@@ -46,21 +46,35 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。">
+  <meta name="description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="类及类的成员3">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/index.html">
+<meta property="og:title" content="图的基本知识">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。">
+<meta property="og:description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png">
-<meta property="article:published_time" content="2020-01-19T05:07:25.666Z">
-<meta property="article:modified_time" content="2020-01-21T09:37:02.882Z">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png">
+<meta property="article:published_time" content="2020-04-04T12:48:28.776Z">
+<meta property="article:modified_time" content="2020-04-04T13:46:58.361Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
 
 
 <script id="page-configurations">
@@ -72,7 +86,7 @@
   };
 </script>
 
-  <title>类及类的成员3 | zpl-novice</title>
+  <title>图的基本知识 | zpl-novice</title>
   
 
 
@@ -202,7 +216,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +229,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          类及类的成员3
+          图的基本知识
         </h1>
 
         <div class="post-meta">
@@ -224,24 +238,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-01-19 13:07:25" itemprop="dateCreated datePublished" datetime="2020-01-19T13:07:25+08:00">2020-01-19</time>
+              <time title="创建时间：2020-04-04 20:48:28 / 修改时间：21:46:58" itemprop="dateCreated datePublished" datetime="2020-04-04T20:48:28+08:00">2020-04-04</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-21 17:37:02" itemprop="dateModified" datetime="2020-01-21T17:37:02+08:00">2020-01-21</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -252,7 +260,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>1.4k</span>
             </span>
 
         </div>
@@ -264,75 +272,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。</p>
+        <p>摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。</p>
 <a id="more"></a>
-
-<p>C++是从C发展而来的，而在C语言中是没有类的概念的，C语言中的函数都是全局函数，C++中则有成员函数，所以问题来了，成员函数在C中该如何表达？C中用<code>struct</code>结构体可以将类表示出来，而成员函数则需要借助this指针。</p>
-<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><p>this指针指向了成员函数作用的对象，在成员函数执行的过程中，正是通过this指针才能找到对象所在的地址，因而也就能找到对象的所有非静态成员变量的地址。<br>C++ 规定，在非静态成员函数内部可以直接使用<code>this</code>关键字，<code>this</code>就代表指向该函数所作用的对象的指针。我们以下面运算符重载的代码中的一部分为例：</p>
-<pre><code>complex&amp; complex::operator+(const complex &amp;s1)
-{
-    real=real+s1.real;
-    image=image+s1.image;
-    return *this ;
- } </code></pre><p>return应该返回的是函数的返回值类型<code>complex&amp;</code>，所以此时this指针指向的对象就是<code>complex</code>的一个对象的引用（返回对象同理）。这里的<code>this-&gt;real</code>和<code>real</code>是等价的。</p>
-<h2 id="常量对象和常量成员函数"><a href="#常量对象和常量成员函数" class="headerlink" title="常量对象和常量成员函数"></a>常量对象和常量成员函数</h2><p>假如不希望某些东西被修改，可以使用<code>const</code>关键字进行限定。C++中，<code>const</code>可以用来修饰对象、成员变量和成员函数。<br>在类的成员函数说明后面加<code>const</code>，const成员函数可以使用类中的所有成员变量，但是不能修改它们的值，这种措施主要还是为了保护数据而设置的。const成员函数也称为常量成员函数。需要强调的是，必须在成员函数的声明和定义处同时加上<code>const</code>关键字。</p>
-<pre><code>class sample
-{
-    public:
-        int value;
-        void getvalue() const;    
-};
-void sample::getvalue() const
-{
-    value=0;  //出错，不能改变变量的值 
-}</code></pre><p><code>const</code>的位置不同，表示的含义也不同，函数开头的<code>const</code>用来修饰函数的返回值，表示返回值是<code>const</code>类型，也就是不能被修改。函数头部的结尾加上<code>const</code>表示常量成员函数，这种函数只能读取成员变量的值，而不能修改成员变量的值。<br>定义对象时同样可以定义为常量对象，这样对象初始化以后就不会再改变。<br>常量成员变量就和普通的const变量相似。</p>
-<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><p>前面我们已经学过函数重载的概念，一个类中可以有多个构造函数，它们也是通过重载实现的。函数重载可以让一个函数有多种功能，在不同情况下实现不同的操作。运算符重载也是相同的道理，使运算符具有不同的功能。<br>C++本身已经对运算符进行了重载，比如我们进行<code>int</code>型数据相加时，直接调用加号就行。但是当我们使两个对象相加时，该怎么办呢？例如我们定义了复数类的两个对象，使它们相加，只用加号是无法实现的。这时候就需要我们自己对运算符重载，使得复数的实部和实部相加，虚部和虚部相加。<br>运算符重载可以重载为成员函数，普通函数和友元函数。声明格式一般为：</p>
-<p><code>返回值类型 operator 运算符 (形参表)</code><br>以下面的代码为例，可知运算符重载的方法和作用：</p>
-<pre><code>class complex
-{
-    public:
-        int real,image;
-        complex(int,int);
-        ~complex();
-        complex&amp; operator+(const complex&amp;);
-        complex&amp; operator-(const complex&amp;);
-        void showcomplex();
-};
-complex::complex(int a=0,int b=0)
-{
-    real=a;
-    image=b;
-}
-complex::~complex()
-{
-}
-complex&amp; complex::operator+(const complex &amp;s1)
-{
-    real=real+s1.real;
-    image=image+s1.image;
-    return *this ;
- } 
- complex&amp; complex::operator-(const complex &amp;s2)
- {
-     real=real-s2.real;
-     image=image-s2.image;
-     return *this;
- }
- void complex::showcomplex()
- {
-     cout&lt;&lt;real&lt;&lt;&quot;+j&quot;&lt;&lt;image&lt;&lt;endl;
- }
-int main()
-{
-    complex s1(2,3);
-    complex s2(3,4);
-    complex s3,s4;
-    s3=s1+s2;
-    s3.showcomplex();
-    s4=s3-s2;
-    s4.showcomplex();
-    return 0;
-} </code></pre><p>代码的运行结果为:<br><img src="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png" alt=""><br>可见通过运算符重载，实现了复数类对象的运算。上面讲的只是简单的加减乘除运算符的重载。在下篇博客里，将会针对运算符重载深入研究，讲解赋值运算符、流插入和流提取运算符等其他运算符重载的用法。</p>
+<p>线性表中数据元素是线性关系，都是只有一个直接前驱和直接后继，在树中数据之间有着明显的层次关系。图是一种比线性表和树更复杂的数据结构。在图形结构中，结点之间的关系可以是任意的，图中任意两个元素之间都可能相关。<br>图是由顶点的有穷非空集合和顶点之间的边的集合组成，通常表示为：G（V，E），其中G表示一个图，V是图G中顶点的集合，E是图G中边的集合。<br><img src="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png" alt=""><br>线性表中数据元素叫元素，树中则叫结点，而在图中叫顶点。有空表和空树，但是没有空图这个概念，即<strong>在图结构中，不允许没有顶点</strong>。顶点之间的逻辑关系用边来表示。<br>下面来讲解图的一些基本概念：<br>无向边是指两个顶点之间的边没有方向，(vi,vj)表示。任意的边都是无向边的图为无向图，如下所示。<br><img src="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png" alt=""><br>有向边则是两个顶点之间的边有方向，也称为弧。&lt;vi,vj&gt;表示，其中vi称为弧尾，vj称为弧头。任意的边都是有向边的图为有向图，如下所示，A,D之间的边为&lt;A,D&gt;。<br><img src="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png" alt=""><br><strong>不存在顶点到自身的边，且同一条边不重复出现的图称为简单图</strong>，我们后面要学习的基本都是简单图。<br>在无向图中，如果任意两个顶点之间都存在边，则称为无向完全图。<br><img src="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png" alt=""><br>根据无向完全图的定义可得，N个顶点，共有<code>N*(N-1)/2</code>条边。<br>在有向图中，如果任意两个顶点之间都存在方向互为相反的两条弧，则称为有向完全图。<br><img src="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png" alt=""><br>根据有向完全图的定义可得，N个顶点，共有<code>N*(N-1)</code>条边。<br>与图的边或弧相关的数叫做权。这种带权的图通常称为网。权可以表示一个顶点到另一个顶点的距离或耗费。如下所示：<br><img src="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png" alt=""><br>如果一个图的顶点和边都是另一个图的顶点和边的集合的子集，则这个图为另一个图的子图。如下所示，右边的图为左边图的子图。 </p>
+<p><img src="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png" alt="">  </p>
+<p>顶点V的度是和V相关联的边的数目。在有向图中，以顶点v为头的弧的数目称为v的入度，以顶点v为尾的弧的数目称为v的出度。<strong>V的度等于出度与入度之和</strong>。<br>路径的长度是路径上边或弧的数目。到自身的路径为回路，<strong>回路中各顶点只出现一次的叫简单回路</strong>。<br>如果图中任意两个顶点都是连通的（即有路径从一个顶点到另一个顶点），则为连通图。下图左边不是连通图，右边是。<br><img src="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png" alt=""><br>一个连通图的生成树是一个极小的连通子图，它含有图中全部的n个顶点，但只有足以构成一棵树的n-1条边。如果一个有向图恰有一个顶点的入度为0，其余顶点的入度均为1，则是一棵有向树。一个有向图的生成森林由若干棵有向树组成，含有图中全部顶点，但只有足以构成若干棵不相交的有向树的弧。如下图1的生成森林为图2和图3。<br><img src="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png" alt="">  </p>
+<h2 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h2><h3 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h3><p>图由顶点和边或弧两部分组成。合在一起比较困难，用两个结构来存储。<br>图的邻接矩阵存储方式是用两个数组来表示图。一个一维数组存储图中顶点信息，一个二维数组（称为邻接矩阵）存储图中边或弧的信息。设图G有n个顶点，则邻接矩阵是一个n*n的方阵。<br><img src="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png" alt=""><br><img src="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png" alt=""><br><img src="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png" alt=""><br>邻接矩阵对于边数相对顶点较少的图，对空间会很大浪费。  </p>
+<h3 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h3><p>参考树的孩子表示法。<br>数组与链表相结合的存储方法称为邻接表。<br><img src="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png" alt=""><br>在有向图中，若以顶点为弧尾来存储，则为邻接表（方便查找出度）。若以顶点为弧头来存储，为逆邻接表（方便查找入度）。<br><img src="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png" alt="">  </p>
+<h3 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h3><p>边集数组由两个一维数组组成。一个存储顶点的信息，一个存储边的信息。<br><img src="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png" alt="">  </p>
+<p>此外，还有将邻接表与逆邻接表结合，既能得到出度又能得到入度的十字链表表示法，以及对无向图邻接表进行优化的邻接多重表表示法等。</p>
 
     </div>
 
@@ -348,7 +296,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" title="类及类的成员3">https://zpl-novice.github.io/2020/01/19/类及类的成员3/</a>
+    <a href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/" title="图的基本知识">https://zpl-novice.github.io/2020/04/04/图的基本知识/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -365,13 +313,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" rel="prev" title="类及类的成员2">
-      <i class="fa fa-chevron-left"></i> 类及类的成员2
+    <a href="/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/" rel="prev" title="排序算法4">
+      <i class="fa fa-chevron-left"></i> 排序算法4
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="next" title="运算符重载">
-      运算符重载 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -431,7 +376,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#this指针"><span class="nav-number">1.</span> <span class="nav-text">this指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量对象和常量成员函数"><span class="nav-number">2.</span> <span class="nav-text">常量对象和常量成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运算符重载"><span class="nav-number">3.</span> <span class="nav-text">运算符重载</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的存储"><span class="nav-number">1.</span> <span class="nav-text">图的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接矩阵"><span class="nav-number">1.1.</span> <span class="nav-text">邻接矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接表"><span class="nav-number">1.2.</span> <span class="nav-text">邻接表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边集数组"><span class="nav-number">1.3.</span> <span class="nav-text">边集数组</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
