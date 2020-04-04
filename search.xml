@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>排序算法4</title>
+    <url>/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/</url>
+    <content><![CDATA[<p>摘要：本篇是排序算法的最后一篇，将主要讲解基于常数时间运行的桶排序和基数排序，以及外部排序算法。到此就对排序算了进行了一个完整的讲解，不同的排序算法有不同的特点。</p>
+<a id="more"></a>
+<p>前面讲过的排序算法的时间复杂度最好达到了O（nlogn)。下面将介绍两种达到时间常数的算法，但它们有着特定的局限性。</p>
+<h2 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h2><p>桶排序要求输入的元素A1、A2、…、An必须由只小于M的正整数构成，这样使用一个大小为M的数组count，它被初始化成全0。相当于有M个桶，初始时这些桶全为空，当读入Ai时，count[Ai]就加1。读入完后，将数组中排序好的打印出来即可。例如2，5，3，2，7，4。可以看到他们都小于8，建立一个大小为8的初始为0的数组count，读入2时，count[2]变为1，这样count[5]、count[3]、count[7]、count[4]全为1，而count[2]为2，按照count中元素的大小，0不读取，1读取一次，2读取2次，来读取下标并输出。可得2，2，3，4，5，7。<br><img src="https://i.loli.net/2020/04/04/DAgh1eGf8SbLOpV.png" alt=""><br>桶排序的实现代码为：  </p>
+<pre><code>void bucketsort(vector&lt;int&gt; &amp;v,vector&lt;int&gt; &amp;temv)
+{
+    int tem;
+    for(int i=0;i&lt;v.size();i++)
+    {
+        tem=v[i];
+        temv[tem]++;
+    }
+    for(int j=0;j&lt;temv.size();j++)
+    {
+        while(temv[j]!=0)
+        {
+            cout&lt;&lt;j&lt;&lt;&quot; &quot;;
+            temv[j]--;
+        }
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{2,5,3,2,7,4};
+    vector&lt;int&gt; temv(10);
+    bucketsort(v,temv);
+    return 0;    
+} </code></pre><p>尽管桶排序看似太一般而用处不大，但是实际上却存在很多其输入只是一些小的整数的情况。这样使用快排这些排序算法就小题大做了。  </p>
+<h2 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h2><p>基数排序是对桶排序的升级。基数排序也称为卡片排序，假设有10个0~999范围内的数，对其进行排序，显然不能使用桶排序，那样桶太多了。怎么改进呢？按照位数来排序，比如先按个位数大小进行一次桶排序，再按十位数大小，最后百位数大小排序。如下所示：<br><img src="https://i.loli.net/2020/04/04/nClFe9XSgzNi75b.png" alt=""><br><strong>基数排序也可用于字符串的排序</strong>，它的时间复杂度为O(n)。</p>
+<h2 id="外部排序"><a href="#外部排序" class="headerlink" title="外部排序"></a>外部排序</h2><p>前面讲过的算法都需要将输入数据装进内存，然而，存在一些应用程序，它们的输入数据量太大装不进内存。因此就有了外部排序算法来解决数据量很大的输入。<br>基本的外部排序算法是使用归并排序中的合并算法。设有4盘磁带，Ta1、Ta2、Tb1、Tb2。其中两盘用来输入，两盘用来输出。设数据最初在Ta1盘上，内存一次容纳M个记录。一种自然的做法就是从输入磁带一次读入M个记录，在内部排序，然后再输出，我们把每组排过序的记录叫做一个顺串。如下所示，设M=3。<br><img src="https://i.loli.net/2020/04/04/6NaKq5ISVzeLPfk.png" alt=""><br>构造顺串放入磁盘后为：<br><img src="https://i.loli.net/2020/04/04/AFW23MLdvaS1Now.png" alt=""><br>然后将顺串合并：<br><img src="https://i.loli.net/2020/04/04/QyArBkYhLJdS6HK.png" alt=""><br>上述为2路合并的情况，如果有多余的磁带，那么可以扩充成<strong>k路合并</strong>来减少将输入数据排序所需的趟数。  </p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>排序算法3</title>
     <url>/2020/04/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%953/</url>
     <content><![CDATA[<p>摘要：本篇主要讲解快速排序算法并对前面讲的所有的排序算法进行一个总结。快速排序一直是实践中已知最快的排序算法，只有对它进行了深入学习才算是真正的学了排序算法。后序还有其他算法如桶排序、基数排序和外部排序算法等，将在下一篇中进行讲解。</p>
