@@ -1,6 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>拓扑排序</title>
+    <url>/2020/04/07/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>摘要：前面讲过了图的基本知识，本篇将会讲解有关拓扑排序和关键路径的知识。拓扑排序是在无环图中的应用，本篇也会介绍如何用算法求得一个图的拓扑序列。</p>
+<a id="more"></a>
+<p>在一个表示工程的有向图中，用顶点表示活动，用弧表示活动之间的优先关系，这样的有向图为顶点表示活动的网，称为AOV网。AOV网中的弧表示活动之间存在的某种制约关系。正如在拍戏过程中，只有演员确定好了，场地也确定好了，才能够开始拍摄。<br>设G=（V,E）是一个具有n个顶点的有向图，V中的顶点序列v1,v2…vn满足若从顶点vi到vj有一条路径，则在顶点序列中顶点vi必在vj之前。则我们称这样的顶点序列为一个拓扑序列。<br>显然<strong>拓扑排序是没有圈</strong>的，因为对于圈上的两个顶点vi和vj，vi先于vj同时vj又先于vi，这是不合理的。同时，拓扑排序不是唯一的，任何合理的排序都是可以的。所谓拓扑排序，就是对一个有向图构造拓扑序列的过程。<br>一个简单的求拓扑排序的算法是先找出任意一个没有入边的顶点。然后显示出该顶点，并将它和它的边一起删除，然后对其余的继续应用该方法。如下所示的图：<br><img src="https://i.loli.net/2020/04/07/oPZ7LeTu3Qm4GWc.png" alt=""><br>V1的入度为0，将其和它的边删除：<br><img src="https://i.loli.net/2020/04/07/BtvGaoOIEweqpM3.png" alt=""><br>这时v2的入度为0，同样删除得：<br><img src="https://i.loli.net/2020/04/07/dOcYCbqlzApTaXD.png" alt=""><br>v5的入度又变成了0：<br><img src="https://i.loli.net/2020/04/07/bwMXC5ya427ukrl.png" alt=""><br>v4入度变为0：<br><img src="https://i.loli.net/2020/04/07/cOLBwvgVK6ozWsY.png" alt=""><br>v3，v7的入度都是0，选择一个即可：<br><img src="https://i.loli.net/2020/04/07/8AUDKmafEI3RoCM.png" alt=""><br>v7也删除，只剩下了v6：<br><img src="https://i.loli.net/2020/04/07/lpqJguBXbKrHC5k.png" alt=""><br>因此得到的一个拓扑序列为：v1，v2，v5，v4，v3，v7，v6。<br>在算法实现时，<strong>将图以邻接表或邻接矩阵的形式存放，计算每个顶点的入度，然后将入度为0的顶点放到一个队列中，再将队列中的顶点输出，并且每输出一个时，将与其相关的顶点的入度减1，若有顶点入度为0，放入队列中。最后判断输出顶点个数是否为总数，若相等，则拓扑排序成功</strong>。<br>具体代码如下（邻接表）：  </p>
+<pre><code>class graph
+{
+    private:
+        int n;
+        list&lt;int&gt; *lst;                //邻接表 
+        queue&lt;int&gt; q;              //入度为0的点进队
+        vector&lt;int&gt; indegree;
+    public:
+        graph(int n,vector&lt;int&gt; v);            //构造函数初始化 
+        void add(int v,int u);     //添加边
+        bool topsort();          //拓扑排序 
+};
+graph::graph(int n,vector&lt;int&gt; v)
+{
+    this-&gt;n=n;
+    lst=new list&lt;int&gt;[n];
+    indegree=v;
+} 
+void graph::add(int v,int u)
+{
+    lst[v].push_back(u);            //v指向u，将u放在v的后面，并且u的入度加1 
+    indegree[u]++;
+}
+bool graph::topsort()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        if(indegree[i]==0)
+        {
+            q.push(i);
+        }
+    }
+    int count=0;
+    while(!q.empty())
+    {
+        int x=q.front();
+        q.pop();
+        cout&lt;&lt;x&lt;&lt;&quot; &quot;;
+        list&lt;int&gt;::iterator i;
+        for(i=lst[x].begin();i!=lst[x].end();i++)
+        {
+            indegree[*i]--;
+            if(indegree[*i]==0)
+            {
+                q.push(*i);
+            }    
+        }
+        count++;
+    }
+    if(count==n)
+    {
+        return true;
+     } 
+    else
+    {
+        return false;
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v(7);
+    graph g(7,v);
+    g.add(0,1);
+    g.add(0,3);
+    g.add(0,2);
+    g.add(1,3);
+    g.add(1,4);
+    g.add(2,5);
+    g.add(3,2);
+    g.add(3,5);
+    g.add(3,6);
+    g.add(4,3);
+    g.add(4,6);
+    g.add(6,5);
+    if(g.topsort())
+    {
+        cout&lt;&lt;&quot;拓扑排序成功&quot;; 
+    }
+    else
+    {
+        cout&lt;&lt;&quot;拓扑排序失败&quot;;
+    }
+    return 0;
+}</code></pre><p>邻接矩阵实现的代码为： </p>
+<pre><code>class graph
+{
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        queue&lt;int&gt; q;              //入度为0的点进队
+        vector&lt;int&gt; indegree;
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;int&gt; v);    //构造函数初始化 
+        void add(int v,int u);     //添加边
+        bool topsort();          //拓扑排序 
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;int&gt; v)
+{
+    this-&gt;n=n;
+    G=G1;
+    indegree=v;
+} 
+void graph::add(int v,int u)
+{
+    G[v].push_back(u);            //v指向u，将u放在v里面，并且u的入度加1 
+    indegree[u]++;
+}
+bool graph::topsort()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        if(indegree[i]==0)
+        {
+            q.push(i);
+        }
+    }
+    int count=0;
+    while(!q.empty())
+    {
+        int x=q.front();
+        q.pop();
+        cout&lt;&lt;x&lt;&lt;&quot; &quot;;
+        for(int i=0;i&lt;G[x].size();i++)
+        {
+            int v=G[x][i];
+            indegree[v]--;
+            if(indegree[v]==0)
+            {
+                q.push(v);
+            }    
+        }
+        count++;
+    }
+    if(count==n)
+    {
+        return true;
+     } 
+    else
+    {
+        return false;
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v(7);
+    vector&lt;vector&lt;int&gt;&gt; G1(7);
+    graph g(7,G1,v);
+    g.add(0,1);
+    g.add(0,3);
+    g.add(0,2);
+    g.add(1,3);
+    g.add(1,4);
+    g.add(2,5);
+    g.add(3,2);
+    g.add(3,5);
+    g.add(3,6);
+    g.add(4,3);
+    g.add(4,6);
+    g.add(6,5);
+    if(g.topsort())
+    {
+        cout&lt;&lt;&quot;拓扑排序成功&quot;; 
+    }
+    else
+    {
+        cout&lt;&lt;&quot;拓扑排序失败&quot;;
+    }
+    return 0;
+} </code></pre><p>在上面的AOV网中，若有向边上是有权值的，称之为AOE网。<br>路径上各个活动所持续的时间之和称为路径长度，从<strong>源点到汇点具有最大长度的路径叫关键路径</strong>，在关键路径上的活动叫关键活动。<br><img src="https://i.loli.net/2020/04/07/ypsTHxLc3KlEwmG.png" alt=""><br><strong>改变关键路径上的关键活动时间，才能提高效率</strong>。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>图的基本知识</title>
     <url>/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/</url>
     <content><![CDATA[<p>摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。</p>
@@ -48,7 +228,41 @@ int main()
     bucketsort(v,temv);
     return 0;    
 } </code></pre><p>尽管桶排序看似太一般而用处不大，但是实际上却存在很多其输入只是一些小的整数的情况。这样使用快排这些排序算法就小题大做了。  </p>
-<h2 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h2><p>基数排序是对桶排序的升级。基数排序也称为卡片排序，假设有10个0~999范围内的数，对其进行排序，显然不能使用桶排序，那样桶太多了。怎么改进呢？按照位数来排序，比如先按个位数大小进行一次桶排序，再按十位数大小，最后百位数大小排序。如下所示：<br><img src="https://i.loli.net/2020/04/04/nClFe9XSgzNi75b.png" alt=""><br><strong>基数排序也可用于字符串的排序</strong>，它的时间复杂度为O(n)。</p>
+<h2 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h2><p>基数排序是对桶排序的升级。基数排序也称为卡片排序，假设有10个0~999范围内的数，对其进行排序，显然不能使用桶排序，那样桶太多了。怎么改进呢？按照位数来排序，比如先按个位数大小进行一次桶排序，再按十位数大小，最后百位数大小排序。如下所示：<br><img src="https://i.loli.net/2020/04/04/nClFe9XSgzNi75b.png" alt=""><br><strong>需要注意这里与桶排序不同的地方在于，桶中存放的不再是个数，而是元素值，并且有可能一个桶有多个元素（个位数相同），因此桶定义成二维数组的类型</strong>。<br>基数排序的实现代码为：</p>
+<pre><code>void radixsort(vector&lt;int&gt; &amp;v,vector&lt;vector&lt;int&gt;&gt; &amp;temv)
+{
+    int tem;
+    int s=1;
+    for(int m=1;m&lt;4;m++)
+    {
+        for(int i=0;i&lt;v.size();i++)
+        {
+            tem=v[i]/s;
+            temv[tem%10].push_back(v[i]);
+        }
+        int idx=0;
+        for (auto &amp; thisBucket : temv)                            
+        {    
+            for (int &amp;s : thisBucket)    
+            {        
+                v[idx++] = std::move(s);
+            }
+            thisBucket.clear();        
+        }
+        s=s*10;
+    }
+}
+int main()
+{
+    vector&lt;int&gt; v{202,105,314,202,745,423};
+    vector&lt;vector&lt;int&gt;&gt; temv(10);
+    radixsort(v,temv);
+    for(int i=0;i&lt;v.size();i++)
+    {
+        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
+    }
+    return 0;    
+} </code></pre><p>可以看到，<strong>在对二维数组temv进行搜索时，使用C++ 11新特性中的基于范围的for循环以及move语句</strong>，这提供了很大方便。<br>基数排序还有一种为计数基数排序，计数排序中依然保留了桶中装元素的个数，它的关键点在于每一次排序后将数组还原，这就需要探索<strong>桶中元素值的序号与原始数组的对应关系</strong>，再用临时的数组把每一次排序后的结果存储。<br><strong>基数排序也可用于字符串的排序</strong>，它的时间复杂度为O(n)。</p>
 <h2 id="外部排序"><a href="#外部排序" class="headerlink" title="外部排序"></a>外部排序</h2><p>前面讲过的算法都需要将输入数据装进内存，然而，存在一些应用程序，它们的输入数据量太大装不进内存。因此就有了外部排序算法来解决数据量很大的输入。<br>基本的外部排序算法是使用归并排序中的合并算法。设有4盘磁带，Ta1、Ta2、Tb1、Tb2。其中两盘用来输入，两盘用来输出。设数据最初在Ta1盘上，内存一次容纳M个记录。一种自然的做法就是从输入磁带一次读入M个记录，在内部排序，然后再输出，我们把每组排过序的记录叫做一个顺串。如下所示，设M=3。<br><img src="https://i.loli.net/2020/04/04/6NaKq5ISVzeLPfk.png" alt=""><br>构造顺串放入磁盘后为：<br><img src="https://i.loli.net/2020/04/04/AFW23MLdvaS1Now.png" alt=""><br>然后将顺串合并：<br><img src="https://i.loli.net/2020/04/04/QyArBkYhLJdS6HK.png" alt=""><br>上述为2路合并的情况，如果有多余的磁带，那么可以扩充成<strong>k路合并</strong>来减少将输入数据排序所需的趟数。  </p>
 ]]></content>
       <categories>
