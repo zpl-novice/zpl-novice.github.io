@@ -46,21 +46,28 @@
   };
 </script>
 
-  <meta name="description" content="摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。">
+  <meta name="description" content="摘要：本篇将要讲解的知识为最短路径。最短路径分为有权的和无权的，无权的即为路径数目，有权的要考虑权值之和最小。求最短路径一般分析的都是有权的，有两种典型算法求解最短路径，在本篇中将主要介绍第一种Dijkstra算法，另一种算法会在下一篇中进行介绍。最短路径是实际生活中经常遇到的问题，学会求解最短路径是非常重要的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STL之迭代器">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/index.html">
+<meta property="og:title" content="最短路径1">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。">
+<meta property="og:description" content="摘要：本篇将要讲解的知识为最短路径。最短路径分为有权的和无权的，无权的即为路径数目，有权的要考虑权值之和最小。求最短路径一般分析的都是有权的，有两种典型算法求解最短路径，在本篇中将主要介绍第一种Dijkstra算法，另一种算法会在下一篇中进行介绍。最短路径是实际生活中经常遇到的问题，学会求解最短路径是非常重要的。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png">
-<meta property="article:published_time" content="2020-02-11T07:22:00.125Z">
-<meta property="article:modified_time" content="2020-02-11T10:00:46.049Z">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/nIMy35USFt79fPl.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/wKAx9aSnqlrBGQV.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/bHYzILVky8tMEvS.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/RowTcxtanN5vCBO.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/liXG82wzPFSrZvu.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/32aMeKm1OgzNiX7.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/NTqyhQUmj3S5l91.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/08/4MxwTDSrvs2iNHR.png">
+<meta property="article:published_time" content="2020-04-08T10:25:20.635Z">
+<meta property="article:modified_time" content="2020-04-08T10:51:24.092Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/08/nIMy35USFt79fPl.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/">
 
 
 <script id="page-configurations">
@@ -72,7 +79,7 @@
   };
 </script>
 
-  <title>STL之迭代器 | zpl-novice</title>
+  <title>最短路径1 | zpl-novice</title>
   
 
 
@@ -202,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          STL之迭代器
+          最短路径1
         </h1>
 
         <div class="post-meta">
@@ -226,7 +233,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-11 15:22:00 / 修改时间：18:00:46" itemprop="dateCreated datePublished" datetime="2020-02-11T15:22:00+08:00">2020-02-11</time>
+              <time title="创建时间：2020-04-08 18:25:20 / 修改时间：18:51:24" itemprop="dateCreated datePublished" datetime="2020-04-08T18:25:20+08:00">2020-04-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,8 +241,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -246,7 +253,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>2.3k</span>
             </span>
 
         </div>
@@ -258,50 +265,75 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。</p>
+        <p>摘要：本篇将要讲解的知识为最短路径。最短路径分为有权的和无权的，无权的即为路径数目，有权的要考虑权值之和最小。求最短路径一般分析的都是有权的，有两种典型算法求解最短路径，在本篇中将主要介绍第一种Dijkstra算法，另一种算法会在下一篇中进行介绍。最短路径是实际生活中经常遇到的问题，学会求解最短路径是非常重要的。</p>
 <a id="more"></a>
-<p>迭代器用于指向顺序容器和关联容器中的元素，它的用法和指针类似。迭代器有<code>const</code>和非<code>const</code>两种，这两种都能读取它指向的元素，其中非<code>const</code>迭代器还可以修改其指向的元素，这也与指针相似。定义一个容器类的迭代器的方法是：<br><code>容器类名::iterator 变量名;</code> 或 <code>容器类名::const_iterator 变量名;</code><br>例如：<br><code>vector&lt;int&gt;::iterator i;</code>    </p>
-<p><code>set&lt;double&gt;::const_iterator j;</code><br>而当访问一个迭代器所指向的元素时，与指针相同， <code>*迭代器变量名</code></p>
-<h2 id="随机访问迭代器"><a href="#随机访问迭代器" class="headerlink" title="随机访问迭代器"></a>随机访问迭代器</h2><p>顺序容器中的<code>vector</code>、<code>deque</code>用的迭代器是随机访问迭代器，随机访问迭代器的意思即可以直接访问想要位置的元素。示例如下：  </p>
-<pre><code>int main()
+<p>在网图和非网图中，最短路径的含义是不同的。非网图的边上没有权值，所以最短路径就是两顶点之间经过的边数最少的路径，而对于网图来说，最短路径是指两顶点之间经过的边上权值之和最少的路径，并且称路径的第一个顶点为源点，最后一个顶点为终点。<br>如下，若边上无权，v1到v6最短路径为2，但边上有权值，则最短路径长为6，v1到v4再到v7，最后到v6。<br><img src="https://i.loli.net/2020/04/08/nIMy35USFt79fPl.png" alt=""><br>在很多的情况下需要我们去寻找一个顶点到另一个顶点的最短路径。<strong>对于无权的最短路径，其实是有权最短路径的特殊问题，这相当于所有边的权值都为1</strong>。例如我们选择v3为初始点s，显然s到v3的距离为0。标记该信息如下：<br><img src="https://i.loli.net/2020/04/08/wKAx9aSnqlrBGQV.png" alt=""><br>然后寻找所有从s出发距离为1的点。考查s的邻接点即可，可以看到v1和v6距离s为1，标记。<br><img src="https://i.loli.net/2020/04/08/bHYzILVky8tMEvS.png" alt=""><br>然后寻找所有从s出发距离为2的点，即距离v1，v6为1的点，可以看到v2和v4距离s为2，标记。<br><img src="https://i.loli.net/2020/04/08/RowTcxtanN5vCBO.png" alt=""><br>这样再去寻找距离s为3的点，依次直到把所有的顶点寻找完。<br><img src="https://i.loli.net/2020/04/08/liXG82wzPFSrZvu.png" alt=""><br><strong>这种搜索图的方法称为广度优先搜索，该方法按层处理顶点：距开始点最近的那些顶点首先被求值，而最远的那些顶点最后被求值。这很像对树的层序遍历</strong>。 </p>
+<p>在有权最短路径的求法中有两种算法，本篇将介绍第一种，迪杰斯特拉(Dijkstra)算法。<br>如同上面所讲述的无权最短路径方法，<strong>迪杰斯特拉(Dijkstra)算法是按路径长度递增的次序产生最短路径的算法</strong>。这个解法是<strong>贪婪算法</strong>的实例。<strong>贪婪算法一般分阶段求解一个问题，在每个阶段它都把出现的当作是最好的去处理</strong>。例如在美国货币找零钱时，一般是先数出25分一个的硬币，然后是1角币，5分币，以及1分币。这种贪婪算法使用最少数目的硬币找零钱。<strong>贪婪算法主要的问题在于，该算法并不是总能够成功的</strong>。例如添加一个12分的货币，若找还15分零钱时，它给出的答案是一个12分和3个1分，然而并不是最优解一个一角和一个5分。<br>该算法需要一个表来表示其初识配置，如下所示：<br><img src="https://i.loli.net/2020/04/08/32aMeKm1OgzNiX7.png" alt=""><br>这里假设开始顶点为v1，所以只有v1到开始顶点距离为0，其余都为无穷，第一个选择v1。然后表变为：<br><img src="https://i.loli.net/2020/04/08/NTqyhQUmj3S5l91.png" alt=""><br><strong>v1变为已知，v2和v4与v1是邻接点，因此有路径长度2和1，其余不是邻接点，仍为无穷</strong>。这时比较1最小，选择v4，调整表得：<br><img src="https://i.loli.net/2020/04/08/4MxwTDSrvs2iNHR.png" alt=""><br>不停的循环下去，直到得到所有。<br>算法代码如下：  </p>
+<pre><code>const int INF=10000;
+void dijkstra(int n,int s,vector&lt;vector&lt;int&gt;&gt; &amp;G,vector&lt;bool&gt; &amp;vis,vector&lt;int&gt; &amp;d,vector&lt;int&gt; &amp;pre) 
+        //顶点数，初始点，图，标记是否被访问，到每个点的最短距离，路径上的前驱顶点 
 {
-    vector&lt;int&gt; v;
-    vector&lt;int&gt;::const_iterator i;                   //const迭代器 
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
-    v.push_back(4);
-    i=v.begin()+2;
-    cout&lt;&lt;*i&lt;&lt;endl;
-    for(i=v.begin();i&lt;v.end();i++)
+    d[s]=0;
+    for(int i=0;i&lt;n;i++)
     {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-    }  
-    vector&lt;int&gt;::iterator j;                     //非const迭代器  修改元素的值 
-    for(j=v.begin();j&lt;v.end();j++)
+        int u=-1;
+        int MIN=INF;
+        for(int j=0;j&lt;n;j++)
+        {
+            if(vis[j]==false&amp;&amp;d[j]&lt;MIN)                 //找到d[u]最小的u 
+            {
+                u=j;                                   
+                MIN=d[j];
+            }
+        }
+        if(u==-1)                               //找不到说明剩下的顶点和s不连通 
+        {
+            return;
+        }
+        vis[u]=true;                       //将找到的u表示为已被访问 
+        for(int m=0;m&lt;n;m++)           //对剩下未被访问并且u能到达的点进行距离优化 
+        {
+            if(vis[m]==false&amp;&amp;d[u]+G[u][m]&lt;d[m])
+            {
+                d[m]=d[u]+G[u][m];
+                pre[m]=u;                               //并将m点的前驱顶点u记录 
+            }
+        }
+    }    
+}
+void DFSPrint(int s,int v,vector&lt;int&gt; pre)        //利用递归将前驱打印出来即为路径 
+{
+    if(s==v)
     {
-        *j=5;
+        cout&lt;&lt;s&lt;&lt;&quot; &quot;;
     }
-    for(i=v.begin();i&lt;v.end();i++)
+    else
     {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
+        DFSPrint(s,pre[v],pre);
+        cout&lt;&lt;v&lt;&lt;&quot; &quot;;
     }
+}
+int main()
+{
+    int n=6;
+    vector&lt;int&gt; d(n);
+    vector&lt;int&gt; pre(n);
+    vector&lt;bool&gt; vis(n);
+    vector&lt;vector&lt;int&gt;&gt; G{{0,1,INF,4,4,INF},{INF,0,INF,2,INF,INF},{INF,INF,0,INF,INF,1},{INF,INF,2,0,3,INF},{INF,INF,INF,INF,0,3},{INF,INF,INF,INF,INF,0}};
+    for(int i=0;i&lt;n;i++)
+    {
+        d[i]=INF;
+        pre[i]=i;
+    }
+    dijkstra(n,0,G,vis,d,pre);
+    for(auto x:d)                         //将初始点到每个点的最短路径长打印出来 
+    {
+        cout&lt;&lt;x&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    DFSPrint(0,5,pre);       //打印出最短路径
     return 0;
-}</code></pre><p>从代码中可以看到，定义了一个空的动态数组v，输入数据变成1 2 3 4，还定义了一个指向动态数组的迭代器，因为<code>vector</code>用的是随机访问迭代器，可以直接访问想要位置的元素，所以当想要访问v中第3个元素时，令<code>i=v.begin()+2;cout&lt;&lt;*i&lt;&lt;endl;</code>即可。只有<strong>随机访问迭代器</strong>可以这样，其他的迭代器是不能用<code>+</code>运算符的。若想修改v中元素的值，定义了非const迭代器，使得v中元素全部变成5，再输出，运行结果如下：<br><img src="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png" alt=""><br>这里再介绍以下反向迭代器，从名字可知，迭代器的顺序进行了反向，即默认迭代器是从头到尾，而方向迭代器是从尾到头。对上面代码进行添加：  </p>
-<pre><code>vector&lt;int&gt;::reverse_iterator r;                //反向迭代器 
-for(r=v.rbegin();r!=v.rend();r++)
-{
-    cout&lt;&lt;*r&lt;&lt;&quot; &quot;;
-}</code></pre><p>输出的结果就为4 3 2 1。</p>
-<h2 id="双向迭代器"><a href="#双向迭代器" class="headerlink" title="双向迭代器"></a>双向迭代器</h2><p>上面已经说到顺序容器中的<code>vector</code>、<code>deque</code>使用的是随机访问迭代器，而顺序容器中还有一个链表<code>list</code>，它和关联容器都使用的是双向迭代器。双向迭代器便不能直接访问第i个元素，而只能从头到后逐个访问。将上篇中<code>set</code>容器的部分代码拿出来如下：</p>
-<pre><code>int a[4]={3,2,1,5};
-set&lt;int&gt; st(a,a+4);
-set&lt;int&gt;::iterator i;   //双向迭代器
-for(i=st.begin();i!=st.end();i++)
-{
-    cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-}</code></pre><p>虽然定义的形式是相同的，但是这里的迭代器是双向迭代器，在for循环的条件可以看到，是<code>i!=st.end()</code>，这里只能这么定义，而不能用<code>i&lt;st.end()</code>，随机访问迭代器两种形式都可以。</p>
-<p>顺序容器和关联容器的迭代器都已经讲了，而容器适配器是不支持迭代器的。同样的，因为容器迭代器的限制，某些算法例如排序（sort）、二分查找（binary_search）需要通过随机访问迭代器来访问容器中的元素，那么<code>list</code>和关联容器就不支持该算法。前面讲<code>list</code>的时候讲过，它有自己定义的排序（sort）算法，就是来解决这个问题的。<br>本篇主要介绍了STL中的迭代器，在下篇将会介绍STL算法，算法是非常复杂的一部分，后面数据结构与算法的学习中还会对算法进行更深入的研究，在这里只简单介绍STL中的部分算法。</p>
+}</code></pre><p>可以看到，<strong>关键点在于找到距离最小的顶点，并对与其相邻的顶点进行距离优化，将该顶点记录</strong>。在打印最短路径顶点时利用了<strong>递归</strong>，这是因为<code>pre</code>中存放的是前驱顶点。<br>对该算法时间复杂度进行分析，可以看到在最外围循环里有两个小循环，但这两个循环没有交叉，因此时间复杂度为O(n^2)。</p>
 
     </div>
 
@@ -317,7 +349,7 @@ for(i=st.begin();i!=st.end();i++)
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/" title="STL之迭代器">https://zpl-novice.github.io/2020/02/11/STL之迭代器/</a>
+    <a href="https://zpl-novice.github.io/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/" title="最短路径1">https://zpl-novice.github.io/2020/04/08/最短路径1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -334,13 +366,10 @@ for(i=st.begin();i!=st.end();i++)
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/09/STL%E4%B9%8B%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%B9%E5%99%A8%E9%80%82%E9%85%8D%E5%99%A8/" rel="prev" title="STL之关联容器和容器适配器">
-      <i class="fa fa-chevron-left"></i> STL之关联容器和容器适配器
+    <a href="/2020/04/07/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="prev" title="拓扑排序">
+      <i class="fa fa-chevron-left"></i> 拓扑排序
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/13/STL%E7%AE%97%E6%B3%95/" rel="next" title="STL算法">
-      STL算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -400,7 +429,6 @@ for(i=st.begin();i!=st.end();i++)
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机访问迭代器"><span class="nav-number">1.</span> <span class="nav-text">随机访问迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双向迭代器"><span class="nav-number">2.</span> <span class="nav-text">双向迭代器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

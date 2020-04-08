@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>最短路径1</title>
+    <url>/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/</url>
+    <content><![CDATA[<p>摘要：本篇将要讲解的知识为最短路径。最短路径分为有权的和无权的，无权的即为路径数目，有权的要考虑权值之和最小。求最短路径一般分析的都是有权的，有两种典型算法求解最短路径，在本篇中将主要介绍第一种Dijkstra算法，另一种算法会在下一篇中进行介绍。最短路径是实际生活中经常遇到的问题，学会求解最短路径是非常重要的。</p>
+<a id="more"></a>
+<p>在网图和非网图中，最短路径的含义是不同的。非网图的边上没有权值，所以最短路径就是两顶点之间经过的边数最少的路径，而对于网图来说，最短路径是指两顶点之间经过的边上权值之和最少的路径，并且称路径的第一个顶点为源点，最后一个顶点为终点。<br>如下，若边上无权，v1到v6最短路径为2，但边上有权值，则最短路径长为6，v1到v4再到v7，最后到v6。<br><img src="https://i.loli.net/2020/04/08/nIMy35USFt79fPl.png" alt=""><br>在很多的情况下需要我们去寻找一个顶点到另一个顶点的最短路径。<strong>对于无权的最短路径，其实是有权最短路径的特殊问题，这相当于所有边的权值都为1</strong>。例如我们选择v3为初始点s，显然s到v3的距离为0。标记该信息如下：<br><img src="https://i.loli.net/2020/04/08/wKAx9aSnqlrBGQV.png" alt=""><br>然后寻找所有从s出发距离为1的点。考查s的邻接点即可，可以看到v1和v6距离s为1，标记。<br><img src="https://i.loli.net/2020/04/08/bHYzILVky8tMEvS.png" alt=""><br>然后寻找所有从s出发距离为2的点，即距离v1，v6为1的点，可以看到v2和v4距离s为2，标记。<br><img src="https://i.loli.net/2020/04/08/RowTcxtanN5vCBO.png" alt=""><br>这样再去寻找距离s为3的点，依次直到把所有的顶点寻找完。<br><img src="https://i.loli.net/2020/04/08/liXG82wzPFSrZvu.png" alt=""><br><strong>这种搜索图的方法称为广度优先搜索，该方法按层处理顶点：距开始点最近的那些顶点首先被求值，而最远的那些顶点最后被求值。这很像对树的层序遍历</strong>。 </p>
+<p>在有权最短路径的求法中有两种算法，本篇将介绍第一种，迪杰斯特拉(Dijkstra)算法。<br>如同上面所讲述的无权最短路径方法，<strong>迪杰斯特拉(Dijkstra)算法是按路径长度递增的次序产生最短路径的算法</strong>。这个解法是<strong>贪婪算法</strong>的实例。<strong>贪婪算法一般分阶段求解一个问题，在每个阶段它都把出现的当作是最好的去处理</strong>。例如在美国货币找零钱时，一般是先数出25分一个的硬币，然后是1角币，5分币，以及1分币。这种贪婪算法使用最少数目的硬币找零钱。<strong>贪婪算法主要的问题在于，该算法并不是总能够成功的</strong>。例如添加一个12分的货币，若找还15分零钱时，它给出的答案是一个12分和3个1分，然而并不是最优解一个一角和一个5分。<br>该算法需要一个表来表示其初识配置，如下所示：<br><img src="https://i.loli.net/2020/04/08/32aMeKm1OgzNiX7.png" alt=""><br>这里假设开始顶点为v1，所以只有v1到开始顶点距离为0，其余都为无穷，第一个选择v1。然后表变为：<br><img src="https://i.loli.net/2020/04/08/NTqyhQUmj3S5l91.png" alt=""><br><strong>v1变为已知，v2和v4与v1是邻接点，因此有路径长度2和1，其余不是邻接点，仍为无穷</strong>。这时比较1最小，选择v4，调整表得：<br><img src="https://i.loli.net/2020/04/08/4MxwTDSrvs2iNHR.png" alt=""><br>不停的循环下去，直到得到所有。<br>算法代码如下：  </p>
+<pre><code>const int INF=10000;
+void dijkstra(int n,int s,vector&lt;vector&lt;int&gt;&gt; &amp;G,vector&lt;bool&gt; &amp;vis,vector&lt;int&gt; &amp;d,vector&lt;int&gt; &amp;pre) 
+        //顶点数，初始点，图，标记是否被访问，到每个点的最短距离，路径上的前驱顶点 
+{
+    d[s]=0;
+    for(int i=0;i&lt;n;i++)
+    {
+        int u=-1;
+        int MIN=INF;
+        for(int j=0;j&lt;n;j++)
+        {
+            if(vis[j]==false&amp;&amp;d[j]&lt;MIN)                 //找到d[u]最小的u 
+            {
+                u=j;                                   
+                MIN=d[j];
+            }
+        }
+        if(u==-1)                               //找不到说明剩下的顶点和s不连通 
+        {
+            return;
+        }
+        vis[u]=true;                       //将找到的u表示为已被访问 
+        for(int m=0;m&lt;n;m++)           //对剩下未被访问并且u能到达的点进行距离优化 
+        {
+            if(vis[m]==false&amp;&amp;d[u]+G[u][m]&lt;d[m])
+            {
+                d[m]=d[u]+G[u][m];
+                pre[m]=u;                               //并将m点的前驱顶点u记录 
+            }
+        }
+    }    
+}
+void DFSPrint(int s,int v,vector&lt;int&gt; pre)        //利用递归将前驱打印出来即为路径 
+{
+    if(s==v)
+    {
+        cout&lt;&lt;s&lt;&lt;&quot; &quot;;
+    }
+    else
+    {
+        DFSPrint(s,pre[v],pre);
+        cout&lt;&lt;v&lt;&lt;&quot; &quot;;
+    }
+}
+int main()
+{
+    int n=6;
+    vector&lt;int&gt; d(n);
+    vector&lt;int&gt; pre(n);
+    vector&lt;bool&gt; vis(n);
+    vector&lt;vector&lt;int&gt;&gt; G{{0,1,INF,4,4,INF},{INF,0,INF,2,INF,INF},{INF,INF,0,INF,INF,1},{INF,INF,2,0,3,INF},{INF,INF,INF,INF,0,3},{INF,INF,INF,INF,INF,0}};
+    for(int i=0;i&lt;n;i++)
+    {
+        d[i]=INF;
+        pre[i]=i;
+    }
+    dijkstra(n,0,G,vis,d,pre);
+    for(auto x:d)                         //将初始点到每个点的最短路径长打印出来 
+    {
+        cout&lt;&lt;x&lt;&lt;&quot; &quot;;
+    }
+    cout&lt;&lt;endl;
+    DFSPrint(0,5,pre);       //打印出最短路径
+    return 0;
+}</code></pre><p>可以看到，<strong>关键点在于找到距离最小的顶点，并对与其相邻的顶点进行距离优化，将该顶点记录</strong>。在打印最短路径顶点时利用了<strong>递归</strong>，这是因为<code>pre</code>中存放的是前驱顶点。<br>对该算法时间复杂度进行分析，可以看到在最外围循环里有两个小循环，但这两个循环没有交叉，因此时间复杂度为O(n^2)。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>拓扑排序</title>
     <url>/2020/04/07/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<p>摘要：前面讲过了图的基本知识，本篇将会讲解有关拓扑排序和关键路径的知识。拓扑排序是在无环图中的应用，本篇也会介绍如何用算法求得一个图的拓扑序列。</p>
