@@ -46,24 +46,25 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将继续上一篇的讲解，对栈ADT和队列ADT作一下简单的介绍。因为有些相关的知识已经在C++ STL当中介绍过。所以本篇重点将会是介绍它们的应用。">
+  <meta name="description" content="摘要：本篇将继续上一篇对求解图顶点间的最短路径进行讲解。主要讲解第二种算法弗洛伊德算法，算法它的时间复杂度为O(n^3)，但是它的实现却非常简单和巧妙。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="栈ADT和队列ADT">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/03/01/%E6%A0%88ADT%E5%92%8C%E9%98%9F%E5%88%97ADT/index.html">
+<meta property="og:title" content="最短路径2">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/04/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%842/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将继续上一篇的讲解，对栈ADT和队列ADT作一下简单的介绍。因为有些相关的知识已经在C++ STL当中介绍过。所以本篇重点将会是介绍它们的应用。">
+<meta property="og:description" content="摘要：本篇将继续上一篇对求解图顶点间的最短路径进行讲解。主要讲解第二种算法弗洛伊德算法，算法它的时间复杂度为O(n^3)，但是它的实现却非常简单和巧妙。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/03/01/nYejlxfZ8ky5Aap.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/01/3WAnj7HZxGKr8Cd.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/02/SDtsPnzbIoGXyWl.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/02/RDCoxXNhvQkP1gd.png">
-<meta property="article:published_time" content="2020-03-01T06:34:12.799Z">
-<meta property="article:modified_time" content="2020-03-02T01:21:18.738Z">
+<meta property="og:image" content="https://i.loli.net/2020/04/10/p8D2Cwd6KNAhjou.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/10/Go5OWq.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/10/GoI9w4.png">
+<meta property="og:image" content="https://pic.images.ac.cn/image/5e901438916dd">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha714fbe49b8d4e5b841ea7e1394da3d3M.png">
+<meta property="article:published_time" content="2020-04-10T06:20:50.222Z">
+<meta property="article:modified_time" content="2020-04-10T06:44:18.468Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/03/01/nYejlxfZ8ky5Aap.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/10/p8D2Cwd6KNAhjou.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/03/01/%E6%A0%88ADT%E5%92%8C%E9%98%9F%E5%88%97ADT/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/04/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%842/">
 
 
 <script id="page-configurations">
@@ -75,7 +76,7 @@
   };
 </script>
 
-  <title>栈ADT和队列ADT | zpl-novice</title>
+  <title>最短路径2 | zpl-novice</title>
   
 
 
@@ -205,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/01/%E6%A0%88ADT%E5%92%8C%E9%98%9F%E5%88%97ADT/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%842/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -218,7 +219,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          栈ADT和队列ADT
+          最短路径2
         </h1>
 
         <div class="post-meta">
@@ -227,16 +228,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-03-01 14:34:12" itemprop="dateCreated datePublished" datetime="2020-03-01T14:34:12+08:00">2020-03-01</time>
+              <time title="创建时间：2020-04-10 14:20:50 / 修改时间：14:44:18" itemprop="dateCreated datePublished" datetime="2020-04-10T14:20:50+08:00">2020-04-10</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-02 09:21:18" itemprop="dateModified" datetime="2020-03-02T09:21:18+08:00">2020-03-02</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -255,7 +250,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>2.2k</span>
             </span>
 
         </div>
@@ -267,132 +262,87 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将继续上一篇的讲解，对栈ADT和队列ADT作一下简单的介绍。因为有些相关的知识已经在C++ STL当中介绍过。所以本篇重点将会是介绍它们的应用。</p>
+        <p>摘要：本篇将继续上一篇对求解图顶点间的最短路径进行讲解。主要讲解第二种算法弗洛伊德算法，算法它的时间复杂度为O(n^3)，但是它的实现却非常简单和巧妙。</p>
 <a id="more"></a>
-<h2 id="栈ADT"><a href="#栈ADT" class="headerlink" title="栈ADT"></a>栈ADT</h2><p>栈（stack）是一个带有限制的表。前面也说过它是后进先出的（LIFO），插入和删除只能在一个位置进行，即表的末端–栈顶（top）。<br>栈是一个表，任何能实现表的方法都能实现栈。<code>list</code>和<code>vector</code>都支持栈的操作，前面也已经讲过，因为它们的功能过于强大，所以才有了容器适配器。<br>栈的链表实现和数组实现与前面讲的表相似。在数组实现中，用下标为0的一端作栈底。<code>top</code>表示栈顶元素在数组中的位置，空栈的判定条件为<code>top=-1</code>。</p>
-<h3 id="栈的应用"><a href="#栈的应用" class="headerlink" title="栈的应用"></a>栈的应用</h3><p>1.平衡符号<br>编译器检查程序的语法错误，但是常常由于缺少一个符号而引起编译器上百行的诊断，因此我们希望有一个算法来检查符号。可以用栈来实现，比如<code>{[()]}</code>是合法的，而<code>{([)]}</code>是不合法的。<br>算法的实现原理为：做一个空栈，读入字符直到文件尾。如果字符是一个开放符号，则将其推入栈中。如果字符是一个封闭符号，则判断栈是否为空，为空则报错。否则将栈元素弹出，如果弹出的符号不是对应的开放符号也报错。在文件尾，如果栈非空报错。实现代码如下：  </p>
-<pre><code>int peidui(string &amp;s1,string &amp;s2)
+<p>和Dijkstra算法一样，弗洛伊德(Floyd)算法也是一种用于寻找给定的加权图中顶点间最短路径的算法。该算法名称以创始人之一、1978年图灵奖获得者、斯坦福大学计算机科学系教授罗伯特·弗洛伊德命名。<br>以一个简单的3顶点连通网图为例：<br><img src="https://i.loli.net/2020/04/10/p8D2Cwd6KNAhjou.png" alt=""><br>定义两个二维数组D[3][3]和P[3][3]。D表示顶点到顶点的最短路径权值，P则表示顶点最小路径的后继顶点。注意与上个算法的不同，上个是前驱顶点。初始时：<br><img src="https://s1.ax1x.com/2020/04/10/Go5OWq.png" alt=""><br>可以看到就是图的邻接矩阵。<br><img src="https://s1.ax1x.com/2020/04/10/GoI9w4.png" alt=""><br>P矩阵初始则为顶点的直接路径，如v1到v2，P[1][2]=2。<br>接下来，以v0为中介点进行更新，即v1直接到v2距离为5，但v1若先到v0再到v2距离为3，比5小。因此对D和P进行更新。更新3次，<strong>分别以所有顶点为中介点对其他顶点间的距离更新</strong>。得到：<br><img src="https://pic.images.ac.cn/image/5e901438916dd" alt="">  </p>
+<p><img src="https://ae01.alicdn.com/kf/Ha714fbe49b8d4e5b841ea7e1394da3d3M.png" alt=""><br>这时矩阵D就表示的顶点之间的最短路径长度。<br><strong>通过Floyd计算图G=(V,E)中各个顶点的最短路径时，需要引入一个矩阵D和P，矩阵D中的元素a[i][j]表示顶点i(第i个顶点)到顶点j(第j个顶点)的距离。假设图G中顶点个数为N，则需要对矩阵S进行N次更新。初始时，矩阵S中顶点a[i][j]的距离为顶点i到顶点j的权值；如果i和j不相邻，则a[i][j]=∞。</strong> 接下来开始，<strong>对矩阵S进行N次更新</strong>。第1次更新时，如果”a[i][j]的距离” &gt; “a[i][0]+a[0][j]”(a[i][0]+a[0][j]表示”i与j之间经过第1个顶点的距离”)，则更新a[i][j]为”a[i][0]+a[0][j]”。 同理，第k次更新时，如果”a[i][j]的距离” &gt; “a[i][k]+a[k][j]”，则更新a[i][j]为”a[i][k]+a[k][j]”。更新N次之后，操作完成。<br>依然以上个算法的图为例，实现代码如下：  </p>
+<pre><code>const int INF=10000;
+class graph
 {
-    if(s1==&quot;{&quot;)
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        vector&lt;vector&lt;int&gt;&gt; P;          //路径结点矩阵
+        vector&lt;vector&lt;int&gt;&gt; D;          //最短路径长度矩阵 
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;vector&lt;int&gt;&gt; P1);    //构造函数
+        void Floyd();     //弗洛伊德算法 
+        void Print(int s,int v);
+        void Print1();
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;vector&lt;int&gt;&gt; P1)
+{
+    this-&gt;n=n;
+    G=G1;
+    D=G1;
+    P=P1;
+}
+void graph::Floyd()
+{
+    for(int k=0;k&lt;n;k++)
     {
-        if(s2==&quot;}&quot;)
+        for(int i=0;i&lt;n;i++)
         {
-            return 1;
+            for(int j=0;j&lt;n;j++)
+            {
+                if(D[i][j]&gt;D[i][k]+D[k][j])
+                {
+                    D[i][j]=D[i][k]+D[k][j];
+                    P[i][j]=k;
+                 } 
+            }
         }
-        else return 0;
     }
-    if(s1==&quot;(&quot;)
+} 
+void graph::Print(int s,int v)              //将路径结点打印出来 
+{
+    if(s!=v)
     {
-        if(s2==&quot;)&quot;)
+        cout&lt;&lt;s&lt;&lt;&quot; &quot;;
+        int k=P[s][v];
+        while(k!=v)
         {
-            return 1;
+            cout&lt;&lt;k&lt;&lt;&quot; &quot;;
+            k=P[k][v];
         }
-        else return 0;
+        cout&lt;&lt;v&lt;&lt;endl;
     }
-    if(s1==&quot;[&quot;)
+}
+void graph::Print1()
+{
+    for(int i=0;i&lt;n;i++)
     {
-        if(s2==&quot;]&quot;)
+        for(int j=0;j&lt;n;j++)
         {
-            return 1;
+            cout&lt;&lt;D[i][j]&lt;&lt;&quot; &quot;;    
         }
-        else return 0;
+        cout&lt;&lt;endl;
     }
 }
 int main()
 {
-    stack&lt;string&gt; s;
-    string s1;
-    string tem;
-    cin&gt;&gt;s1;
-    for(int i=0;i&lt;s1.length();i++)
-    {
-        tem=s1.at(i);
-        if(s1.at(i)==&apos;{&apos;||s1.at(i)==&apos;(&apos;||s1.at(i)==&apos;[&apos;)
-        {
-            s.push(tem);
-        }
-        else
-        {
-            if(s.empty()==1)
-            {
-                cout&lt;&lt;&quot;error&quot;;
-                return 0;
-            }
-            else
-            {
-                if(peidui(s.top(),tem)==1)
-                {
-                    s.pop();
-                }
-                else
-                {
-                    cout&lt;&lt;&quot;error&quot;;
-                    return 0;    
-                }
-            }
-        }
-    }
-    if(s.empty()==1)
-    {
-        cout&lt;&lt;&quot;true&quot;;
-    }
-    else
-    {
-        cout&lt;&lt;&quot;error&quot;;
-    }
+    int n=6;
+    vector&lt;vector&lt;int&gt;&gt; Pm{{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5}};
+    vector&lt;vector&lt;int&gt;&gt; G1{{0,1,INF,4,4,INF},{INF,0,INF,2,INF,INF},{INF,INF,0,INF,INF,1},{INF,INF,2,0,3,INF},{INF,INF,INF,INF,0,3},{INF,INF,INF,INF,INF,0}};
+    graph g(n,G1,Pm);
+    g.Print1();
+    g.Floyd();
+    cout&lt;&lt;endl;
+    g.Print(0,5);
+    cout&lt;&lt;endl;
+    g.Print1();
     return 0;
- } </code></pre><p>可以看到，定义了一个配对函数用来判断两个符号是否是一对的。在栈里面按符号进行判断。运行结果为：<br><img src="https://i.loli.net/2020/03/01/nYejlxfZ8ky5Aap.png" alt=""><br><img src="https://i.loli.net/2020/03/01/3WAnj7HZxGKr8Cd.png" alt="">  </p>
-<p>2.逆波兰表达式<br>我们常用的表达式是中缀表达式，而逆波兰表达式又叫后缀表达式，波兰表达式则为前缀表达式。逆波兰表达式是操作数在前，再操作符号。举例如下：<br><code>1 + 2</code>的逆波兰表达式为<code>1 2 +</code><br><code>3 + 4 - 5</code>的逆波兰表达式为<code>3 4 + 5 -</code><br><code>2 * 3 + 7</code>的逆波兰表达式为<code>2 3 * 7 +</code><br>因此它的实现原理为：如果当前符号是数字，压栈。如果是运算符，弹出栈顶的两个元素并运算。再将运算结果压入栈中。直到扫描完整个字符串，栈里的就是结果。实现代码如下：  </p>
-<pre><code>int exchange(char s)
-{
-    switch(s)
-    {
-        case &apos;1&apos;: return 1;break;
-        case &apos;2&apos;: return 2;break;
-        case &apos;3&apos;: return 3;break;
-        case &apos;4&apos;: return 4;break;
-        case &apos;5&apos;: return 5;break;
-        case &apos;6&apos;: return 6;break;
-        case &apos;7&apos;: return 7;break;
-        case &apos;8&apos;: return 8;break;
-        case &apos;9&apos;: return 9;break;
-    }
-}
-int main()
-{
-    stack&lt;int&gt; s;
-    char str[20];
-    int a,b,c;
-    cin&gt;&gt;str;
-    for(int i=0;str[i]!=0;i++)
-    {
-        if(str[i]!=&apos;+&apos;&amp;&amp;str[i]!=&apos;-&apos;&amp;&amp;str[i]!=&apos;*&apos;&amp;&amp;str[i]!=&apos;/&apos;)
-        {
-            c=exchange(str[i]);
-            s.push(c);
-        }
-        else
-        {
-            a=s.top();
-            s.pop();
-            b=s.top();
-            s.pop();
-            switch(str[i])
-            {
-                case &apos;+&apos;: b=a+b;s.push(b);break;
-                case &apos;-&apos;: b=b-a;s.push(b);break;
-                case &apos;*&apos;: b=a*b;s.push(b);break;
-                case &apos;/&apos;: b=b/a;s.push(b);break;
-                default: cout&lt;&lt;&quot;error&quot;;
-            }
-        }
-    }
-    cout&lt;&lt;s.top();
-    return 0;
-}</code></pre><p>从代码中可以看到，为了方便定义了一个转换函数，将字符转换成数字。输入字符串，判断是否为运算符，不是则将其通过转换函数变成数字压栈。运行结果为：<br><img src="https://i.loli.net/2020/03/02/SDtsPnzbIoGXyWl.png" alt=""><br><img src="https://i.loli.net/2020/03/02/RDCoxXNhvQkP1gd.png" alt="">  </p>
-<h2 id="队列ADT"><a href="#队列ADT" class="headerlink" title="队列ADT"></a>队列ADT</h2><p>队列是一种先进先出的表，简称FIFO。允许插入的一端称为队尾，允许删除的一端称为队头。<br>队列也有两种实现方式，数组和链队列。对于数组实现，可以使队列的头尾相接，构成循环队列来解决假溢出问题（即数组中还有位置，但是队尾无位置）。</p>
-<h3 id="队列的应用"><a href="#队列的应用" class="headerlink" title="队列的应用"></a>队列的应用</h3><p>有许多算法使用队列给出高效运行时间。它们当中有些可以在图论中找到，后面的学习中会讨论它们。实际上，每一个实际生活中的排队都是一个队列。  </p>
-<p>表、栈和队列或许在全部计算机科学中是3个基本的数据结构，大量的例子证明了它们广泛的用途。</p>
+}</code></pre><p>可以看到，3重嵌套循环，时间复杂度为O(n^3)。但是算法却并不复杂，不停的选择中介点来更新距离，与上一节的算法有异曲同工的作用。通过该算法就能得到各顶点之间的最短路径长度。若顶点之间无法到达，则为我们定义的INF。</p>
 
     </div>
 
@@ -408,7 +358,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/01/%E6%A0%88ADT%E5%92%8C%E9%98%9F%E5%88%97ADT/" title="栈ADT和队列ADT">https://zpl-novice.github.io/2020/03/01/栈ADT和队列ADT/</a>
+    <a href="https://zpl-novice.github.io/2020/04/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%842/" title="最短路径2">https://zpl-novice.github.io/2020/04/10/最短路径2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -425,13 +375,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/" rel="prev" title="抽象数据类型和表ADT">
-      <i class="fa fa-chevron-left"></i> 抽象数据类型和表ADT
+    <a href="/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/" rel="prev" title="最短路径1">
+      <i class="fa fa-chevron-left"></i> 最短路径1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/03/%E6%A0%91%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="next" title="树的基础知识">
-      树的基础知识 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -491,7 +438,6 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#栈ADT"><span class="nav-number">1.</span> <span class="nav-text">栈ADT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#栈的应用"><span class="nav-number">1.1.</span> <span class="nav-text">栈的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#队列ADT"><span class="nav-number">2.</span> <span class="nav-text">队列ADT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#队列的应用"><span class="nav-number">2.1.</span> <span class="nav-text">队列的应用</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

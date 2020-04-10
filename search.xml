@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>最短路径2</title>
+    <url>/2020/04/10/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%842/</url>
+    <content><![CDATA[<p>摘要：本篇将继续上一篇对求解图顶点间的最短路径进行讲解。主要讲解第二种算法弗洛伊德算法，算法它的时间复杂度为O(n^3)，但是它的实现却非常简单和巧妙。</p>
+<a id="more"></a>
+<p>和Dijkstra算法一样，弗洛伊德(Floyd)算法也是一种用于寻找给定的加权图中顶点间最短路径的算法。该算法名称以创始人之一、1978年图灵奖获得者、斯坦福大学计算机科学系教授罗伯特·弗洛伊德命名。<br>以一个简单的3顶点连通网图为例：<br><img src="https://i.loli.net/2020/04/10/p8D2Cwd6KNAhjou.png" alt=""><br>定义两个二维数组D[3][3]和P[3][3]。D表示顶点到顶点的最短路径权值，P则表示顶点最小路径的后继顶点。注意与上个算法的不同，上个是前驱顶点。初始时：<br><img src="https://s1.ax1x.com/2020/04/10/Go5OWq.png" alt=""><br>可以看到就是图的邻接矩阵。<br><img src="https://s1.ax1x.com/2020/04/10/GoI9w4.png" alt=""><br>P矩阵初始则为顶点的直接路径，如v1到v2，P[1][2]=2。<br>接下来，以v0为中介点进行更新，即v1直接到v2距离为5，但v1若先到v0再到v2距离为3，比5小。因此对D和P进行更新。更新3次，<strong>分别以所有顶点为中介点对其他顶点间的距离更新</strong>。得到：<br><img src="https://pic.images.ac.cn/image/5e901438916dd" alt="">  </p>
+<p><img src="https://ae01.alicdn.com/kf/Ha714fbe49b8d4e5b841ea7e1394da3d3M.png" alt=""><br>这时矩阵D就表示的顶点之间的最短路径长度。<br><strong>通过Floyd计算图G=(V,E)中各个顶点的最短路径时，需要引入一个矩阵D和P，矩阵D中的元素a[i][j]表示顶点i(第i个顶点)到顶点j(第j个顶点)的距离。假设图G中顶点个数为N，则需要对矩阵S进行N次更新。初始时，矩阵S中顶点a[i][j]的距离为顶点i到顶点j的权值；如果i和j不相邻，则a[i][j]=∞。</strong> 接下来开始，<strong>对矩阵S进行N次更新</strong>。第1次更新时，如果”a[i][j]的距离” &gt; “a[i][0]+a[0][j]”(a[i][0]+a[0][j]表示”i与j之间经过第1个顶点的距离”)，则更新a[i][j]为”a[i][0]+a[0][j]”。 同理，第k次更新时，如果”a[i][j]的距离” &gt; “a[i][k]+a[k][j]”，则更新a[i][j]为”a[i][k]+a[k][j]”。更新N次之后，操作完成。<br>依然以上个算法的图为例，实现代码如下：  </p>
+<pre><code>const int INF=10000;
+class graph
+{
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        vector&lt;vector&lt;int&gt;&gt; P;          //路径结点矩阵
+        vector&lt;vector&lt;int&gt;&gt; D;          //最短路径长度矩阵 
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;vector&lt;int&gt;&gt; P1);    //构造函数
+        void Floyd();     //弗洛伊德算法 
+        void Print(int s,int v);
+        void Print1();
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;vector&lt;int&gt;&gt; P1)
+{
+    this-&gt;n=n;
+    G=G1;
+    D=G1;
+    P=P1;
+}
+void graph::Floyd()
+{
+    for(int k=0;k&lt;n;k++)
+    {
+        for(int i=0;i&lt;n;i++)
+        {
+            for(int j=0;j&lt;n;j++)
+            {
+                if(D[i][j]&gt;D[i][k]+D[k][j])
+                {
+                    D[i][j]=D[i][k]+D[k][j];
+                    P[i][j]=k;
+                 } 
+            }
+        }
+    }
+} 
+void graph::Print(int s,int v)              //将路径结点打印出来 
+{
+    if(s!=v)
+    {
+        cout&lt;&lt;s&lt;&lt;&quot; &quot;;
+        int k=P[s][v];
+        while(k!=v)
+        {
+            cout&lt;&lt;k&lt;&lt;&quot; &quot;;
+            k=P[k][v];
+        }
+        cout&lt;&lt;v&lt;&lt;endl;
+    }
+}
+void graph::Print1()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        for(int j=0;j&lt;n;j++)
+        {
+            cout&lt;&lt;D[i][j]&lt;&lt;&quot; &quot;;    
+        }
+        cout&lt;&lt;endl;
+    }
+}
+int main()
+{
+    int n=6;
+    vector&lt;vector&lt;int&gt;&gt; Pm{{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5},{0,1,2,3,4,5}};
+    vector&lt;vector&lt;int&gt;&gt; G1{{0,1,INF,4,4,INF},{INF,0,INF,2,INF,INF},{INF,INF,0,INF,INF,1},{INF,INF,2,0,3,INF},{INF,INF,INF,INF,0,3},{INF,INF,INF,INF,INF,0}};
+    graph g(n,G1,Pm);
+    g.Print1();
+    g.Floyd();
+    cout&lt;&lt;endl;
+    g.Print(0,5);
+    cout&lt;&lt;endl;
+    g.Print1();
+    return 0;
+}</code></pre><p>可以看到，3重嵌套循环，时间复杂度为O(n^3)。但是算法却并不复杂，不停的选择中介点来更新距离，与上一节的算法有异曲同工的作用。通过该算法就能得到各顶点之间的最短路径长度。若顶点之间无法到达，则为我们定义的INF。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>最短路径1</title>
     <url>/2020/04/08/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%841/</url>
     <content><![CDATA[<p>摘要：本篇将要讲解的知识为最短路径。最短路径分为有权的和无权的，无权的即为路径数目，有权的要考虑权值之和最小。求最短路径一般分析的都是有权的，有两种典型算法求解最短路径，在本篇中将主要介绍第一种Dijkstra算法，另一种算法会在下一篇中进行介绍。最短路径是实际生活中经常遇到的问题，学会求解最短路径是非常重要的。</p>
