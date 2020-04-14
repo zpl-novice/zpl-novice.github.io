@@ -1,6 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>图的遍历</title>
+    <url>/2020/04/14/%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86/</url>
+    <content><![CDATA[<p>摘要：图的遍历类似于树的遍历。但图的遍历只有两种形式，深度优先遍历和广度优先遍历。本篇将会对这两种遍历方法进行介绍，并给出它们的代码实现。深度优先遍历和广度优先遍历和树的先序遍历和层序遍历有相似之处。</p>
+<a id="more"></a>
+<p>从图中某一顶点出发访遍图中其他顶点，且使每个顶点仅被访问一次，这就是图的遍历。它类似于树的遍历，通过递归实现。  </p>
+<h2 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h2><p>深度优先遍历(DFS)类似于树的<strong>先序遍历</strong>，从一个点v出发进行访问，然后依次从它未被访问的邻接点出发深度搜索遍历图，直至所有和v有路径相通的顶点都被访问到。若尚有其他顶点未被访问，就另选一个顶点作为起始点重复上述过程。<br><img src="https://ae01.alicdn.com/kf/H0adabe8f2c3f41a3b47848cb986cb625t.png" alt=""><br>如上所示的图，若从顶点A作为起始点，首先访问A，然后再访问它的邻接点B，再访问B的邻接点C（B的邻接点有C、E、F，按照存储顺序C在前面），再访问C的邻接点E，E的邻接点D（B已被访问过），D的邻接点C也被访问过，因此<strong>返回到B</strong>，B的邻接点C和E都被访问过，访问F和它的邻接点G。最终顺序为A、B、C、E、D、F、G。<br>DFS实现代码为：  </p>
+<pre><code>class graph
+{
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        vector&lt;bool&gt; visit;             //访问标志的数组 
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v);    //构造函数初始化 
+        void DFS(int i);
+        void DFS1();
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v)
+{
+    this-&gt;n=n;
+    G=G1;
+    visit=v;
+} 
+void graph::DFS(int i)
+{
+    int j;
+    visit[i]=true;
+    cout&lt;&lt;i&lt;&lt;&quot; &quot;;
+    for(j=0;j&lt;n;j++)
+    {
+        if(visit[j]==false&amp;&amp;G[i][j]==1)
+        {
+            DFS(j);
+        }
+    }
+}
+//若图是非连通的
+void graph::DFS1()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        if(visit[i]==false)
+        {
+            DFS(i);
+        }
+    }
+} 
+int main()
+{
+    int n=7;
+    vector&lt;vector&lt;int&gt;&gt; G1{{0,1,0,0,0,0,0},{0,0,1,0,1,1,0},{0,0,0,0,1,0,0},{0,0,1,0,0,0,0},{0,1,0,1,0,0,0},{0,0,0,0,0,0,1},{0,0,0,0,0,0,0}};
+    vector&lt;bool&gt; v(7);
+    graph g(n,G1,v);
+    g.DFS(0);
+    g.DFS1();
+    return 0;
+}</code></pre><h2 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h2><p>广度优先遍历(BFS)类似于树的层序遍历,从顶点v出发，访问v以后依次访问它的邻接点，然后再从这些邻接点出发依次访问它们的邻接点，并使得先被访问的顶点的邻接点先于后被访问的顶点的邻接点被访问，如果最终仍有顶点未被访问到，则另选一个未被访问的顶点重复上述过程。<br>继续以上面的图为例：<br><img src="https://ae01.alicdn.com/kf/Hcc15ccb6bfef4284809ec31ec41d45a1l.png" alt=""><br>以A为起始点访问然后按顺序访问它的邻接点，因为A只有一个邻接点B，访问B然后按顺序访问它的邻接点C、E、F。先访问C，再访问E，最后访问F。然后再依次访问C的邻接点、E的邻接点、F的邻接点。最终顺序为A、B、C、E、F、D、G。<br>广度优先搜索的实现代码如下：  </p>
+<pre><code>class graph
+{
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        vector&lt;bool&gt; visit;             //访问标志的数组 
+        queue&lt;int&gt; q;
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v);    //构造函数初始化 
+        void BFS(int i);
+        void BFS1();
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v)
+{
+    this-&gt;n=n;
+    G=G1;
+    visit=v;
+} 
+void graph::BFS(int i)
+{
+    int j;
+    int tem;
+    visit[i]=true;
+    cout&lt;&lt;i&lt;&lt;&quot; &quot;;
+    for(j=0;j&lt;n;j++)
+    {
+        if(visit[j]==false&amp;&amp;G[i][j]==1)
+        {
+            q.push(j);
+            visit[j]=true;
+        }
+    }
+    if(!q.empty())
+    {
+        tem=q.front();
+        q.pop();
+        BFS(tem);
+    }
+}
+//若图是非连通的
+void graph::BFS1()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        if(visit[i]==false)
+        {
+            BFS(i);
+        }
+    }
+} 
+int main()
+{
+    int n=7;
+    vector&lt;vector&lt;int&gt;&gt; G1{{0,1,0,0,0,0,0},{0,0,1,0,1,1,0},{0,0,0,0,1,0,0},{0,0,1,0,0,0,0},{0,1,0,1,0,0,0},{0,0,0,0,0,0,1},{0,0,0,0,0,0,0}};
+    vector&lt;bool&gt; v(7);
+    graph g(n,G1,v);
+    g.BFS(0);
+    g.BFS1();
+    return 0;
+}</code></pre><p>可以看到，与DFS不同之处在于多了一个队列q进行辅助，来存储要访问的顶点顺序。<br>图的遍历和树的遍历都是非常重要的知识，理解遍历的过程，掌握如何用代码实现遍历是非常重要的。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>最小生成树</title>
     <url>/2020/04/12/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/</url>
     <content><![CDATA[<p>摘要：本篇将要讲解的知识为最小生成树。一个n个顶点的图，选取其n-1条边且不构成回路称为生成树。而权值最小的则为最小生成树，求解一个图的最小生成树是非常重要的。本篇将介绍两种算法来求解一个图的最小生成树。</p>

@@ -46,30 +46,22 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将要讲解的二叉树为伸展树，伸展树其实是一种特殊的二叉查找树，它会调整自己的结构，提高查找效率。本篇将会介绍伸展树的概念，以及伸展树是如何伸展的。">
+  <meta name="description" content="摘要：图的遍历类似于树的遍历。但图的遍历只有两种形式，深度优先遍历和广度优先遍历。本篇将会对这两种遍历方法进行介绍，并给出它们的代码实现。深度优先遍历和广度优先遍历和树的先序遍历和层序遍历有相似之处。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="伸展树(splay tree)">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/index.html">
+<meta property="og:title" content="图的遍历">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/04/14/%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将要讲解的二叉树为伸展树，伸展树其实是一种特殊的二叉查找树，它会调整自己的结构，提高查找效率。本篇将会介绍伸展树的概念，以及伸展树是如何伸展的。">
+<meta property="og:description" content="摘要：图的遍历类似于树的遍历。但图的遍历只有两种形式，深度优先遍历和广度优先遍历。本篇将会对这两种遍历方法进行介绍，并给出它们的代码实现。深度优先遍历和广度优先遍历和树的先序遍历和层序遍历有相似之处。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/EL9ix51l4uo7TdU.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/6J9uj87YtgcEUFI.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/uKaB5MXGedZ8UnD.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/hntDSNW8gjZBk4z.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/nE5YcAj8O76XVTR.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/8XquI1wSmMCL2VT.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/T7d3zFA8CGMoKQH.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/q4wMVCLurXIR1j7.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/VR4Su6eJOWp9hGY.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/8xUjoZM3NXt4197.png">
-<meta property="article:published_time" content="2020-03-15T09:18:02.480Z">
-<meta property="article:modified_time" content="2020-03-15T09:36:09.219Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0adabe8f2c3f41a3b47848cb986cb625t.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hcc15ccb6bfef4284809ec31ec41d45a1l.png">
+<meta property="article:published_time" content="2020-04-14T08:59:48.368Z">
+<meta property="article:modified_time" content="2020-04-14T09:20:23.293Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/03/15/EL9ix51l4uo7TdU.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H0adabe8f2c3f41a3b47848cb986cb625t.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/04/14/%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86/">
 
 
 <script id="page-configurations">
@@ -81,7 +73,7 @@
   };
 </script>
 
-  <title>伸展树(splay tree) | zpl-novice</title>
+  <title>图的遍历 | zpl-novice</title>
   
 
 
@@ -211,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/14/%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -224,7 +216,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          伸展树(splay tree)
+          图的遍历
         </h1>
 
         <div class="post-meta">
@@ -235,7 +227,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-15 17:18:02 / 修改时间：17:36:09" itemprop="dateCreated datePublished" datetime="2020-03-15T17:18:02+08:00">2020-03-15</time>
+              <time title="创建时间：2020-04-14 16:59:48 / 修改时间：17:20:23" itemprop="dateCreated datePublished" datetime="2020-04-14T16:59:48+08:00">2020-04-14</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,7 +247,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>970</span>
+              <span>2.4k</span>
             </span>
 
         </div>
@@ -267,15 +259,121 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将要讲解的二叉树为伸展树，伸展树其实是一种特殊的二叉查找树，它会调整自己的结构，提高查找效率。本篇将会介绍伸展树的概念，以及伸展树是如何伸展的。</p>
+        <p>摘要：图的遍历类似于树的遍历。但图的遍历只有两种形式，深度优先遍历和广度优先遍历。本篇将会对这两种遍历方法进行介绍，并给出它们的代码实现。深度优先遍历和广度优先遍历和树的先序遍历和层序遍历有相似之处。</p>
 <a id="more"></a>
-<p>伸展树保证从空树开始连续M次对树的操作最多花费O(Mlogn)时间，不过这种保证并不排除单次操作花费O(n)时间的可能，而且这样的界也不如每次操作最坏情形的界为O(logn)那么强，但实际效果是一样的：不存在坏的输入序列。<br>伸展树是基于这样的事实：对于二叉查找树来说，每次操作最坏情形时间O(n)并不坏，只要它相对不常发生就行。于是为了使整个查找时间更小，被查频率高的那些条目就应当经常处于靠近树根的位置。伸展树的基本想法是，当一个结点被访问后，它就要经过一系列AVL旋转向根推进。注意，如果一个结点很深，那么在其路径上就存在许多结点也相对较深，通过重新构造以使得对所有这些结点的进一步访问所花费的时间变少。它是一种自调整形式的二叉查找树。</p>
-<h2 id="简单想法"><a href="#简单想法" class="headerlink" title="简单想法"></a>简单想法</h2><p>实施上面描述的重新构造的一种方法是执行单旋转，从底向上进行。这意味着我们将在访问路径上的每一个结点和它们的父结点实施旋转。注意，<strong>该想法是不能直接使用的</strong>，下面会说明原因。如下所示，对k1进行一次访问后：<br><img src="https://i.loli.net/2020/03/15/EL9ix51l4uo7TdU.png" alt=""><br>虚线是访问的路径，首先单旋转使k1与k2交换：<br><img src="https://i.loli.net/2020/03/15/6J9uj87YtgcEUFI.png" alt=""><br>然后k1和k3之间执行旋转：<br><img src="https://i.loli.net/2020/03/15/uKaB5MXGedZ8UnD.png" alt=""><br>再然后：<br><img src="https://i.loli.net/2020/03/15/hntDSNW8gjZBk4z.png" alt=""><br><img src="https://i.loli.net/2020/03/15/nE5YcAj8O76XVTR.png" alt=""><br>最终使得k1变成了根结点，使得对k1的进一步访问很容易。但是，它把另一个结点k3推向和以前k1一样深，而对k3的访问又会推动下一个结点。所以这个想法存在着问题，需要改进。  </p>
-<h2 id="伸展"><a href="#伸展" class="headerlink" title="伸展"></a>伸展</h2><p>伸展(splaying)的思路类似于前面的旋转，但有一些改变。令X是访问路径上的一个结点，我们将在这个结点上实施伸展。若X的父结点是树的根，那么只需要旋转X和根即可。否则，X就有父亲(P)和祖父(G)，于是存在两种情况外加对称的情形要考虑。  </p>
-<h3 id="之字形"><a href="#之字形" class="headerlink" title="之字形"></a>之字形</h3><p><img src="https://i.loli.net/2020/03/15/8XquI1wSmMCL2VT.png" alt=""><br>这种情况下执行的是双旋转。  </p>
-<h3 id="一字形"><a href="#一字形" class="headerlink" title="一字形"></a>一字形</h3><p><img src="https://i.loli.net/2020/03/15/T7d3zFA8CGMoKQH.png" alt=""><br><strong>注意，这种情况下既不是单旋转，也不是双旋转</strong>。  </p>
-<p>这样，再对上面的例子进行伸展：<br><img src="https://i.loli.net/2020/03/15/q4wMVCLurXIR1j7.png" alt=""><br>这是一个之字形，因此我们执行一次AVL的双旋转，得：<br><img src="https://i.loli.net/2020/03/15/VR4Su6eJOWp9hGY.png" alt=""><br>此时变成了一字形，进行一次一字形的变换，得最终的树：<br><img src="https://i.loli.net/2020/03/15/8xUjoZM3NXt4197.png" alt=""><br>伸展操作不仅将访问的结点移动到根处，而且还有把访问路径上的大部分结点的深度大致减少一半的效果。  </p>
-<p>伸展树因为没有平衡信息要保留所以比平衡二叉树实现简单，情形少，所占用内存也少，它会自调整逐步优化自己，使得最终查找速度变快，更有效率。</p>
+<p>从图中某一顶点出发访遍图中其他顶点，且使每个顶点仅被访问一次，这就是图的遍历。它类似于树的遍历，通过递归实现。  </p>
+<h2 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h2><p>深度优先遍历(DFS)类似于树的<strong>先序遍历</strong>，从一个点v出发进行访问，然后依次从它未被访问的邻接点出发深度搜索遍历图，直至所有和v有路径相通的顶点都被访问到。若尚有其他顶点未被访问，就另选一个顶点作为起始点重复上述过程。<br><img src="https://ae01.alicdn.com/kf/H0adabe8f2c3f41a3b47848cb986cb625t.png" alt=""><br>如上所示的图，若从顶点A作为起始点，首先访问A，然后再访问它的邻接点B，再访问B的邻接点C（B的邻接点有C、E、F，按照存储顺序C在前面），再访问C的邻接点E，E的邻接点D（B已被访问过），D的邻接点C也被访问过，因此<strong>返回到B</strong>，B的邻接点C和E都被访问过，访问F和它的邻接点G。最终顺序为A、B、C、E、D、F、G。<br>DFS实现代码为：  </p>
+<pre><code>class graph
+{
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        vector&lt;bool&gt; visit;             //访问标志的数组 
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v);    //构造函数初始化 
+        void DFS(int i);
+        void DFS1();
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v)
+{
+    this-&gt;n=n;
+    G=G1;
+    visit=v;
+} 
+void graph::DFS(int i)
+{
+    int j;
+    visit[i]=true;
+    cout&lt;&lt;i&lt;&lt;&quot; &quot;;
+    for(j=0;j&lt;n;j++)
+    {
+        if(visit[j]==false&amp;&amp;G[i][j]==1)
+        {
+            DFS(j);
+        }
+    }
+}
+//若图是非连通的
+void graph::DFS1()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        if(visit[i]==false)
+        {
+            DFS(i);
+        }
+    }
+} 
+int main()
+{
+    int n=7;
+    vector&lt;vector&lt;int&gt;&gt; G1{{0,1,0,0,0,0,0},{0,0,1,0,1,1,0},{0,0,0,0,1,0,0},{0,0,1,0,0,0,0},{0,1,0,1,0,0,0},{0,0,0,0,0,0,1},{0,0,0,0,0,0,0}};
+    vector&lt;bool&gt; v(7);
+    graph g(n,G1,v);
+    g.DFS(0);
+    g.DFS1();
+    return 0;
+}</code></pre><h2 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h2><p>广度优先遍历(BFS)类似于树的层序遍历,从顶点v出发，访问v以后依次访问它的邻接点，然后再从这些邻接点出发依次访问它们的邻接点，并使得先被访问的顶点的邻接点先于后被访问的顶点的邻接点被访问，如果最终仍有顶点未被访问到，则另选一个未被访问的顶点重复上述过程。<br>继续以上面的图为例：<br><img src="https://ae01.alicdn.com/kf/Hcc15ccb6bfef4284809ec31ec41d45a1l.png" alt=""><br>以A为起始点访问然后按顺序访问它的邻接点，因为A只有一个邻接点B，访问B然后按顺序访问它的邻接点C、E、F。先访问C，再访问E，最后访问F。然后再依次访问C的邻接点、E的邻接点、F的邻接点。最终顺序为A、B、C、E、F、D、G。<br>广度优先搜索的实现代码如下：  </p>
+<pre><code>class graph
+{
+    private:
+        int n;
+        vector&lt;vector&lt;int&gt;&gt; G;            //邻接矩阵 
+        vector&lt;bool&gt; visit;             //访问标志的数组 
+        queue&lt;int&gt; q;
+    public:
+        graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v);    //构造函数初始化 
+        void BFS(int i);
+        void BFS1();
+};
+graph::graph(int n,vector&lt;vector&lt;int&gt;&gt; G1,vector&lt;bool&gt; v)
+{
+    this-&gt;n=n;
+    G=G1;
+    visit=v;
+} 
+void graph::BFS(int i)
+{
+    int j;
+    int tem;
+    visit[i]=true;
+    cout&lt;&lt;i&lt;&lt;&quot; &quot;;
+    for(j=0;j&lt;n;j++)
+    {
+        if(visit[j]==false&amp;&amp;G[i][j]==1)
+        {
+            q.push(j);
+            visit[j]=true;
+        }
+    }
+    if(!q.empty())
+    {
+        tem=q.front();
+        q.pop();
+        BFS(tem);
+    }
+}
+//若图是非连通的
+void graph::BFS1()
+{
+    for(int i=0;i&lt;n;i++)
+    {
+        if(visit[i]==false)
+        {
+            BFS(i);
+        }
+    }
+} 
+int main()
+{
+    int n=7;
+    vector&lt;vector&lt;int&gt;&gt; G1{{0,1,0,0,0,0,0},{0,0,1,0,1,1,0},{0,0,0,0,1,0,0},{0,0,1,0,0,0,0},{0,1,0,1,0,0,0},{0,0,0,0,0,0,1},{0,0,0,0,0,0,0}};
+    vector&lt;bool&gt; v(7);
+    graph g(n,G1,v);
+    g.BFS(0);
+    g.BFS1();
+    return 0;
+}</code></pre><p>可以看到，与DFS不同之处在于多了一个队列q进行辅助，来存储要访问的顶点顺序。<br>图的遍历和树的遍历都是非常重要的知识，理解遍历的过程，掌握如何用代码实现遍历是非常重要的。</p>
 
     </div>
 
@@ -291,7 +389,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/" title="伸展树(splay tree)">https://zpl-novice.github.io/2020/03/15/伸展树(splay tree)/</a>
+    <a href="https://zpl-novice.github.io/2020/04/14/%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86/" title="图的遍历">https://zpl-novice.github.io/2020/04/14/图的遍历/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,13 +406,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/13/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91(AVL)%E6%A6%82%E5%BF%B5/" rel="prev" title="平衡二叉树(AVL)">
-      <i class="fa fa-chevron-left"></i> 平衡二叉树(AVL)
+    <a href="/2020/04/12/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" rel="prev" title="最小生成树">
+      <i class="fa fa-chevron-left"></i> 最小生成树
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/" rel="next" title="多路查找树（B树）">
-      多路查找树（B树） <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -374,7 +469,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单想法"><span class="nav-number">1.</span> <span class="nav-text">简单想法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伸展"><span class="nav-number">2.</span> <span class="nav-text">伸展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#之字形"><span class="nav-number">2.1.</span> <span class="nav-text">之字形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一字形"><span class="nav-number">2.2.</span> <span class="nav-text">一字形</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度优先遍历"><span class="nav-number">1.</span> <span class="nav-text">深度优先遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广度优先遍历"><span class="nav-number">2.</span> <span class="nav-text">广度优先遍历</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
