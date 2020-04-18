@@ -46,19 +46,28 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将介绍一下在分析算法时所用到的一些知识。例如如何判断一个算法的好坏？怎么去计算算法的时间复杂度等等。通过本篇的介绍，能够更好的让我们对一个算法进行分析。">
+  <meta name="description" content="摘要：本篇将要讲解的算法为分治算法，其实在之前的学习中，有过很多分治算法的例子，它的应用非常广泛，在本篇将会再介绍它的一些应用以及解法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="算法分析相关概念">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:title" content="分治算法">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/04/18/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将介绍一下在分析算法时所用到的一些知识。例如如何判断一个算法的好坏？怎么去计算算法的时间复杂度等等。通过本篇的介绍，能够更好的让我们对一个算法进行分析。">
+<meta property="og:description" content="摘要：本篇将要讲解的算法为分治算法，其实在之前的学习中，有过很多分治算法的例子，它的应用非常广泛，在本篇将会再介绍它的一些应用以及解法。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-26T09:13:34.558Z">
-<meta property="article:modified_time" content="2020-02-26T12:00:29.573Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hebdd5758691242ac892a75ada04fe02dO.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H31cd546ccb16478998580f1f9e8dd971F.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H130893a88ff845babee1049ce89f9a55A.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb4c7c495d5d846bc8dc2fe12bcdf0ee6e.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H1f8f14c7e93a47378fdcc020c59c73fde.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8b465c457a3f425ba0affc92446129bcG.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H010b8f6fbb934fb7835fc72441c5044cl.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H5c6d5224c8be4389924735db90d817ab7.png">
+<meta property="article:published_time" content="2020-04-18T07:28:18.443Z">
+<meta property="article:modified_time" content="2020-04-18T07:41:05.109Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hebdd5758691242ac892a75ada04fe02dO.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/04/18/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -70,7 +79,7 @@
   };
 </script>
 
-  <title>算法分析相关概念 | zpl-novice</title>
+  <title>分治算法 | zpl-novice</title>
   
 
 
@@ -200,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/18/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          算法分析相关概念
+          分治算法
         </h1>
 
         <div class="post-meta">
@@ -224,7 +233,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-26 17:13:34 / 修改时间：20:00:29" itemprop="dateCreated datePublished" datetime="2020-02-26T17:13:34+08:00">2020-02-26</time>
+              <time title="创建时间：2020-04-18 15:28:18 / 修改时间：15:41:05" itemprop="dateCreated datePublished" datetime="2020-04-18T15:28:18+08:00">2020-04-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,7 +253,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
+              <span>1.4k</span>
             </span>
 
         </div>
@@ -256,41 +265,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将介绍一下在分析算法时所用到的一些知识。例如如何判断一个算法的好坏？怎么去计算算法的时间复杂度等等。通过本篇的介绍，能够更好的让我们对一个算法进行分析。</p>
+        <p>摘要：本篇将要讲解的算法为分治算法，其实在之前的学习中，有过很多分治算法的例子，它的应用非常广泛，在本篇将会再介绍它的一些应用以及解法。</p>
 <a id="more"></a>
-<p>算法（algorithm)是为求解一个问题需要遵循的、被清楚的指定的简单指令的集合。对于一个问题，一旦某种算法给定并且被确定是正确的，那么重要的一步就是确定该算法将需要多少诸如时间或空间等的资源量的问题。一个程序的运行时间，依赖于算法的好坏和问题的输入规模。同一个问题的不同解决方法会花费的时间，内存各不相同。即使计算机在不停进步，有些算法依然需要花费大量时间，因此需要找到最优效率的算法。因此，一个算法的好坏或者性能由它的时间复杂度和空间复杂度决定。</p>
-<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>算法的空间复杂度通过计算算法所需的存储空间实现，算法空间复杂度的公式为S(n)，n为问题的规模。通常的复杂度指的都是时间复杂度。因此这里不再对空间复杂度过多解释，只简单说一下，在以后遇到时会具体介绍。</p>
-<h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>算法的时间复杂度的分析就是针对每个输入规模值，计算基本运算的执行次数。某些情况下，基本运算的执行次数不仅取决于输入规模，还与输入值有关。简而言之，就是一个算法要花多长时间执行。即一个算法所有指令被执行的次数为T(n)。最佳情况时间复杂度称为B(n)，最差情况时间复杂度称为W(n)，平均情况时间复杂度为A(n), 对于一般的排序，讨论平均情况下的时间复杂度即可，但是对于电厂检测这种，就必须要考虑最差情况时间复杂度，因为出了差错是灾难性的。具体问题具体分析讨论哪种情况的时间复杂度。一般情况下，一个算法必须是O(nlogn)或者更佳时，我们才能假定它可以在可容忍时间内处理极大实例。一般在没有特殊说明的情况下，都是指最坏时间复杂度。<br>时间复杂度常用大O符号表示，T(n)是一个具体的函数，而大O表示则相当于时间复杂度的分级，常见的为:<br>O(1)、O(logn)、O(n)、O(nlogn)、O(n^2)、O(n^3)、O(2^n)、O(n!)<br>为什么要分这几类呢？，举个例子，对于时间复杂度为n和n^2的两种算法，显然当n足够大时，第一种的效率总是高于第二种。那么100n和0.01n^2呢？若只比较一些数，如100以内的，第一种花费的时间大于第二种，但只要n&gt;10000,第一种还是效率高于第二种，只是需要n的值更大了而已。所以我们需要比较的是它们的相对增长率。因此看最终结果，引入了阶的概念。低阶的效率最终都是高于高阶的。我们只需要按阶次划分时间复杂度即可，不再考虑系数，以T(n)的最高阶作为O(n)。<br>如何计算时间复杂度？分析算法的复杂度，关键是分析循环结构的运行情况。</p>
-<h3 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h3><p>一个for循环的运行时间至多是该for循环内部那些语句（包括测试）的运行时间乘以迭代的次数。例如：</p>
+<p>从名字就可以知道，分治算法由两部分组成：<br>分(divide)：递归解决较小的问题，<br>治(conquer)：从子问题的解构建原问题的解。<br>传统上，在其代码中<strong>至少含有两个递归调用的例程</strong>叫做分治算法，而只含有一个就是递归而不是分治。一般坚持子问题是不相交的。<br>前面讲过很多分治算法的例子，如<strong>树的遍历、归并排序和快速排序</strong>等等。在这里，将给出更多分治算法的实例。<br>首先介绍以下分治算法的运行时间，因为分成两部分递归，若附加的工作时间为O(n)，则总时间T(n)=2T(n/2)+O(n)，可解得为O(nlogn)。若附加的工作时间为O(n^2)，则总运行时间为O(n^2)。  </p>
+<h2 id="计算几何"><a href="#计算几何" class="headerlink" title="计算几何"></a>计算几何</h2><p>给定平面上的N个点，证明最近的一对点可以在O(nlogn)时间内找到。<br>显然有N(N-1)/2对点间的距离，若要采用暴力解法全部计算出来，然后排序选择最小的，则需要O(n^2)的时间。<br>若这些点已经按x坐标排好序，因为<strong>排序算法为O(nlogn)的时间复杂度</strong>，因此不增加算法运行时间的级别。如下所示：<br><img src="https://ae01.alicdn.com/kf/Hebdd5758691242ac892a75ada04fe02dO.png" alt=""><br>我们可以画一条想象的垂线，把点集分成两半，PL和PR。这样最近的一对点或者都在PL中，或者都在PR中，或者一个在PL中，一个在PR中。如下所示：<br><img src="https://ae01.alicdn.com/kf/H31cd546ccb16478998580f1f9e8dd971F.png" alt=""><br>根据前面所讲的，我们需要用O(n)的时间来算出dc。然后递归计算dl和dr即可。这样总时间才能为O(nlogn)。在计算dc的时候，显然不需要考虑所有点，因为<strong>dc要满足比dl和dr小</strong>才有意义，因此设min为dl和dr中的最小值。那么计算<strong>dc所需要的点只能分布在mid-min和mid+min这一段x坐标</strong>上。否则dc必定超出min。一种简单的方法是对于每个mid-min区域内的点，遍历mid+min区域求出最短距离。然而若这个区域包含所有点，时间复杂度又变成了O(n^2)。 因此<strong>考虑x坐标划分的方法，显然对于mid-min区域内的点，若mid+min区域点的y坐标与之差别超过min，自然距离也超出min。因此对于mid-min区域内的点，只需计算mid+min区域中y坐标与该点y坐标相差不超过min的点的距离即可</strong>。  </p>
+<h2 id="选择问题"><a href="#选择问题" class="headerlink" title="选择问题"></a>选择问题</h2><p>要求找出N个元素集合S中的第k个最小的元素。通过把元素排序选择问题可以容易的以最坏情形时间O(nlogn)解决，但是不知道选择能否以O(n)最坏情形时间完成。  </p>
+<h2 id="矩阵相乘"><a href="#矩阵相乘" class="headerlink" title="矩阵相乘"></a>矩阵相乘</h2><p>常规的矩阵相乘即3重循环，计算A的第i行和B的第j列的点乘。  </p>
 <pre><code>for(int i=0;i&lt;n;i++)
 {
-    cout&lt;&lt;i;
-}</code></pre><p>可以看到，输出语句执行了n次，还有一次判断语句(i=n)，总共执行了n+1次，复杂度为O(n)。</p>
-<h3 id="嵌套循环"><a href="#嵌套循环" class="headerlink" title="嵌套循环"></a>嵌套循环</h3><p>从里向外分析这些循环，在一组嵌套循环内部的一条语句总的运行时间为该语句的运行时间乘以该组所有的for循环的大小的乘积。 </p>
-<pre><code>for(int i=0;i&lt;n;i++)
-{
-    for(int j=o;j&lt;n;j++)
+    for(int j=0;j&lt;n;j++)
     {
-        cout&lt;&lt;i;
+        C[i][j]=0;
+        for(k=0;k&lt;n;k++)
+        {
+            C[i][j]+=A[i][k]*B[k][j];
+        }
     }
-}</code></pre><p>可以看到有两个for循环，复杂度为O(n^2)。</p>
-<h3 id="顺序语句"><a href="#顺序语句" class="headerlink" title="顺序语句"></a>顺序语句</h3><p>将各个语句的运行时间求和即可。如将上面两个循环合并：</p>
-<pre><code>for(int i=0;i&lt;n;i++)
-{
-    cout&lt;&lt;i;
-}
-for(int i=0;i&lt;n;i++)
-{
-    for(int j=o;j&lt;n;j++)
-    {
-        cout&lt;&lt;i;
-    }
-}</code></pre><p>因为取的是最高阶次，T(n)=n^2+n，复杂度仍为O(n^2)。</p>
-<h3 id="if-else语句"><a href="#if-else语句" class="headerlink" title="if/else语句"></a>if/else语句</h3><p>对于if/else语句：</p>
-<pre><code>if(condition)
-    s1
-else
-    s2</code></pre><p>运行时间从不超过判断的运行时间再加上s1和s2中运行时间长者的总的运行时间。<br>对于其他情形的分析也是看执行次数，如递归等等。分析一个算法的时间复杂度是非常重要的，它能体现算法的性能。在后续对算法的学习当中，复杂度是必不可少的。</p>
+}</code></pre><p>长期以来一直认为矩阵乘法是需要工作量O(n^3)的。直到后来打破了该屏障。把每一个矩阵分解成四块。<br><img src="https://ae01.alicdn.com/kf/H130893a88ff845babee1049ce89f9a55A.png" alt=""><br>此时容易证明：<br><img src="https://ae01.alicdn.com/kf/Hb4c7c495d5d846bc8dc2fe12bcdf0ee6e.png" alt=""><br>例如计算：<br><img src="https://ae01.alicdn.com/kf/H1f8f14c7e93a47378fdcc020c59c73fde.png" alt=""><br>分成8部分：<br><img src="https://ae01.alicdn.com/kf/H8b465c457a3f425ba0affc92446129bcG.png" alt=""><br>这样共进行8个矩阵乘法和4个矩阵加法，加法花费O(n^2)时间。T(n)=8T(n/2)+O(n^2)。然而通过计算可得时间T(n)=O(n^3)，并没有作出改进，所以要把<strong>子问题优化到8个以下</strong>。需要重新安排运算：<br><img src="https://ae01.alicdn.com/kf/H010b8f6fbb934fb7835fc72441c5044cl.png" alt=""><br>这样，最后答案可由8次加法得到：<br><img src="https://ae01.alicdn.com/kf/H5c6d5224c8be4389924735db90d817ab7.png" alt=""><br>时间复杂度由O(n^3)变成了T(n)=O(n^log7)=O(n^2.81)。  </p>
+<p>分治算法利用递归来分和治，巧妙了缩短了运行时间，在后续依然后很多例子会让我们见识到分治算法的巧妙之处。  </p>
 
     </div>
 
@@ -306,7 +298,7 @@ else
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" title="算法分析相关概念">https://zpl-novice.github.io/2020/02/26/算法分析相关概念/</a>
+    <a href="https://zpl-novice.github.io/2020/04/18/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/" title="分治算法">https://zpl-novice.github.io/2020/04/18/分治算法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -323,13 +315,10 @@ else
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%9D%E8%AF%86/" rel="prev" title="数据结构与算法初识">
-      <i class="fa fa-chevron-left"></i> 数据结构与算法初识
+    <a href="/2020/04/16/%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/" rel="prev" title="贪婪算法">
+      <i class="fa fa-chevron-left"></i> 贪婪算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/28/%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%A1%A8ADT/" rel="next" title="抽象数据类型和表ADT">
-      抽象数据类型和表ADT <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -389,7 +378,7 @@ else
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#空间复杂度"><span class="nav-number">1.</span> <span class="nav-text">空间复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间复杂度"><span class="nav-number">2.</span> <span class="nav-text">时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">2.1.</span> <span class="nav-text">for循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套循环"><span class="nav-number">2.2.</span> <span class="nav-text">嵌套循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顺序语句"><span class="nav-number">2.3.</span> <span class="nav-text">顺序语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if-else语句"><span class="nav-number">2.4.</span> <span class="nav-text">if&#x2F;else语句</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算几何"><span class="nav-number">1.</span> <span class="nav-text">计算几何</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择问题"><span class="nav-number">2.</span> <span class="nav-text">选择问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵相乘"><span class="nav-number">3.</span> <span class="nav-text">矩阵相乘</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

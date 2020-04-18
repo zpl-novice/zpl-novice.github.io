@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>分治算法</title>
+    <url>/2020/04/18/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>摘要：本篇将要讲解的算法为分治算法，其实在之前的学习中，有过很多分治算法的例子，它的应用非常广泛，在本篇将会再介绍它的一些应用以及解法。</p>
+<a id="more"></a>
+<p>从名字就可以知道，分治算法由两部分组成：<br>分(divide)：递归解决较小的问题，<br>治(conquer)：从子问题的解构建原问题的解。<br>传统上，在其代码中<strong>至少含有两个递归调用的例程</strong>叫做分治算法，而只含有一个就是递归而不是分治。一般坚持子问题是不相交的。<br>前面讲过很多分治算法的例子，如<strong>树的遍历、归并排序和快速排序</strong>等等。在这里，将给出更多分治算法的实例。<br>首先介绍以下分治算法的运行时间，因为分成两部分递归，若附加的工作时间为O(n)，则总时间T(n)=2T(n/2)+O(n)，可解得为O(nlogn)。若附加的工作时间为O(n^2)，则总运行时间为O(n^2)。  </p>
+<h2 id="计算几何"><a href="#计算几何" class="headerlink" title="计算几何"></a>计算几何</h2><p>给定平面上的N个点，证明最近的一对点可以在O(nlogn)时间内找到。<br>显然有N(N-1)/2对点间的距离，若要采用暴力解法全部计算出来，然后排序选择最小的，则需要O(n^2)的时间。<br>若这些点已经按x坐标排好序，因为<strong>排序算法为O(nlogn)的时间复杂度</strong>，因此不增加算法运行时间的级别。如下所示：<br><img src="https://ae01.alicdn.com/kf/Hebdd5758691242ac892a75ada04fe02dO.png" alt=""><br>我们可以画一条想象的垂线，把点集分成两半，PL和PR。这样最近的一对点或者都在PL中，或者都在PR中，或者一个在PL中，一个在PR中。如下所示：<br><img src="https://ae01.alicdn.com/kf/H31cd546ccb16478998580f1f9e8dd971F.png" alt=""><br>根据前面所讲的，我们需要用O(n)的时间来算出dc。然后递归计算dl和dr即可。这样总时间才能为O(nlogn)。在计算dc的时候，显然不需要考虑所有点，因为<strong>dc要满足比dl和dr小</strong>才有意义，因此设min为dl和dr中的最小值。那么计算<strong>dc所需要的点只能分布在mid-min和mid+min这一段x坐标</strong>上。否则dc必定超出min。一种简单的方法是对于每个mid-min区域内的点，遍历mid+min区域求出最短距离。然而若这个区域包含所有点，时间复杂度又变成了O(n^2)。 因此<strong>考虑x坐标划分的方法，显然对于mid-min区域内的点，若mid+min区域点的y坐标与之差别超过min，自然距离也超出min。因此对于mid-min区域内的点，只需计算mid+min区域中y坐标与该点y坐标相差不超过min的点的距离即可</strong>。  </p>
+<h2 id="选择问题"><a href="#选择问题" class="headerlink" title="选择问题"></a>选择问题</h2><p>要求找出N个元素集合S中的第k个最小的元素。通过把元素排序选择问题可以容易的以最坏情形时间O(nlogn)解决，但是不知道选择能否以O(n)最坏情形时间完成。  </p>
+<h2 id="矩阵相乘"><a href="#矩阵相乘" class="headerlink" title="矩阵相乘"></a>矩阵相乘</h2><p>常规的矩阵相乘即3重循环，计算A的第i行和B的第j列的点乘。  </p>
+<pre><code>for(int i=0;i&lt;n;i++)
+{
+    for(int j=0;j&lt;n;j++)
+    {
+        C[i][j]=0;
+        for(k=0;k&lt;n;k++)
+        {
+            C[i][j]+=A[i][k]*B[k][j];
+        }
+    }
+}</code></pre><p>长期以来一直认为矩阵乘法是需要工作量O(n^3)的。直到后来打破了该屏障。把每一个矩阵分解成四块。<br><img src="https://ae01.alicdn.com/kf/H130893a88ff845babee1049ce89f9a55A.png" alt=""><br>此时容易证明：<br><img src="https://ae01.alicdn.com/kf/Hb4c7c495d5d846bc8dc2fe12bcdf0ee6e.png" alt=""><br>例如计算：<br><img src="https://ae01.alicdn.com/kf/H1f8f14c7e93a47378fdcc020c59c73fde.png" alt=""><br>分成8部分：<br><img src="https://ae01.alicdn.com/kf/H8b465c457a3f425ba0affc92446129bcG.png" alt=""><br>这样共进行8个矩阵乘法和4个矩阵加法，加法花费O(n^2)时间。T(n)=8T(n/2)+O(n^2)。然而通过计算可得时间T(n)=O(n^3)，并没有作出改进，所以要把<strong>子问题优化到8个以下</strong>。需要重新安排运算：<br><img src="https://ae01.alicdn.com/kf/H010b8f6fbb934fb7835fc72441c5044cl.png" alt=""><br>这样，最后答案可由8次加法得到：<br><img src="https://ae01.alicdn.com/kf/H5c6d5224c8be4389924735db90d817ab7.png" alt=""><br>时间复杂度由O(n^3)变成了T(n)=O(n^log7)=O(n^2.81)。  </p>
+<p>分治算法利用递归来分和治，巧妙了缩短了运行时间，在后续依然后很多例子会让我们见识到分治算法的巧妙之处。  </p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>贪婪算法</title>
     <url>/2020/04/16/%E8%B4%AA%E5%A9%AA%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p>摘要：在本篇就进入了算法设计的部分。总共有5种类型的算法设计技巧，本篇所要介绍的是贪婪算法。主要讲解贪婪算法的思想以及贪婪算法的应用。</p>
