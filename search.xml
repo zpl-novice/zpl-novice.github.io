@@ -1,6 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>动态规划</title>
+    <url>/2020/04/22/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</url>
+    <content><![CDATA[<p>摘要：本篇将要讲解第三个设计技巧：动态规划。它与前面的贪婪算法和分治算法有相似点，又有不同之处，在前面的学习中，我们同样见到过动态规划的身影。本篇将主要介绍动态规划的思想以及它的应用。</p>
+<a id="more"></a>
+<p>在上一节，我们看到数学上能够被递归表示的问题也可以表示成一个递归算法，这对枚举做出了改进。<br>然而，编译器常常不能正确对待递归算法，导致低效的程序。当很怀疑是这种情况时，我们必须<strong>给编译器一些帮助，把递归算法重新写成非递归算法，让后者把那些子问题的答案系统的记录在一个表内。一种利用这种方法的技巧叫做动态规划</strong>。  </p>
+<h2 id="斐波那契数"><a href="#斐波那契数" class="headerlink" title="斐波那契数"></a>斐波那契数</h2><p>例如求斐波那契数的递归算法，其实是非常低效的。  </p>
+<pre><code>int fib(int n)
+{
+    if(n&lt;=1)
+        return 1;
+    else
+        return fib(n-1)+fib(n-2);
+}</code></pre><p>T(N)&gt;=T(N-1)+T(N-2)，所以运行时间与斐波那契数相同的速度在增长，从而是指数级的。<br>我们前面讲过通过迭代对递归进行优化，减少重复调用次数。  </p>
+<pre><code>int fib(int n)
+{
+    int first,second,answer;
+    first=second=1;
+    for(int i=3;i&lt;=n;i++)
+    {
+        answer=first+second;
+        first=second;
+        second=answer;    
+    } 
+    return answer;
+}</code></pre><p>而<strong>动态规划是用表来记录子问题的答案来减少重复调用，拿空间换时间</strong>。 </p>
+<pre><code>int fib(int n)
+{
+    int i;
+    vector&lt;int&gt; v(n);
+    v[0]=0;
+    v[1]=1;
+    v[2]=1;
+    i=3;
+    while(i&lt;=n)
+    {
+        v[i]=v[i-1]+v[i-2];
+        i++;
+    }
+    return v[n];    
+}</code></pre><p><strong>可以看到，动态规划和迭代与递归相比，都有了很大的改进，使得能够在线性时间内完成，这是因为迭代只需要记录更新最近的两个解，动态规划把子问题的解都记录在了表中，可以直接调用</strong>，这样就避免了每次递归都要不停调用到起始条件。  </p>
+<h2 id="01背包问题"><a href="#01背包问题" class="headerlink" title="01背包问题"></a>01背包问题</h2><p>01背包问题是动态规划中最基础的问题之一，它的解法完美地体现了动态规划的思想和性质。<br>给定n件物品的体积和价值，现有给定容量的背包，如何让背包里装入的物品有最大的价值总和？<br>我们先来考虑贪婪算法，发现该问题类似于前面的装箱问题，但是不同之处在于有多个限制，而且<strong>贪婪算法得到的是局部最优，并不一定是最优解</strong>。<br><strong>动态规划与分治法类似，都是把大问题拆分成小问题，通过寻找大问题与小问题的递推关系，解决一个个小问题，最终达到解决原问题的效果。但不同的是，分治法在子问题和子子问题等上被重复计算了很多次，而动态规划则具有记忆性，通过填写表把所有已经解决的子问题答案纪录下来，在新问题里需要用到的子问题可以直接提取，避免了重复计算，从而节约了时间，所以在问题满足最优性原理之后，用动态规划解决问题的核心就在于填表，表填写完毕，最优解也就找到</strong>。<br>示例如下：<br><img src="https://p.pstatp.com/origin/ff0800011f6654081254" alt=""><br>（1）问题抽象。用Xi取0或1，表示第i个物品选或不选，Wi表示第i个物品的体积，Vi表示第i个物品的价值。<br>（2）建立模型。即求max(V1X1+V2X2+V3X3+…+VnXn)。<br>（3）约束条件。W1X1+W2X2+W3X3+…+WnXn&lt;=capacity<br>（4）V(i,j)表示i个物品，容量j时对应的最佳组合的价值。（子问题）<br>（5）寻找递推关系式（状态转移），面对当前商品有两种可能性：<br>第一，包的剩余容量比该商品小，装不下。因此V(i,j)=V(i-1,j)。<br>第二，能装下该商品，但装了也不一定达到当前最优的价值，所以选择装还是不装。V(i,j)=max{V(i-1,j),V(i-1,j-W(i))+V(i)}。V(i-1,j)表示不装，V(i-1,j-W(i))+V(i)表示装了该物品，容量减少W(i)，但价值增加V(i)。<br>算法代码为：  </p>
+<pre><code>void findmax(vector&lt;int&gt; &amp;w,vector&lt;int&gt; &amp;v,vector&lt;vector&lt;int&gt;&gt; &amp;V,int n,int capacity)
+{                
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=0;j&lt;=capacity;j++)
+        {
+            if(j&lt;w[i])
+            {
+                V[i][j]=V[i-1][j];
+            }
+            else
+            {
+                if(V[i-1][j]&lt;V[i-1][j-w[i]]+v[i])
+                {
+                    V[i][j]=V[i-1][j-w[i]]+v[i];
+                }
+                else
+                {
+                    V[i][j]=V[i-1][j];
+                }
+            }
+        }
+     } 
+}
+int main()
+{
+    vector&lt;int&gt; w{0,2,3,4,5};
+    vector&lt;int&gt; v{0,3,4,5,6};
+    vector&lt;vector&lt;int&gt;&gt; V(5,vector&lt;int&gt;(9,0));
+    int capacity=8;
+    findmax(w,v,V,4,8);
+    cout&lt;&lt;V[4][8];
+    return 0;
+}</code></pre><p>这其实就是一个一步步填表的过程，初始时：<br><img src="https://p.pstatp.com/origin/ffb50000a427e98bee38" alt=""><br>一步步填写后：<br><img src="https://p.pstatp.com/origin/fe6c00018367a640a493" alt=""><br>时间复杂度为O(num*capacity)，即物品数量与总容量的乘积。  </p>
+<h2 id="Floyd算法"><a href="#Floyd算法" class="headerlink" title="Floyd算法"></a>Floyd算法</h2><p>前面在讲图的两点最短路径时，讲解过两种算法，Dijkstra算法和Floyd算法，其中<strong>Floyd算法就是动态规划的一个应用。它的递推关系式就是面对一个结点时进行判断是否将该结点作为中介点。比较选择该点为中介点以及不选择该点为中介点的最短路径的值，来进行状态转移</strong>。  </p>
+<p>动态规划是非常高效的一种算法，它也是利用递推来求解最值。但与贪婪算法不同的地方在于动态规划考虑了所有情况，贪婪算法不一定得到最优值，而动态规划得到的一定是最优值。与分治算法相比，动态规划使用表来存储数据，避免了递归的重复调用。虽然会花费更多的空间，但是提高了运行时间的效率。  </p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>分治算法</title>
     <url>/2020/04/18/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p>摘要：本篇将要讲解的算法为分治算法，其实在之前的学习中，有过很多分治算法的例子，它的应用非常广泛，在本篇将会再介绍它的一些应用以及解法。</p>
