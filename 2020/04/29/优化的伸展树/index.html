@@ -46,21 +46,30 @@
   };
 </script>
 
-  <meta name="description" content="摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。">
+  <meta name="description" content="摘要：本篇将开始进入高级数据结构的学习。主要讨论6种重点在于实用的数据结构。首先考察前面学习过的AVL树的一些变种，包括优化的伸展树，红黑树，以及treap树。然后考察后缀树，它能够在大文本中对一个模式进行搜索。然后，考察一种可以用于多维数据的数据结构，在这种情况下，每一项均可有多个关键字。K-d树对任何相关的关键字都能够进行查找。最后将考查配对堆，它似乎是对斐波那契堆一种最实用的变种。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STL之迭代器">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/index.html">
+<meta property="og:title" content="优化的伸展树">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/04/29/%E4%BC%98%E5%8C%96%E7%9A%84%E4%BC%B8%E5%B1%95%E6%A0%91/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。">
+<meta property="og:description" content="摘要：本篇将开始进入高级数据结构的学习。主要讨论6种重点在于实用的数据结构。首先考察前面学习过的AVL树的一些变种，包括优化的伸展树，红黑树，以及treap树。然后考察后缀树，它能够在大文本中对一个模式进行搜索。然后，考察一种可以用于多维数据的数据结构，在这种情况下，每一项均可有多个关键字。K-d树对任何相关的关键字都能够进行查找。最后将考查配对堆，它似乎是对斐波那契堆一种最实用的变种。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png">
-<meta property="article:published_time" content="2020-02-11T07:22:00.125Z">
-<meta property="article:modified_time" content="2020-02-11T10:00:46.049Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hed0b931faf0e460dbad17506bb7ee45b3.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H7581283eebd14e20b31da0bf95abf057K.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/He2aaa84ea09846af8270005cbf4e6187G.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd9443bd7a7b9429d8da33dd9abf7ac35B.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hee080362ee554f539b6fd9b29d2336b0A.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb5a2f1a30e994789bf1619bb2112158eo.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hab03985db10e40b88b76e0be8181e6829.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H072dc90d946b4ce6870b0d76a2d467ffc.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H5852253bcde24c72a27b38825baa7068n.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hbcf5c8b705834261b3a74436438ab3ebb.jpg">
+<meta property="article:published_time" content="2020-04-29T03:41:41.274Z">
+<meta property="article:modified_time" content="2020-04-29T04:03:44.723Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hed0b931faf0e460dbad17506bb7ee45b3.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/04/29/%E4%BC%98%E5%8C%96%E7%9A%84%E4%BC%B8%E5%B1%95%E6%A0%91/">
 
 
 <script id="page-configurations">
@@ -72,7 +81,7 @@
   };
 </script>
 
-  <title>STL之迭代器 | zpl-novice</title>
+  <title>优化的伸展树 | zpl-novice</title>
   
 
 
@@ -202,7 +211,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/29/%E4%BC%98%E5%8C%96%E7%9A%84%E4%BC%B8%E5%B1%95%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          STL之迭代器
+          优化的伸展树
         </h1>
 
         <div class="post-meta">
@@ -226,7 +235,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-11 15:22:00 / 修改时间：18:00:46" itemprop="dateCreated datePublished" datetime="2020-02-11T15:22:00+08:00">2020-02-11</time>
+              <time title="创建时间：2020-04-29 11:41:41 / 修改时间：12:03:44" itemprop="dateCreated datePublished" datetime="2020-04-29T11:41:41+08:00">2020-04-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,8 +243,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -246,7 +255,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>1.3k</span>
             </span>
 
         </div>
@@ -258,50 +267,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：上两篇介绍了STL的容器相关的知识，本篇将会讲解迭代器。不同的容器用到不同的迭代器，因此需要了解各种容器的特征以及它们所适用的迭代器的用法。</p>
+        <p>摘要：本篇将开始进入高级数据结构的学习。主要讨论6种重点在于实用的数据结构。首先考察前面学习过的AVL树的一些变种，包括优化的伸展树，红黑树，以及treap树。然后考察后缀树，它能够在大文本中对一个模式进行搜索。然后，考察一种可以用于多维数据的数据结构，在这种情况下，每一项均可有多个关键字。K-d树对任何相关的关键字都能够进行查找。最后将考查配对堆，它似乎是对斐波那契堆一种最实用的变种。</p>
 <a id="more"></a>
-<p>迭代器用于指向顺序容器和关联容器中的元素，它的用法和指针类似。迭代器有<code>const</code>和非<code>const</code>两种，这两种都能读取它指向的元素，其中非<code>const</code>迭代器还可以修改其指向的元素，这也与指针相似。定义一个容器类的迭代器的方法是：<br><code>容器类名::iterator 变量名;</code> 或 <code>容器类名::const_iterator 变量名;</code><br>例如：<br><code>vector&lt;int&gt;::iterator i;</code>    </p>
-<p><code>set&lt;double&gt;::const_iterator j;</code><br>而当访问一个迭代器所指向的元素时，与指针相同， <code>*迭代器变量名</code></p>
-<h2 id="随机访问迭代器"><a href="#随机访问迭代器" class="headerlink" title="随机访问迭代器"></a>随机访问迭代器</h2><p>顺序容器中的<code>vector</code>、<code>deque</code>用的迭代器是随机访问迭代器，随机访问迭代器的意思即可以直接访问想要位置的元素。示例如下：  </p>
-<pre><code>int main()
-{
-    vector&lt;int&gt; v;
-    vector&lt;int&gt;::const_iterator i;                   //const迭代器 
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
-    v.push_back(4);
-    i=v.begin()+2;
-    cout&lt;&lt;*i&lt;&lt;endl;
-    for(i=v.begin();i&lt;v.end();i++)
-    {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-    }  
-    vector&lt;int&gt;::iterator j;                     //非const迭代器  修改元素的值 
-    for(j=v.begin();j&lt;v.end();j++)
-    {
-        *j=5;
-    }
-    for(i=v.begin();i&lt;v.end();i++)
-    {
-        cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-    }
-    return 0;
-}</code></pre><p>从代码中可以看到，定义了一个空的动态数组v，输入数据变成1 2 3 4，还定义了一个指向动态数组的迭代器，因为<code>vector</code>用的是随机访问迭代器，可以直接访问想要位置的元素，所以当想要访问v中第3个元素时，令<code>i=v.begin()+2;cout&lt;&lt;*i&lt;&lt;endl;</code>即可。只有<strong>随机访问迭代器</strong>可以这样，其他的迭代器是不能用<code>+</code>运算符的。若想修改v中元素的值，定义了非const迭代器，使得v中元素全部变成5，再输出，运行结果如下：<br><img src="https://i.loli.net/2020/02/11/oLCZQ3MUJ4adjwh.png" alt=""><br>这里再介绍以下反向迭代器，从名字可知，迭代器的顺序进行了反向，即默认迭代器是从头到尾，而方向迭代器是从尾到头。对上面代码进行添加：  </p>
-<pre><code>vector&lt;int&gt;::reverse_iterator r;                //反向迭代器 
-for(r=v.rbegin();r!=v.rend();r++)
-{
-    cout&lt;&lt;*r&lt;&lt;&quot; &quot;;
-}</code></pre><p>输出的结果就为4 3 2 1。</p>
-<h2 id="双向迭代器"><a href="#双向迭代器" class="headerlink" title="双向迭代器"></a>双向迭代器</h2><p>上面已经说到顺序容器中的<code>vector</code>、<code>deque</code>使用的是随机访问迭代器，而顺序容器中还有一个链表<code>list</code>，它和关联容器都使用的是双向迭代器。双向迭代器便不能直接访问第i个元素，而只能从头到后逐个访问。将上篇中<code>set</code>容器的部分代码拿出来如下：</p>
-<pre><code>int a[4]={3,2,1,5};
-set&lt;int&gt; st(a,a+4);
-set&lt;int&gt;::iterator i;   //双向迭代器
-for(i=st.begin();i!=st.end();i++)
-{
-    cout&lt;&lt;*i&lt;&lt;&quot; &quot;;
-}</code></pre><p>虽然定义的形式是相同的，但是这里的迭代器是双向迭代器，在for循环的条件可以看到，是<code>i!=st.end()</code>，这里只能这么定义，而不能用<code>i&lt;st.end()</code>，随机访问迭代器两种形式都可以。</p>
-<p>顺序容器和关联容器的迭代器都已经讲了，而容器适配器是不支持迭代器的。同样的，因为容器迭代器的限制，某些算法例如排序（sort）、二分查找（binary_search）需要通过随机访问迭代器来访问容器中的元素，那么<code>list</code>和关联容器就不支持该算法。前面讲<code>list</code>的时候讲过，它有自己定义的排序（sort）算法，就是来解决这个问题的。<br>本篇主要介绍了STL中的迭代器，在下篇将会介绍STL算法，算法是非常复杂的一部分，后面数据结构与算法的学习中还会对算法进行更深入的研究，在这里只简单介绍STL中的部分算法。</p>
+<p>重新复习一下伸展树，根据80-20黄金法则即80%的访问发生在20%的数据上，所以<strong>如果我们能够把经常访问的节点推到靠近根节点的位置，那么就可以极大的提高访问速度</strong>。根据这个思路，我们提出了 “ 旋转到根 ” 这一思路，具体的：每次查找、插入、删除一个节点，我们都使用旋转的方法把这个节点旋转到根节点的位置，并且因为旋转操作能够很好的把其他访问路径上的节点向上移动，所以最后这经常访问的20%的数据基本上都处于靠近根节点的位置。<br><strong>AVL树是全局调控即目的是缩小整棵树的高度，不会针对某一个节点做优化（例如将经常访问的节点移动到根的位置或靠近根的位置），伸展树则不考虑平衡的问题。AVL树是最坏情形运行时间为O(logn)，而伸展树则是摊还时间为O(logn)</strong>。<strong>因此它们的旋转操作也有区别</strong>。<br>前面已经讲了伸展树的伸展操作。其实伸展分为“自底向上”和“自顶向下”两种。<strong>前面所讲解的是“自底向上”。但在实际应用中，一般不用这种方法</strong>。因为，（1）首先要遍历访问路径上的所有节点，找到要访问的节点x （2）在自底向上调整结构的过程中，必须要记住x 的父节点P和祖父节点G，如果旋转G节点那么还需要记录曾祖父节点GG，如果你不想在节点结构中添加额外的成员来记住父节点，那么就只能使用足够深的栈来记录父节点信息。<br>所以使用<strong>自顶向下来替代自底向上，在自顶向下算法中，只需要一次遍历访问路径上的节点，并且在访问过程中我们就要完成“旋转到顶的操作”。只用到了O(1)的附加空间，但却保持了O(logn)的摊还时间界</strong>。<br>下面是自顶向下的旋转操作，分别为单旋转、一字形、之字形旋转。其中树L存储那些在树T中，但不在X子树中的小于X的结点。树R存储那些在树T中，但不在X子树中的大于X的结点。初始时，X为T的根，而L和R都是空树。<br><img src="https://ae01.alicdn.com/kf/Hed0b931faf0e460dbad17506bb7ee45b3.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H7581283eebd14e20b31da0bf95abf057K.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/He2aaa84ea09846af8270005cbf4e6187G.jpg" alt=""><br>对于上面之字形的旋转可以进行简化，不再让Z成为中间树的根，而是让Y成为其根。这样，就变的与单旋转的情况相同。<br><img src="https://ae01.alicdn.com/kf/Hd9443bd7a7b9429d8da33dd9abf7ac35B.jpg" alt=""><br>当执行完最后一步展开后，就要处理L、R以及中间树，使其成为一棵树。这里的结果不同于从底部向上的展开，关键的问题在于，它保持了O(logn)的摊还界。<br><img src="https://ae01.alicdn.com/kf/Hee080362ee554f539b6fd9b29d2336b0A.jpg" alt=""><br>举例如下：<br><img src="https://ae01.alicdn.com/kf/Hb5a2f1a30e994789bf1619bb2112158eo.jpg" alt=""><br>我们访问树中的18，<strong>自顶向下是在遍历过程中就开始旋转，即从根结点开始，第一步是一个之字形旋转，我们使用简化后的，25变成中间树的根，不在25子树中且比25小的放在L树中</strong>：<br><img src="https://ae01.alicdn.com/kf/Hab03985db10e40b88b76e0be8181e6829.jpg" alt=""><br>接下来是<strong>一字形旋转，15变成中间树的根，不在15子树中且比15大的放入R树中</strong>：<br><img src="https://ae01.alicdn.com/kf/H072dc90d946b4ce6870b0d76a2d467ffc.jpg" alt=""><br>这样变成了单旋转：<br><img src="https://ae01.alicdn.com/kf/H5852253bcde24c72a27b38825baa7068n.jpg" alt=""><br>到此<strong>伸展已经完成，18为中间树的根，接下来将这三部分合成1棵树</strong>：<br><img src="https://ae01.alicdn.com/kf/Hbcf5c8b705834261b3a74436438ab3ebb.jpg" alt="">  </p>
+<p>这就是自顶向下的伸展树的概念了，可以看到它比前面讲过的自底向上的有了很大改进。  </p>
 
     </div>
 
@@ -317,7 +286,7 @@ for(i=st.begin();i!=st.end();i++)
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/11/STL%E4%B9%8B%E8%BF%AD%E4%BB%A3%E5%99%A8/" title="STL之迭代器">https://zpl-novice.github.io/2020/02/11/STL之迭代器/</a>
+    <a href="https://zpl-novice.github.io/2020/04/29/%E4%BC%98%E5%8C%96%E7%9A%84%E4%BC%B8%E5%B1%95%E6%A0%91/" title="优化的伸展树">https://zpl-novice.github.io/2020/04/29/优化的伸展树/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -334,13 +303,10 @@ for(i=st.begin();i!=st.end();i++)
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/09/STL%E4%B9%8B%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%92%8C%E5%AE%B9%E5%99%A8%E9%80%82%E9%85%8D%E5%99%A8/" rel="prev" title="STL之关联容器和容器适配器">
-      <i class="fa fa-chevron-left"></i> STL之关联容器和容器适配器
+    <a href="/2020/04/26/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/" rel="prev" title="回溯算法">
+      <i class="fa fa-chevron-left"></i> 回溯算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/13/STL%E7%AE%97%E6%B3%95/" rel="next" title="STL算法">
-      STL算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -400,7 +366,6 @@ for(i=st.begin();i!=st.end();i++)
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机访问迭代器"><span class="nav-number">1.</span> <span class="nav-text">随机访问迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双向迭代器"><span class="nav-number">2.</span> <span class="nav-text">双向迭代器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
