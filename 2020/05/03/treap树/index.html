@@ -46,22 +46,27 @@
   };
 </script>
 
-  <meta name="description" content="摘要：在数据结构里有一个部分为串（或字符串），它是非常常用的一个数据类型。C++中，string类对应的就是实现字符串相关的各种功能。通过对string类的学习，使得解决字符串有关问题时更加方便快捷。">
+  <meta name="description" content="摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)期望时间的性能。查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="模板类之string类">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/index.html">
+<meta property="og:title" content="treap树">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：在数据结构里有一个部分为串（或字符串），它是非常常用的一个数据类型。C++中，string类对应的就是实现字符串相关的各种功能。通过对string类的学习，使得解决字符串有关问题时更加方便快捷。">
+<meta property="og:description" content="摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)期望时间的性能。查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/02/05/nDozMjdgFTuX4Vy.png">
-<meta property="og:image" content="https://i.loli.net/2020/02/05/1jSoqHuXc2fEpNO.png">
-<meta property="article:published_time" content="2020-02-05T07:39:24.105Z">
-<meta property="article:modified_time" content="2020-02-05T11:05:58.939Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg">
+<meta property="article:published_time" content="2020-05-03T12:10:55.985Z">
+<meta property="article:modified_time" content="2020-05-03T12:23:45.594Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/02/05/nDozMjdgFTuX4Vy.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/">
 
 
 <script id="page-configurations">
@@ -73,7 +78,7 @@
   };
 </script>
 
-  <title>模板类之string类 | zpl-novice</title>
+  <title>treap树 | zpl-novice</title>
   
 
 
@@ -203,7 +208,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -216,7 +221,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          模板类之string类
+          treap树
         </h1>
 
         <div class="post-meta">
@@ -227,7 +232,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-05 15:39:24 / 修改时间：19:05:58" itemprop="dateCreated datePublished" datetime="2020-02-05T15:39:24+08:00">2020-02-05</time>
+              <time title="创建时间：2020-05-03 20:10:55 / 修改时间：20:23:45" itemprop="dateCreated datePublished" datetime="2020-05-03T20:10:55+08:00">2020-05-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -235,8 +240,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -247,7 +252,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
+              <span>2.9k</span>
             </span>
 
         </div>
@@ -259,59 +264,189 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：在数据结构里有一个部分为串（或字符串），它是非常常用的一个数据类型。C++中，string类对应的就是实现字符串相关的各种功能。通过对string类的学习，使得解决字符串有关问题时更加方便快捷。</p>
+        <p>摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)<strong>期望时间</strong>的性能。<strong>查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间</strong>。  </p>
 <a id="more"></a>
-<p>上篇中已经学习过类模板有关的知识，在本篇将就string类举例进行介绍。<code>&lt;string&gt;</code>是C++标准程序库中的一个头文件，定义了C++标准中的字符串的基本模板类<code>std::basic_string</code>及相关的模板类实例。string是以char作为模板参数的模板类实例，把字符串的内存管理责任由string负责而不是由编程者负责，大大减轻了C语言风格的字符串的麻烦。<code>std::basic_string</code>提供了大量的字符串操作函数，如比较、连接、搜索、替换、获得子串等。并可与C语言风格字符串双向转换。<code>std::basic_string</code>属于C++ STL容器类，用户自定义的类也可以作为它的模板参数，因此也适用C++ STL Algorithm库。<br>string类的成员函数如下：<br><img src="https://i.loli.net/2020/02/05/nDozMjdgFTuX4Vy.png" alt=""><br>这里只介绍一些常用的成员函数。</p>
-<h2 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h2><p>按照以前所学的对类的对象赋值，string类的格式如下：  </p>
-<pre><code>string s1(&quot;hello&quot;);</code></pre><p>即令字符串s1的内容为hello，但在string类里还有其他的赋值方式，比如：  </p>
-<pre><code>string s1=&quot;hello&quot;;
-string s2(8,&apos;x&apos;);</code></pre><h2 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h2><p>如果要访问字符串中的字符，需要用到的成员函数为<code>at()</code>，例如逐个访问并输出string对象中的字符代码为：  </p>
-<pre><code>for(int i=0;i&lt;s1.length();i++)
+<p>treap是tree 和 heap组合的结构。treap树中每个结点存储一项，一个左指针和一个右指针，以及一个优先级，这个<strong>优先级是建立结点时随机指定的</strong>。一个treap树就是一个二叉查找树，但其<strong>结点优先级满足堆序性质：任意结点的优先级必须至少和它父结点的优先级一样大</strong>。<br>查找时与普通的二叉查找树相同。<br>插入时：先按二叉查找树找到插入的位置，插入数据并生成随机值，因为插入的都是叶结点，所以影响到堆性质的为插入结点和它的父结点。<strong>若插入结点的优先级比父结点小，旋转操作使其满足性质</strong>。<br>示例如下：<br><img src="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg" alt=""><br>删除时分为两种情况：<br>1.有两个孩子<br>2.只有一个孩子或无孩子<br>第二种情况无孩子直接删除，有一个孩子就用孩子代替该结点然后删除。第一种情况，<strong>旋转使其变成第二种情况。如果该结点的左孩子优先级比右孩子优先级小，右旋。否则左旋，重复下去直至变为第二种情况</strong>。示例如下：<br><img src="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg" alt=""><br>具体代码实现如下：  </p>
+<pre><code>typedef struct node                     
 {
-    cout&lt;&lt;s1.at(i)&lt;&lt;&quot; &quot;;
-}</code></pre><h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>用<code>+</code>运算符或者<code>append()</code>函数可以实现字符串之间的拼接。例如若将字符串s1和字符串s2拼在一起：  </p>
-<pre><code>string s1,s2;
-s1=&quot;hello&quot;;
-s2=&quot; world&quot;;
-s1=s1+s2; //用+运算符实现
-s1.append(s2);  //用append函数</code></pre><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>若要删除字符串中的某些字符，需要用到<code>erase()</code>函数，函数输入的参数为下标，表示去掉该下标及以后的字符。例如我们要使hello world字符串只剩下hello，则：  </p>
-<pre><code>string s1=&quot;hello world&quot;;
-s1.erase(5);</code></pre><p>需要说明的是该函数只能实现删除字符串后面一部分的功能。</p>
-<h2 id="子串"><a href="#子串" class="headerlink" title="子串"></a>子串</h2><p>由上面所述，假如要求得到的不是hello而是world，这样不能用删除函数，应该怎么办？有一个成员函数名字为<code>substr()</code>，它的作用是得到字符串中的一部分，即子串。需要输入两个参数，第一个参数表示下标，第二个参数表示从该下标开始，你想要往后得到的字符个数。</p>
-<pre><code>string s1=&quot;hello world&quot;;
-s1.substr(6,5);</code></pre><p>这样就能得到子串world。</p>
-<h2 id="寻找"><a href="#寻找" class="headerlink" title="寻找"></a>寻找</h2><p>若需要在字符串中找到需要的字符的位置，应该怎么办？这个问题是很常见的，需要用到的成员函数为<code>find()</code>，输入参数为想要查询的字符或字符串，返回结果为该字符或字符串在给定的字符串中第一次出现的位置。它是从前往后找的，第一次找到即返回。若要求从后往前找，则成员函数为<code>rfind()</code>。例如若要查到ll在hello world中第一次出现的位置：  </p>
-<pre><code>string s1=&quot;hello world&quot;;
-s1.find(&quot;ll&quot;);</code></pre><p>除此之外，<code>find_first_of(&quot;abc&quot;)</code>函数表示的是查找abc中任意一个字符第一次出现的位置。<code>find_first_not_of(&quot;abc&quot;)</code>表示的是查找不是abc这3个字符的其他字符第一次出现的位置。</p>
-<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><p>假如字符串中某些地方需要替换，这时候就需要用到成员函数<code>replace()</code>，例如将字符串heloo world变成hello world。</p>
-<pre><code>string s1=&quot;heloo world&quot;;
-s1.replace(3,1,&quot;l&quot;);</code></pre><p>表示的意思为将字符串s1中下标3开始后的一个字符替换为字符l。</p>
-<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><p>若要在字符串中插入字符则需要用到成员函数<code>insert()</code>，输入参数为插入位置的下标和要插入的字符。就用上面连接里面的例子：</p>
-<pre><code>string s1,s2;
-s1=&quot;hello&quot;;
-s2=&quot; world&quot;;
-s1.insert(5,s2);</code></pre><p>这样将s2插入到s1后面，实现了连接，当然也可以插入到中间和前面，由我们自己定义。</p>
-<p>最后将上面所将的成员函数进行一下汇总，放在代码中为： </p>
-<pre><code>#include&lt;string&gt;
-using namespace std;
+    int data;
+    node* lchild;
+    node* rchild;
+    int priority;    
+}node,*Node;
+ class treap
+ {
+     private:
+         Node root;
+         int searchtreap(Node &amp;T,int key);
+         int inserttreap(Node &amp;T,int key);
+         void delete1(Node &amp;T,int key);
+         void delete2(Node &amp;T);
+         Node leftrotate(Node &amp;T);
+         Node rightrotate(Node &amp;T);
+         void preorder(Node T);
+     public:
+         treap()
+         {
+             root=NULL;
+         }
+         void search(int key)
+         {
+             searchtreap(root,key);
+        }
+         void insert(int key)
+         {
+             inserttreap(root,key);
+         }
+        void deletetreap(int key)
+        {
+            delete1(root,key);
+        }
+        void preord()                 //前序遍历 
+        {
+            preorder(root);    
+        }
+ };    
+ int treap::searchtreap(Node &amp;T,int key)                          
+ {
+     if(T!=NULL)
+     {
+         if(T-&gt;data==key)
+         {
+             cout&lt;&lt;&quot;find &quot;&lt;&lt;key&lt;&lt;endl;
+        }
+        else if(key&lt;T-&gt;data)
+        {
+             searchtreap(T-&gt;lchild,key);
+        }
+        else if(key&gt;T-&gt;data)
+        {
+            searchtreap(T-&gt;rchild,key);
+        }
+    }
+    else
+        cout&lt;&lt;&quot;can&apos;t find &quot;&lt;&lt;key&lt;&lt;endl;
+    return 0;
+ }
+ void treap::delete2(Node &amp;T)                                    
+{
+    Node q;
+    if(T-&gt;rchild==NULL)
+    {
+        q=T;
+        T=T-&gt;lchild;
+        delete q; 
+    }
+    if(T-&gt;lchild==NULL)
+    {
+        q=T;
+        T=T-&gt;rchild;
+        delete q; 
+    }
+    else                               //既有左孩子又有右孩子 
+    {
+        if(T-&gt;lchild-&gt;priority&gt;T-&gt;rchild-&gt;priority)
+        {
+            leftrotate(T);
+            delete2(T);
+        }
+        else
+        {
+            rightrotate(T);
+            delete2(T);
+        }
+    }
+}
+int treap::inserttreap(Node &amp;T,int key)         
+{
+    if(T==NULL)
+    {
+        Node p;
+        p=new node;
+        p-&gt;data=key;
+        p-&gt;lchild=p-&gt;rchild=NULL;
+        p-&gt;priority=rand()%500;
+        T=p;
+        return 1;
+    }
+    else if(key&lt;T-&gt;data)
+    {
+        inserttreap(T-&gt;lchild,key);
+        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
+        {
+            T=rightrotate(T);
+        }
+    }
+    else 
+    {
+        inserttreap(T-&gt;rchild,key);
+        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
+        {
+            T=leftrotate(T);
+        }
+    }
+    return 0;
+}
+void treap::delete1(Node &amp;T,int key)
+{
+    if(T!=NULL)
+    {
+        if(T-&gt;data==key)
+        {
+            delete2(T);
+        }
+        else if(key&lt;T-&gt;data)
+        {
+            delete1(T-&gt;lchild,key);
+        }
+        else if(key&gt;T-&gt;data)
+        {
+            delete1(T-&gt;rchild,key);
+        }
+    }
+    else
+        cout&lt;&lt;&quot;can&apos;t find and delete &quot;&lt;&lt;key&lt;&lt;endl;
+}
+Node treap::leftrotate(Node &amp;T)
+{
+    Node tem;
+    tem=T-&gt;rchild;
+    T-&gt;rchild=tem-&gt;lchild;
+    tem-&gt;lchild=T;
+    return tem;
+}
+Node treap::rightrotate(Node &amp;T)
+{
+    Node tem;
+    tem=T-&gt;lchild;
+    T-&gt;lchild=tem-&gt;rchild;
+    tem-&gt;rchild=T;
+    return tem;
+}
+void treap::preorder(Node T)
+{
+    if(T!=NULL)
+    {
+        cout&lt;&lt;&quot;关键字：&quot;&lt;&lt;T-&gt;data&lt;&lt;&quot; 随机值&quot;&lt;&lt;T-&gt;priority&lt;&lt;endl;
+        preorder(T-&gt;lchild);
+        preorder(T-&gt;rchild);
+    }
+}
 int main()
 {
-    string s1,s2;
-    s1=&quot;Hell0 world&quot;;
-    for(int i=0;i&lt;s1.length();i++)
-    {
-        cout&lt;&lt;s1.at(i)&lt;&lt;&quot; &quot;;
-    }
-    cout&lt;&lt;endl;
-    cout&lt;&lt;s1.find(&quot;ll&quot;)&lt;&lt;endl;
-    s2=s1.substr(6,5);
-    cout&lt;&lt;s2&lt;&lt;endl;
-    cout&lt;&lt;s1.append(s2)&lt;&lt;endl;
-    cout&lt;&lt;s1.erase(11,5)&lt;&lt;endl;
-    cout&lt;&lt;s1.replace(6,5,&quot;ZPL&quot;)&lt;&lt;endl;
-    cout&lt;&lt;s1.insert(9,&quot;HHH&quot;)&lt;&lt;endl;
-    return 0; 
- } </code></pre><p>运行结果为：<br><img src="https://i.loli.net/2020/02/05/1jSoqHuXc2fEpNO.png" alt=""><br>string类是非常实用的一个模板类，掌握并能运用它的常用的成员函数是很有必要的。</p>
+    treap t;
+    srand(0);
+    t.insert(5);
+    t.insert(3);
+    t.insert(15);
+    t.insert(2);
+    t.insert(4);
+    t.preord();
+    t.search(5);
+    t.search(3);
+    t.search(21);
+    return 0;
+}</code></pre><p>本篇主要讲解了treap树的有关知识，它将二叉查找树和堆结合起来，并通过随机选取优先级的方式获得了不错的期望时间，能够满足在O(logn)期望时间内完成各种操作，且实现相对平衡二叉树简单，因此是一种很好的数据结构。</p>
 
     </div>
 
@@ -327,7 +462,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/05/%E6%A8%A1%E6%9D%BF%E7%B1%BB%E4%B9%8Bstring%E7%B1%BB/" title="模板类之string类">https://zpl-novice.github.io/2020/02/05/模板类之string类/</a>
+    <a href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/" title="treap树">https://zpl-novice.github.io/2020/05/03/treap树/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -344,13 +479,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/03/%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E3%80%81%E7%B1%BB%E6%A8%A1%E6%9D%BF%E5%92%8C%E6%A8%A1%E6%9D%BF%E7%B1%BB/" rel="prev" title="函数模板、类模板和模板类">
-      <i class="fa fa-chevron-left"></i> 函数模板、类模板和模板类
+    <a href="/2020/05/01/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="prev" title="红黑树">
+      <i class="fa fa-chevron-left"></i> 红黑树
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/07/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93%EF%BC%88STL%EF%BC%89/" rel="next" title="标准模板库（STL)">
-      标准模板库（STL) <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -410,7 +542,6 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#赋值"><span class="nav-number">1.</span> <span class="nav-text">赋值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问"><span class="nav-number">2.</span> <span class="nav-text">访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接"><span class="nav-number">3.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除"><span class="nav-number">4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子串"><span class="nav-number">5.</span> <span class="nav-text">子串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找"><span class="nav-number">6.</span> <span class="nav-text">寻找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换"><span class="nav-number">7.</span> <span class="nav-text">替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入"><span class="nav-number">8.</span> <span class="nav-text">插入</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

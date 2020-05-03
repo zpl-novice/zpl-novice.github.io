@@ -1,6 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>treap树</title>
+    <url>/2020/05/03/treap%E6%A0%91/</url>
+    <content><![CDATA[<p>摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)<strong>期望时间</strong>的性能。<strong>查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间</strong>。  </p>
+<a id="more"></a>
+<p>treap是tree 和 heap组合的结构。treap树中每个结点存储一项，一个左指针和一个右指针，以及一个优先级，这个<strong>优先级是建立结点时随机指定的</strong>。一个treap树就是一个二叉查找树，但其<strong>结点优先级满足堆序性质：任意结点的优先级必须至少和它父结点的优先级一样大</strong>。<br>查找时与普通的二叉查找树相同。<br>插入时：先按二叉查找树找到插入的位置，插入数据并生成随机值，因为插入的都是叶结点，所以影响到堆性质的为插入结点和它的父结点。<strong>若插入结点的优先级比父结点小，旋转操作使其满足性质</strong>。<br>示例如下：<br><img src="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg" alt=""><br>删除时分为两种情况：<br>1.有两个孩子<br>2.只有一个孩子或无孩子<br>第二种情况无孩子直接删除，有一个孩子就用孩子代替该结点然后删除。第一种情况，<strong>旋转使其变成第二种情况。如果该结点的左孩子优先级比右孩子优先级小，右旋。否则左旋，重复下去直至变为第二种情况</strong>。示例如下：<br><img src="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg" alt=""><br>具体代码实现如下：  </p>
+<pre><code>typedef struct node                     
+{
+    int data;
+    node* lchild;
+    node* rchild;
+    int priority;    
+}node,*Node;
+ class treap
+ {
+     private:
+         Node root;
+         int searchtreap(Node &amp;T,int key);
+         int inserttreap(Node &amp;T,int key);
+         void delete1(Node &amp;T,int key);
+         void delete2(Node &amp;T);
+         Node leftrotate(Node &amp;T);
+         Node rightrotate(Node &amp;T);
+         void preorder(Node T);
+     public:
+         treap()
+         {
+             root=NULL;
+         }
+         void search(int key)
+         {
+             searchtreap(root,key);
+        }
+         void insert(int key)
+         {
+             inserttreap(root,key);
+         }
+        void deletetreap(int key)
+        {
+            delete1(root,key);
+        }
+        void preord()                 //前序遍历 
+        {
+            preorder(root);    
+        }
+ };    
+ int treap::searchtreap(Node &amp;T,int key)                          
+ {
+     if(T!=NULL)
+     {
+         if(T-&gt;data==key)
+         {
+             cout&lt;&lt;&quot;find &quot;&lt;&lt;key&lt;&lt;endl;
+        }
+        else if(key&lt;T-&gt;data)
+        {
+             searchtreap(T-&gt;lchild,key);
+        }
+        else if(key&gt;T-&gt;data)
+        {
+            searchtreap(T-&gt;rchild,key);
+        }
+    }
+    else
+        cout&lt;&lt;&quot;can&apos;t find &quot;&lt;&lt;key&lt;&lt;endl;
+    return 0;
+ }
+ void treap::delete2(Node &amp;T)                                    
+{
+    Node q;
+    if(T-&gt;rchild==NULL)
+    {
+        q=T;
+        T=T-&gt;lchild;
+        delete q; 
+    }
+    if(T-&gt;lchild==NULL)
+    {
+        q=T;
+        T=T-&gt;rchild;
+        delete q; 
+    }
+    else                               //既有左孩子又有右孩子 
+    {
+        if(T-&gt;lchild-&gt;priority&gt;T-&gt;rchild-&gt;priority)
+        {
+            leftrotate(T);
+            delete2(T);
+        }
+        else
+        {
+            rightrotate(T);
+            delete2(T);
+        }
+    }
+}
+int treap::inserttreap(Node &amp;T,int key)         
+{
+    if(T==NULL)
+    {
+        Node p;
+        p=new node;
+        p-&gt;data=key;
+        p-&gt;lchild=p-&gt;rchild=NULL;
+        p-&gt;priority=rand()%500;
+        T=p;
+        return 1;
+    }
+    else if(key&lt;T-&gt;data)
+    {
+        inserttreap(T-&gt;lchild,key);
+        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
+        {
+            T=rightrotate(T);
+        }
+    }
+    else 
+    {
+        inserttreap(T-&gt;rchild,key);
+        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
+        {
+            T=leftrotate(T);
+        }
+    }
+    return 0;
+}
+void treap::delete1(Node &amp;T,int key)
+{
+    if(T!=NULL)
+    {
+        if(T-&gt;data==key)
+        {
+            delete2(T);
+        }
+        else if(key&lt;T-&gt;data)
+        {
+            delete1(T-&gt;lchild,key);
+        }
+        else if(key&gt;T-&gt;data)
+        {
+            delete1(T-&gt;rchild,key);
+        }
+    }
+    else
+        cout&lt;&lt;&quot;can&apos;t find and delete &quot;&lt;&lt;key&lt;&lt;endl;
+}
+Node treap::leftrotate(Node &amp;T)
+{
+    Node tem;
+    tem=T-&gt;rchild;
+    T-&gt;rchild=tem-&gt;lchild;
+    tem-&gt;lchild=T;
+    return tem;
+}
+Node treap::rightrotate(Node &amp;T)
+{
+    Node tem;
+    tem=T-&gt;lchild;
+    T-&gt;lchild=tem-&gt;rchild;
+    tem-&gt;rchild=T;
+    return tem;
+}
+void treap::preorder(Node T)
+{
+    if(T!=NULL)
+    {
+        cout&lt;&lt;&quot;关键字：&quot;&lt;&lt;T-&gt;data&lt;&lt;&quot; 随机值&quot;&lt;&lt;T-&gt;priority&lt;&lt;endl;
+        preorder(T-&gt;lchild);
+        preorder(T-&gt;rchild);
+    }
+}
+int main()
+{
+    treap t;
+    srand(0);
+    t.insert(5);
+    t.insert(3);
+    t.insert(15);
+    t.insert(2);
+    t.insert(4);
+    t.preord();
+    t.search(5);
+    t.search(3);
+    t.search(21);
+    return 0;
+}</code></pre><p>本篇主要讲解了treap树的有关知识，它将二叉查找树和堆结合起来，并通过随机选取优先级的方式获得了不错的期望时间，能够满足在O(logn)期望时间内完成各种操作，且实现相对平衡二叉树简单，因此是一种很好的数据结构。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>红黑树</title>
     <url>/2020/05/01/%E7%BA%A2%E9%BB%91%E6%A0%91/</url>
     <content><![CDATA[<p>摘要：本篇将要学习的数据结构是红黑树。红黑树一种AVL树的变体，它具有良好的性能，能够以花费O(logn)最坏运行时间来完成树的操作。甚至比AVL更快，因此是一种流行的选择。本篇将主要介绍红黑树的概念，以及它是怎么调整来实现各种操作的。</p>
