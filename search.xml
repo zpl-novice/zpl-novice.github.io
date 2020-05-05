@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>字典树和后缀树</title>
+    <url>/2020/05/05/%E5%AD%97%E5%85%B8%E6%A0%91%E5%92%8C%E5%90%8E%E7%BC%80%E6%A0%91/</url>
+    <content><![CDATA[<p>摘要：本篇将要讲解的知识为字典树(trie tree)和后缀树(suffix tree)，用于数据处理当中能够提高效率，字典树(trie tree)经常被搜索引擎系统用于文本词频统计。它的优点是：最大限度地减少无谓的字符串比较，查询效率比哈希表高。</p>
+<a id="more"></a>
+<p>数据处理中最基本的问题之一是找出模式（pattern）P在文本T中的位置。P的大小通常要显著的小于T，我们的兴趣是在常见的问题上，其中T是固定的，而对于不同的P的查询是经常发生的。在这种情况下，<strong>我们愿意把T预处理成理想的形式，使得每一次的搜索更加高效，花费的时间显著小于T大小的线性量—或者是T大小的对数，或者甚至更好，与T无关而只依赖于P的长度</strong>。  </p>
+<h2 id="trie-tree"><a href="#trie-tree" class="headerlink" title="trie tree"></a>trie tree</h2><p>字典树（trie tree）具有下列性质：<br>1.根结点不包含字符，除根结点外每一个结点都只包含一个字符。<br>2.从根结点到某一结点，路径上经过的字符连接起来，为该结点对应的字符串。<br>3.每个节点的所有子结点包含的字符都不相同。<br>trie tree示例如下，在这个trie结构里，保存了to，tea，ted，ten，A，i，in，inn这8个字符串，仅占用8个字节。<br><img src="https://ae01.alicdn.com/kf/H89d8c6365b1c4283b9c841b1dad6a3e9c.jpg" alt=""><br>可以看出，<strong>trie tree充分利用字符串与字符串间拥有公共前缀的特性，而这种特性在字符串的检索与词频统计中会发挥重要的作用</strong>。 <strong>拿空间换时间</strong>。<br>给定多个字符串，如 {banana,band,apple,apt,bbc,app,ba}，那么所构建的一棵TrieTree形状如下：<br><img src="https://ae01.alicdn.com/kf/Hdbabd91b21594d929c5d8b7f9f5cec28M.jpg" alt=""><br><strong>黄色的节点代表从根节点通往该节点的路径上所经过的节点的字符构成的一个字符串出现在原来的输入文本中</strong>，如以d为例，路径上的字符为：b-a-n-d，对应输入的字符串集合中的”band”。<strong>Trie树可以很方便的扩展，当来了新的字符串时，只要把新的字符串按照原本的规则插入到原来的树中</strong>，便可以得到新的树。<strong>当前的节点并不是黄色的，说明了“从根节点到该节点的路径形成的字符串没有出现在原来的字符串集合中，但该字符串是原字符串集合中某个(些)单词的前缀</strong>。  </p>
+<h2 id="suffix-tree"><a href="#suffix-tree" class="headerlink" title="suffix tree"></a>suffix tree</h2><p>后缀树的想法就是把后缀都存储在一棵trie树中。例如bananas字符串的后缀trie树为：<br><img src="https://ae01.alicdn.com/kf/H2dda57ab8b2c4653979d9eca61d60759u.jpg" alt=""><br><strong>可以看到里面有许多只有一个子结点的结点，这会明显的浪费空间，因此需要对trie树进行压缩，变成压缩trie树。把单分支结点压缩成一个结点，这样得到的树称为后缀树（suffix tree）</strong>。<br><img src="https://ae01.alicdn.com/kf/H2bee9ae0e94742b58b9fd5c7b0ab6cf59.jpg" alt=""><br>合并后的bananas的标准后缀树为：<br><img src="https://ae01.alicdn.com/kf/Hf44502761f0d488cb234029f17bf871fP.jpg" alt=""><br>可以得到它的性质（<strong>除了trie树的性质以外</strong>）：<br>1.从根到树叶的路径与后缀一一对应，且每条路径唯一代表了字符串的一个后缀。<br>2.所有内部结点（除根结点外）都有至少两个子结点（<strong>单子结点被压缩</strong>）。<br>用后缀树可以查找字符串o是否在字符串S中，用S构造后缀树，<strong>若o在S中，则o必然是S的某个后缀的前缀</strong>。因此用trie树搜索的方式找到o即可。  </p>
+<p>本篇对于字典树和后缀树的知识就讲解到这里，在后面的学习中可能还会遇到相关的问题，到时候再进一步深入学习。</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>treap树</title>
     <url>/2020/05/03/treap%E6%A0%91/</url>
     <content><![CDATA[<p>摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)<strong>期望时间</strong>的性能。<strong>查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间</strong>。  </p>
