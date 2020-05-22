@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux介绍</title>
+    <url>/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>摘要：本篇将进入Linux操作系统的学习，在开始之际，先对Linux做一个简单的介绍，它是如何产生的？Linux有哪些分类？以及Linux的优缺点。</p>
+<a id="more"></a>
+<p>在介绍Linux之前，需要先来介绍一下Unix。</p>
+<h2 id="Unix"><a href="#Unix" class="headerlink" title="Unix"></a>Unix</h2><p>Unix是1969年汤普森在贝尔实验室开发出的系统原型，由汇编编写而成。在1973年经C语言改写，方便移植，因为Unix的好用性并且开源，很为学生和教授喜欢。但是贝尔实验室属于AT&amp;T公司，AT&amp;T公司为了盈利，在1979年收回版权，不对学生开源。<br>斯蒂曼原本是一个黑客，他为了解决Unix问题，不受专利软件的限制，提出了GNU，<strong>GNU is Not Unix的递归缩写，由斯蒂曼在1984年发起，旨在构建一个自由、开放的操作系统</strong>。<br>斯蒂曼重新开发<strong>自由</strong>的工具软件并推广。开发<strong>GCC</strong>（<strong>GNU的C语言编译器</strong>，如今仍在使用）等其他基础的软件便于自由软件的发展。同时他<strong>开放这些软件的源代码</strong>，允许复制、修改、传播。为了防止自由软件被其他人做成专利软件，制定<strong>GPL授权</strong>。GPL：通用公共许可证。与专利软件的授权截然相反，允许自由使用。<br><strong>但当时并没有设计出GNU操作系统的内核，只有自由软件，仍然在Unix上运行</strong>。  </p>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>1991年，芬兰大学生图瓦达开发出<strong>基于x86系统的Linux内核</strong>，经过虚拟团队的维护逐渐发展壮大并被移植到其他的硬件系统上。因此出现了Linux这一操作系统。<br>由于<strong>Linux是一个自由软件，具有GPL授权</strong>，因为有许多种不同的版本。下面介绍其主要的3个版本：<br>1.Ubuntu，2004年9月发布，最为流行的 <strong>桌面</strong> Linux发行版。对于个人用户较为合适。<br>2.RedHat，<strong>使用最广，性能最稳</strong>。<br>3.CentOS，2003年底推出，rhel的重新编译版，免费。<br>Linux的优点有：<br>1.性能稳定<br>2.较高的安全性和Bug的快速修复<br>3.支持多用户多任务<br>4.完善的用户和群组策略<br>5.资源耗费低<br>6.适合嵌入式应用<br>7.免费或费用低廉<br>缺点有：<br>1.专业软件支持不够，不像window有丰富的软件。<br>2.厂商支持度不够，因为有多种版本，且非盈利。<br>3.标准化不足  </p>
+<p>本次的学习将主要通过VMware软件建立虚拟机，然后在虚拟机上装Linux系统来进行对Linux的学习。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>k-d树和配对堆</title>
     <url>/2020/05/13/k-d%E6%A0%91%E5%92%8C%E9%85%8D%E5%AF%B9%E5%A0%86/</url>
     <content><![CDATA[<p>摘要： 本篇将要讲解最后两种数据结构k-d树和配对堆。k-d树是多维查找树，而配对堆则是优先队列的利器，它们有特用的适合场景，并且更加高效。</p>
