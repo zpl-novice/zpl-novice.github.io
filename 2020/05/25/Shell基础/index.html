@@ -46,17 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="you never konw what you can do till you try">
-<meta property="og:type" content="website">
-<meta property="og:title" content="zpl-novice">
-<meta property="og:url" content="https://zpl-novice.github.io/archives/2020/05/index.html">
+  <meta name="description" content="摘要：本篇将介绍Linux中的Shell，Shell是一个命令解释器，它可以对我们给出的命令进行解析，若正确则执行相应的操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell基础">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/05/25/Shell%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="you never konw what you can do till you try">
+<meta property="og:description" content="摘要：本篇将介绍Linux中的Shell，Shell是一个命令解释器，它可以对我们给出的命令进行解析，若正确则执行相应的操作。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H907e61ced359486c9cf9107b0faf46cbg.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H38dc764e17964374818ede5e643e6548r.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H86cde36f72ee4f23b8e89065cf080315s.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H99895e757b304d5caf120824b4d8ce2am.jpg">
+<meta property="article:published_time" content="2020-05-25T04:23:57.495Z">
+<meta property="article:modified_time" content="2020-05-25T05:37:34.408Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H907e61ced359486c9cf9107b0faf46cbg.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/archives/2020/05/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/05/25/Shell%E5%9F%BA%E7%A1%80/">
 
 
 <script id="page-configurations">
@@ -64,11 +71,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false
+    isPost: true
   };
 </script>
 
-  <title>归档 | zpl-novice</title>
+  <title>Shell基础 | zpl-novice</title>
   
 
 
@@ -193,150 +200,117 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">不错! 目前共计 57 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/25/Shell%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Shell基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-25 12:23:57 / 修改时间：13:37:34" itemprop="dateCreated datePublished" datetime="2020-05-25T12:23:57+08:00">2020-05-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2020</h1>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-25T12:23:57+08:00"
-              content="2020-05-25">
-          05-25
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/05/25/Shell%E5%9F%BA%E7%A1%80/" itemprop="url">
-            <span itemprop="name">Shell基础</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-22T20:01:24+08:00"
-              content="2020-05-22">
-          05-22
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/" itemprop="url">
-            <span itemprop="name">Linux介绍</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-13T11:16:35+08:00"
-              content="2020-05-13">
-          05-13
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/05/13/k-d%E6%A0%91%E5%92%8C%E9%85%8D%E5%AF%B9%E5%A0%86/" itemprop="url">
-            <span itemprop="name">k-d树和配对堆</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-05T19:17:23+08:00"
-              content="2020-05-05">
-          05-05
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/05/05/%E5%AD%97%E5%85%B8%E6%A0%91%E5%92%8C%E5%90%8E%E7%BC%80%E6%A0%91/" itemprop="url">
-            <span itemprop="name">字典树和后缀树</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-03T20:10:55+08:00"
-              content="2020-05-03">
-          05-03
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/05/03/treap%E6%A0%91/" itemprop="url">
-            <span itemprop="name">treap树</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-05-01T18:27:23+08:00"
-              content="2020-05-01">
-          05-01
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/05/01/%E7%BA%A2%E9%BB%91%E6%A0%91/" itemprop="url">
-            <span itemprop="name">红黑树</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
+        <p>摘要：本篇将介绍Linux中的Shell，Shell是一个命令解释器，它可以对我们给出的命令进行解析，若正确则执行相应的操作。</p>
+<a id="more"></a>
+<p><strong>Shell是Linux的一个特殊程序，是内核与用户的接口，它是命令语言、命令解释程序及程序设计语言的统称</strong>。Shell是一个命令语言解释器，它拥有自己内建的Shell命令集，Shell也能被系统中其他应用程序所调用。<br><strong>当用户成功登录Linux系统后，即开始了与Shell的对话交互过程</strong>，此时，不论何时键入一个命令，都被Shell解释执行。<br>用户—shell—Kernel（内核）—硬件。 </p>
+<p>终端是来使用shell解释器的，<strong>Linux在控制台上虚拟了6个字符终端和一个图形终端，图形化界面中的终端程序就是图形终端</strong>。<strong>为什么有这么多的终端且互不影响？这是为了满足Linux多用户多任务的功能</strong>。用户可以使用不同的终端，一个用户也可以切换多个终端来使用。<br>在Linux终端中，主提示符为：[登录用户@主机名 工作目录]。辅助提示符：root用户登录后 提示符为“#”，普通用户登录后 提示符为“$”，使用su - root命令可以切换到root用户，su - zpl命令切换到普通用户。<br><img src="https://ae01.alicdn.com/kf/H907e61ced359486c9cf9107b0faf46cbg.jpg" alt=""><br>Linux命令行格式：命令字 [选项][参数]。其中选项用于调节命令的具体功能：<br>以-引导短格式选项，单个字符，如-l<br>以–引导长格式选项，多个字符，如–color<br>多个短格式选项可以写在一起，只用一个-引导，如-al  </p>
+<p>参数是命令操作的对象，如文件、目录名等。举例，<strong>查看命令ls用来显示文件和目录列表</strong>。用选项-l来显示具体信息。<br><img src="https://ae01.alicdn.com/kf/H38dc764e17964374818ede5e643e6548r.jpg" alt=""><br>而-a、–all选项则是显示全部文件，包括隐藏文件。<br><img src="https://ae01.alicdn.com/kf/H86cde36f72ee4f23b8e89065cf080315s.jpg" alt=""><br>命令行是有快捷键的，如Tab可以自动补齐，反斜杠\用来强制换行，ctrl+a 跳至行首，ctrl+e跳至行尾，ctrl+l清屏等等，方便我们的操作。<br>因为Linux的命令非常多，当遇到我们不清楚具体作用的命令时，可以查看该命令的帮助，–help选项用来查看该命令的选项及作用或者用man命令，如ls –help 或 man ls。<br>再举例一个命令如cat，它可以查看文本文件的内容，如cat /etc/shells  查看系统中的所有shell解释器。<br><img src="https://ae01.alicdn.com/kf/H99895e757b304d5caf120824b4d8ce2am.jpg" alt=""><br>也可以查看此时我们使用的是哪个Shell解释器，一般情况下都为bin中的bash，也可以自己切换Shell解释器。<br>在Linux中有着许多的Shell命令，这对于Linux的使用是非常重要的，随着我们的学习，也会见到更多的命令，了解它们的作用。</p>
 
     </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2020/05/25/Shell%E5%9F%BA%E7%A1%80/" title="Shell基础">https://zpl-novice.github.io/2020/05/25/Shell基础/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/" rel="prev" title="Linux介绍">
+      <i class="fa fa-chevron-left"></i> Linux介绍
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>

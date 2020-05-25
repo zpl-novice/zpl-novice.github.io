@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Shell基础</title>
+    <url>/2020/05/25/Shell%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍Linux中的Shell，Shell是一个命令解释器，它可以对我们给出的命令进行解析，若正确则执行相应的操作。</p>
+<a id="more"></a>
+<p><strong>Shell是Linux的一个特殊程序，是内核与用户的接口，它是命令语言、命令解释程序及程序设计语言的统称</strong>。Shell是一个命令语言解释器，它拥有自己内建的Shell命令集，Shell也能被系统中其他应用程序所调用。<br><strong>当用户成功登录Linux系统后，即开始了与Shell的对话交互过程</strong>，此时，不论何时键入一个命令，都被Shell解释执行。<br>用户—shell—Kernel（内核）—硬件。 </p>
+<p>终端是来使用shell解释器的，<strong>Linux在控制台上虚拟了6个字符终端和一个图形终端，图形化界面中的终端程序就是图形终端</strong>。<strong>为什么有这么多的终端且互不影响？这是为了满足Linux多用户多任务的功能</strong>。用户可以使用不同的终端，一个用户也可以切换多个终端来使用。<br>在Linux终端中，主提示符为：[登录用户@主机名 工作目录]。辅助提示符：root用户登录后 提示符为“#”，普通用户登录后 提示符为“$”，使用su - root命令可以切换到root用户，su - zpl命令切换到普通用户。<br><img src="https://ae01.alicdn.com/kf/H907e61ced359486c9cf9107b0faf46cbg.jpg" alt=""><br>Linux命令行格式：命令字 [选项][参数]。其中选项用于调节命令的具体功能：<br>以-引导短格式选项，单个字符，如-l<br>以–引导长格式选项，多个字符，如–color<br>多个短格式选项可以写在一起，只用一个-引导，如-al  </p>
+<p>参数是命令操作的对象，如文件、目录名等。举例，<strong>查看命令ls用来显示文件和目录列表</strong>。用选项-l来显示具体信息。<br><img src="https://ae01.alicdn.com/kf/H38dc764e17964374818ede5e643e6548r.jpg" alt=""><br>而-a、–all选项则是显示全部文件，包括隐藏文件。<br><img src="https://ae01.alicdn.com/kf/H86cde36f72ee4f23b8e89065cf080315s.jpg" alt=""><br>命令行是有快捷键的，如Tab可以自动补齐，反斜杠\用来强制换行，ctrl+a 跳至行首，ctrl+e跳至行尾，ctrl+l清屏等等，方便我们的操作。<br>因为Linux的命令非常多，当遇到我们不清楚具体作用的命令时，可以查看该命令的帮助，–help选项用来查看该命令的选项及作用或者用man命令，如ls –help 或 man ls。<br>再举例一个命令如cat，它可以查看文本文件的内容，如cat /etc/shells  查看系统中的所有shell解释器。<br><img src="https://ae01.alicdn.com/kf/H99895e757b304d5caf120824b4d8ce2am.jpg" alt=""><br>也可以查看此时我们使用的是哪个Shell解释器，一般情况下都为bin中的bash，也可以自己切换Shell解释器。<br>在Linux中有着许多的Shell命令，这对于Linux的使用是非常重要的，随着我们的学习，也会见到更多的命令，了解它们的作用。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux介绍</title>
     <url>/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p>摘要：本篇将进入Linux操作系统的学习，在开始之际，先对Linux做一个简单的介绍，它是如何产生的？Linux有哪些分类？以及Linux的优缺点。</p>
 <a id="more"></a>
 <p>在介绍Linux之前，需要先来介绍一下Unix。</p>
 <h2 id="Unix"><a href="#Unix" class="headerlink" title="Unix"></a>Unix</h2><p>Unix是1969年汤普森在贝尔实验室开发出的系统原型，由汇编编写而成。在1973年经C语言改写，方便移植，因为Unix的好用性并且开源，很为学生和教授喜欢。但是贝尔实验室属于AT&amp;T公司，AT&amp;T公司为了盈利，在1979年收回版权，不对学生开源。<br>斯蒂曼原本是一个黑客，他为了解决Unix问题，不受专利软件的限制，提出了GNU，<strong>GNU is Not Unix的递归缩写，由斯蒂曼在1984年发起，旨在构建一个自由、开放的操作系统</strong>。<br>斯蒂曼重新开发<strong>自由</strong>的工具软件并推广。开发<strong>GCC</strong>（<strong>GNU的C语言编译器</strong>，如今仍在使用）等其他基础的软件便于自由软件的发展。同时他<strong>开放这些软件的源代码</strong>，允许复制、修改、传播。为了防止自由软件被其他人做成专利软件，制定<strong>GPL授权</strong>。GPL：通用公共许可证。与专利软件的授权截然相反，允许自由使用。<br><strong>但当时并没有设计出GNU操作系统的内核，只有自由软件，仍然在Unix上运行</strong>。  </p>
-<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>1991年，芬兰大学生图瓦达开发出<strong>基于x86系统的Linux内核</strong>，经过虚拟团队的维护逐渐发展壮大并被移植到其他的硬件系统上。因此出现了Linux这一操作系统。<br>由于<strong>Linux是一个自由软件，具有GPL授权</strong>，因为有许多种不同的版本。下面介绍其主要的3个版本：<br>1.Ubuntu，2004年9月发布，最为流行的 <strong>桌面</strong> Linux发行版。对于个人用户较为合适。<br>2.RedHat，<strong>使用最广，性能最稳</strong>。<br>3.CentOS，2003年底推出，rhel的重新编译版，免费。<br>Linux的优点有：<br>1.性能稳定<br>2.较高的安全性和Bug的快速修复<br>3.支持多用户多任务<br>4.完善的用户和群组策略<br>5.资源耗费低<br>6.适合嵌入式应用<br>7.免费或费用低廉<br>缺点有：<br>1.专业软件支持不够，不像window有丰富的软件。<br>2.厂商支持度不够，因为有多种版本，且非盈利。<br>3.标准化不足  </p>
-<p>本次的学习将主要通过VMware软件建立虚拟机，然后在虚拟机上装Linux系统来进行对Linux的学习。</p>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>1991年，芬兰大学生图瓦达开发出<strong>基于x86系统的Linux内核</strong>，经过虚拟团队的维护逐渐发展壮大并被移植到其他的硬件系统上。因此出现了Linux这一操作系统。<br>由于<strong>Linux是一个自由软件，具有GPL授权</strong>，因为有许多种不同的版本。下面介绍其主要的3个版本：<br>1.Ubuntu，2004年9月发布，最为流行的 <strong>桌面</strong> Linux发行版。对于个人用户较为合适。<br>2.RedHat，<strong>使用最广，性能最稳</strong>。<br>3.CentOS，2003年底推出，rhel的重新编译版，免费。<br>Linux的优点有：<br>1.性能稳定<br>2.较高的安全性和Bug的快速修复<br>3.支持多用户多任务<br>4.完善的用户和群组策略<br>5.资源耗费低<br>6.适合嵌入式应用<br>7.免费或费用低廉<br>缺点有：<br>1.专业软件支持不够，不像windows有丰富的软件。<br>2.厂商支持度不够，因为有多种版本，且非盈利。<br>3.标准化不足  </p>
+<p>本次的学习将主要通过VMware软件建立虚拟机，然后在虚拟机上装Linux系统来进行对Linux的学习。下图为Linux的目录树结构：<br><img src="https://ae01.alicdn.com/kf/H688517caeb33446e96f6ee6518ef93d9R.jpg" alt=""><br>根目录root用/表示，Linux中所有东西以文件形式存在。/home/oracle/bin/..<br>在装Linux系统时需要进行磁盘分区，如同windows中的C盘、D盘等。那么怎么把Linux中的文件与磁盘相对应呢？即将文件系统和目录挂载到磁盘上。<strong>Windows中每一个磁盘分区，如C盘就相当于一个根目录，而Linux只有一个根目录</strong>。  </p>
+<p><img src="https://ae01.alicdn.com/kf/H507ecda6affd4e5dad3fefd09ca76794U.jpg" alt="">  </p>
+<p><strong>将某一个文件挂载到一个磁盘或分区上，该文件为挂载点</strong>。则该文件的子文件就在该分区内。根目录必须要挂载到一个磁盘或分区上。这样，就有可能<strong>一个目录下的子目录可能保存在不同的分区或磁盘</strong>上。  </p>
 ]]></content>
       <categories>
         <category>Linux学习</category>
