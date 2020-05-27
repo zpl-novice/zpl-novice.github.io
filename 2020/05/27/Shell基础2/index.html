@@ -46,25 +46,34 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将要介绍的算法是随机化算法。随机化算法是在算法期间，随机数至少有一次用于决策。运行时间不只依赖于特定的输入，还依赖于所出现的随机数。主要介绍了随机数的生成，以及随机化算法的两个用途：查找和素数测试。">
+  <meta name="description" content="摘要：本篇将继续上一篇的学习，对一些常见的命令作出介绍，这些命令在我们以后的Linux学习中是非常常见且有用的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="随机化算法">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/04/24/%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:title" content="Shell基础2">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/05/27/Shell%E5%9F%BA%E7%A1%802/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将要介绍的算法是随机化算法。随机化算法是在算法期间，随机数至少有一次用于决策。运行时间不只依赖于特定的输入，还依赖于所出现的随机数。主要介绍了随机数的生成，以及随机化算法的两个用途：查找和素数测试。">
+<meta property="og:description" content="摘要：本篇将继续上一篇的学习，对一些常见的命令作出介绍，这些命令在我们以后的Linux学习中是非常常见且有用的。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://p.pstatp.com/origin/fe880001ab73a2a5ff63">
-<meta property="og:image" content="https://p.pstatp.com/origin/ff9900010cadc8f9c321">
-<meta property="og:image" content="https://p.pstatp.com/origin/dc110005332a06014666">
-<meta property="og:image" content="https://p.pstatp.com/origin/ff3600009663364661cb">
-<meta property="og:image" content="https://p.pstatp.com/origin/fedc00008386f119e32c">
-<meta property="article:published_time" content="2020-04-24T08:05:45.923Z">
-<meta property="article:modified_time" content="2020-04-24T08:18:49.763Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Heb156f57214c4532b82fc315454af513W.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H4f1e43f7a0674c9b9c8a195b27e8213fo.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hef5bcf8d3f5f44d7acb8705151adc63fl.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H2fb27cbc1f1244d4a8b589462a9e7abcC.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H11d32d28b9664cbab48066d32e8c2cecY.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H2f1301d9257347eda50833018387adbfL.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb90128630db24e3f83c385acbcbe3ecaI.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H746f89b0345b4a8888e73dfaf1020c8es.jpg">
+<meta property="og:image" content="https://shop.io.mi-img.com/app/shop/img?id=shop_b349f981e1b78d214fa8118d1aec70f3.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb82636e93fa54300a05646d0f8c2e1c9o.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6ca487b424044fc78100a150ebe80036m.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hfac3e4e133234a2e9be7d33e799f821bU.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H63ce2007e5d04e62a9baa0807b59a7ddM.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H9ffbfb8b78974a00a73c556137ccf3ceO.jpg">
+<meta property="article:published_time" content="2020-05-27T07:33:49.292Z">
+<meta property="article:modified_time" content="2020-05-27T09:28:14.992Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://p.pstatp.com/origin/fe880001ab73a2a5ff63">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Heb156f57214c4532b82fc315454af513W.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/04/24/%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/05/27/Shell%E5%9F%BA%E7%A1%802/">
 
 
 <script id="page-configurations">
@@ -76,7 +85,7 @@
   };
 </script>
 
-  <title>随机化算法 | zpl-novice</title>
+  <title>Shell基础2 | zpl-novice</title>
   
 
 
@@ -206,7 +215,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/24/%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/27/Shell%E5%9F%BA%E7%A1%802/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -219,7 +228,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          随机化算法
+          Shell基础2
         </h1>
 
         <div class="post-meta">
@@ -230,7 +239,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-24 16:05:45 / 修改时间：16:18:49" itemprop="dateCreated datePublished" datetime="2020-04-24T16:05:45+08:00">2020-04-24</time>
+              <time title="创建时间：2020-05-27 15:33:49 / 修改时间：17:28:14" itemprop="dateCreated datePublished" datetime="2020-05-27T15:33:49+08:00">2020-05-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,8 +247,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -250,7 +259,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.7k</span>
+              <span>1.1k</span>
             </span>
 
         </div>
@@ -262,44 +271,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将要介绍的算法是随机化算法。随机化算法是在算法期间，随机数至少有一次用于决策。运行时间不只依赖于特定的输入，还依赖于所出现的随机数。主要介绍了随机数的生成，以及随机化算法的两个用途：查找和素数测试。</p>
+        <p>摘要：本篇将继续上一篇的学习，对一些常见的命令作出介绍，这些命令在我们以后的Linux学习中是非常常见且有用的。  </p>
 <a id="more"></a>
-<p>一个随机化算法的最坏情形运行时间常常和非随机化算法的最坏情形运行时间相同。重要的区别在于，好的随机化算法没有坏的输入，只有坏的随机数。<br>例如快速排序算法的两种变形。方法A用第一个元素当作枢纽元，而方法B使用随机选出的元素当作枢纽元，在这两种情形下，最坏情形运行时间都为O(n^2)，因为每一步都有可能选取最大的元素当作枢纽元。两种最坏情形的区别在于，存在特定的输入总能够在A中产生坏的运行时间，比如一个反序排列的数组，而在B中以该输入运行两次，将有两个不同的运行时间。<br>在前面散列的学习当中，已经有过随机数的应用，在本篇中将介绍随机化算法的两个用途：跳跃表、测试是否为素数。  </p>
-<h2 id="随机数生成器"><a href="#随机数生成器" class="headerlink" title="随机数生成器"></a>随机数生成器</h2><p>正的随机数在计算机上是不可能生成的，所以一般使用的都是伪随机数。C++中随机数的库为<random>。因为是伪随机数，所以多次运行得到的随机序列是相同的，为了不同需要改变随机种子。  </p>
-<pre><code>srand(0);             //随机种子0
-for(int i=0;i&lt;5;i++)
-{
-    cout&lt;&lt;rand()%100&lt;&lt;&quot; &quot;;    
-}    
-srand(1);             //随机种子1
-for(int i=0;i&lt;5;i++)
-{
-    cout&lt;&lt;rand()%100&lt;&lt;&quot; &quot;;    
-}    </code></pre><h2 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h2><p>随机化算法的第一个用途是以O(logn)的<strong>期望时间</strong>支持查找和插入的数据结构。这意味着对于任意输入序列的每一次操作的运行时间都有期望值O(logn)，其中的<strong>期望是基于随机数发生器</strong>的。<br>最简单的支持查找的数据结构是链表，一个普通的链表执行一次查找的最坏时间为N。<br><img src="https://p.pstatp.com/origin/fe880001ab73a2a5ff63" alt=""><br>对其进行加链来缩短时间：<br><img src="https://p.pstatp.com/origin/ff9900010cadc8f9c321" alt=""><br><img src="https://p.pstatp.com/origin/dc110005332a06014666" alt=""><br>跳跃幅度的一般情形如下图所示，<strong>每个第2^i节点都有一个链接链到其前面2^i节点。链的总个数是原始链表的2倍，但现在一次查找总的时间消耗为O(logn)</strong>。注意，在这种数据结构中的查找基本都是折半查找。<br><img src="https://p.pstatp.com/origin/ff3600009663364661cb" alt=""><br>但这种情形过于僵硬，不能进行有效的插入。因此要稍微放松它的限制条件。我们将带有k个链的节点定义为k阶节点。<br>当插入一个新元素时，为它<strong>分配一个新节点，此时，必须决定该节点是多少阶的</strong>。下图是一个一般的跳跃表，可以发现，大约一半的节点是一阶节点，1/4的节点是二阶节点，1/2^i的节点是i阶节点。我们<strong>按照这个概率分布随机选择节点的阶数</strong>。<br><img src="https://p.pstatp.com/origin/fedc00008386f119e32c" alt=""><br>跳跃表类似于散列表，它们都需要估计将要出现在链表中的元素个数（从而确定阶的数目）。  </p>
-<h2 id="素性测试"><a href="#素性测试" class="headerlink" title="素性测试"></a>素性测试</h2><p>确定一个大数是否为素数。将给出一个可以测试素性的多项式时间算法。如果这个算法宣称一个数不是素数，那么我们可以肯定这个数不是素数。如果该算法宣称一个数是素数，那么，<strong>这个数将以高的概率，但不是100%的肯定是素数。错误的概率不依赖于测试的数，而是依赖于由算法做出的随机选择</strong>。<br>算法的关键是费马小定理：如果P是素数，且0&lt;A&lt;P，那么A^(P-1)=1(mod P)。<br>例如，由于67是素数，因此2^66=1(mod 67)，即2^66和1对于模67同余数。<strong>如果一个数N不满足该条件，那一定不是素数，满足该条件则很大可能是素数</strong>。<br>因此我们<strong>对A进行随机选取</strong>来构造随机化算法进行素性测试。  </p>
-<pre><code>void prime(int n,int A)
-{
-    int m;
-    m=pow(A,m-1);
-    if(m%n==1)
-    {
-        cout&lt;&lt;&quot;true&quot;;    
-    } 
-    else
-    {
-        cout&lt;&lt;&quot;false&quot;;
-    }
-}
-int main()
-{
-    int A;
-    int n;
-    cin&gt;&gt;n;
-    A=1+rand()%n;
-    cout&lt;&lt;A&lt;&lt;&quot; &quot;;
-    prime(n,A);
-    return 0;
-}</code></pre><p>随机化算法通过随机数进行决策来得到期望时间，是一个非常巧妙地方法。在下一篇中，我们将讲解最后一种算法设计技巧，回溯算法。</p>
+<p>（8） 复制文件或目录<br>cp命令，copy的意思，复制目录需要选项-r，如将桌面文件里的东西复制到temp文件（若没有temp文件将被创建）。<br><img src="https://ae01.alicdn.com/kf/Heb156f57214c4532b82fc315454af513W.jpg" alt="">  </p>
+<p>（9） 查看文件内容<br>前面已经介绍过cat命令来查看文件内容，还有more、less、head、tail命令，都可以用来查看。但最常使用的却不是这些，而是后面会学习到的vi命令。<br><img src="https://ae01.alicdn.com/kf/H4f1e43f7a0674c9b9c8a195b27e8213fo.jpg" alt="">  </p>
+<p>（10）移动文件或修改文件名<br>mv命令，目录也是相同指令。<br><img src="https://ae01.alicdn.com/kf/Hef5bcf8d3f5f44d7acb8705151adc63fl.jpg" alt="">  </p>
+<p><img src="https://ae01.alicdn.com/kf/H2fb27cbc1f1244d4a8b589462a9e7abcC.jpg" alt="">  </p>
+<p>（11）创建软链接（快捷方式）<br>ln命令，<strong>需要选项-s</strong>，为了全局使用，需要<strong>绝对路径</strong>，即若为hello.c创建快捷方式<br><img src="https://ae01.alicdn.com/kf/H11d32d28b9664cbab48066d32e8c2cecY.jpg" alt="">  </p>
+<p>（12）创建硬链接（另一个入口）<br>同样是ln命令，<strong>不需要选项-s</strong>，<strong>硬链接与软链接的区别在于软链接相当于快捷方式，硬链接相当于智能指针。硬链接可以有多个，而且不需要绝对路径</strong>。<br><img src="https://ae01.alicdn.com/kf/H2f1301d9257347eda50833018387adbfL.jpg" alt="">  </p>
+<p>（13）获取文本文件的属性（行数，单词数）<br>wc命令查看普通文件，od命令查看二进制文件。<br><img src="https://ae01.alicdn.com/kf/Hb90128630db24e3f83c385acbcbe3ecaI.jpg" alt="">  </p>
+<p>（14）查看命令所用解释器<br>which命令，如查看cp命令和cd命令：<br><img src="https://ae01.alicdn.com/kf/H746f89b0345b4a8888e73dfaf1020c8es.jpg" alt="">  </p>
+<p>（15）修改文件权限<br>什么是文件权限，即读r、写w、执行x。在上一篇ls -l查找中有：<br><img src="https://shop.io.mi-img.com/app/shop/img?id=shop_b349f981e1b78d214fa8118d1aec70f3.png" alt=""><br><strong>d表示文件类型，d后前3个字符表示文件所有者权限，中间3个表示文件所属组（组内其他成员）权限，后3个字符表示其他人权限</strong>。2表示硬链接数，后面就是所有者和所属组名字，内存和时间。<br>当修改文件权限时，文字设定法，<strong>chmod命令</strong>，change mod的意思，chmod [who] [+|-|=] [mod]<br>其中who： 文件所有者u，文件所属组g，其他人o，所有的人a。+：添加权限，-：减少权限，=：覆盖原本权限。mod：读r，写w，执行x。<br><img src="https://ae01.alicdn.com/kf/Hb82636e93fa54300a05646d0f8c2e1c9o.jpg" alt=""></p>
+<p>数字设定法：-：没有权限。4：读r。1：执行x。2：写w。所以7就是满权限，7：rwx文件所有者，6：rw文件所属组，5：rx其他人。chmod 777 hello  使hello满权限。  </p>
+<p>（16）修改文件所有者和所属组<br><strong>文件属于所有者，但不一定属于所有者所在的组，而可能属于其他的组</strong>。因此文件所有者和文件所属组不一定有关系。chown命令。<strong>目录必须拥有执行权限，只有这样，才能进入目录</strong>。   </p>
+<p>（17）文件的查找<br>find命令，按文件名查找，选项为查找目录-name，即find -name “文件名”<br><img src="https://ae01.alicdn.com/kf/H6ca487b424044fc78100a150ebe80036m.jpg" alt=""><br>若不知文件全名，加*<br><img src="https://ae01.alicdn.com/kf/Hfac3e4e133234a2e9be7d33e799f821bU.jpg" alt=""><br>按文件大小查找，选项为查找目录-size  </p>
+<p>（18）文件的检索<br><strong>grep命令</strong>，对文件的内容进行查找，选项-r “查找的内容“ 查找的目录<br><img src="https://ae01.alicdn.com/kf/H63ce2007e5d04e62a9baa0807b59a7ddM.jpg" alt="">  </p>
+<p>软件的安装，分为在线安装，deb包安装和源码安装。<strong>Redhat的在线安装命令为yum</strong>，如前面的安装tree软件。<br><img src="https://ae01.alicdn.com/kf/H9ffbfb8b78974a00a73c556137ccf3ceO.jpg" alt="">  </p>
+<p>本篇就先讲解到这里，剩下的知识会在下面慢慢介绍。</p>
 
     </div>
 
@@ -315,7 +303,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/04/24/%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95/" title="随机化算法">https://zpl-novice.github.io/2020/04/24/随机化算法/</a>
+    <a href="https://zpl-novice.github.io/2020/05/27/Shell%E5%9F%BA%E7%A1%802/" title="Shell基础2">https://zpl-novice.github.io/2020/05/27/Shell基础2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -332,13 +320,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/22/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="prev" title="动态规划">
-      <i class="fa fa-chevron-left"></i> 动态规划
+    <a href="/2020/05/25/Shell%E5%9F%BA%E7%A1%80/" rel="prev" title="Shell基础1">
+      <i class="fa fa-chevron-left"></i> Shell基础1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/26/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/" rel="next" title="回溯算法">
-      回溯算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -398,7 +383,6 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机数生成器"><span class="nav-number">1.</span> <span class="nav-text">随机数生成器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳跃表"><span class="nav-number">2.</span> <span class="nav-text">跳跃表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#素性测试"><span class="nav-number">3.</span> <span class="nav-text">素性测试</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
