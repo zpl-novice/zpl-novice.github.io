@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Shell基础2</title>
+    <title>Linux命令3</title>
+    <url>/2020/05/29/Linux%E5%91%BD%E4%BB%A43/</url>
+    <content><![CDATA[<p>摘要：本篇将继续对Linux常见命令进行学习，将主要介绍U盘挂载、压缩包管理、进程管理和网络管理有关的命令。其中对于进程管理只是简单介绍，在后续的学习中会对进程进行更加深入的学习。</p>
+<a id="more"></a>
+<h2 id="U盘的挂载"><a href="#U盘的挂载" class="headerlink" title="U盘的挂载"></a>U盘的挂载</h2><p>前面已经讲过Linux文件目录，其中/media和/mnt是用来挂载外设的，如U盘、光驱等。当虚拟机全屏时，插入U盘，会自动挂载到/media目录下。如果我们想手动挂载，需要用到的命令为<strong>mount</strong>，而卸载的命令则为unmount。<code>mount 设备名字 要挂载目录</code>，卸载时就不需要设备名字，直接<code>umount 路径</code>。<strong>注意卸载时自己不要在U盘路径中</strong>。因为挂载需要用到设备名字，所以我们需要查看U盘在Linux中的名字，需要用到命令为<code>fdisk -l</code>来获取设备名字。</p>
+<h2 id="压缩包管理"><a href="#压缩包管理" class="headerlink" title="压缩包管理"></a>压缩包管理</h2><p><strong>tar命令</strong>，选项：<br>c 创建，即压缩。<br>x 释放，即解压缩。<br>f 指定压缩文件的名字。<br>v 显示提示信息。<br>z 使用gzip的方式压缩文件。<br>j 使用bzip2的方式压缩文件。<br>压缩： <code>tar -zcvf 生成的压缩包名字（xxx.tar.gz）要压缩的文件或目录</code>，例如将hello.c压缩成tar.gz：<br><img src="https://ae01.alicdn.com/kf/Hbbda4f874f0c437ea0dc6e635549299ef.jpg" alt=""><br>解压缩： <code>tar -zxvf 要解压的文件名 -C 指定目录（不加则解压到当前文件夹）</code>，将hello.c删除，然后将上面压缩的tar.gz解压：<br><img src="https://ae01.alicdn.com/kf/Hcac6866ea04f4b8ca71c03e42488d2eft.jpg" alt=""><br><strong>rar命令</strong>，需要安装该软件。选项 a压缩，x 解压。<br><strong>zip命令，需要安装软件</strong>。通过yum安装zip软件。<br>压缩： <code>zip 压缩包的名字 要压缩的文件或目录</code><br>解压缩：<code>unzip 压缩包的名字 -d 解压目录（不指定则解压当前文件夹）</code><br><img src="https://ae01.alicdn.com/kf/H6042f00694584a4fb1bfd9fd20e3a641I.jpg" alt="">  </p>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p>启动的程序称之为进程。<strong>who命令</strong>，查看当前用户。<br><img src="https://ae01.alicdn.com/kf/H8ec3286e400443a296755273e4a59706V.jpg" alt=""><br>其中tty2表示图形终端。<br><strong>ps命令，查看进程</strong>。选项：<br>-a，显示现行的所有进程，包括其他用户的进程。<br><img src="https://ae01.alicdn.com/kf/H6e8175d287254a88a2d8f047d5a6a7ebs.jpg" alt=""><br>图只截了一部分，可以看到是有非常多的进程的。<br>-u，以用户为主的进程状态。比如当前root用户的：<br><img src="https://ae01.alicdn.com/kf/H0a8c31da4d0643f59aa18eba2c26bb78x.jpg" alt=""><br><strong>pid表示进程的id</strong>。<br>-x，通常与 a 这个参数一起使用，可列出较完整信息。<br><img src="https://ae01.alicdn.com/kf/H5179bf8bb50742c18969f2759628ab98p.jpg" alt=""><br>？表示没有终端。<br><strong>一般直接用-aux，显示出很多信息。但我们需要在这么多进程中找到一个进程时该如何办</strong>？<br><strong>管道（|）相当于重定向。使用管道可以对进程进行过滤。管道将指令1的输出作为指令2的输入，因此我们可以对指令1的结果进行查找</strong> 。<br><code>ps -aux | grep xxx</code>例如查找有bash关键字的进程<br><img src="https://ae01.alicdn.com/kf/Hb600e362b83e47b5adfe3a31d1ccf5adS.jpg" alt=""><br>其中<strong>第三条表示的是grep执行时占用的进程，不是查找的结果</strong>。<br><strong>kill命令可以用来杀死进程</strong>。<br><img src="https://ae01.alicdn.com/kf/Hb4128fede8884714a3001482612eaab8A.jpg" alt=""><br>kill有64个信号，杀死进程使用第9个信号SIGKILL。<code>Kill -SIGKILL 进程ID</code>。<br><strong>env命令，查看当前进程的环境变量</strong>。<br><img src="https://ae01.alicdn.com/kf/H94152aad6f0f472fba3f025178f3789eX.jpg" alt=""> </p>
+<p>同样可以使用<strong>管道</strong>可以进行过滤。<br><img src="https://ae01.alicdn.com/kf/H4aa3b68e0bc64d9ba2f27fb168b74b9fX.jpg" alt="">  </p>
+<p><strong>ps是显示瞬间进程</strong>的状态，并不动态连续；如果想对进程进行<strong>实时监控应该用top命令</strong>。  </p>
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><p><strong>ifconfig命令，查看ip地址</strong>。<br><img src="https://ae01.alicdn.com/kf/Hedab32830cfa4293bcf92333dfc28f8av.jpg" alt=""><br>Ens160表示网卡名字。下面192.168.2.2.128则表示ip地址。<br><strong>ping命令</strong>，测试两个地址能不能通信。<br><img src="https://ae01.alicdn.com/kf/H186469deb24c43f9962c98ca53ea4d56K.jpg" alt=""><br><strong>直接ping网站的域名也可以</strong>。如ping百度。<br><img src="https://ae01.alicdn.com/kf/H88fb897ca29144c7a51ef687986e3ec1O.jpg" alt="">  </p>
+<p>下一篇将会将用户管理、服务器等相关的命令。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Shell命令2</title>
     <url>/2020/05/27/Shell%E5%9F%BA%E7%A1%802/</url>
     <content><![CDATA[<p>摘要：本篇将继续上一篇的学习，对一些常见的命令作出介绍，这些命令在我们以后的Linux学习中是非常常见且有用的。  </p>
 <a id="more"></a>
@@ -26,7 +43,7 @@
       </categories>
   </entry>
   <entry>
-    <title>Shell基础1</title>
+    <title>Shell命令1</title>
     <url>/2020/05/25/Shell%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p>摘要：本篇将介绍Linux中的Shell，Shell是一个命令解释器，它可以对我们给出的命令进行解析，若正确则执行相应的操作。并会介绍一些常用的命令。</p>
 <a id="more"></a>

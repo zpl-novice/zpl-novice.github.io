@@ -46,35 +46,34 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
+  <meta name="description" content="摘要：本篇将继续对Linux常见命令进行学习，将主要介绍U盘挂载、压缩包管理、进程管理和网络管理有关的命令。其中对于进程管理只是简单介绍，在后续的学习中会对进程进行更加深入的学习。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图的基本知识">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:title" content="Linux命令3">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/05/29/Linux%E5%91%BD%E4%BB%A43/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
+<meta property="og:description" content="摘要：本篇将继续对Linux常见命令进行学习，将主要介绍U盘挂载、压缩包管理、进程管理和网络管理有关的命令。其中对于进程管理只是简单介绍，在后续的学习中会对进程进行更加深入的学习。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png">
-<meta property="article:published_time" content="2020-04-04T12:48:28.776Z">
-<meta property="article:modified_time" content="2020-04-04T13:46:58.361Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hbbda4f874f0c437ea0dc6e635549299ef.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hcac6866ea04f4b8ca71c03e42488d2eft.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6042f00694584a4fb1bfd9fd20e3a641I.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8ec3286e400443a296755273e4a59706V.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6e8175d287254a88a2d8f047d5a6a7ebs.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0a8c31da4d0643f59aa18eba2c26bb78x.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H5179bf8bb50742c18969f2759628ab98p.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb600e362b83e47b5adfe3a31d1ccf5adS.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb4128fede8884714a3001482612eaab8A.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H94152aad6f0f472fba3f025178f3789eX.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H4aa3b68e0bc64d9ba2f27fb168b74b9fX.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hedab32830cfa4293bcf92333dfc28f8av.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H186469deb24c43f9962c98ca53ea4d56K.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H88fb897ca29144c7a51ef687986e3ec1O.jpg">
+<meta property="article:published_time" content="2020-05-29T08:58:38.365Z">
+<meta property="article:modified_time" content="2020-05-29T09:55:01.445Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hbbda4f874f0c437ea0dc6e635549299ef.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/05/29/Linux%E5%91%BD%E4%BB%A43/">
 
 
 <script id="page-configurations">
@@ -86,7 +85,7 @@
   };
 </script>
 
-  <title>图的基本知识 | zpl-novice</title>
+  <title>Linux命令3 | zpl-novice</title>
   
 
 
@@ -216,7 +215,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/29/Linux%E5%91%BD%E4%BB%A43/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -229,7 +228,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          图的基本知识
+          Linux命令3
         </h1>
 
         <div class="post-meta">
@@ -240,7 +239,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-04 20:48:28 / 修改时间：21:46:58" itemprop="dateCreated datePublished" datetime="2020-04-04T20:48:28+08:00">2020-04-04</time>
+              <time title="创建时间：2020-05-29 16:58:38 / 修改时间：17:55:01" itemprop="dateCreated datePublished" datetime="2020-05-29T16:58:38+08:00">2020-05-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,8 +247,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -260,7 +259,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>1.2k</span>
             </span>
 
         </div>
@@ -272,15 +271,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。</p>
+        <p>摘要：本篇将继续对Linux常见命令进行学习，将主要介绍U盘挂载、压缩包管理、进程管理和网络管理有关的命令。其中对于进程管理只是简单介绍，在后续的学习中会对进程进行更加深入的学习。</p>
 <a id="more"></a>
-<p>线性表中数据元素是线性关系，都是只有一个直接前驱和直接后继，在树中数据之间有着明显的层次关系。图是一种比线性表和树更复杂的数据结构。在图形结构中，结点之间的关系可以是任意的，图中任意两个元素之间都可能相关。<br>图是由顶点的有穷非空集合和顶点之间的边的集合组成，通常表示为：G（V，E），其中G表示一个图，V是图G中顶点的集合，E是图G中边的集合。<br><img src="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png" alt=""><br>线性表中数据元素叫元素，树中则叫结点，而在图中叫顶点。有空表和空树，但是没有空图这个概念，即<strong>在图结构中，不允许没有顶点</strong>。顶点之间的逻辑关系用边来表示。<br>下面来讲解图的一些基本概念：<br>无向边是指两个顶点之间的边没有方向，(vi,vj)表示。任意的边都是无向边的图为无向图，如下所示。<br><img src="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png" alt=""><br>有向边则是两个顶点之间的边有方向，也称为弧。&lt;vi,vj&gt;表示，其中vi称为弧尾，vj称为弧头。任意的边都是有向边的图为有向图，如下所示，A,D之间的边为&lt;A,D&gt;。<br><img src="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png" alt=""><br><strong>不存在顶点到自身的边，且同一条边不重复出现的图称为简单图</strong>，我们后面要学习的基本都是简单图。<br>在无向图中，如果任意两个顶点之间都存在边，则称为无向完全图。<br><img src="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png" alt=""><br>根据无向完全图的定义可得，N个顶点，共有<code>N*(N-1)/2</code>条边。<br>在有向图中，如果任意两个顶点之间都存在方向互为相反的两条弧，则称为有向完全图。<br><img src="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png" alt=""><br>根据有向完全图的定义可得，N个顶点，共有<code>N*(N-1)</code>条边。<br>与图的边或弧相关的数叫做权。这种带权的图通常称为网。权可以表示一个顶点到另一个顶点的距离或耗费。如下所示：<br><img src="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png" alt=""><br>如果一个图的顶点和边都是另一个图的顶点和边的集合的子集，则这个图为另一个图的子图。如下所示，右边的图为左边图的子图。 </p>
-<p><img src="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png" alt="">  </p>
-<p>顶点V的度是和V相关联的边的数目。在有向图中，以顶点v为头的弧的数目称为v的入度，以顶点v为尾的弧的数目称为v的出度。<strong>V的度等于出度与入度之和</strong>。<br>路径的长度是路径上边或弧的数目。到自身的路径为回路，<strong>回路中各顶点只出现一次的叫简单回路</strong>。<br>如果图中任意两个顶点都是连通的（即有路径从一个顶点到另一个顶点），则为连通图。下图左边不是连通图，右边是。<br><img src="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png" alt=""><br>一个连通图的生成树是一个极小的连通子图，它含有图中全部的n个顶点，但只有足以构成一棵树的n-1条边。如果一个有向图恰有一个顶点的入度为0，其余顶点的入度均为1，则是一棵有向树。一个有向图的生成森林由若干棵有向树组成，含有图中全部顶点，但只有足以构成若干棵不相交的有向树的弧。如下图1的生成森林为图2和图3。<br><img src="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png" alt="">  </p>
-<h2 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h2><h3 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h3><p>图由顶点和边或弧两部分组成。合在一起比较困难，用两个结构来存储。<br>图的邻接矩阵存储方式是用两个数组来表示图。一个一维数组存储图中顶点信息，一个二维数组（称为邻接矩阵）存储图中边或弧的信息。设图G有n个顶点，则邻接矩阵是一个n*n的方阵。<br><img src="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png" alt=""><br><img src="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png" alt=""><br><img src="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png" alt=""><br>邻接矩阵对于边数相对顶点较少的图，对空间会很大浪费。  </p>
-<h3 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h3><p>参考树的孩子表示法。<br>数组与链表相结合的存储方法称为邻接表。<br><img src="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png" alt=""><br>在有向图中，若以顶点为弧尾来存储，则为邻接表（方便查找出度）。若以顶点为弧头来存储，为逆邻接表（方便查找入度）。<br><img src="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png" alt="">  </p>
-<h3 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h3><p>边集数组由两个一维数组组成。一个存储顶点的信息，一个存储边的信息。<br><img src="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png" alt="">  </p>
-<p>此外，还有将邻接表与逆邻接表结合，既能得到出度又能得到入度的十字链表表示法，以及对无向图邻接表进行优化的邻接多重表表示法等。</p>
+<h2 id="U盘的挂载"><a href="#U盘的挂载" class="headerlink" title="U盘的挂载"></a>U盘的挂载</h2><p>前面已经讲过Linux文件目录，其中/media和/mnt是用来挂载外设的，如U盘、光驱等。当虚拟机全屏时，插入U盘，会自动挂载到/media目录下。如果我们想手动挂载，需要用到的命令为<strong>mount</strong>，而卸载的命令则为unmount。<code>mount 设备名字 要挂载目录</code>，卸载时就不需要设备名字，直接<code>umount 路径</code>。<strong>注意卸载时自己不要在U盘路径中</strong>。因为挂载需要用到设备名字，所以我们需要查看U盘在Linux中的名字，需要用到命令为<code>fdisk -l</code>来获取设备名字。</p>
+<h2 id="压缩包管理"><a href="#压缩包管理" class="headerlink" title="压缩包管理"></a>压缩包管理</h2><p><strong>tar命令</strong>，选项：<br>c 创建，即压缩。<br>x 释放，即解压缩。<br>f 指定压缩文件的名字。<br>v 显示提示信息。<br>z 使用gzip的方式压缩文件。<br>j 使用bzip2的方式压缩文件。<br>压缩： <code>tar -zcvf 生成的压缩包名字（xxx.tar.gz）要压缩的文件或目录</code>，例如将hello.c压缩成tar.gz：<br><img src="https://ae01.alicdn.com/kf/Hbbda4f874f0c437ea0dc6e635549299ef.jpg" alt=""><br>解压缩： <code>tar -zxvf 要解压的文件名 -C 指定目录（不加则解压到当前文件夹）</code>，将hello.c删除，然后将上面压缩的tar.gz解压：<br><img src="https://ae01.alicdn.com/kf/Hcac6866ea04f4b8ca71c03e42488d2eft.jpg" alt=""><br><strong>rar命令</strong>，需要安装该软件。选项 a压缩，x 解压。<br><strong>zip命令，需要安装软件</strong>。通过yum安装zip软件。<br>压缩： <code>zip 压缩包的名字 要压缩的文件或目录</code><br>解压缩：<code>unzip 压缩包的名字 -d 解压目录（不指定则解压当前文件夹）</code><br><img src="https://ae01.alicdn.com/kf/H6042f00694584a4fb1bfd9fd20e3a641I.jpg" alt="">  </p>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p>启动的程序称之为进程。<strong>who命令</strong>，查看当前用户。<br><img src="https://ae01.alicdn.com/kf/H8ec3286e400443a296755273e4a59706V.jpg" alt=""><br>其中tty2表示图形终端。<br><strong>ps命令，查看进程</strong>。选项：<br>-a，显示现行的所有进程，包括其他用户的进程。<br><img src="https://ae01.alicdn.com/kf/H6e8175d287254a88a2d8f047d5a6a7ebs.jpg" alt=""><br>图只截了一部分，可以看到是有非常多的进程的。<br>-u，以用户为主的进程状态。比如当前root用户的：<br><img src="https://ae01.alicdn.com/kf/H0a8c31da4d0643f59aa18eba2c26bb78x.jpg" alt=""><br><strong>pid表示进程的id</strong>。<br>-x，通常与 a 这个参数一起使用，可列出较完整信息。<br><img src="https://ae01.alicdn.com/kf/H5179bf8bb50742c18969f2759628ab98p.jpg" alt=""><br>？表示没有终端。<br><strong>一般直接用-aux，显示出很多信息。但我们需要在这么多进程中找到一个进程时该如何办</strong>？<br><strong>管道（|）相当于重定向。使用管道可以对进程进行过滤。管道将指令1的输出作为指令2的输入，因此我们可以对指令1的结果进行查找</strong> 。<br><code>ps -aux | grep xxx</code>例如查找有bash关键字的进程<br><img src="https://ae01.alicdn.com/kf/Hb600e362b83e47b5adfe3a31d1ccf5adS.jpg" alt=""><br>其中<strong>第三条表示的是grep执行时占用的进程，不是查找的结果</strong>。<br><strong>kill命令可以用来杀死进程</strong>。<br><img src="https://ae01.alicdn.com/kf/Hb4128fede8884714a3001482612eaab8A.jpg" alt=""><br>kill有64个信号，杀死进程使用第9个信号SIGKILL。<code>Kill -SIGKILL 进程ID</code>。<br><strong>env命令，查看当前进程的环境变量</strong>。<br><img src="https://ae01.alicdn.com/kf/H94152aad6f0f472fba3f025178f3789eX.jpg" alt=""> </p>
+<p>同样可以使用<strong>管道</strong>可以进行过滤。<br><img src="https://ae01.alicdn.com/kf/H4aa3b68e0bc64d9ba2f27fb168b74b9fX.jpg" alt="">  </p>
+<p><strong>ps是显示瞬间进程</strong>的状态，并不动态连续；如果想对进程进行<strong>实时监控应该用top命令</strong>。  </p>
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><p><strong>ifconfig命令，查看ip地址</strong>。<br><img src="https://ae01.alicdn.com/kf/Hedab32830cfa4293bcf92333dfc28f8av.jpg" alt=""><br>Ens160表示网卡名字。下面192.168.2.2.128则表示ip地址。<br><strong>ping命令</strong>，测试两个地址能不能通信。<br><img src="https://ae01.alicdn.com/kf/H186469deb24c43f9962c98ca53ea4d56K.jpg" alt=""><br><strong>直接ping网站的域名也可以</strong>。如ping百度。<br><img src="https://ae01.alicdn.com/kf/H88fb897ca29144c7a51ef687986e3ec1O.jpg" alt="">  </p>
+<p>下一篇将会将用户管理、服务器等相关的命令。</p>
 
     </div>
 
@@ -296,7 +295,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/" title="图的基本知识">https://zpl-novice.github.io/2020/04/04/图的基本知识/</a>
+    <a href="https://zpl-novice.github.io/2020/05/29/Linux%E5%91%BD%E4%BB%A43/" title="Linux命令3">https://zpl-novice.github.io/2020/05/29/Linux命令3/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -313,13 +312,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/" rel="prev" title="排序算法4">
-      <i class="fa fa-chevron-left"></i> 排序算法4
+    <a href="/2020/05/27/Shell%E5%9F%BA%E7%A1%802/" rel="prev" title="Shell命令2">
+      <i class="fa fa-chevron-left"></i> Shell命令2
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/07/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="next" title="拓扑排序">
-      拓扑排序 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -379,7 +375,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的存储"><span class="nav-number">1.</span> <span class="nav-text">图的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接矩阵"><span class="nav-number">1.1.</span> <span class="nav-text">邻接矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接表"><span class="nav-number">1.2.</span> <span class="nav-text">邻接表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边集数组"><span class="nav-number">1.3.</span> <span class="nav-text">边集数组</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#U盘的挂载"><span class="nav-number">1.</span> <span class="nav-text">U盘的挂载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩包管理"><span class="nav-number">2.</span> <span class="nav-text">压缩包管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程管理"><span class="nav-number">3.</span> <span class="nav-text">进程管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络管理"><span class="nav-number">4.</span> <span class="nav-text">网络管理</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
