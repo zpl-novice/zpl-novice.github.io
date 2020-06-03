@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux命令5</title>
+    <url>/2020/06/03/Linux%E5%91%BD%E4%BB%A45/</url>
+    <content><![CDATA[<p>摘要：本篇将首先介绍剩下的两个服务器的搭建，然后再对vim文本编辑器进行简单的介绍，主要讲解它的三种模式下的各种命令。</p>
+<a id="more"></a>
+<h2 id="nfs服务器"><a href="#nfs服务器" class="headerlink" title="nfs服务器"></a>nfs服务器</h2><p>需要下载软件: <code>yum install rpcbind nfs-utils -y</code><br>服务器端：<br>创建共享目录 <code>mkdir dir</code><br><img src="https://ae01.alicdn.com/kf/Hb653069e3bdc4bfa96c54c7319101724o.jpg" alt=""><br>   修改配置文件  <code>vi /etc/exports</code><br>   添加共享目录 <code>/home/zpl/nfsshare *(rw,sync)</code>， sync表示实时更新。<br>  重启服务   <code>systemctl restart nfs*</code><br>客户端：<br>使用<strong>挂载</strong>的方式来连接服务器，<code>mount  服务器ip : /home/zpl/nfsshare  /mnt</code>，这样在/mnt目录下就可以查看共享文件夹的内容了。  </p>
+<h2 id="ssh服务器"><a href="#ssh服务器" class="headerlink" title="ssh服务器"></a>ssh服务器</h2><p><strong>ssh用来远程登录服务器，并获得相同权限</strong>。<br>安装软件。<code>yum install openssh-server</code><br>远程登录： <code>ssh 用户名@IP</code>，如以zhangsan用户远程登陆zpl用户的服务器。<br><img src="https://ae01.alicdn.com/kf/H950b9f52856c41ecbea802c8f0489b76s.jpg" alt=""><br>退出：<code>logout</code><br><img src="https://ae01.alicdn.com/kf/Hb7983a4e4eb34cfb847db7075c8ca798b.jpg" alt=""><br><strong>scp命令</strong>：super copy 。可实现服务器之间数据的复制。<br><code>scp -r 目标主机名@IP：目录路径 要拷贝到的目录</code>  </p>
+<h2 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h2><p><strong>vim是从vi发展过来的一款文本编辑器</strong>。现在虽然输入的是vi，其实调用的是vim。<br>vim共有三种模式。  </p>
+<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><p>打开文件之后，默认进入命令模式。<br><img src="https://ae01.alicdn.com/kf/Hf0b7b7ad1bcc4f4ea680e496123539a06.jpg" alt=""><br>光标移动：h、j、k、l。<br>行首：0，行尾：$。<br>移动到文本头部：gg，移动到文本尾部：G。<br>行跳转： 行数 G。<br><strong>删除光标所在字符：x，撤销删除：u。</strong><br>删除4行：4dd，<strong>vim的删除并不是真正的删除，而是剪切，可以粘贴出来：p。</strong><br>p表示粘贴到光标下一行，P则是当前行。<br>复制：yy    复制多行：nyy。<br>可视模式：v，可以自由选择，选择完复制：y，选择完删除：d。<br>查找：/内容。向下遍历：n。  </p>
+<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><p>需要输入一些命令，切换到编辑模式。<br><strong>a:从光标后面开始插入，A：光标跳到行尾开始插入。</strong><br><img src="https://ae01.alicdn.com/kf/H417cc9f870304bc7aece789637bcfb6aO.jpg" alt=""><br><strong>i:从光标前面开始插入，I：光标跳到行尾开始插入。</strong><br>o:光标所在行下面开辟一个新的行，O：光标所在行上面开辟一个新的行。<br>s:删除光标所在的字符开始插入，S：删除光标所在行开始插入。  </p>
+<h3 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h3><p>在末行模式可以输入一些命令。<strong>命令模式输入冒号进入末行模式</strong>。w：保存文件。q：退出。<br><img src="https://ae01.alicdn.com/kf/Hdccc9bb6ee7f4b58981303067e7f0941a.jpg" alt="">  </p>
+<p>关于vim的知识就先到这里，在下一篇中会继续介绍。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux命令4</title>
     <url>/2020/06/01/Linux%E5%91%BD%E4%BB%A44/</url>
     <content><![CDATA[<p>摘要：本篇将主要讲解用户管理和服务器搭建的相关命令。我们经常需要添加用户和删除用户，而服务器搭建又分为好几种，本篇将主要讲解ftp服务器的搭建，剩下的两种服务器在下篇中介绍。</p>
