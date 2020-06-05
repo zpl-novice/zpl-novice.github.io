@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux命令6</title>
+    <url>/2020/06/05/Linux%E5%91%BD%E4%BB%A46/</url>
+    <content><![CDATA[<p>摘要： 本篇将主要介绍gcc的编译、静态库和动态库的制作、gdb的调试等相关的命令，这些都是基础的命令，对于我们在Linux上编程是必须要掌握的。</p>
+<a id="more"></a>
+<h2 id="gcc的编译过程"><a href="#gcc的编译过程" class="headerlink" title="gcc的编译过程"></a>gcc的编译过程</h2><p><img src="https://ae01.alicdn.com/kf/H0c8088eddacd4fcd9734e277738e0860w.jpg" alt=""><br>安装gcc和g++：<code>yum install gcc</code>，<code>yum install gcc-c++ libstdc++-devel</code>。<br><strong>gcc默认编译c文件，g++编译c++文件</strong>。如将hello.cpp编译，生成.out文件：<br><img src="https://ae01.alicdn.com/kf/H45696bac7c234c04b95d3758383b811bO.jpg" alt=""><br>执行编译好的a.out文件：<br><img src="https://ae01.alicdn.com/kf/Hbf7fed099b974f458807658ca67058329.jpg" alt=""><br>命名选项-o：<code>g++ hello.cpp -o myapp</code>。<br>生成二进制文件来处理而不是可执行文件选项-c：<code>g++ -c hello.cpp</code>。<br><img src="https://ae01.alicdn.com/kf/H78d6ffed6efc45398fe90ef1aebe1fb2g.jpg" alt="">  </p>
+<h2 id="静态库的制作"><a href="#静态库的制作" class="headerlink" title="静态库的制作"></a>静态库的制作</h2><p>命名：<code>lib+库的名字+.a</code>，如<code>libmytest.a</code>。<br>制作步骤：<strong>生成相应的.o文件，打包</strong>：<code>ar rcs+静态库的名字（libmytest.a）+生成的所有的.o</code>。<br>发布和使用静态库：<strong>只需要给用户头文件和静态库 ，在main函数里直接调用头文件里的接口即可。而不用泄露接口实现源码</strong>。<br>用户操作：<code>g++  main.cpp  ./lib/libmytest.a -I include</code>。<br><img src="https://ae01.alicdn.com/kf/He91195abecc946bab521a353976d696dd.jpg" alt="">  </p>
+<h2 id="共享库（动态库）"><a href="#共享库（动态库）" class="headerlink" title="共享库（动态库）"></a>共享库（动态库）</h2><p>命名：<code>lib+库的名字+.so</code>，如<code>libmytest.so</code>。<br>制作步骤：<strong>生成与位置无关的代码(.o)</strong>，<code>g++ -fpic -c hello.cpp -o hello1.o</code>。<br><img src="https://ae01.alicdn.com/kf/H32d5e9c01d934a8893efd7eec84bc7beN.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Haca812d55cdc4cf988303ce1095489b7b.jpg" alt=""><br>静态库.o文件存放在代码段，位置固定。动态库文件存放在共享库段，位置不定。<br>打包：<code>g++ -shared -o libtest.so hello1.o</code>。<br><img src="https://ae01.alicdn.com/kf/H1aed291328064596ac84299804e76cb5J.jpg" alt=""><br>用户操作：<code>g++ main.c ./lib/libtest.so -o app -I include</code>。<br><img src="https://ae01.alicdn.com/kf/Hea8eb75b26e9404182674469a22ba3632.jpg" alt="">  </p>
+<h2 id="gdb调试"><a href="#gdb调试" class="headerlink" title="gdb调试"></a>gdb调试</h2><p><strong>在编译的时候加上选项-g，包含了调试信息</strong>。<br><img src="https://ae01.alicdn.com/kf/Hd7ec19ec1deb4663ab97ff7ecefc8fc5P.jpg" alt=""><br><strong>可以看到加上-g编译的可执行文件比不加大很多</strong>。<br><strong>开启gdb</strong>： <code>gdb a1.out</code>。<br><img src="https://ae01.alicdn.com/kf/Hd3c3ab915b8743eb8e75f98962166148k.jpg" alt=""><br><strong>l：查看源代码（默认包含main函数的文件）</strong>。<br><img src="https://ae01.alicdn.com/kf/Hf7f5c27808fd493692d6466248d5eb53d.jpg" alt=""><br><strong><code>break 行数</code>：设置断点</strong>。<br><img src="https://ae01.alicdn.com/kf/H084867a3bb2e4f849060b48df10642043.jpg" alt=""><br><strong><code>break 行数 if 条件</code>：设置条件断点</strong>。<br><img src="https://ae01.alicdn.com/kf/Hb90f5afa3e8d4bf2833a627992fefabfw.jpg" alt=""><br><strong>info break：查看断点信息</strong>。<br><img src="https://ae01.alicdn.com/kf/Heca2a4d8e2ef42ceafc4682be553f33eU.jpg" alt=""><br><strong>start: 启动调试程序。c：断点后继续执行</strong>。<br><img src="https://ae01.alicdn.com/kf/Hb5a60fe1cd9e4b53ba306c1582c23762Q.jpg" alt=""><br><strong>p：查看变量值。 p i 、p j：查看当前断点时刻i、j的值。<br>ptype：查看变量类型。<br>display：追踪变量。<br>n：单步调试。</strong><br><img src="https://ae01.alicdn.com/kf/H324748d0354f41f5a48b6afb8f1cd68cI.jpg" alt=""><br><strong>delete 断点编号：删除断点，断点编号在info b里查看</strong>。<br><img src="https://ae01.alicdn.com/kf/H8af2869de7344c6883aa33c9d8af1d039.jpg" alt=""><br><strong>quit：退出gdb</strong>。<br><img src="https://ae01.alicdn.com/kf/Ha8fbe38781f64dc4b9f75e79bb426d75u.jpg" alt="">   </p>
+<p>关于gcc和gdb的知识就先讲解到这里，下篇将会介绍makefile文件的编写。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux命令5</title>
     <url>/2020/06/03/Linux%E5%91%BD%E4%BB%A45/</url>
     <content><![CDATA[<p>摘要：本篇将首先介绍剩下的两个服务器的搭建，然后再对vim文本编辑器进行简单的介绍，主要讲解它的三种模式下的各种命令。</p>
@@ -10,7 +25,7 @@
 <h2 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h2><p><strong>vim是从vi发展过来的一款文本编辑器</strong>。现在虽然输入的是vi，其实调用的是vim。<br>vim共有三种模式。  </p>
 <h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><p>打开文件之后，默认进入命令模式。<br><img src="https://ae01.alicdn.com/kf/Hf0b7b7ad1bcc4f4ea680e496123539a06.jpg" alt=""><br>光标移动：h、j、k、l。<br>行首：0，行尾：$。<br>移动到文本头部：gg，移动到文本尾部：G。<br>行跳转： 行数 G。<br><strong>删除光标所在字符：x，撤销删除：u。</strong><br>删除4行：4dd，<strong>vim的删除并不是真正的删除，而是剪切，可以粘贴出来：p。</strong><br>p表示粘贴到光标下一行，P则是当前行。<br>复制：yy    复制多行：nyy。<br>可视模式：v，可以自由选择，选择完复制：y，选择完删除：d。<br>查找：/内容。向下遍历：n。  </p>
 <h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><p>需要输入一些命令，切换到编辑模式。<br><strong>a:从光标后面开始插入，A：光标跳到行尾开始插入。</strong><br><img src="https://ae01.alicdn.com/kf/H417cc9f870304bc7aece789637bcfb6aO.jpg" alt=""><br><strong>i:从光标前面开始插入，I：光标跳到行尾开始插入。</strong><br>o:光标所在行下面开辟一个新的行，O：光标所在行上面开辟一个新的行。<br>s:删除光标所在的字符开始插入，S：删除光标所在行开始插入。  </p>
-<h3 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h3><p>在末行模式可以输入一些命令。<strong>命令模式输入冒号进入末行模式</strong>。w：保存文件。q：退出。<br><img src="https://ae01.alicdn.com/kf/Hdccc9bb6ee7f4b58981303067e7f0941a.jpg" alt="">  </p>
+<h3 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h3><p>在末行模式可以输入一些命令。<strong>命令模式输入冒号进入末行模式</strong>。w：保存文件。q：退出。<br><img src="https://ae01.alicdn.com/kf/Hdccc9bb6ee7f4b58981303067e7f0941a.jpg" alt=""><br>sp：水平分屏，vsp：垂直分屏，ctrl+w+w在两个分屏之间切换。<br><img src="https://ae01.alicdn.com/kf/H8457e10a1f7d44608320454bf602b539j.jpg" alt="">  </p>
 <p>关于vim的知识就先到这里，在下一篇中会继续介绍。</p>
 ]]></content>
       <categories>
