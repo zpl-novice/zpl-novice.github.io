@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux学习7</title>
+    <url>/2020/06/07/Linux%E5%AD%A6%E4%B9%A07/</url>
+    <content><![CDATA[<p>摘要：本篇将要介绍makefile文件、虚拟地址空间已经Linux系统IO函数中的open函数，makefile是一个非常重要的代码管理工具，虚拟地址空间在前面也已经有过简单的介绍。</p>
+<a id="more"></a>
+<h2 id="makefile的编写"><a href="#makefile的编写" class="headerlink" title="makefile的编写"></a>makefile的编写</h2><p><strong>makefile是一个项目的代码管理工具，用来管理源代码。将编译源代码的命令统一写入到makefile中</strong>。<br>创建makefile文件。 <code>vi makefile</code> 或<code>touch makefile</code>。<br>makefile规则中有三要素：目标、依赖、命令。<br><img src="https://ae01.alicdn.com/kf/H4d0d24c7f7d9482c879d017478692ad3i.jpg" alt="">  </p>
+<p><img src="https://ae01.alicdn.com/kf/H7eff1c56e07d4013ad94c3a07e094e07F.jpg" alt=""><br>命令make：执行makefile。<br><img src="https://ae01.alicdn.com/kf/H25469836846747acaa3057c15989620bN.jpg" alt=""><br>对makefile进行修改：<br><img src="https://ae01.alicdn.com/kf/H59a8adab967342f681da584ee63a6ab25.jpg" alt=""><br><strong>当有多条规则时，第一条规则里的目标是终极目标，剩下的规则用来生成依赖条件</strong>。<br><img src="https://ae01.alicdn.com/kf/H1fc712e2dc994e7da866b1e2ffeb86aey.jpg" alt=""><br><strong>这样，当有多个文件编译时，若有一些文件修改，makefile只会对修改过的文件进行重新编译，而对没修改过的文件不再编译</strong>。<br>工作原理：<br><strong>比较目标和依赖条件的时间。若目标时间比依赖晚，正常不需更新。若目标时间比依赖早，说明依赖更新过，因此重新编译</strong>。<br>makefile中可以用变量代替复杂的源文件名。<br><img src="https://ae01.alicdn.com/kf/Hd036ca4f75e7488a87c05329db6dc721m.jpg" alt=""><br>模式：  </p>
+<pre><code>%.o:%.c    
+  g++ -c $&lt; -o $@</code></pre><p>%.o和%.c与终极目标中的.c和.o相匹配。<br><strong>自动变量</strong>：<br>$&lt;：规则中的第一个依赖，<br>$@：规则中的目标，<br>$^：规则中的所有依赖。<br><strong>只能在规则的命令中使用</strong>。<br>makefile也有系统自身维护的一些变量，一般都是大写。<br><strong>makefile中的函数：<br>（1）    获取当前目录下所有的.c文件<br>      <code>src=$(wildcard ./*.c)</code><br>（2）    将.c文件替换成.o文件<br><code>obj=$(patsubst ./%.o, ./%.c,$(src))</code></strong><br>初始化：<br><strong>添加clean命令，声明尾目标</strong>。</p>
+<pre><code>.PHONY:clean
+clean：
+       rm ./*.o app</code></pre><p>先 <code>make clean</code>，再make就可以生成新的app。  </p>
+<h2 id="虚拟地址空间"><a href="#虚拟地址空间" class="headerlink" title="虚拟地址空间"></a>虚拟地址空间</h2><p>前面讲过每一个运行的程序，系统都会为其分配一个0-4G的虚拟地址空间。<br><img src="https://ae01.alicdn.com/kf/Haca812d55cdc4cf988303ce1095489b7b.jpg" alt=""><br>内核中的进程管理段：<br><img src="https://ae01.alicdn.com/kf/H2e2f18d4840e46618e73b5b04b897f32U.jpg" alt=""><br><strong>在打开文件时都会有一个文件描述符</strong>。  </p>
+<h2 id="系统IO函数"><a href="#系统IO函数" class="headerlink" title="系统IO函数"></a>系统IO函数</h2><h3 id="open函数"><a href="#open函数" class="headerlink" title="open函数"></a>open函数</h3><p>首先查看open函数的man文档，系统函数位于第二章，<code>man 2 open</code>。<br><img src="https://ae01.alicdn.com/kf/Hd104bae8a5474866905059ca251e21e4L.jpg" alt="">  </p>
+<p><img src="https://ae01.alicdn.com/kf/H626b9a298d514f9688d79e7109dbda35D.jpg" alt=""><br>可以看到，<strong>open函数返回值是前面所讲的文件描述符，如果出错会返回-1，并且errno也会设置成相应的值。errno是全局变量，不同的值表示不同的错误类型。perror函数能显示错误信息</strong>。<br><img src="https://ae01.alicdn.com/kf/Hf4ea9ddcd33e48eeb85fae32a51562b88.jpg" alt=""><br><strong>在调用系统IO函数时，一定要查看man文档，包含其头文件，按格式调用</strong>。  </p>
+<p>在下篇中会介绍剩下的系统IO函数，掌握这些函数是非常有必要的。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux命令6</title>
     <url>/2020/06/05/Linux%E5%91%BD%E4%BB%A46/</url>
     <content><![CDATA[<p>摘要： 本篇将主要介绍gcc的编译、静态库和动态库的制作、gdb的调试等相关的命令，这些都是基础的命令，对于我们在Linux上编程是必须要掌握的。</p>
