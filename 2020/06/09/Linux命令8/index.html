@@ -46,35 +46,30 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
+  <meta name="description" content="摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图的基本知识">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:title" content="Linux命令8">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
+<meta property="og:description" content="摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png">
-<meta property="article:published_time" content="2020-04-04T12:48:28.776Z">
-<meta property="article:modified_time" content="2020-04-04T13:46:58.361Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H4b8c4aa04ff0422d8d7e7296838a35777.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H4e75d9db586d4f89be7eb1b82ff18da42.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H3effe84422d24202bfe768ecb1e58401e.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha5ca78c423b4437086462da7213fac7dJ.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hbf2ee9aab65d46989d405244908519ecV.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6f671b71e1ed4cf1bb03f6cb1f93d3a58.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H386354e5e135450ea8560afb2325d758G.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/He479d7e37b73406f842c903cfbb1cd0cT.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H2541d289606f49fcb7b9bd1f0d35df86u.jpg">
+<meta property="article:published_time" content="2020-06-09T07:40:55.606Z">
+<meta property="article:modified_time" content="2020-06-09T07:52:49.314Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/">
 
 
 <script id="page-configurations">
@@ -86,7 +81,7 @@
   };
 </script>
 
-  <title>图的基本知识 | zpl-novice</title>
+  <title>Linux命令8 | zpl-novice</title>
   
 
 
@@ -216,7 +211,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -229,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          图的基本知识
+          Linux命令8
         </h1>
 
         <div class="post-meta">
@@ -240,7 +235,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-04 20:48:28 / 修改时间：21:46:58" itemprop="dateCreated datePublished" datetime="2020-04-04T20:48:28+08:00">2020-04-04</time>
+              <time title="创建时间：2020-06-09 15:40:55 / 修改时间：15:52:49" itemprop="dateCreated datePublished" datetime="2020-06-09T15:40:55+08:00">2020-06-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,8 +243,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -260,7 +255,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>497</span>
             </span>
 
         </div>
@@ -272,15 +267,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。</p>
+        <p>摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。</p>
 <a id="more"></a>
-<p>线性表中数据元素是线性关系，都是只有一个直接前驱和直接后继，在树中数据之间有着明显的层次关系。图是一种比线性表和树更复杂的数据结构。在图形结构中，结点之间的关系可以是任意的，图中任意两个元素之间都可能相关。<br>图是由顶点的有穷非空集合和顶点之间的边的集合组成，通常表示为：G（V，E），其中G表示一个图，V是图G中顶点的集合，E是图G中边的集合。<br><img src="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png" alt=""><br>线性表中数据元素叫元素，树中则叫结点，而在图中叫顶点。有空表和空树，但是没有空图这个概念，即<strong>在图结构中，不允许没有顶点</strong>。顶点之间的逻辑关系用边来表示。<br>下面来讲解图的一些基本概念：<br>无向边是指两个顶点之间的边没有方向，(vi,vj)表示。任意的边都是无向边的图为无向图，如下所示。<br><img src="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png" alt=""><br>有向边则是两个顶点之间的边有方向，也称为弧。&lt;vi,vj&gt;表示，其中vi称为弧尾，vj称为弧头。任意的边都是有向边的图为有向图，如下所示，A,D之间的边为&lt;A,D&gt;。<br><img src="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png" alt=""><br><strong>不存在顶点到自身的边，且同一条边不重复出现的图称为简单图</strong>，我们后面要学习的基本都是简单图。<br>在无向图中，如果任意两个顶点之间都存在边，则称为无向完全图。<br><img src="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png" alt=""><br>根据无向完全图的定义可得，N个顶点，共有<code>N*(N-1)/2</code>条边。<br>在有向图中，如果任意两个顶点之间都存在方向互为相反的两条弧，则称为有向完全图。<br><img src="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png" alt=""><br>根据有向完全图的定义可得，N个顶点，共有<code>N*(N-1)</code>条边。<br>与图的边或弧相关的数叫做权。这种带权的图通常称为网。权可以表示一个顶点到另一个顶点的距离或耗费。如下所示：<br><img src="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png" alt=""><br>如果一个图的顶点和边都是另一个图的顶点和边的集合的子集，则这个图为另一个图的子图。如下所示，右边的图为左边图的子图。 </p>
-<p><img src="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png" alt="">  </p>
-<p>顶点V的度是和V相关联的边的数目。在有向图中，以顶点v为头的弧的数目称为v的入度，以顶点v为尾的弧的数目称为v的出度。<strong>V的度等于出度与入度之和</strong>。<br>路径的长度是路径上边或弧的数目。到自身的路径为回路，<strong>回路中各顶点只出现一次的叫简单回路</strong>。<br>如果图中任意两个顶点都是连通的（即有路径从一个顶点到另一个顶点），则为连通图。下图左边不是连通图，右边是。<br><img src="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png" alt=""><br>一个连通图的生成树是一个极小的连通子图，它含有图中全部的n个顶点，但只有足以构成一棵树的n-1条边。如果一个有向图恰有一个顶点的入度为0，其余顶点的入度均为1，则是一棵有向树。一个有向图的生成森林由若干棵有向树组成，含有图中全部顶点，但只有足以构成若干棵不相交的有向树的弧。如下图1的生成森林为图2和图3。<br><img src="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png" alt="">  </p>
-<h2 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h2><h3 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h3><p>图由顶点和边或弧两部分组成。合在一起比较困难，用两个结构来存储。<br>图的邻接矩阵存储方式是用两个数组来表示图。一个一维数组存储图中顶点信息，一个二维数组（称为邻接矩阵）存储图中边或弧的信息。设图G有n个顶点，则邻接矩阵是一个n*n的方阵。<br><img src="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png" alt=""><br><img src="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png" alt=""><br><img src="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png" alt=""><br>邻接矩阵对于边数相对顶点较少的图，对空间会很大浪费。  </p>
-<h3 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h3><p>参考树的孩子表示法。<br>数组与链表相结合的存储方法称为邻接表。<br><img src="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png" alt=""><br>在有向图中，若以顶点为弧尾来存储，则为邻接表（方便查找出度）。若以顶点为弧头来存储，为逆邻接表（方便查找入度）。<br><img src="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png" alt="">  </p>
-<h3 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h3><p>边集数组由两个一维数组组成。一个存储顶点的信息，一个存储边的信息。<br><img src="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png" alt="">  </p>
-<p>此外，还有将邻接表与逆邻接表结合，既能得到出度又能得到入度的十字链表表示法，以及对无向图邻接表进行优化的邻接多重表表示法等。</p>
+<h3 id="read和write函数"><a href="#read和write函数" class="headerlink" title="read和write函数"></a>read和write函数</h3><p>查看read函数的man文档。<br><img src="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg" alt=""><br><strong>返回值：-1表示读文件失败，0表示文件读完，&gt;0表示读取的字节</strong>。<br>查看write函数的man文档。<br><img src="https://ae01.alicdn.com/kf/H4b8c4aa04ff0422d8d7e7296838a35777.jpg" alt=""><br>读写操作：读一个大文件并将其写到另一个文件中。<strong>创建.c文件来实现上述操作</strong>。<br><img src="https://ae01.alicdn.com/kf/H4e75d9db586d4f89be7eb1b82ff18da42.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H3effe84422d24202bfe768ecb1e58401e.jpg" alt="">  </p>
+<h3 id="lseek函数"><a href="#lseek函数" class="headerlink" title="lseek函数"></a>lseek函数</h3><p>查看lseek的man文档。lseek用来移动文件指针或获取文件长度、文件拓展。<br><img src="https://ae01.alicdn.com/kf/Ha5ca78c423b4437086462da7213fac7dJ.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hbf2ee9aab65d46989d405244908519ecV.jpg" alt="">  </p>
+<h2 id="文件操作函数"><a href="#文件操作函数" class="headerlink" title="文件操作函数"></a>文件操作函数</h2><p>stat函数：获取文件的信息。<br><img src="https://ae01.alicdn.com/kf/H6f671b71e1ed4cf1bb03f6cb1f93d3a58.jpg" alt=""><br>它的man文档为：<br><img src="https://ae01.alicdn.com/kf/H386354e5e135450ea8560afb2325d758G.jpg" alt=""><br>可以看到，作用跟ls -l命令很像。<br>lstat函数：<br>不穿透符号链接。只能读到链接文件，而不能追踪到映射的文件。<br>access函数：<br>测试指定文件是否拥有某种权限。<br><img src="https://ae01.alicdn.com/kf/He479d7e37b73406f842c903cfbb1cd0cT.jpg" alt=""><br>chmod函数：<br>改变文件权限。<br>chown函数：<br>改变文件所有者。<br>truncate函数：<br><strong>截断文件。如果第二个参数比文件大，则会对文件进行拓展，反之进行截断</strong>。<br><img src="https://ae01.alicdn.com/kf/H2541d289606f49fcb7b9bd1f0d35df86u.jpg" alt=""><br>rename函数：<br>对文件进行重命名。<br>fcntl函数：<br>改变已经打开的文件的属性。  </p>
+<p>还有很多的函数，在这里就不一一介绍，我们需要记住一些常见的函数来方便我们对系统进行操作。  </p>
 
     </div>
 
@@ -296,7 +288,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/" title="图的基本知识">https://zpl-novice.github.io/2020/04/04/图的基本知识/</a>
+    <a href="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/" title="Linux命令8">https://zpl-novice.github.io/2020/06/09/Linux命令8/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -313,13 +305,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/" rel="prev" title="排序算法4">
-      <i class="fa fa-chevron-left"></i> 排序算法4
+    <a href="/2020/06/07/Linux%E5%AD%A6%E4%B9%A07/" rel="prev" title="Linux命令7">
+      <i class="fa fa-chevron-left"></i> Linux命令7
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/07/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="next" title="拓扑排序">
-      拓扑排序 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -379,7 +368,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的存储"><span class="nav-number">1.</span> <span class="nav-text">图的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接矩阵"><span class="nav-number">1.1.</span> <span class="nav-text">邻接矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接表"><span class="nav-number">1.2.</span> <span class="nav-text">邻接表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边集数组"><span class="nav-number">1.3.</span> <span class="nav-text">边集数组</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#read和write函数"><span class="nav-number">1.</span> <span class="nav-text">read和write函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lseek函数"><span class="nav-number">2.</span> <span class="nav-text">lseek函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作函数"><span class="nav-number"></span> <span class="nav-text">文件操作函数</span></a></div>
       </div>
       <!--/noindex-->
 

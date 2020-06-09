@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux学习7</title>
+    <title>Linux命令8</title>
+    <url>/2020/06/09/Linux%E5%91%BD%E4%BB%A48/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。</p>
+<a id="more"></a>
+<h3 id="read和write函数"><a href="#read和write函数" class="headerlink" title="read和write函数"></a>read和write函数</h3><p>查看read函数的man文档。<br><img src="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg" alt=""><br><strong>返回值：-1表示读文件失败，0表示文件读完，&gt;0表示读取的字节</strong>。<br>查看write函数的man文档。<br><img src="https://ae01.alicdn.com/kf/H4b8c4aa04ff0422d8d7e7296838a35777.jpg" alt=""><br>读写操作：读一个大文件并将其写到另一个文件中。<strong>创建.c文件来实现上述操作</strong>。<br><img src="https://ae01.alicdn.com/kf/H4e75d9db586d4f89be7eb1b82ff18da42.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H3effe84422d24202bfe768ecb1e58401e.jpg" alt="">  </p>
+<h3 id="lseek函数"><a href="#lseek函数" class="headerlink" title="lseek函数"></a>lseek函数</h3><p>查看lseek的man文档。lseek用来移动文件指针或获取文件长度、文件拓展。<br><img src="https://ae01.alicdn.com/kf/Ha5ca78c423b4437086462da7213fac7dJ.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hbf2ee9aab65d46989d405244908519ecV.jpg" alt="">  </p>
+<h2 id="文件操作函数"><a href="#文件操作函数" class="headerlink" title="文件操作函数"></a>文件操作函数</h2><p>stat函数：获取文件的信息。<br><img src="https://ae01.alicdn.com/kf/H6f671b71e1ed4cf1bb03f6cb1f93d3a58.jpg" alt=""><br>它的man文档为：<br><img src="https://ae01.alicdn.com/kf/H386354e5e135450ea8560afb2325d758G.jpg" alt=""><br>可以看到，作用跟ls -l命令很像。<br>lstat函数：<br>不穿透符号链接。只能读到链接文件，而不能追踪到映射的文件。<br>access函数：<br>测试指定文件是否拥有某种权限。<br><img src="https://ae01.alicdn.com/kf/He479d7e37b73406f842c903cfbb1cd0cT.jpg" alt=""><br>chmod函数：<br>改变文件权限。<br>chown函数：<br>改变文件所有者。<br>truncate函数：<br><strong>截断文件。如果第二个参数比文件大，则会对文件进行拓展，反之进行截断</strong>。<br><img src="https://ae01.alicdn.com/kf/H2541d289606f49fcb7b9bd1f0d35df86u.jpg" alt=""><br>rename函数：<br>对文件进行重命名。<br>fcntl函数：<br>改变已经打开的文件的属性。  </p>
+<p>还有很多的函数，在这里就不一一介绍，我们需要记住一些常见的函数来方便我们对系统进行操作。  </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux命令7</title>
     <url>/2020/06/07/Linux%E5%AD%A6%E4%B9%A07/</url>
     <content><![CDATA[<p>摘要：本篇将要介绍makefile文件、虚拟地址空间已经Linux系统IO函数中的open函数，makefile是一个非常重要的代码管理工具，虚拟地址空间在前面也已经有过简单的介绍。</p>
 <a id="more"></a>
