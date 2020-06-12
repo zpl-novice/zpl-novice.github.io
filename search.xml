@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程1</title>
+    <url>/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/</url>
+    <content><![CDATA[<p>摘要：本篇开始将进入Linux系统编程的学习，其中有部分知识是计算机操作系统组成原理，通过对系统编程的学习，能够让我们更加深入的了解Linux。本篇将主要介绍进程相关知识。</p>
+<a id="more"></a>
+<h2 id="进程相关概念"><a href="#进程相关概念" class="headerlink" title="进程相关概念"></a>进程相关概念</h2><p><strong>首先要明白程序和进程的关系</strong>。<br><strong>程序：编译好的二进制文件，在磁盘上，不占用系统资源（cpu、内存、打开的文件、设备、锁）</strong>。<br><strong>进程：是一个抽象的概念，与操作系统原理联系紧密，进程是活跃的程序，占用系统资源，在内存中执行。（程序运行起来，产生一个进程）</strong>。<br>如果把程序比作剧本，那么进程就是戏，它需要舞台、灯光、演员等条件。这相当于<strong>系统资源</strong>。<br>同一个剧本可以在多个舞台同时上演，同样，<strong>同一个程序可以加载为不同的进程（彼此之间互不影响）</strong>。  </p>
+<h2 id="单道程序设计模式"><a href="#单道程序设计模式" class="headerlink" title="单道程序设计模式"></a>单道程序设计模式</h2><p>单道程序设计模式是指cpu同一时刻只能运行一个进程，其他程序只能等该进程结束再运行。<br><img src="https://ae01.alicdn.com/kf/H81a4c0323d4f40fc8dd4e952921fcbfbs.jpg" alt="">    </p>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p><strong>并发是宏观上的并行运行，是多道程序设计模型。多个进程被分成多个时间片，因为硬件手段的时钟中断，cpu在一个时间片处理一个进程，各进程交替</strong>。<br><img src="https://ae01.alicdn.com/kf/H50d35cb0c09f479392a724848f904dc2R.jpg" alt=""><br><strong>由于cpu处理速度非常快，所以看似多个进程同时在运行。实际上，并发是宏观并行，微观串行。在一个时刻点cpu仍然只有一个进程</strong>。  </p>
+<h2 id="cpu和mmu"><a href="#cpu和mmu" class="headerlink" title="cpu和mmu"></a>cpu和mmu</h2><p>中央处理器（cpu）：<br><img src="https://ae01.alicdn.com/kf/H0fa3b2803e004ca080d4b038e1c9a1562.jpg" alt=""><br>内存管理单元（mmu）：<br><img src="https://ae01.alicdn.com/kf/H99c07256267347ec83647f745d5b28a1B.jpg" alt="">  </p>
+<h2 id="进程控制块PCB"><a href="#进程控制块PCB" class="headerlink" title="进程控制块PCB"></a>进程控制块PCB</h2><p><strong>每个进程在内核中都有一个进程控制块（PCB）来维护进程相关的信息，Linux内核的进程控制块是task_struct结构体</strong>。内部有如下部分成员： </p>
+<p><strong>进程id</strong>。系统中每个进程都有唯一的id，在C语言中用pid_t类型表示，其实就是一个非负整数。<br><strong>进程的状态</strong>。有初始化、就绪、运行、挂起、停机等状态。<br><strong>进程切换时需要保存和恢复的一些CPU寄存器。<br>描述虚拟地址空间的信息。<br>描述控制终端的信息。<br>当前工作目录。<br>umask掩码</strong>。<br><strong>文件描述符表</strong>。包含很多指向file结构体的指针。<br><strong>和信号相关的信息。<br>用户id和组id。<br>会话和进程组。<br>进程可以使用的资源上限。</strong>  </p>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p>环境变量是指在操作系统中用来指定操作系统运行环境的一些参数，通常具备以下特征：<br>（1）字符串（2）有统一的格式：名=值（：值）（3）值用来描述进程环境信息。<br>存储形式、使用形式、加载位置都与命令行参数类似。<br>使用时需要引入全局环境变量表，<code>extren char **environ</code>。<br>常用环境变量：<br><strong>PATH：可执行文件的搜索路径</strong>。如ls命令也是一个程序，执行它不需要提供完整的路径名/bin/ls，但我们在执行文件a.out却需要给路径名，这就是因为PATH环境变量的值里包含了ls命令所在的目录。<br><strong>SHELL：当前Shell，通常是/bin/bash</strong>。<br>T<strong>ERM：当前终端类型</strong>，在图形界面终端下它的值通常是xtrem。<br>LANG：语言和locale。<br>HOME：当前用户主目录的路径。<br>环境变量操作函数：<br><strong>getenv函数：获取环境变量值。<br>setenv函数：设置环境变量值。<br>unsetenv函数：删除环境变量值</strong>。  </p>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p><strong>创建子进程：fork函数</strong>。<br><img src="https://ae01.alicdn.com/kf/H0eec814f40884905994497408df16aa8v.jpg" alt="">  </p>
+<p><strong>返回值有两个：返回子进程的pid 和 0。（父进程返回的是pid，子进程返回的是0）</strong><br><img src="https://ae01.alicdn.com/kf/H2336834fb4314936949e723ce71782d2N.jpg" alt=""><br>函数调用：<br><img src="https://ae01.alicdn.com/kf/H5a9dcec0126a412bbc6f06b35f4a94d8m.jpg" alt=""><br>创建了一个子进程。结果为：<br><img src="https://ae01.alicdn.com/kf/Hff5d4aa4c0ff44f6aa7873e2894f12dcr.jpg" alt=""><br>可以看到父进程的pid是5331，子进程的pid是5332。<strong>因为有两个进程，所以YYYY被打印了两次</strong>。<br>循环创建N个子进程：<br><strong>不能只使用for循环。因为已经创建过的子进程也会创建新的子进程，使进程数增加。需要在循环里将生成的子进程break，跳出for循环，不再参与下次的循环</strong>。<br><img src="https://ae01.alicdn.com/kf/Hc1f648cc192c4b25a9481df72fa3af71Q.jpg" alt=""><br><strong>如果没有sleep，那父进程和子进程会互相抢占cpu，输出顺序不定。<br>甚至父进程的父进程Shell也会参与进来</strong>。  </p>
+<p>在下篇中将会继续介绍进程相关的知识。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux命令8</title>
     <url>/2020/06/09/Linux%E5%91%BD%E4%BB%A48/</url>
     <content><![CDATA[<p>摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。</p>

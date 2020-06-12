@@ -46,22 +46,29 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将进入Linux操作系统的学习，在开始之际，先对Linux做一个简单的介绍，它是如何产生的？Linux有哪些分类？以及Linux的优缺点。">
+  <meta name="description" content="摘要：本篇开始将进入Linux系统编程的学习，其中有部分知识是计算机操作系统组成原理，通过对系统编程的学习，能够让我们更加深入的了解Linux。本篇将主要介绍进程相关知识。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux介绍">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:title" content="Linux系统编程1">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将进入Linux操作系统的学习，在开始之际，先对Linux做一个简单的介绍，它是如何产生的？Linux有哪些分类？以及Linux的优缺点。">
+<meta property="og:description" content="摘要：本篇开始将进入Linux系统编程的学习，其中有部分知识是计算机操作系统组成原理，通过对系统编程的学习，能够让我们更加深入的了解Linux。本篇将主要介绍进程相关知识。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H688517caeb33446e96f6ee6518ef93d9R.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H507ecda6affd4e5dad3fefd09ca76794U.jpg">
-<meta property="article:published_time" content="2020-05-22T12:01:24.754Z">
-<meta property="article:modified_time" content="2020-05-27T07:16:59.140Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H81a4c0323d4f40fc8dd4e952921fcbfbs.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H50d35cb0c09f479392a724848f904dc2R.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0fa3b2803e004ca080d4b038e1c9a1562.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H99c07256267347ec83647f745d5b28a1B.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0eec814f40884905994497408df16aa8v.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H2336834fb4314936949e723ce71782d2N.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H5a9dcec0126a412bbc6f06b35f4a94d8m.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hff5d4aa4c0ff44f6aa7873e2894f12dcr.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc1f648cc192c4b25a9481df72fa3af71Q.jpg">
+<meta property="article:published_time" content="2020-06-12T08:14:20.289Z">
+<meta property="article:modified_time" content="2020-06-12T08:36:04.939Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H688517caeb33446e96f6ee6518ef93d9R.jpg">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H81a4c0323d4f40fc8dd4e952921fcbfbs.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/">
 
 
 <script id="page-configurations">
@@ -73,7 +80,7 @@
   };
 </script>
 
-  <title>Linux介绍 | zpl-novice</title>
+  <title>Linux系统编程1 | zpl-novice</title>
   
 
 
@@ -203,7 +210,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -216,7 +223,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux介绍
+          Linux系统编程1
         </h1>
 
         <div class="post-meta">
@@ -225,16 +232,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-05-22 20:01:24" itemprop="dateCreated datePublished" datetime="2020-05-22T20:01:24+08:00">2020-05-22</time>
+              <time title="创建时间：2020-06-12 16:14:20 / 修改时间：16:36:04" itemprop="dateCreated datePublished" datetime="2020-06-12T16:14:20+08:00">2020-06-12</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-27 15:16:59" itemprop="dateModified" datetime="2020-05-27T15:16:59+08:00">2020-05-27</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -253,7 +254,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
+              <span>1.5k</span>
             </span>
 
         </div>
@@ -265,15 +266,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将进入Linux操作系统的学习，在开始之际，先对Linux做一个简单的介绍，它是如何产生的？Linux有哪些分类？以及Linux的优缺点。</p>
+        <p>摘要：本篇开始将进入Linux系统编程的学习，其中有部分知识是计算机操作系统组成原理，通过对系统编程的学习，能够让我们更加深入的了解Linux。本篇将主要介绍进程相关知识。</p>
 <a id="more"></a>
-<p>在介绍Linux之前，需要先来介绍一下Unix。</p>
-<h2 id="Unix"><a href="#Unix" class="headerlink" title="Unix"></a>Unix</h2><p>Unix是1969年汤普森在贝尔实验室开发出的系统原型，由汇编编写而成。在1973年经C语言改写，方便移植，因为Unix的好用性并且开源，很为学生和教授喜欢。但是贝尔实验室属于AT&amp;T公司，AT&amp;T公司为了盈利，在1979年收回版权，不对学生开源。<br>斯蒂曼原本是一个黑客，他为了解决Unix问题，不受专利软件的限制，提出了GNU，<strong>GNU is Not Unix的递归缩写，由斯蒂曼在1984年发起，旨在构建一个自由、开放的操作系统</strong>。<br>斯蒂曼重新开发<strong>自由</strong>的工具软件并推广。开发<strong>GCC</strong>（<strong>GNU的C语言编译器</strong>，如今仍在使用）等其他基础的软件便于自由软件的发展。同时他<strong>开放这些软件的源代码</strong>，允许复制、修改、传播。为了防止自由软件被其他人做成专利软件，制定<strong>GPL授权</strong>。GPL：通用公共许可证。与专利软件的授权截然相反，允许自由使用。<br><strong>但当时并没有设计出GNU操作系统的内核，只有自由软件，仍然在Unix上运行</strong>。  </p>
-<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>1991年，芬兰大学生图瓦达开发出<strong>基于x86系统的Linux内核</strong>，经过虚拟团队的维护逐渐发展壮大并被移植到其他的硬件系统上。因此出现了Linux这一操作系统。<br>由于<strong>Linux是一个自由软件，具有GPL授权</strong>，因为有许多种不同的版本。下面介绍其主要的3个版本：<br>1.Ubuntu，2004年9月发布，最为流行的 <strong>桌面</strong> Linux发行版。对于个人用户较为合适。<br>2.RedHat，<strong>使用最广，性能最稳</strong>。<br>3.CentOS，2003年底推出，rhel的重新编译版，免费。<br>Linux的优点有：<br>1.性能稳定<br>2.较高的安全性和Bug的快速修复<br>3.支持多用户多任务<br>4.完善的用户和群组策略<br>5.资源耗费低<br>6.适合嵌入式应用<br>7.免费或费用低廉<br>缺点有：<br>1.专业软件支持不够，不像windows有丰富的软件。<br>2.厂商支持度不够，因为有多种版本，且非盈利。<br>3.标准化不足  </p>
-<p>本次的学习将主要通过VMware软件建立虚拟机，然后在虚拟机上装Linux系统来进行对Linux的学习。下图为Linux的目录树结构：<br><img src="https://ae01.alicdn.com/kf/H688517caeb33446e96f6ee6518ef93d9R.jpg" alt=""><br>根目录root用/表示，Linux中所有东西以文件形式存在。/home/oracle/bin/..<br>下面介绍一下一些主要目录：<br>/bin：bin是binary的缩写，这个目录存放着最经常使用的命令。<br>/boot：存放的是启动Linux时使用的一些核心文件，包括一些连接文件和镜像文件。最好不要对其进行改动。<br>/dev：dev是设备device的缩写，存放Linux的外部设备。一切皆文件。<br>/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。在后续对配置文件修改时会经常用到。<br>/home：存放所有用户的子目录（不包括root）。<br>/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于windows里的dll文件，几乎所有的程序都需要用到这些文件。<br>/media和/mnt：挂载外设的，如U盘、光驱等。<br>/root：系统管理员，超级用户的主目录。<br>/usr：这是一个非常重要的目录，user software resource，用户软件资源，用户的很多应用程序和文件都在这个目录下。  </p>
-<p>在装Linux系统时需要进行磁盘分区，如同windows中的C盘、D盘等。那么怎么把Linux中的文件与磁盘相对应呢？即将文件系统和目录挂载到磁盘上。<strong>Windows中每一个磁盘分区，如C盘就相当于一个根目录，而Linux只有一个根目录</strong>。  </p>
-<p><img src="https://ae01.alicdn.com/kf/H507ecda6affd4e5dad3fefd09ca76794U.jpg" alt="">  </p>
-<p><strong>将某一个文件挂载到一个磁盘或分区上，该文件为挂载点</strong>。则该文件的子文件就在该分区内。根目录必须要挂载到一个磁盘或分区上。这样，就有可能<strong>一个目录下的子目录可能保存在不同的分区或磁盘</strong>上。  </p>
+<h2 id="进程相关概念"><a href="#进程相关概念" class="headerlink" title="进程相关概念"></a>进程相关概念</h2><p><strong>首先要明白程序和进程的关系</strong>。<br><strong>程序：编译好的二进制文件，在磁盘上，不占用系统资源（cpu、内存、打开的文件、设备、锁）</strong>。<br><strong>进程：是一个抽象的概念，与操作系统原理联系紧密，进程是活跃的程序，占用系统资源，在内存中执行。（程序运行起来，产生一个进程）</strong>。<br>如果把程序比作剧本，那么进程就是戏，它需要舞台、灯光、演员等条件。这相当于<strong>系统资源</strong>。<br>同一个剧本可以在多个舞台同时上演，同样，<strong>同一个程序可以加载为不同的进程（彼此之间互不影响）</strong>。  </p>
+<h2 id="单道程序设计模式"><a href="#单道程序设计模式" class="headerlink" title="单道程序设计模式"></a>单道程序设计模式</h2><p>单道程序设计模式是指cpu同一时刻只能运行一个进程，其他程序只能等该进程结束再运行。<br><img src="https://ae01.alicdn.com/kf/H81a4c0323d4f40fc8dd4e952921fcbfbs.jpg" alt="">    </p>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p><strong>并发是宏观上的并行运行，是多道程序设计模型。多个进程被分成多个时间片，因为硬件手段的时钟中断，cpu在一个时间片处理一个进程，各进程交替</strong>。<br><img src="https://ae01.alicdn.com/kf/H50d35cb0c09f479392a724848f904dc2R.jpg" alt=""><br><strong>由于cpu处理速度非常快，所以看似多个进程同时在运行。实际上，并发是宏观并行，微观串行。在一个时刻点cpu仍然只有一个进程</strong>。  </p>
+<h2 id="cpu和mmu"><a href="#cpu和mmu" class="headerlink" title="cpu和mmu"></a>cpu和mmu</h2><p>中央处理器（cpu）：<br><img src="https://ae01.alicdn.com/kf/H0fa3b2803e004ca080d4b038e1c9a1562.jpg" alt=""><br>内存管理单元（mmu）：<br><img src="https://ae01.alicdn.com/kf/H99c07256267347ec83647f745d5b28a1B.jpg" alt="">  </p>
+<h2 id="进程控制块PCB"><a href="#进程控制块PCB" class="headerlink" title="进程控制块PCB"></a>进程控制块PCB</h2><p><strong>每个进程在内核中都有一个进程控制块（PCB）来维护进程相关的信息，Linux内核的进程控制块是task_struct结构体</strong>。内部有如下部分成员： </p>
+<p><strong>进程id</strong>。系统中每个进程都有唯一的id，在C语言中用pid_t类型表示，其实就是一个非负整数。<br><strong>进程的状态</strong>。有初始化、就绪、运行、挂起、停机等状态。<br><strong>进程切换时需要保存和恢复的一些CPU寄存器。<br>描述虚拟地址空间的信息。<br>描述控制终端的信息。<br>当前工作目录。<br>umask掩码</strong>。<br><strong>文件描述符表</strong>。包含很多指向file结构体的指针。<br><strong>和信号相关的信息。<br>用户id和组id。<br>会话和进程组。<br>进程可以使用的资源上限。</strong>  </p>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p>环境变量是指在操作系统中用来指定操作系统运行环境的一些参数，通常具备以下特征：<br>（1）字符串（2）有统一的格式：名=值（：值）（3）值用来描述进程环境信息。<br>存储形式、使用形式、加载位置都与命令行参数类似。<br>使用时需要引入全局环境变量表，<code>extren char **environ</code>。<br>常用环境变量：<br><strong>PATH：可执行文件的搜索路径</strong>。如ls命令也是一个程序，执行它不需要提供完整的路径名/bin/ls，但我们在执行文件a.out却需要给路径名，这就是因为PATH环境变量的值里包含了ls命令所在的目录。<br><strong>SHELL：当前Shell，通常是/bin/bash</strong>。<br>T<strong>ERM：当前终端类型</strong>，在图形界面终端下它的值通常是xtrem。<br>LANG：语言和locale。<br>HOME：当前用户主目录的路径。<br>环境变量操作函数：<br><strong>getenv函数：获取环境变量值。<br>setenv函数：设置环境变量值。<br>unsetenv函数：删除环境变量值</strong>。  </p>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p><strong>创建子进程：fork函数</strong>。<br><img src="https://ae01.alicdn.com/kf/H0eec814f40884905994497408df16aa8v.jpg" alt="">  </p>
+<p><strong>返回值有两个：返回子进程的pid 和 0。（父进程返回的是pid，子进程返回的是0）</strong><br><img src="https://ae01.alicdn.com/kf/H2336834fb4314936949e723ce71782d2N.jpg" alt=""><br>函数调用：<br><img src="https://ae01.alicdn.com/kf/H5a9dcec0126a412bbc6f06b35f4a94d8m.jpg" alt=""><br>创建了一个子进程。结果为：<br><img src="https://ae01.alicdn.com/kf/Hff5d4aa4c0ff44f6aa7873e2894f12dcr.jpg" alt=""><br>可以看到父进程的pid是5331，子进程的pid是5332。<strong>因为有两个进程，所以YYYY被打印了两次</strong>。<br>循环创建N个子进程：<br><strong>不能只使用for循环。因为已经创建过的子进程也会创建新的子进程，使进程数增加。需要在循环里将生成的子进程break，跳出for循环，不再参与下次的循环</strong>。<br><img src="https://ae01.alicdn.com/kf/Hc1f648cc192c4b25a9481df72fa3af71Q.jpg" alt=""><br><strong>如果没有sleep，那父进程和子进程会互相抢占cpu，输出顺序不定。<br>甚至父进程的父进程Shell也会参与进来</strong>。  </p>
+<p>在下篇中将会继续介绍进程相关的知识。</p>
 
     </div>
 
@@ -289,7 +293,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/05/22/Linux%E4%BB%8B%E7%BB%8D/" title="Linux介绍">https://zpl-novice.github.io/2020/05/22/Linux介绍/</a>
+    <a href="https://zpl-novice.github.io/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/" title="Linux系统编程1">https://zpl-novice.github.io/2020/06/12/Linux系统编程1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -306,13 +310,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/13/k-d%E6%A0%91%E5%92%8C%E9%85%8D%E5%AF%B9%E5%A0%86/" rel="prev" title="k-d树和配对堆">
-      <i class="fa fa-chevron-left"></i> k-d树和配对堆
+    <a href="/2020/06/09/Linux%E5%91%BD%E4%BB%A48/" rel="prev" title="Linux命令8">
+      <i class="fa fa-chevron-left"></i> Linux命令8
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/05/25/Shell%E5%9F%BA%E7%A1%80/" rel="next" title="Shell命令1">
-      Shell命令1 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -372,7 +373,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unix"><span class="nav-number">1.</span> <span class="nav-text">Unix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux"><span class="nav-number">2.</span> <span class="nav-text">Linux</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程相关概念"><span class="nav-number">1.</span> <span class="nav-text">进程相关概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单道程序设计模式"><span class="nav-number">2.</span> <span class="nav-text">单道程序设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发"><span class="nav-number">3.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu和mmu"><span class="nav-number">4.</span> <span class="nav-text">cpu和mmu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程控制块PCB"><span class="nav-number">5.</span> <span class="nav-text">进程控制块PCB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-number">6.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程控制"><span class="nav-number">7.</span> <span class="nav-text">进程控制</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
