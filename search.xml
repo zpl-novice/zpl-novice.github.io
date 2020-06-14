@@ -2,6 +2,21 @@
 <search>
   <entry>
     <title>Linux系统编程1</title>
+    <url>/2020/06/14/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B2/</url>
+    <content><![CDATA[<p>摘要：本篇将继续对进程的学习，主要介绍父子进程共享、exec函数族、回收子进程的相关知识，wait和waitpid函数是用来回收子进程的两个主要函数。</p>
+<a id="more"></a>
+<h2 id="父子进程共享"><a href="#父子进程共享" class="headerlink" title="父子进程共享"></a>父子进程共享</h2><p>刚fork之后：<br>父子相同处（0-3G）：全局变量、.data、.txt、栈、堆、环境变量、用户id、宿主目录、进程工作目录、信号处理方式..<br>父子不同处（PCB）：进程ID、fork返回值、各自的父进程ID、进程运行时间、闹钟（定时器）、未决信号集<br><strong>父子进程间遵循读时共享写时复制的原则，这样设计，不论子进程执行父进程的逻辑还是执行自己的逻辑都能节省内存开销</strong>。<br>父子进程共享：<strong>文件描述符、mmap建立的映射区</strong>。  </p>
+<h2 id="exec函数族"><a href="#exec函数族" class="headerlink" title="exec函数族"></a>exec函数族</h2><p>fork创建子进程以后执行的是和父进程相同的程序（但有可能执行不同的代码分支），<strong>子进程往往要调用一种exec函数以执行另一个程序，当进程调用一种exec函数时，该进程的用户空间代码和数据完全被新程序替换</strong>，从新程序的启动例程开始执行。<strong>调用exec并不创建新进程，所以调用exec前后该进程的id并未改变</strong>。<br><strong>execlp函数：加载一个进程，借助PATH环境变量</strong>。<br><img src="https://ae01.alicdn.com/kf/H6aa738abcd9d4130aaf13987e489c219H.jpg" alt=""><br>如在子进程中调用execlp函数打开ls指令：<br><img src="https://ae01.alicdn.com/kf/H17d85f1518b1435ea6b58198066f7339o.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hdd1652c9b3214a3b8c5a190894e4c8fei.jpg" alt=""><br><strong>execl函数：加载一个进程，通过路径+程序名来加载</strong>。<br>只需要将上面的execlp函数修改为：<br><img src="https://ae01.alicdn.com/kf/H5e4715f76cb5405dabb8c0854561d2abD.jpg" alt=""><br>因此，可以<strong>加载自己自定义的程序</strong>。<br>此外，还有execv、execle、execvp、execvpe函数。  </p>
+<h2 id="回收子进程"><a href="#回收子进程" class="headerlink" title="回收子进程"></a>回收子进程</h2><p><strong>孤儿进程：父进程先于子进程结束，则子进程成为孤儿进程，子进程的父进程成为init进程，成为init进程领养孤儿进程。子进程由init回收</strong>。<br><strong>僵尸进程：子进程结束，父进程尚未回收子进程，子进程残留资源（PCB）存在于内核中，变成僵尸进程</strong>。<br>怎么清除掉僵尸进程呢？即回收子进程。  </p>
+<h3 id="wait函数"><a href="#wait函数" class="headerlink" title="wait函数"></a>wait函数</h3><p>一个进程在终止时会关闭所有文件描述符，释放在用户空间分配的内存，但<strong>它的PCB还保留着</strong>，内核在其中保存了一些信息：如果正常终止则保存着退出状态，如果是异常终止则保存着导致该进程终止的信号是哪个。这个<strong>进程的父进程可以用wait或waitpid来获取这些信息，然后彻底清除掉这个进程</strong>。<br><strong>父进程调用wait函数可以回收子进程终止信息，该函数有三个功能：<br>（1）    阻塞等待子进程退出。<br>（2）    回收子进程残留资源。<br>（3）    获取子进程结束状态（退出原因）</strong>。<br><img src="https://ae01.alicdn.com/kf/H8f53b51e65aa4b67b0a88efc60ca11eac.jpg" alt=""><br><strong>调用wait函数使父进程阻塞等待子进程结束并将其回收，再继续运行父进程</strong>：<br><img src="https://ae01.alicdn.com/kf/H0569ba3fb1ae4159b511566741551841h.jpg" alt=""><br>可使用wait函数传出参数status来保存进程的退出状态，借助宏函数来进一步判断进程终止的具体原因：<br>（1）    <strong>WIFEXITED(status)非零：正常退出。</strong><br>如上宏为真，再使用WEXITSTATUS(status)：退出状态（exit参数）。<br><img src="https://ae01.alicdn.com/kf/Hd130ec364dd04806a5fa396599f813c1B.jpg" alt=""><br>（2）    <strong>WIFSIGNALED(status)非零：表示进程异常终止</strong>。<br>若上宏为真，再使用WTERMSIG(status)：使进程终止的信号的编号。<br><img src="https://ae01.alicdn.com/kf/Hd33b1e1e5ab34bc38250dc600680449fG.jpg" alt="">  </p>
+<h3 id="waitpid函数"><a href="#waitpid函数" class="headerlink" title="waitpid函数"></a>waitpid函数</h3><p><strong>作用同wait，但可指定pid进程清理，可以不阻塞</strong>。<br><strong>一次wait或waitpid调用只回收一个子进程，清理多个子进程需使用循环。</strong><br><img src="https://ae01.alicdn.com/kf/Hacd33b7f36df4afb986fcfcf5b5b455cS.jpg" alt=""><br>q为要指定回收子进程的pid。当定义成非阻塞运行时：<br><img src="https://ae01.alicdn.com/kf/Haf911610c65a4c7285b9486ef7c83c5an.jpg" alt="">  </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux系统编程1</title>
     <url>/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/</url>
     <content><![CDATA[<p>摘要：本篇开始将进入Linux系统编程的学习，其中有部分知识是计算机操作系统组成原理，通过对系统编程的学习，能够让我们更加深入的了解Linux。本篇将主要介绍进程相关知识。</p>
 <a id="more"></a>

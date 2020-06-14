@@ -46,22 +46,30 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇主要讲解快速排序算法并对前面讲的所有的排序算法进行一个总结。快速排序一直是实践中已知最快的排序算法，只有对它进行了深入学习才算是真正的学了排序算法。后序还有其他算法如桶排序、基数排序和外部排序算法等，将在下一篇中进行讲解。">
+  <meta name="description" content="摘要：本篇将继续对进程的学习，主要介绍父子进程共享、exec函数族、回收子进程的相关知识，wait和waitpid函数是用来回收子进程的两个主要函数。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="排序算法3">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/04/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%953/index.html">
+<meta property="og:title" content="Linux系统编程1">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/14/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B2/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇主要讲解快速排序算法并对前面讲的所有的排序算法进行一个总结。快速排序一直是实践中已知最快的排序算法，只有对它进行了深入学习才算是真正的学了排序算法。后序还有其他算法如桶排序、基数排序和外部排序算法等，将在下一篇中进行讲解。">
+<meta property="og:description" content="摘要：本篇将继续对进程的学习，主要介绍父子进程共享、exec函数族、回收子进程的相关知识，wait和waitpid函数是用来回收子进程的两个主要函数。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/04/02/igLIY1XvQEUa3jR.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/02/dpiu2K1kPCDnTeL.png">
-<meta property="article:published_time" content="2020-04-02T05:54:04.307Z">
-<meta property="article:modified_time" content="2020-04-02T07:46:10.708Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6aa738abcd9d4130aaf13987e489c219H.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H17d85f1518b1435ea6b58198066f7339o.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hdd1652c9b3214a3b8c5a190894e4c8fei.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H5e4715f76cb5405dabb8c0854561d2abD.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8f53b51e65aa4b67b0a88efc60ca11eac.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0569ba3fb1ae4159b511566741551841h.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd130ec364dd04806a5fa396599f813c1B.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd33b1e1e5ab34bc38250dc600680449fG.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hacd33b7f36df4afb986fcfcf5b5b455cS.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Haf911610c65a4c7285b9486ef7c83c5an.jpg">
+<meta property="article:published_time" content="2020-06-14T10:32:46.643Z">
+<meta property="article:modified_time" content="2020-06-14T10:58:59.674Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/04/02/igLIY1XvQEUa3jR.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H6aa738abcd9d4130aaf13987e489c219H.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/04/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%953/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/14/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B2/">
 
 
 <script id="page-configurations">
@@ -73,7 +81,7 @@
   };
 </script>
 
-  <title>排序算法3 | zpl-novice</title>
+  <title>Linux系统编程1 | zpl-novice</title>
   
 
 
@@ -203,7 +211,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%953/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/14/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -216,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          排序算法3
+          Linux系统编程1
         </h1>
 
         <div class="post-meta">
@@ -227,7 +235,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-02 13:54:04 / 修改时间：15:46:10" itemprop="dateCreated datePublished" datetime="2020-04-02T13:54:04+08:00">2020-04-02</time>
+              <time title="创建时间：2020-06-14 18:32:46 / 修改时间：18:58:59" itemprop="dateCreated datePublished" datetime="2020-06-14T18:32:46+08:00">2020-06-14</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -235,8 +243,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -247,7 +255,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.4k</span>
+              <span>1.3k</span>
             </span>
 
         </div>
@@ -259,92 +267,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇主要讲解快速排序算法并对前面讲的所有的排序算法进行一个总结。快速排序一直是实践中已知最快的排序算法，只有对它进行了深入学习才算是真正的学了排序算法。后序还有其他算法如桶排序、基数排序和外部排序算法等，将在下一篇中进行讲解。</p>
+        <p>摘要：本篇将继续对进程的学习，主要介绍父子进程共享、exec函数族、回收子进程的相关知识，wait和waitpid函数是用来回收子进程的两个主要函数。</p>
 <a id="more"></a>
-<p>快速排序算法被列为20世纪十大算法之一。快速排序与归并排序一样，也是用了分而治之的思想。快速排序的基本思想是通过一趟排序将待排记录分割成独立的两部分，其中一部分的关键字均比另一部分小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。<br>它的技巧是：<br>将某个数当作分割元素，从第二个数开始，向右寻找大于等于第一个数的数，从最后一个数开始，向左寻找小于等于第一个数的数，直到它们交叉，并将分割元素与最终这两个数里较小的交换位置。<br><strong>快排算法的每一步都相当于将一个数归位。迭代n次，最终将所有数归位。</strong><br>将选取的分割元素称为枢纽元，如下所示，选择第一个元素50为枢纽元，然后从10往后，20往前寻找比50小和大的数，10比50小，跳过，90比50大，选择90，另一边选择20，然后将20与90交换，继续寻找，这样一边下来可以将数组分为比50大的一组和比50小的一组。再在子数组中快排。<br><img src="https://i.loli.net/2020/04/02/igLIY1XvQEUa3jR.png" alt=""><br>下面直接来看实现代码：  </p>
-<pre><code>template&lt;class T&gt;
-void quicksort(vector&lt;T&gt; &amp;v,int left,int right)
-{
-    if(left&lt;right)
-    {
-        int pivot;
-        pivot=qsort(v,left,right);
-        quicksort(v,left,pivot-1);
-        quicksort(v,pivot+1,right);
-    }
-} 
-template&lt;class T&gt;
-int qsort(vector&lt;T&gt; &amp;v,int left,int right)
-{
-    int pivotkey;
-    T tem;
-    pivotkey=left;
-    while(left&lt;right)
-    {
-        left=left+1;
-        while(left&lt;right&amp;&amp;v[left]&lt;v[pivotkey])
-        {
-            left++;
-        }
-        while(left&lt;right&amp;&amp;v[right]&gt;v[pivotkey])
-        {
-            right--;
-        }
-        tem=v[right];
-        v[right]=v[left];
-        v[left]=tem;
-    }
-    if(v[left]&gt;v[pivotkey])
-    {
-        tem=v[left-1];
-        v[left-1]=v[pivotkey];
-        v[pivotkey]=tem;
-        return left-1;
-    }
-    else
-    {
-        tem=v[left];
-        v[left]=v[pivotkey];
-        v[pivotkey]=tem;
-        return left;
-    }
-}
-int main()
-{
-    vector&lt;int&gt; v{2,5,1,8,6,4,7};
-    quicksort(v,0,v.size()-1);
-    for(int i=0;i&lt;v.size();i++)
-    {
-        cout&lt;&lt;v[i]&lt;&lt;&quot; &quot;;
-    }
-    return 0;
-}</code></pre><p>代码中主要包含函数<code>quicksort()</code>和它调用的函数<code>qsort()</code>，<code>qsort()</code>的功能是选择枢纽元，将数组排序成小于枢纽元、枢纽元、大于枢纽元的三部分，然后返回枢纽元。而<code>quicksort()</code>则是通过递归不断调用排序，最终实现整体排序。<strong>其中有一些细节地方需要注意，比如临界情况、枢纽元最终位置等</strong>。<br>对其时间复杂度进行分析，显然与枢纽元的选择有关。如果每次选择的数都偏中间，就如同平衡二叉树一样，得到<strong>最佳的时间复杂度为O(nlogn)，但如果选择的枢纽元为两端值，则时间复杂度能达到O(n^2)。但是快速排序的平均时间复杂度为O(nlogn)</strong>。因此，快速排序法的执行速度和分割元素所在的位置有密切的关系。当分割最平均时，快速排序执行的最快，相反则最慢。  </p>
-<h2 id="快排的优化"><a href="#快排的优化" class="headerlink" title="快排的优化"></a>快排的优化</h2><p>首先就是对枢纽元的选择进行优化。<strong>常见的选择是将第一个元素当作枢纽元，但是这是错误的方式</strong>。如果输入是随机的还能接受，如果是预排序或者反序的，时间复杂度可能达到O(n^2)。比较好的方法是随机选取，或者<strong>三数中值法，即比较首位、末位和中间元素大小，选择中位数来当枢纽元</strong>。<br>下面是三数中值法的代码，只需要对<code>qsort()</code>函数进行修改。  </p>
-<pre><code>int pivotkey;
-T tem;
-int center;                       //三数中值法 
-center=(left+right)/2;
-if(v[left]&gt;v[right])
-{
-    tem=v[right];
-    v[right]=v[left];
-    v[left]=tem;
-}
-if(v[center]&gt;v[right])
-{
-    tem=v[right];
-    v[right]=v[center];
-    v[center]=tem;
-}
-if(v[center]&gt;v[left])
-{
-    tem=v[left];
-    v[left]=v[center];
-    v[center]=tem;
-}
-pivotkey=left;</code></pre><p>通过三次比较大小，就将中位数移动到了最左边，然后令枢纽元为最左边的元素即可。<br>另一个优化的地方就是对递归的优化，之前已经讲解过，迭代的性能比递归要好，因此可以将递归改换成迭代。  </p>
-<p>到此已经讲了7种排序算法，这7种全部都是内部排序，希尔排序相当于插入排序的升级，堆排序相当于选择排序的升级，而快速排序则是前面认为最慢的冒泡排序的升级。<br><img src="https://i.loli.net/2020/04/02/dpiu2K1kPCDnTeL.png" alt=""><br>从平均情况来看，显然最后3种算法要胜过希尔排序，并远远胜过前3种。但是从最好情况来看，冒泡排序更胜一筹，因此使用哪种算法是不固定的，需要具体情况来分析。没有十全十美的算法。  </p>
-<p>在下一篇中将会讲解桶排序和基数排序，它们的时间复杂度甚至能达到O(n），但是限制条件是很大的，需要我们了解，同时外部排序的知识也会简单讲解。</p>
+<h2 id="父子进程共享"><a href="#父子进程共享" class="headerlink" title="父子进程共享"></a>父子进程共享</h2><p>刚fork之后：<br>父子相同处（0-3G）：全局变量、.data、.txt、栈、堆、环境变量、用户id、宿主目录、进程工作目录、信号处理方式..<br>父子不同处（PCB）：进程ID、fork返回值、各自的父进程ID、进程运行时间、闹钟（定时器）、未决信号集<br><strong>父子进程间遵循读时共享写时复制的原则，这样设计，不论子进程执行父进程的逻辑还是执行自己的逻辑都能节省内存开销</strong>。<br>父子进程共享：<strong>文件描述符、mmap建立的映射区</strong>。  </p>
+<h2 id="exec函数族"><a href="#exec函数族" class="headerlink" title="exec函数族"></a>exec函数族</h2><p>fork创建子进程以后执行的是和父进程相同的程序（但有可能执行不同的代码分支），<strong>子进程往往要调用一种exec函数以执行另一个程序，当进程调用一种exec函数时，该进程的用户空间代码和数据完全被新程序替换</strong>，从新程序的启动例程开始执行。<strong>调用exec并不创建新进程，所以调用exec前后该进程的id并未改变</strong>。<br><strong>execlp函数：加载一个进程，借助PATH环境变量</strong>。<br><img src="https://ae01.alicdn.com/kf/H6aa738abcd9d4130aaf13987e489c219H.jpg" alt=""><br>如在子进程中调用execlp函数打开ls指令：<br><img src="https://ae01.alicdn.com/kf/H17d85f1518b1435ea6b58198066f7339o.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hdd1652c9b3214a3b8c5a190894e4c8fei.jpg" alt=""><br><strong>execl函数：加载一个进程，通过路径+程序名来加载</strong>。<br>只需要将上面的execlp函数修改为：<br><img src="https://ae01.alicdn.com/kf/H5e4715f76cb5405dabb8c0854561d2abD.jpg" alt=""><br>因此，可以<strong>加载自己自定义的程序</strong>。<br>此外，还有execv、execle、execvp、execvpe函数。  </p>
+<h2 id="回收子进程"><a href="#回收子进程" class="headerlink" title="回收子进程"></a>回收子进程</h2><p><strong>孤儿进程：父进程先于子进程结束，则子进程成为孤儿进程，子进程的父进程成为init进程，成为init进程领养孤儿进程。子进程由init回收</strong>。<br><strong>僵尸进程：子进程结束，父进程尚未回收子进程，子进程残留资源（PCB）存在于内核中，变成僵尸进程</strong>。<br>怎么清除掉僵尸进程呢？即回收子进程。  </p>
+<h3 id="wait函数"><a href="#wait函数" class="headerlink" title="wait函数"></a>wait函数</h3><p>一个进程在终止时会关闭所有文件描述符，释放在用户空间分配的内存，但<strong>它的PCB还保留着</strong>，内核在其中保存了一些信息：如果正常终止则保存着退出状态，如果是异常终止则保存着导致该进程终止的信号是哪个。这个<strong>进程的父进程可以用wait或waitpid来获取这些信息，然后彻底清除掉这个进程</strong>。<br><strong>父进程调用wait函数可以回收子进程终止信息，该函数有三个功能：<br>（1）    阻塞等待子进程退出。<br>（2）    回收子进程残留资源。<br>（3）    获取子进程结束状态（退出原因）</strong>。<br><img src="https://ae01.alicdn.com/kf/H8f53b51e65aa4b67b0a88efc60ca11eac.jpg" alt=""><br><strong>调用wait函数使父进程阻塞等待子进程结束并将其回收，再继续运行父进程</strong>：<br><img src="https://ae01.alicdn.com/kf/H0569ba3fb1ae4159b511566741551841h.jpg" alt=""><br>可使用wait函数传出参数status来保存进程的退出状态，借助宏函数来进一步判断进程终止的具体原因：<br>（1）    <strong>WIFEXITED(status)非零：正常退出。</strong><br>如上宏为真，再使用WEXITSTATUS(status)：退出状态（exit参数）。<br><img src="https://ae01.alicdn.com/kf/Hd130ec364dd04806a5fa396599f813c1B.jpg" alt=""><br>（2）    <strong>WIFSIGNALED(status)非零：表示进程异常终止</strong>。<br>若上宏为真，再使用WTERMSIG(status)：使进程终止的信号的编号。<br><img src="https://ae01.alicdn.com/kf/Hd33b1e1e5ab34bc38250dc600680449fG.jpg" alt="">  </p>
+<h3 id="waitpid函数"><a href="#waitpid函数" class="headerlink" title="waitpid函数"></a>waitpid函数</h3><p><strong>作用同wait，但可指定pid进程清理，可以不阻塞</strong>。<br><strong>一次wait或waitpid调用只回收一个子进程，清理多个子进程需使用循环。</strong><br><img src="https://ae01.alicdn.com/kf/Hacd33b7f36df4afb986fcfcf5b5b455cS.jpg" alt=""><br>q为要指定回收子进程的pid。当定义成非阻塞运行时：<br><img src="https://ae01.alicdn.com/kf/Haf911610c65a4c7285b9486ef7c83c5an.jpg" alt="">  </p>
 
     </div>
 
@@ -360,7 +289,7 @@ pivotkey=left;</code></pre><p>通过三次比较大小，就将中位数移动�
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/04/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%953/" title="排序算法3">https://zpl-novice.github.io/2020/04/02/排序算法3/</a>
+    <a href="https://zpl-novice.github.io/2020/06/14/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B2/" title="Linux系统编程1">https://zpl-novice.github.io/2020/06/14/Linux系统编程2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -377,13 +306,10 @@ pivotkey=left;</code></pre><p>通过三次比较大小，就将中位数移动�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/31/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%952/" rel="prev" title="排序算法2">
-      <i class="fa fa-chevron-left"></i> 排序算法2
+    <a href="/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/" rel="prev" title="Linux系统编程1">
+      <i class="fa fa-chevron-left"></i> Linux系统编程1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/" rel="next" title="排序算法4">
-      排序算法4 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -443,7 +369,7 @@ pivotkey=left;</code></pre><p>通过三次比较大小，就将中位数移动�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#快排的优化"><span class="nav-number">1.</span> <span class="nav-text">快排的优化</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#父子进程共享"><span class="nav-number">1.</span> <span class="nav-text">父子进程共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exec函数族"><span class="nav-number">2.</span> <span class="nav-text">exec函数族</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回收子进程"><span class="nav-number">3.</span> <span class="nav-text">回收子进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#wait函数"><span class="nav-number">3.1.</span> <span class="nav-text">wait函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#waitpid函数"><span class="nav-number">3.2.</span> <span class="nav-text">waitpid函数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
