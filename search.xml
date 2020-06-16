@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux系统编程1</title>
+    <title>Linux系统编程3</title>
+    <url>/2020/06/16/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B3/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍进程间通信（IPC）的相关知识，其中包括有血缘关系的进程以及无血缘关系的进程之间的通信，主要有5种方式，在这里将主要介绍管道、FIFO有名管道、共享映射区。  </p>
+<a id="more"></a>
+<p>Linux环境下，进程地址空间相互独立，<strong>每个进程各自有不同的用户地址空间（注意与子进程的区别）</strong>，任何一个进程的全局变量在另一个进程中都看不到，所以进程和进程不能相互访问，<strong>要交换数据必须通过内核，在内核中开辟一块缓冲区，进程1把数据从用户空间拷贝到内核缓冲区，进程2再从内核缓冲区把数据读走，内核提供的这种机制称为进程间通信（IPC）</strong>。<br><img src="https://ae01.alicdn.com/kf/Hea3a7877430245a8bb5ec51671ee160cb.jpg" alt=""><br>在进程间完成数据传递需要借助操作系统提供特殊的方法。现今常用的进程间通信方式有：<br><strong>（1）    管道（使用最简单）<br>（2）    信号（开销最小）<br>（3）    共享映射区（无血缘关系）<br>（4）    本地套接字（最稳定）</strong>  </p>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p> 作用于有血缘关系的进程之间，完成数据传递。调用pipe系统函数即可创建一个管道。有如下特质：  </p>
+<ol>
+<li>其本质是一个伪文件（实质为内核缓冲区）  </li>
+<li>由两个文件描述符引用，一个表示读端，一个表示写端。  </li>
+<li>规定数据从管道的写端流入管道，从读端流出。<br>pipe函数：<br><img src="https://ae01.alicdn.com/kf/Hd001aba42b68458981c70672670a9b0cV.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H35794a4c10c945f69401ce9837660b019.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H475d976c48834f7084c409757f92b4dao.jpg" alt="">  <h2 id="FIFO有名管道"><a href="#FIFO有名管道" class="headerlink" title="FIFO有名管道"></a>FIFO有名管道</h2>创建：（1）命令：mkfifo （2）函数：mkfifo  </li>
+</ol>
+<p><strong>可用于无血缘关系进程间通信</strong>。 需要用同一个文件创建管道。<br><img src="https://ae01.alicdn.com/kf/H986a0dd61bc843d2b33257672528b2eds.jpg" alt="">   </p>
+<h2 id="共享映射区"><a href="#共享映射区" class="headerlink" title="共享映射区"></a>共享映射区</h2><p><strong>mmap函数把磁盘上的文件映射到内存上</strong>：<br><img src="https://ae01.alicdn.com/kf/Hde82813cb4f7486fbedf44b9d232037eF.jpg" alt=""><br><strong>mmap函数创建映射区，munmap函数用来释放映射区</strong>：<br><img src="https://ae01.alicdn.com/kf/H8779ee502b3e48bc89436729e68d6996Y.jpg" alt=""><br>父子进程共享映射区：<br><img src="https://ae01.alicdn.com/kf/He4a1d0f8acbe4f8880052820e00cf2300.jpg" alt=""><br>匿名映射：<br>可以发现，<strong>每次创建映射区一定要依赖一个文件才能实现。通常为了建立映射区要open一个temp文件，创建好了再unlink、close掉，比较麻烦。可以直接匿名映射，无需依赖文件即可建立映射区</strong>。<br><img src="https://ae01.alicdn.com/kf/H648d199c29d7452786ea672f235a5f5cI.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H2784015d620f419e8da5f8e1825f1711e.jpg" alt=""><br>需要注意的是<strong>创建匿名映射的这个宏，只能在Linux下使用</strong>。<br>mmap无血缘关系进程间通信：<br><strong>利用相同的文件创建映射区，与FIFO类似，指定MAP_SHARED</strong>。  </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux系统编程2</title>
     <url>/2020/06/14/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B2/</url>
     <content><![CDATA[<p>摘要：本篇将继续对进程的学习，主要介绍父子进程共享、exec函数族、回收子进程的相关知识，wait和waitpid函数是用来回收子进程的两个主要函数。</p>
 <a id="more"></a>
