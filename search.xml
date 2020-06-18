@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程4</title>
+    <url>/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/</url>
+    <content><![CDATA[<p>摘要：本篇将要介绍信号相关的知识，主要包括信号的概念、Linux是如何产生信号的以及信号的四要素，不同信号具有不同的作用，信号的产生方式和处理方式也有多种，在本篇中会介绍其中的一部分。</p>
+<a id="more"></a>
+<p>生活中到处都是信号，如发令枪响，如铃声等等。在系统中信号也是非常重要的，信号具有特征：<strong>简单（开销小）、不能携带大量信息、满足某个特定条件才发送</strong>。<br>A通过内核给B发送信号，B收到信号之前执行自己的代码，<strong>在收到信号后，不管执行到程序的什么位置，都要暂停运行，去处理信号，当处理完信号后再继续运行</strong>。<strong>这类似于时钟中断，只不过中断是由硬件完成的，而信号是由软件完成的，因此早期被称为软中断</strong>。<br><strong>每个进程收到的信号，都是由内核发送的，由内核处理。</strong><br>产生信号的方式有：  </p>
+<ol>
+<li>按键产生，如：Ctrl+c、Ctrl+z、Ctrl+\  </li>
+<li>系统调用产生，如：kill、raise、abort  </li>
+<li>软件条件产生，如：定时器alarm  </li>
+<li>硬件异常产生，如：非法访问内存（段错误）、除0（浮点数例外）、内存对齐出错（总线错误）  </li>
+<li>命令产生，如：kill命令<br>下面介绍一些专用名词，<strong>递达：信号的传递和到达</strong>。<strong>未决：在产生和递达之间（主要由于阻塞或屏蔽导致）</strong>。  </li>
+</ol>
+<p><strong>PCB中包含了阻塞信号集（信号屏蔽字）和未决信号集</strong>。<br>阻塞信号集（信号屏蔽字）：将某些信号加入集合，<strong>对它们设置屏蔽，则收到信号后不进行处理（想要屏蔽的信号，不管是否产生）</strong>。<br>未决信号集：<strong>当信号产生，未决信号集中描述该信号的位立刻翻转为1，表示该信号未决</strong>，若该信号递达被处理则翻转回0，这一时刻非常短暂。<strong>若由于阻塞不能递达，这类信号的集合称为未决信号集（已经产生但未处理的信号）</strong>。<br><img src="https://ae01.alicdn.com/kf/H0b52243a5edd4a5891969f5107ab29507.jpg" alt=""><br>信号的处理方式：<br><strong>1.执行默认动作<br>2.忽略（丢弃）<br>3.捕捉（用户处理函数）</strong>  </p>
+<p><strong>信号的四要素为：<br>1.编号<br>2.名称<br>3.事件<br>4.默认处理动作</strong><br>通过<code>kill -l</code>可得到Linux下的所有信号：<br><img src="https://ae01.alicdn.com/kf/H936b870fd74144d29448ea4df8a73669J.jpg" alt=""><br>其中1号到31号是常用的，而32到64号则是实时信号，主要用于嵌入式的。<br>前面讲信号有3中处理方式，然而<strong>9号信号SIGKILL（杀死进程）和19号信号SIGSTOP（暂停进程）不允许忽略和捕捉，只能执行默认处理动作</strong>。<br>默认动作一共有5种：<br>1.Term：终止进程<br>2.Ign：忽略信号<br><strong>3.Core：终止进程，生成core文件。（查验进程死亡原因，用于gdb调试）</strong><br>4.Stop：停止（暂停）进程<br>5.Cont：继续运行进程  </p>
+<p>下面介绍一下前面讲的信号产生方式中，分别产生的是哪种信号。<br>按键产生信号：<br><strong>Ctrl+c ：2号信号SIGINT（终止/中断），interrupt。<br>Ctrl+z：20号信号SIGTSTP，停止与终端交互的程序。Terminal终端。<br>Ctrl+\：3号信号SIGQUIT，退出</strong>。<br>kill函数：<br>kill函数输入参数为pid和信号类型。删除自身的操作如下所示：<br><img src="https://ae01.alicdn.com/kf/H82654ad8e58f400fae9b7b2b90aeffa0A.jpg" alt=""><br>raise和abort函数：<br>raise函数：<strong>给当前进程发送指定信号（自己给自己发）</strong>，int raise(int sig)。<br>abort函数：<strong>给自己发送异常终止信号6号信号SIGABRT信号，终止并产生core文件</strong>。<br><code>void abort(void)</code>  </p>
+<p>硬件条件产生的信号：<br><strong>内存对齐出错（总线错误）：7号信号SIGBUS。<br>非法访问内存（段错误）：11号信号SIGSEGV。<br>除0（浮点数例外）：8号信号SIGFPE</strong>。  </p>
+<p>关于软件条件产生的信号以及命令kill产生信号会在下一篇中继续进行介绍。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux系统编程3</title>
     <url>/2020/06/16/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B3/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍进程间通信（IPC）的相关知识，其中包括有血缘关系的进程以及无血缘关系的进程之间的通信，主要有5种方式，在这里将主要介绍管道、FIFO有名管道、共享映射区。  </p>

@@ -46,17 +46,23 @@
   };
 </script>
 
-  <meta name="description" content="you never konw what you can do till you try">
-<meta property="og:type" content="website">
-<meta property="og:title" content="zpl-novice">
-<meta property="og:url" content="https://zpl-novice.github.io/archives/2020/01/index.html">
+  <meta name="description" content="摘要：本篇将要介绍信号相关的知识，主要包括信号的概念、Linux是如何产生信号的以及信号的四要素，不同信号具有不同的作用，信号的产生方式和处理方式也有多种，在本篇中会介绍其中的一部分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统编程4">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="you never konw what you can do till you try">
+<meta property="og:description" content="摘要：本篇将要介绍信号相关的知识，主要包括信号的概念、Linux是如何产生信号的以及信号的四要素，不同信号具有不同的作用，信号的产生方式和处理方式也有多种，在本篇中会介绍其中的一部分。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0b52243a5edd4a5891969f5107ab29507.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H936b870fd74144d29448ea4df8a73669J.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H82654ad8e58f400fae9b7b2b90aeffa0A.jpg">
+<meta property="article:published_time" content="2020-06-18T10:48:58.467Z">
+<meta property="article:modified_time" content="2020-06-18T11:09:14.796Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H0b52243a5edd4a5891969f5107ab29507.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/archives/2020/01/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/">
 
 
 <script id="page-configurations">
@@ -64,11 +70,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false
+    isPost: true
   };
 </script>
 
-  <title>归档 | zpl-novice</title>
+  <title>Linux系统编程4 | zpl-novice</title>
   
 
 
@@ -193,233 +199,127 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">不错! 目前共计 68 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统编程4
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-18 18:48:58 / 修改时间：19:09:14" itemprop="dateCreated datePublished" datetime="2020-06-18T18:48:58+08:00">2020-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2020</h1>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-31T17:45:32+08:00"
-              content="2020-01-31">
-          01-31
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/31/%E6%96%87%E4%BB%B6%E5%92%8C%E6%B5%81/" itemprop="url">
-            <span itemprop="name">文件和流</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-28T15:47:52+08:00"
-              content="2020-01-28">
-          01-28
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/28/%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E3%80%81%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB/" itemprop="url">
-            <span itemprop="name">虚析构函数、纯虚函数和抽象类</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-26T13:45:40+08:00"
-              content="2020-01-26">
-          01-26
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/26/%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81/" itemprop="url">
-            <span itemprop="name">虚函数和多态</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-24T12:43:10+08:00"
-              content="2020-01-24">
-          01-24
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/" itemprop="url">
-            <span itemprop="name">继承和派生</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-21T16:53:21+08:00"
-              content="2020-01-21">
-          01-21
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" itemprop="url">
-            <span itemprop="name">运算符重载</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-19T13:07:25+08:00"
-              content="2020-01-19">
-          01-19
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" itemprop="url">
-            <span itemprop="name">类及类的成员3</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-15T16:14:53+08:00"
-              content="2020-01-15">
-          01-15
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" itemprop="url">
-            <span itemprop="name">类及类的成员2</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-13T18:06:32+08:00"
-              content="2020-01-13">
-          01-13
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/" itemprop="url">
-            <span itemprop="name">类及类的成员1</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-11T16:18:54+08:00"
-              content="2020-01-11">
-          01-11
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/11/C%E8%AF%AD%E8%A8%80%E7%9F%A5%E8%AF%86%E5%BC%BA%E5%8C%96/" itemprop="url">
-            <span itemprop="name">C语言知识强化</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-10T11:21:32+08:00"
-              content="2020-01-10">
-          01-10
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/10/%E5%8D%9A%E5%AE%A2%E5%88%9D%E5%A7%8B/" itemprop="url">
-            <span itemprop="name">博客初识</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
+        <p>摘要：本篇将要介绍信号相关的知识，主要包括信号的概念、Linux是如何产生信号的以及信号的四要素，不同信号具有不同的作用，信号的产生方式和处理方式也有多种，在本篇中会介绍其中的一部分。</p>
+<a id="more"></a>
+<p>生活中到处都是信号，如发令枪响，如铃声等等。在系统中信号也是非常重要的，信号具有特征：<strong>简单（开销小）、不能携带大量信息、满足某个特定条件才发送</strong>。<br>A通过内核给B发送信号，B收到信号之前执行自己的代码，<strong>在收到信号后，不管执行到程序的什么位置，都要暂停运行，去处理信号，当处理完信号后再继续运行</strong>。<strong>这类似于时钟中断，只不过中断是由硬件完成的，而信号是由软件完成的，因此早期被称为软中断</strong>。<br><strong>每个进程收到的信号，都是由内核发送的，由内核处理。</strong><br>产生信号的方式有：  </p>
+<ol>
+<li>按键产生，如：Ctrl+c、Ctrl+z、Ctrl+\  </li>
+<li>系统调用产生，如：kill、raise、abort  </li>
+<li>软件条件产生，如：定时器alarm  </li>
+<li>硬件异常产生，如：非法访问内存（段错误）、除0（浮点数例外）、内存对齐出错（总线错误）  </li>
+<li>命令产生，如：kill命令<br>下面介绍一些专用名词，<strong>递达：信号的传递和到达</strong>。<strong>未决：在产生和递达之间（主要由于阻塞或屏蔽导致）</strong>。  </li>
+</ol>
+<p><strong>PCB中包含了阻塞信号集（信号屏蔽字）和未决信号集</strong>。<br>阻塞信号集（信号屏蔽字）：将某些信号加入集合，<strong>对它们设置屏蔽，则收到信号后不进行处理（想要屏蔽的信号，不管是否产生）</strong>。<br>未决信号集：<strong>当信号产生，未决信号集中描述该信号的位立刻翻转为1，表示该信号未决</strong>，若该信号递达被处理则翻转回0，这一时刻非常短暂。<strong>若由于阻塞不能递达，这类信号的集合称为未决信号集（已经产生但未处理的信号）</strong>。<br><img src="https://ae01.alicdn.com/kf/H0b52243a5edd4a5891969f5107ab29507.jpg" alt=""><br>信号的处理方式：<br><strong>1.执行默认动作<br>2.忽略（丢弃）<br>3.捕捉（用户处理函数）</strong>  </p>
+<p><strong>信号的四要素为：<br>1.编号<br>2.名称<br>3.事件<br>4.默认处理动作</strong><br>通过<code>kill -l</code>可得到Linux下的所有信号：<br><img src="https://ae01.alicdn.com/kf/H936b870fd74144d29448ea4df8a73669J.jpg" alt=""><br>其中1号到31号是常用的，而32到64号则是实时信号，主要用于嵌入式的。<br>前面讲信号有3中处理方式，然而<strong>9号信号SIGKILL（杀死进程）和19号信号SIGSTOP（暂停进程）不允许忽略和捕捉，只能执行默认处理动作</strong>。<br>默认动作一共有5种：<br>1.Term：终止进程<br>2.Ign：忽略信号<br><strong>3.Core：终止进程，生成core文件。（查验进程死亡原因，用于gdb调试）</strong><br>4.Stop：停止（暂停）进程<br>5.Cont：继续运行进程  </p>
+<p>下面介绍一下前面讲的信号产生方式中，分别产生的是哪种信号。<br>按键产生信号：<br><strong>Ctrl+c ：2号信号SIGINT（终止/中断），interrupt。<br>Ctrl+z：20号信号SIGTSTP，停止与终端交互的程序。Terminal终端。<br>Ctrl+\：3号信号SIGQUIT，退出</strong>。<br>kill函数：<br>kill函数输入参数为pid和信号类型。删除自身的操作如下所示：<br><img src="https://ae01.alicdn.com/kf/H82654ad8e58f400fae9b7b2b90aeffa0A.jpg" alt=""><br>raise和abort函数：<br>raise函数：<strong>给当前进程发送指定信号（自己给自己发）</strong>，int raise(int sig)。<br>abort函数：<strong>给自己发送异常终止信号6号信号SIGABRT信号，终止并产生core文件</strong>。<br><code>void abort(void)</code>  </p>
+<p>硬件条件产生的信号：<br><strong>内存对齐出错（总线错误）：7号信号SIGBUS。<br>非法访问内存（段错误）：11号信号SIGSEGV。<br>除0（浮点数例外）：8号信号SIGFPE</strong>。  </p>
+<p>关于软件条件产生的信号以及命令kill产生信号会在下一篇中继续进行介绍。</p>
 
     </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/" title="Linux系统编程4">https://zpl-novice.github.io/2020/06/18/Linux系统编程4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/16/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B3/" rel="prev" title="Linux系统编程3">
+      <i class="fa fa-chevron-left"></i> Linux系统编程3
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
-  
-  
-  
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2020/01/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/01/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
 
 
           </div>
