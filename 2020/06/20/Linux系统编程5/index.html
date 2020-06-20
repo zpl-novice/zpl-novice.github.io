@@ -46,28 +46,28 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇继续上一篇对二叉树的学习。主要讲解如何用代码实现对二叉树的建立以及遍历，同时也会介绍一下树、森林和二叉树的转换。这些也是我们后面学习的基础，了解树这一结构是怎么通过程序来实现。">
+  <meta name="description" content="摘要：本篇继续上一篇对信号的学习，将主要介绍如何软件条件产生信号、信号集的操作函数、捕捉信号。主要包括了alarm函数、setitimer函数、信号集设定相关函数、signal函数和sigaction函数。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="二叉树知识2">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/index.html">
+<meta property="og:title" content="Linux系统编程5">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇继续上一篇对二叉树的学习。主要讲解如何用代码实现对二叉树的建立以及遍历，同时也会介绍一下树、森林和二叉树的转换。这些也是我们后面学习的基础，了解树这一结构是怎么通过程序来实现。">
+<meta property="og:description" content="摘要：本篇继续上一篇对信号的学习，将主要介绍如何软件条件产生信号、信号集的操作函数、捕捉信号。主要包括了alarm函数、setitimer函数、信号集设定相关函数、signal函数和sigaction函数。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/DCw4VPqRlJftyYT.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/xu4q5W6TiM8Jh3X.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/8rapH9dMsEXoIcT.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/8F7xqEb42PActG9.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/GOv7kqzYjSywAK5.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/W6xnXr1sK5fkFqH.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/zDVwTb3fLUWdjch.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/07/3Nb1uXEhjWpQtRd.png">
-<meta property="article:published_time" content="2020-03-07T01:46:44.923Z">
-<meta property="article:modified_time" content="2020-03-07T04:26:18.232Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6a09e704ccef40198d5c3c470e0abf280.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6cd84607be6b4b159c9670bc6317c9e8C.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb5283170b0ba4d43976346e7e7268621l.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H2e460f48860a40acbccfaa9529db60636.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H6d8180e21cc04741ad999f916a661cdby.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc826d08ea7194c189835ddf3eef85214W.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb1f6808430504449b322c1665c4e5889s.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H5e368fa1c1844f66a496ccee7b5ffcddm.jpg">
+<meta property="article:published_time" content="2020-06-20T06:10:48.664Z">
+<meta property="article:modified_time" content="2020-06-20T06:30:21.097Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/03/07/DCw4VPqRlJftyYT.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H6a09e704ccef40198d5c3c470e0abf280.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/">
 
 
 <script id="page-configurations">
@@ -79,7 +79,7 @@
   };
 </script>
 
-  <title>二叉树知识2 | zpl-novice</title>
+  <title>Linux系统编程5 | zpl-novice</title>
   
 
 
@@ -209,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -222,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          二叉树知识2
+          Linux系统编程5
         </h1>
 
         <div class="post-meta">
@@ -233,7 +233,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-07 09:46:44 / 修改时间：12:26:18" itemprop="dateCreated datePublished" datetime="2020-03-07T09:46:44+08:00">2020-03-07</time>
+              <time title="创建时间：2020-06-20 14:10:48 / 修改时间：14:30:21" itemprop="dateCreated datePublished" datetime="2020-06-20T14:10:48+08:00">2020-06-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,8 +241,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -253,7 +253,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>1.1k</span>
             </span>
 
         </div>
@@ -265,74 +265,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇继续上一篇对二叉树的学习。主要讲解如何用代码实现对二叉树的建立以及遍历，同时也会介绍一下树、森林和二叉树的转换。这些也是我们后面学习的基础，了解树这一结构是怎么通过程序来实现。</p>
+        <p>摘要：本篇继续上一篇对信号的学习，将主要介绍如何软件条件产生信号、信号集的操作函数、捕捉信号。主要包括了alarm函数、setitimer函数、信号集设定相关函数、signal函数和sigaction函数。  </p>
 <a id="more"></a>
-<p>前面已经说过二叉树的存储。二叉树是由结点组成的，每个结点又包括一个数据位和两个指向其左右孩子的指针。因此对于结点的建立，我们可以用结构体来完成。  </p>
-<pre><code>typedef struct node
-{
-    char data;
-    node* lchild;
-    node* rchild;    
- }node,*Node;</code></pre><p>可以看到，定义了一个结点结构<code>node</code>，还定义了一个指向该结构体的指针<code>Node</code>。<strong>二叉树建立和遍历过程中，需要不停的生成结点，赋值。因此需要修改指针的指向，指向新的结点</strong>。在我们创建的时候，若二叉树某个结点为空，那我们就令指针<code>Node</code>的引用为空。而如果<code>Node</code>的值是空的，那么自然就没有结构体<code>node</code>的地方了，这个结点就相当于没有了。<br>还有一个问题是怎么确定每个结点是否有左右孩子？为了解决这个问题，对二叉树进行扩展，将二叉树中每个结点的空指针引出一个虚结点，其值为一特定值，比如<code>#</code>。这种处理后的二叉树称为扩展二叉树，<strong>扩展二叉树可以做到一个遍历序列确定一棵二叉树</strong>。 </p>
-<p><img src="https://i.loli.net/2020/03/07/DCw4VPqRlJftyYT.png" alt=""><br>扩展后前序为：AB#D##C##。<br>接下来就是利用递归生成二叉树。代码如下：  </p>
-<pre><code>typedef struct node
-{
-    char data;
-    node* lchild;
-    node* rchild;    
- }node,*Node;
- void CBtree(Node &amp;T)
- {
-     char data;
-     cin&gt;&gt;data;
-     if(data==&apos;#&apos;)
-     {
-         T=NULL;
-     }
-     else
-     {
-         T=new node;
-         T-&gt;data=data;
-         CBtree(T-&gt;lchild);
-         CBtree(T-&gt;rchild);
-     }
- }
- void print(Node T)
- {
-     if(T != NULL)
-     {
-          print(T-&gt;lchild);
-          cout&lt;&lt;T-&gt;data;
-         print(T-&gt;rchild);
-    }
- }
- int main()
- {
-     Node T;
-     CBtree(T);
-     print(T);
-     return 0;
- }</code></pre><p>首先定义了一个创建树的函数<code>CBtree</code>，输入参数为结点结构指针的引用。然后输入前序顺序，根据顺序判断若字符是<code>#</code>，则表示是空结点，否则就新建一个结点，将读入的数据赋给这个新建的结点，然后递归去创建该结点的左子树和右子树。需要说明的是，<strong>这是以前序顺序来建立的二叉树，如果以中序和后序就需要换一下位置</strong>。<br>在遍历函数中，先判断树是否为空，若不为空，则递归遍历二叉树的左子树，再打印该结点数据，最后递归遍历右子树，可以看到这是中序遍历。以上篇中的二叉树为例：<br><img src="https://i.loli.net/2020/03/05/xu4q5W6TiM8Jh3X.png" alt=""><br>前序遍历顺序为：ABDGHCEIF。中序遍历顺序为：GDHBAEICF。将其变成扩展二叉树后前序遍历顺序为：ABDG##H###CE#I##F##。运行结果为：<br><img src="https://i.loli.net/2020/03/07/8rapH9dMsEXoIcT.png" alt=""><br>可见，成功的实现了二叉树的建立与遍历。若想要实现中序和后序遍历，只需修改代码为：  </p>
-<pre><code>//将二叉树按照中序输出
-void Print2(Node T)
-{
-    if(T != NULL)
-    {
-        Print2(T-&gt;lchild);
-        cout&lt;&lt;T-&gt;data;
-        Print2(T-&gt;rchild);
-    }
-}
-//将二叉树按照后序输出
-void Print3(Node T)
-{
-    if(T != NULL)
-    {
-            Print3(T-&gt;lchild);
-           Print3(T-&gt;rchild);
-        cout&lt;&lt;T-&gt;data;
-        }
-}</code></pre><p>接下来介绍一下树、森林和二叉树的转换。在前面对树的表示中，我们学过一种方法叫孩子兄弟表示法。这里复习一下：任意一个树，它的结点的第一个孩子和该结点的右兄弟如果存在就是唯一的。设置两个指针，分别指向该结点的第一个孩子和此结点的右兄弟，因为我们要转换成二叉树，所以规定左子树为第一个孩子，右子树为右边第一个兄弟，没有则为空。如下所示树：<br><img src="https://i.loli.net/2020/03/07/8F7xqEb42PActG9.png" alt=""><br>A的第一个孩子为B，无兄弟，因此转换后A为根结点，左孩子为B，无右孩子。B的第一个孩子为E，右边第一个兄弟为C，因此转换后左孩子为E，右孩子为C。E没有孩子，右边第一个兄弟为F，因此E的左孩子为空，右孩子为F…转换后：<br><img src="https://i.loli.net/2020/03/07/GOv7kqzYjSywAK5.png" alt=""><br>森林有多棵树，将每个树先转换成二叉树，然后将根结点连起来（根结点相当于兄弟）。<br><img src="https://i.loli.net/2020/03/07/W6xnXr1sK5fkFqH.png" alt=""><br>每棵树转换后为：<br><img src="https://i.loli.net/2020/03/07/zDVwTb3fLUWdjch.png" alt=""><br>合在一起：<br><img src="https://i.loli.net/2020/03/07/3Nb1uXEhjWpQtRd.png" alt=""><br>二叉树转换成树和森林，反过来即可。   </p>
+<h2 id="软件条件产生信号"><a href="#软件条件产生信号" class="headerlink" title="软件条件产生信号"></a>软件条件产生信号</h2><h3 id="alarm函数"><a href="#alarm函数" class="headerlink" title="alarm函数"></a>alarm函数</h3><p><strong>alarm函数用来设置定时器（闹钟）</strong>。在经过指定seconds后，内核会给当前进程发送14号SIGALRM信号，进程收到该信号，默认动作终止。<br><strong>每个进程都有且只有一个定时器</strong>。<br><code>unsigned int alarm(unsigned int seconds)</code>;返回0或上次定时剩余的秒数，无失败。<br>常用：<strong>取消定时器alarm(0)，返回旧闹钟余下秒数</strong>。<br><strong>与进程的状态无关</strong>。如查看1s内系统能输出多少个数：<br><img src="https://ae01.alicdn.com/kf/H6a09e704ccef40198d5c3c470e0abf280.jpg" alt="">  </p>
+<h3 id="setitimer函数"><a href="#setitimer函数" class="headerlink" title="setitimer函数"></a>setitimer函数</h3><p><strong>设置定时器（闹钟）。可代替alarm函数，精度微秒us，可以实现周期定时</strong>。<br><img src="https://ae01.alicdn.com/kf/H6cd84607be6b4b159c9670bc6317c9e8C.jpg" alt="">  </p>
+<h2 id="信号集操作函数"><a href="#信号集操作函数" class="headerlink" title="信号集操作函数"></a>信号集操作函数</h2><p><strong>内核通过读取未决信号集来判断信号是否应被处理，信号屏蔽字mask可以影响未决信号集，而我们可以在应用程序中自定义set（集合）来改变mask，以达到屏蔽指定信号的目的</strong>。<br>信号集设定：定义一个集合set。<br>sigemptyset(&amp;set)   将集合set全清0<br>sigfillset(&amp;set)       将集合set全置1<br>sigaddset(&amp;set,num)   将某个信号加入set，即置1<br>sigdelset(&amp;set,num)   将某个信号清除出set，即置0<br>sigismember(&amp;set,num)  判断信号是否在集合中，即信号是否为1<br>将自定义的set代替阻塞信号集中的set：<br><img src="https://ae01.alicdn.com/kf/Hb5283170b0ba4d43976346e7e7268621l.jpg" alt=""><br>sigpending函数：<br>将当前进程未决信号集读取。如下所示：<br><img src="https://ae01.alicdn.com/kf/H2e460f48860a40acbccfaa9529db60636.jpg" alt=""><br>在<strong>未产生信号</strong>前，<strong>即使阻塞信号集3号信号为1，未决信号集全为0</strong>。<strong>当按Ctrl+\产生3号信号后，被屏蔽，未决信号集里3号变成1，不执行终止操作</strong>。<br><img src="https://ae01.alicdn.com/kf/H6d8180e21cc04741ad999f916a661cdby.jpg" alt="">  </p>
+<h2 id="注册信号捕捉函数"><a href="#注册信号捕捉函数" class="headerlink" title="注册信号捕捉函数"></a>注册信号捕捉函数</h2><p><strong>信号屏蔽发生在递送阶段，可以使信号阻塞，不能进行处理，也就不能执行默认处理动作。信号捕捉发生在信号处理阶段，同样可以使信号不执行默认处理动作，而执行自定义的函数</strong>。<br><strong>内核捕捉信号，函数用于注册</strong>。  </p>
+<h3 id="signal函数"><a href="#signal函数" class="headerlink" title="signal函数"></a>signal函数</h3><p><img src="https://ae01.alicdn.com/kf/Hc826d08ea7194c189835ddf3eef85214W.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hb1f6808430504449b322c1665c4e5889s.jpg" alt=""><br><strong>原本出现SIGINT信号时会执行默认处理终止进程，而此时变成捕捉以后调用自定义的函数</strong>。   </p>
+<h3 id="sigaction函数"><a href="#sigaction函数" class="headerlink" title="sigaction函数"></a>sigaction函数</h3><p>与signal函数作用相同。<br><img src="https://ae01.alicdn.com/kf/H5e368fa1c1844f66a496ccee7b5ffcddm.jpg" alt="">  </p>
+<h2 id="信号捕捉特性"><a href="#信号捕捉特性" class="headerlink" title="信号捕捉特性"></a>信号捕捉特性</h2><p>1.捕捉函数执行期间，屏蔽字由<code>sa_mask</code>指定，而不是原本的阻塞信号集。<br>2.默认捕捉函数执行期间，对被捕捉的信号自动屏蔽，<code>sa_flags=0</code>情况下。<br>3.执行期间常规信号不支持排队，多次产生只记录一次。  </p>
+<p>内核实现信号捕捉过程：<strong>首先信号被内核处理，回调捕捉函数，进入用户区，执行完再通过函数先返回内核</strong>。  </p>
+<p>下一篇将会介绍时序竞态的相关知识。</p>
 
     </div>
 
@@ -348,7 +291,7 @@ void Print3(Node T)
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/" title="二叉树知识2">https://zpl-novice.github.io/2020/03/07/二叉树知识2/</a>
+    <a href="https://zpl-novice.github.io/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/" title="Linux系统编程5">https://zpl-novice.github.io/2020/06/20/Linux系统编程5/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -365,13 +308,10 @@ void Print3(Node T)
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/05/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%861/" rel="prev" title="二叉树知识1">
-      <i class="fa fa-chevron-left"></i> 二叉树知识1
+    <a href="/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/" rel="prev" title="Linux系统编程4">
+      <i class="fa fa-chevron-left"></i> Linux系统编程4
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/09/%E8%B5%AB%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91/" rel="next" title="赫夫曼树和表达式树">
-      赫夫曼树和表达式树 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -431,6 +371,7 @@ void Print3(Node T)
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#软件条件产生信号"><span class="nav-number">1.</span> <span class="nav-text">软件条件产生信号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#alarm函数"><span class="nav-number">1.1.</span> <span class="nav-text">alarm函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setitimer函数"><span class="nav-number">1.2.</span> <span class="nav-text">setitimer函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号集操作函数"><span class="nav-number">2.</span> <span class="nav-text">信号集操作函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册信号捕捉函数"><span class="nav-number">3.</span> <span class="nav-text">注册信号捕捉函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#signal函数"><span class="nav-number">3.1.</span> <span class="nav-text">signal函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigaction函数"><span class="nav-number">3.2.</span> <span class="nav-text">sigaction函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号捕捉特性"><span class="nav-number">4.</span> <span class="nav-text">信号捕捉特性</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

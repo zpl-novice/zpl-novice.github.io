@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程5</title>
+    <url>/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/</url>
+    <content><![CDATA[<p>摘要：本篇继续上一篇对信号的学习，将主要介绍如何软件条件产生信号、信号集的操作函数、捕捉信号。主要包括了alarm函数、setitimer函数、信号集设定相关函数、signal函数和sigaction函数。  </p>
+<a id="more"></a>
+<h2 id="软件条件产生信号"><a href="#软件条件产生信号" class="headerlink" title="软件条件产生信号"></a>软件条件产生信号</h2><h3 id="alarm函数"><a href="#alarm函数" class="headerlink" title="alarm函数"></a>alarm函数</h3><p><strong>alarm函数用来设置定时器（闹钟）</strong>。在经过指定seconds后，内核会给当前进程发送14号SIGALRM信号，进程收到该信号，默认动作终止。<br><strong>每个进程都有且只有一个定时器</strong>。<br><code>unsigned int alarm(unsigned int seconds)</code>;返回0或上次定时剩余的秒数，无失败。<br>常用：<strong>取消定时器alarm(0)，返回旧闹钟余下秒数</strong>。<br><strong>与进程的状态无关</strong>。如查看1s内系统能输出多少个数：<br><img src="https://ae01.alicdn.com/kf/H6a09e704ccef40198d5c3c470e0abf280.jpg" alt="">  </p>
+<h3 id="setitimer函数"><a href="#setitimer函数" class="headerlink" title="setitimer函数"></a>setitimer函数</h3><p><strong>设置定时器（闹钟）。可代替alarm函数，精度微秒us，可以实现周期定时</strong>。<br><img src="https://ae01.alicdn.com/kf/H6cd84607be6b4b159c9670bc6317c9e8C.jpg" alt="">  </p>
+<h2 id="信号集操作函数"><a href="#信号集操作函数" class="headerlink" title="信号集操作函数"></a>信号集操作函数</h2><p><strong>内核通过读取未决信号集来判断信号是否应被处理，信号屏蔽字mask可以影响未决信号集，而我们可以在应用程序中自定义set（集合）来改变mask，以达到屏蔽指定信号的目的</strong>。<br>信号集设定：定义一个集合set。<br>sigemptyset(&amp;set)   将集合set全清0<br>sigfillset(&amp;set)       将集合set全置1<br>sigaddset(&amp;set,num)   将某个信号加入set，即置1<br>sigdelset(&amp;set,num)   将某个信号清除出set，即置0<br>sigismember(&amp;set,num)  判断信号是否在集合中，即信号是否为1<br>将自定义的set代替阻塞信号集中的set：<br><img src="https://ae01.alicdn.com/kf/Hb5283170b0ba4d43976346e7e7268621l.jpg" alt=""><br>sigpending函数：<br>将当前进程未决信号集读取。如下所示：<br><img src="https://ae01.alicdn.com/kf/H2e460f48860a40acbccfaa9529db60636.jpg" alt=""><br>在<strong>未产生信号</strong>前，<strong>即使阻塞信号集3号信号为1，未决信号集全为0</strong>。<strong>当按Ctrl+\产生3号信号后，被屏蔽，未决信号集里3号变成1，不执行终止操作</strong>。<br><img src="https://ae01.alicdn.com/kf/H6d8180e21cc04741ad999f916a661cdby.jpg" alt="">  </p>
+<h2 id="注册信号捕捉函数"><a href="#注册信号捕捉函数" class="headerlink" title="注册信号捕捉函数"></a>注册信号捕捉函数</h2><p><strong>信号屏蔽发生在递送阶段，可以使信号阻塞，不能进行处理，也就不能执行默认处理动作。信号捕捉发生在信号处理阶段，同样可以使信号不执行默认处理动作，而执行自定义的函数</strong>。<br><strong>内核捕捉信号，函数用于注册</strong>。  </p>
+<h3 id="signal函数"><a href="#signal函数" class="headerlink" title="signal函数"></a>signal函数</h3><p><img src="https://ae01.alicdn.com/kf/Hc826d08ea7194c189835ddf3eef85214W.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hb1f6808430504449b322c1665c4e5889s.jpg" alt=""><br><strong>原本出现SIGINT信号时会执行默认处理终止进程，而此时变成捕捉以后调用自定义的函数</strong>。   </p>
+<h3 id="sigaction函数"><a href="#sigaction函数" class="headerlink" title="sigaction函数"></a>sigaction函数</h3><p>与signal函数作用相同。<br><img src="https://ae01.alicdn.com/kf/H5e368fa1c1844f66a496ccee7b5ffcddm.jpg" alt="">  </p>
+<h2 id="信号捕捉特性"><a href="#信号捕捉特性" class="headerlink" title="信号捕捉特性"></a>信号捕捉特性</h2><p>1.捕捉函数执行期间，屏蔽字由<code>sa_mask</code>指定，而不是原本的阻塞信号集。<br>2.默认捕捉函数执行期间，对被捕捉的信号自动屏蔽，<code>sa_flags=0</code>情况下。<br>3.执行期间常规信号不支持排队，多次产生只记录一次。  </p>
+<p>内核实现信号捕捉过程：<strong>首先信号被内核处理，回调捕捉函数，进入用户区，执行完再通过函数先返回内核</strong>。  </p>
+<p>下一篇将会介绍时序竞态的相关知识。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux系统编程4</title>
     <url>/2020/06/18/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B4/</url>
     <content><![CDATA[<p>摘要：本篇将要介绍信号相关的知识，主要包括信号的概念、Linux是如何产生信号的以及信号的四要素，不同信号具有不同的作用，信号的产生方式和处理方式也有多种，在本篇中会介绍其中的一部分。</p>
