@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程6</title>
+    <url>/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍时序竞态的知识。主要包括什么是时序竞态，都用到了哪些函数，以及如何解决时序竞态和时序竞态引起的全局变量异步IO问题。</p>
+<a id="more"></a>
+<p>首先介绍pause函数：<br><strong>调用pause函数可以造成进程主动挂起，等待信号唤醒。该进程处于阻塞状态，主动放弃cpu</strong>。<br>等待<strong>唤醒的信号必须是捕捉</strong>，执行自定义的函数。<br><img src="https://ae01.alicdn.com/kf/H7556dda61c5c42f3a7ebc6e1e3c68886f.jpg" alt=""><br><strong>使用pause函数和alarm函数就可以实现sleep函数</strong>。<br><img src="https://ae01.alicdn.com/kf/Heb9ded4b1bfc4808ba5ae6898a6391c5C.jpg" alt=""><br>假设在23行alarm(seconds)以后，pause之前，<strong>进程突然失去了cpu</strong>，这时时钟已经定时，当过了一段时间（大于seconds）后该进程重新获得cpu，这时<strong>首先对信号进行处理</strong>，即对SIGALRM信号进行捕捉，然后继续执行pause和下面的代码，然而以后<strong>已经没有信号唤醒，进程陷入挂起状态。这就是时序竞态</strong>。<br>解决方法：<strong>采用信号屏蔽和解除屏蔽的方法</strong>，<strong>将解除屏蔽与挂起绑定一起，sigsuspend函数代替pause函数</strong>。<br><code>int sigsuspend(const sigset_t *mask)</code>  挂起等待信号。<br>sigsuspend函数调用期间，<strong>进程信号屏蔽字由其参数mask</strong>指定。<br>全局变量异步IO：<br>例如实现父子进程交替打印数字：<br><img src="https://ae01.alicdn.com/kf/He4b03d00eb7b4c23bcd302c4558a32c7z.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hd7efa7bffe594147bbcf974651fe2820U.jpg" alt=""><br>上述函数的正常执行结果本应该是：父进程数1、3、5、7、······；子进程数2、4、6、8、·······，且它们之间交替数数。<strong>然而实际结果却是当数到某一个数，程序就会停下来不再继续</strong>。<br>父进程中的第一个sleep函数确保在父进程向子进程发送信号前，子进程已经完成了对信号的注册（因为子进程有可能失去CPU时间太长而未完成对信号的注册），否则会导致子进程收到信号被终结。<br><strong>如果其中某一个进程（父进程或子进程）在while循环中刚发送完信号就失去了CPU，还未对flag进行修改，此时另一个进程处理完信号后，再次向该进程发送信号</strong>，此时该进程接收到信号不会接着执行flag=0的操作了，会马上去处理信号，信号处理完后，才会回到主控程序执行flag=0的操作，此时<strong>显然顺序发生了颠倒，导致最终flag错误置为0。</strong>因此，该进程处理完信号后再也不会发送信号了，另一个进程也再也不会收到信号，从而更不会再发信号。  </p>
+<p><strong>当有多个进程操作同一个全局变量时，如内核和子进程都对flag进行操作，就可能由于时序竞态，执行顺序不一样，导致产生不一样的结果，程序出错，这就是全局变量异步IO</strong>。<br>面对这种情况，处理方法：<br><strong>1.**</strong>尽量的避免使用全局变量，而使用局部变量。<br>2.使用锁机制，当操作全局变量时，通过加锁、解锁来解决该问题。<br>3.添加sleep函数，保证每一步的操作顺序**。  </p>
+<p>时序竞态虽然出现的概率比较低，但是是有可能发生的，而且会造成致命的后果，需要我们自己在编程时提前预知、避免。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux系统编程5</title>
     <url>/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/</url>
     <content><![CDATA[<p>摘要：本篇继续上一篇对信号的学习，将主要介绍如何软件条件产生信号、信号集的操作函数、捕捉信号。主要包括了alarm函数、setitimer函数、信号集设定相关函数、signal函数和sigaction函数。  </p>

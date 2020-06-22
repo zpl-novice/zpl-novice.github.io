@@ -46,25 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将要讲解的树为B树，它不再是二叉树，与前面所讲的不太相同，而且它的作用体现在内存与外存数据交换上。本篇将会主要介绍什么是多路查找树？它的特点是什么？以及为什么要构建多路查找树？在学完了本篇之后，也希望大家对计算机的数据交换有更深一步的认识。">
+  <meta name="description" content="摘要：本篇将主要介绍时序竞态的知识。主要包括什么是时序竞态，都用到了哪些函数，以及如何解决时序竞态和时序竞态引起的全局变量异步IO问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多路查找树（B树）">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/index.html">
+<meta property="og:title" content="Linux系统编程6">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将要讲解的树为B树，它不再是二叉树，与前面所讲的不太相同，而且它的作用体现在内存与外存数据交换上。本篇将会主要介绍什么是多路查找树？它的特点是什么？以及为什么要构建多路查找树？在学完了本篇之后，也希望大家对计算机的数据交换有更深一步的认识。">
+<meta property="og:description" content="摘要：本篇将主要介绍时序竞态的知识。主要包括什么是时序竞态，都用到了哪些函数，以及如何解决时序竞态和时序竞态引起的全局变量异步IO问题。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/03/17/3Wc7ynIoNLOSGiF.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/17/GDXlxN3qsvIdt7S.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/17/pjrsfgTbxemvzZE.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/17/2cICYrhvNuZ5aBd.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/17/JTihD8VLIvsxAkw.png">
-<meta property="article:published_time" content="2020-03-17T11:31:20.798Z">
-<meta property="article:modified_time" content="2020-03-17T11:44:49.895Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H7556dda61c5c42f3a7ebc6e1e3c68886f.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Heb9ded4b1bfc4808ba5ae6898a6391c5C.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/He4b03d00eb7b4c23bcd302c4558a32c7z.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd7efa7bffe594147bbcf974651fe2820U.jpg">
+<meta property="article:published_time" content="2020-06-22T06:57:06.798Z">
+<meta property="article:modified_time" content="2020-06-22T07:08:05.826Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/03/17/3Wc7ynIoNLOSGiF.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H7556dda61c5c42f3a7ebc6e1e3c68886f.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/">
 
 
 <script id="page-configurations">
@@ -76,7 +75,7 @@
   };
 </script>
 
-  <title>多路查找树（B树） | zpl-novice</title>
+  <title>Linux系统编程6 | zpl-novice</title>
   
 
 
@@ -206,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -219,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          多路查找树（B树）
+          Linux系统编程6
         </h1>
 
         <div class="post-meta">
@@ -230,7 +229,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-17 19:31:20 / 修改时间：19:44:49" itemprop="dateCreated datePublished" datetime="2020-03-17T19:31:20+08:00">2020-03-17</time>
+              <time title="创建时间：2020-06-22 14:57:06 / 修改时间：15:08:05" itemprop="dateCreated datePublished" datetime="2020-06-22T14:57:06+08:00">2020-06-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,8 +237,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -250,7 +249,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>1.1k</span>
             </span>
 
         </div>
@@ -262,14 +261,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将要讲解的树为B树，它不再是二叉树，与前面所讲的不太相同，而且它的作用体现在内存与外存数据交换上。本篇将会主要介绍什么是多路查找树？它的特点是什么？以及为什么要构建多路查找树？在学完了本篇之后，也希望大家对计算机的数据交换有更深一步的认识。</p>
+        <p>摘要：本篇将主要介绍时序竞态的知识。主要包括什么是时序竞态，都用到了哪些函数，以及如何解决时序竞态和时序竞态引起的全局变量异步IO问题。</p>
 <a id="more"></a>
-<p>我们前面讨论过的数据结构，处理数据都是在内存中，因此考虑的都是内存中的运算时间复杂度。但若是我们要操作的数据集非常大，大到内存已经没法处理了怎么办？在这种情况下，<strong>对数据的处理需要不断的从硬盘等存储设备中调入或调出内存页面</strong>。而且涉及到这样的外部存储，关于时间复杂度的计算也就发生了改变，访问该集合元素的时间已经不仅仅是寻找该元素所需比较次数的函数，我们必须考虑对硬盘等外部存储设备的访问时间以及将会对设备做出多少次单独访问。<br>为了降低对外存设备的访问次数，我们需要新的数据结构来处理这样的问题。我们之前谈的树，都是一个结点可以有多个孩子，但是它自身只存储一个元素，二叉树的限制更多，结点最多只能有两个孩子。这使得在元素非常多的时候，要么树的度非常大，要么树的高度非常大，甚至两者都要很大才行。<br><strong>多路查找树，其每一个结点的孩子数可以多于两个，且每一个结点处可以存储多个元素。由于它是查找树，所有元素之间存在特定的排序关系</strong>。本篇将讲4种特殊形式：2-3树、2-3-4树、B树和B+树。  </p>
-<h2 id="2-3树"><a href="#2-3树" class="headerlink" title="2-3树"></a>2-3树</h2><p>2-3树是这样的一棵多路查找树：其中每一个结点都具有两个孩子（称它为2结点）或3个孩子（称它为3结点）。一个2结点包含一个元素和两个孩子（或没有孩子），<strong>但与二叉排序树不同的是，这个2结点要么没有孩子，要有就有两个，不能只有一个孩子</strong>。一个3结点包含一小一大（较小元素和较大元素）两个元素和三个孩子（或没有孩子）。左子树包含小于较小元素的元素，右子树包含大于较大元素的元素，中间子树包含介于两元素之间的元素。这个3结点要么没有孩子，要有就有三个。<br><strong>并且2-3树中所有叶子都在同一层次上</strong>。如图所示为一棵2-3树：<br><img src="https://i.loli.net/2020/03/17/3Wc7ynIoNLOSGiF.png" alt=""><br>因为要保证所有的叶结点在同一层上，而且每个结点既有可能是2结点，也有可能是3结点，所以2-3树的插入和删除操作是比较复杂的。</p>
-<h2 id="2-3-4树"><a href="#2-3-4树" class="headerlink" title="2-3-4树"></a>2-3-4树</h2><p>2-3-4树就是2-3树的概念扩展，包括了4结点的使用。一个4结点包括小中大三个元素和4个孩子（或没有孩子），一个4结点要么没有孩子，要有就有4个孩子。其中左子树包含小于最小元素的元素，第二子树包含大于最小元素，小于第二元素的元素，第三子树包含大于第二元素，小于最大元素的元素，右子树包含大于最大元素的元素。<br>举个例子来说明构建2-3-4树的过程。如构建一个数组为{7,1,2,5,6,9,8,4,3}的2-3-4树。首先在插入7、1、2时满足4结点的定义，因此不需要拆分，如图1所示，当插入5时，就需要增加结点，但是要满足2-3-4树所有叶子结点在同一层的要求，所以不能简单的把5插入成4结点的子树，因此拆分成图2的形状，这样不停的插入，最终形成了图7所示的2-3-4树。<br><img src="https://i.loli.net/2020/03/17/GDXlxN3qsvIdt7S.png" alt="">  </p>
-<h2 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h2><p>本篇的标题是B树，可现在才开始讲到B树，是不是太晚了？其实，前面一直在讲B树。<br><strong>B树(B-tree)是一种平衡的多路查找树，2-3树和2-3-4树都是B树的特例。结点最大的孩子数目称为B树的阶，因此2-3树是3阶B树，2-3-4树是4阶B树</strong>。一个m阶的B树具有如下属性：<br>1.如果根结点不是叶结点，那么它至少有两棵子树。<br>2.每一个非根的分支结点都有k-1个元素和k个孩子，每一个叶结点都有k-1个元素，其中k介于m/2和m之间（可以等于边界）。<br>3.所有叶子结点都位于同一层次。<br>4.所有分支结点包含下列信息数据(n,A0,K1,A1,K2,…,Kn,An)，其中，Ki为关键字，i=1,2,3…，且Ki&lt;K(i+1)。Ai为指向子树根结点的指针，且指针A(i-1)所指向的子树中所有结点的关键字都小于Ki。An所指子树中所有结点的关键字都大于Kn。n为关键字的个数，或者说n+1为子树的个数。<br>例如上面讲的2-3-4树的例子转换成B树就变成了如图所示,左侧灰色方块表示当前结点的元素个数。<br><img src="https://i.loli.net/2020/03/17/pjrsfgTbxemvzZE.png" alt=""><br>在B树上查找的过程是一个顺指针查找结点和在结点中查找关键字的交叉过程。比如，我们要查找数字7，首先从外存中读取到根结点3、5、8三个元素，发现7不在其中，但在5和8之间，因此就通过A2再读取外存的6、7结点，查找到所要的元素。B树的插入和删除与前面讲的2-3树类似，只不过更加复杂。<br>前面提过，多路查找树涉及到内存与外存的数据交换，如果交换次数频繁，就会造成增加时间。那么B树结构怎么做到减少次数呢？我们的外存，比如硬盘，是将所有的信息分割成相等大小的页面，每次硬盘读写的都是一个或多个完整的页面。在一个典型的B树应用中，我们会对B树进行调整，使得B树的阶数与硬盘存储的页面大小相匹配。比如说一棵B树的阶为1001（即1个结点包含1000个关键字），高度为2，它可以存储超过10亿个关键字，我们只要让根结点持久的保留在内存中，那么在这棵树上，寻找某一关键字至多需要两次硬盘的读取即可。<br>通过这种方式，在有限内存的情况下，每一次磁盘的访问我们都可以获得最大数量的数据。B树的数据结构就是为内外存的数据交互准备的。  </p>
-<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>尽管前面讲了B树的好处，但它还是有缺陷的。对于树结构来说，我们都可以通过中序遍历来顺序查找树中的元素，这一切都是在内存中进行的。<br>可是在B树结构中，往返于每个结点之间意味着必须得在硬盘的页面之间进行多次访问，如下图所示，若要遍历这棵B树，则顺序为页面2-&gt;页面1-&gt;页面3-&gt;页面1-&gt;页面4-&gt;页面1-&gt;页面5。这就很麻烦。<br><img src="https://i.loli.net/2020/03/17/2cICYrhvNuZ5aBd.png" alt=""><br>B+树是应文件系统所需而出的一种B树的变形树，在B树中，每一个元素在该树中只出现一次，有可能在叶结点上，也有可能在分支结点上。而<strong>在B+树中，出现在分支结点中的元素会在它们的中序后继者（叶结点）中再次列出，另外，每一个叶结点都会保存一个指向后一叶结点的指针</strong>。<br>如下所示，根结点中的关键字在叶结点中再次列出，并且所有叶子结点都链接在一起。<br><img src="https://i.loli.net/2020/03/17/JTihD8VLIvsxAkw.png" alt=""><br><strong>B+树与B树的不同之处在于B+树的叶结点包含所有关键字的信息，及指向含这些关键字记录的指针，叶子结点本身依关键字大小顺序链接。所有分支结点可以看成是索引，结点中仅含其子树的最大（或最小）关键字</strong>。<br>B+树的结构特别适合带有范围的查找。它的插入、删除过程也与B树类似，只不过都是在叶结点上进行而已。  </p>
-<p>本篇简单的介绍了B树相关的概念，了解了它的构成及用途，在后续的学习中，还会有再次用到它的地方，到时会细讲。</p>
+<p>首先介绍pause函数：<br><strong>调用pause函数可以造成进程主动挂起，等待信号唤醒。该进程处于阻塞状态，主动放弃cpu</strong>。<br>等待<strong>唤醒的信号必须是捕捉</strong>，执行自定义的函数。<br><img src="https://ae01.alicdn.com/kf/H7556dda61c5c42f3a7ebc6e1e3c68886f.jpg" alt=""><br><strong>使用pause函数和alarm函数就可以实现sleep函数</strong>。<br><img src="https://ae01.alicdn.com/kf/Heb9ded4b1bfc4808ba5ae6898a6391c5C.jpg" alt=""><br>假设在23行alarm(seconds)以后，pause之前，<strong>进程突然失去了cpu</strong>，这时时钟已经定时，当过了一段时间（大于seconds）后该进程重新获得cpu，这时<strong>首先对信号进行处理</strong>，即对SIGALRM信号进行捕捉，然后继续执行pause和下面的代码，然而以后<strong>已经没有信号唤醒，进程陷入挂起状态。这就是时序竞态</strong>。<br>解决方法：<strong>采用信号屏蔽和解除屏蔽的方法</strong>，<strong>将解除屏蔽与挂起绑定一起，sigsuspend函数代替pause函数</strong>。<br><code>int sigsuspend(const sigset_t *mask)</code>  挂起等待信号。<br>sigsuspend函数调用期间，<strong>进程信号屏蔽字由其参数mask</strong>指定。<br>全局变量异步IO：<br>例如实现父子进程交替打印数字：<br><img src="https://ae01.alicdn.com/kf/He4b03d00eb7b4c23bcd302c4558a32c7z.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hd7efa7bffe594147bbcf974651fe2820U.jpg" alt=""><br>上述函数的正常执行结果本应该是：父进程数1、3、5、7、······；子进程数2、4、6、8、·······，且它们之间交替数数。<strong>然而实际结果却是当数到某一个数，程序就会停下来不再继续</strong>。<br>父进程中的第一个sleep函数确保在父进程向子进程发送信号前，子进程已经完成了对信号的注册（因为子进程有可能失去CPU时间太长而未完成对信号的注册），否则会导致子进程收到信号被终结。<br><strong>如果其中某一个进程（父进程或子进程）在while循环中刚发送完信号就失去了CPU，还未对flag进行修改，此时另一个进程处理完信号后，再次向该进程发送信号</strong>，此时该进程接收到信号不会接着执行flag=0的操作了，会马上去处理信号，信号处理完后，才会回到主控程序执行flag=0的操作，此时<strong>显然顺序发生了颠倒，导致最终flag错误置为0。</strong>因此，该进程处理完信号后再也不会发送信号了，另一个进程也再也不会收到信号，从而更不会再发信号。  </p>
+<p><strong>当有多个进程操作同一个全局变量时，如内核和子进程都对flag进行操作，就可能由于时序竞态，执行顺序不一样，导致产生不一样的结果，程序出错，这就是全局变量异步IO</strong>。<br>面对这种情况，处理方法：<br><strong>1.**</strong>尽量的避免使用全局变量，而使用局部变量。<br>2.使用锁机制，当操作全局变量时，通过加锁、解锁来解决该问题。<br>3.添加sleep函数，保证每一步的操作顺序**。  </p>
+<p>时序竞态虽然出现的概率比较低，但是是有可能发生的，而且会造成致命的后果，需要我们自己在编程时提前预知、避免。</p>
 
     </div>
 
@@ -285,7 +281,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/" title="多路查找树（B树）">https://zpl-novice.github.io/2020/03/17/多路查找树（B树）/</a>
+    <a href="https://zpl-novice.github.io/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/" title="Linux系统编程6">https://zpl-novice.github.io/2020/06/22/Linux系统编程6/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -302,13 +298,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/" rel="prev" title="伸展树(splay tree)">
-      <i class="fa fa-chevron-left"></i> 伸展树(splay tree)
+    <a href="/2020/06/20/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B5/" rel="prev" title="Linux系统编程5">
+      <i class="fa fa-chevron-left"></i> Linux系统编程5
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/20/%E6%95%A3%E5%88%971/" rel="next" title="散列">
-      散列 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -368,7 +361,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3树"><span class="nav-number">1.</span> <span class="nav-text">2-3树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-4树"><span class="nav-number">2.</span> <span class="nav-text">2-3-4树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B树"><span class="nav-number">3.</span> <span class="nav-text">B树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-树"><span class="nav-number">4.</span> <span class="nav-text">B+树</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
