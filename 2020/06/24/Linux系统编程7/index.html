@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将要介绍的知识是SIGCHLD信号、中断系统调用、网络终端、进程组、会话和守护进程。其中有些只是简单介绍其概念，而有些则需要重点掌握。守护进程可以和前面讲过的僵尸进程、孤儿进程一起记，是三大特殊进程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统编程7">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/24/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B7/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将要介绍的知识是SIGCHLD信号、中断系统调用、网络终端、进程组、会话和守护进程。其中有些只是简单介绍其概念，而有些则需要重点掌握。守护进程可以和前面讲过的僵尸进程、孤儿进程一起记，是三大特殊进程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H7bcba1bbcee04beebf497ed6563079b9F.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H9f6351c4bf3747c8bcd9c2145c120f1cG.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8d6639e91c7f467ab980e66b6b628205H.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb7a469b337a64b8792fbe0ab69c903b0i.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H94c29a6552e245f0b9406733b8542fbbO.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H9d84c50aaad34483894478c86182bee42.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha39d3e3a520c43e6883080230a947d89F.jpg">
+<meta property="article:published_time" content="2020-06-24T09:40:31.520Z">
+<meta property="article:modified_time" content="2020-06-24T10:00:26.132Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H7bcba1bbcee04beebf497ed6563079b9F.jpg">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/24/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux系统编程7 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/24/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统编程7
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-24 17:40:31 / 修改时间：18:00:26" itemprop="dateCreated datePublished" datetime="2020-06-24T17:40:31+08:00">2020-06-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将要介绍的知识是SIGCHLD信号、中断系统调用、网络终端、进程组、会话和守护进程。其中有些只是简单介绍其概念，而有些则需要重点掌握。守护进程可以和前面讲过的僵尸进程、孤儿进程一起记，是三大特殊进程。</p>
+<a id="more"></a>
+<h2 id="SIGCHLD信号"><a href="#SIGCHLD信号" class="headerlink" title="SIGCHLD信号"></a>SIGCHLD信号</h2><p>SIGCHLD信号产生条件：子进程终止时、子进程接收到SIGSTOP信号停止时、子进程处在停止态接收到SIGCONT后唤醒时。<br><strong>即子进程运行状态发生改变时，向父进程发送SIGCHLD信号</strong>。<br>借助SIGCHLD信号回收子进程，循环创建10个子进程，对SIGCHLD信号进行捕捉，这样每个子进程结束时会给父进程发送SIGCHLD信号，转入自定义函数中，对子进程进行回收并打印：<br><img src="https://ae01.alicdn.com/kf/H7bcba1bbcee04beebf497ed6563079b9F.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H9f6351c4bf3747c8bcd9c2145c120f1cG.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H8d6639e91c7f467ab980e66b6b628205H.jpg" alt=""><br>注意事项：在<strong>回收子进程时选用while循环而不是if，如果用if有可能造成某些子进程回收不到，形成僵尸进程。原因是在某一子进程回收期间，其他多个子进程终止发送SIGCHLD信号，但这时对SIGCHLD信号还处于屏蔽，内核只记录一次。当选用whlie循环时，经过循环判断，一次函数可回收多个子进程</strong>。<br>在<strong>父进程注册信号捕捉函数之前要先对信号阻塞，防止还没注册完函数子进程就已经终止发送信号</strong>，在注册完立即解除阻塞处理。  </p>
+<h2 id="中断系统调用"><a href="#中断系统调用" class="headerlink" title="中断系统调用"></a>中断系统调用</h2><p>系统调用可分为两类：慢速系统调用和其他系统调用。<br>1.<strong>慢速系统调用：可能使进程永远阻塞的一类。如果在阻塞期间收到一个信号，该系统调用就被中断，不再继续执行或系统调用重启（看情况）。如：pause、wait、read</strong>…<br>2.<strong>其他系统调用：一调用直接就被执行。如：getpid、fork</strong>…<br><strong>慢速系统调用被中断的相关行为，实际上就是pause的行为</strong>。<br><strong>可修改sa_flags参数来设置被信号中断后系统调用是否重启</strong>。如pause不需要重启，而read却需要。  </p>
+<h2 id="网络终端"><a href="#网络终端" class="headerlink" title="网络终端"></a>网络终端</h2><p><strong>Linux除了符号终端和图形终端，还可以配置网络终端，通过网络连接服务器</strong>。<br><img src="https://ae01.alicdn.com/kf/Hb7a469b337a64b8792fbe0ab69c903b0i.jpg" alt=""><br>每一个按键都要在网络里走一个来回。  </p>
+<h2 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h2><p><strong>计算机启动的第一个进程是init进程，其它进程由其fork而生</strong>。<br><strong>多个进程具有相同的进程组ID，称它们为进程组</strong>。<code>ps -ajx</code>可以<strong>查看父进程ID和进程组ID</strong>。<br><strong>当父进程创建子进程时，默认父进程和子进程同属一个进程组，进程组ID等于组长ID（父进程ID）</strong>。<br>使用 <code>kill -SIGKILL -进程组ID（负的）</code> 可以杀死一整个进程组。<br>进程组操作函数：<br>getpgrp函数：获取<strong>当前进程</strong>的进程组ID。<br><code>pid_t getpgrp(void)</code><br>getpgid函数：获取<strong>指定进程</strong>的进程组ID，若<strong>为0则表示当前进程</strong>。<br><code>pid_t getpgid(pid_t pid)</code><br>setpgid函数：<strong>改变进程默认所属的进程组</strong>，通常可用来加入一个现有的进程组或创建一个新的进程组。<br><code>int setpgid(pid_t pid,pid_t pgid)</code> 参1为进程ID，参2为进程组ID，将进程放到进程组中，没有则创建。  </p>
+<h2 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h2><p><strong>会话是进程组的集合，即多个进程组可以构成一个会话</strong>。<br>创建一个会话注意事项：<br>1.调用进程<strong>不能是进程组组长，该进程变成新会话首进程。如果是组长进程调用，则出错返回</strong>。<br>2.该进程成为一个新进程组的组长进程。<br>3.须有root权限。<br>4.<strong>该会话丢弃原有的控制终端，变成没有控制终端</strong>。<br>5.建立新会话时，<strong>先调用fork，父进程终止，子进程调用setsid</strong>。<br><strong>setsid函数：设置一个新会话。<br>getsid函数：获取进程所属的会话ID</strong>。<br><img src="https://ae01.alicdn.com/kf/H94c29a6552e245f0b9406733b8542fbbO.jpg" alt="">   </p>
+<h2 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h2><p><strong>Daemon（精灵）进程，是Linux中的后台服务进程，通常独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件，一般采用d结尾的名字</strong>。如vsftpd、httpd、sshd<br><strong>Linux后台的一些系统服务进程，没有控制终端，不能直接和用户交互，不受用户登录、注销的影响，一直在运行着，它们都是守护进程。如：预读入缓输出机制的实现、ftp服务器、nfs服务器等</strong><br>创建守护进程模型:<br>1.创建子进程、父进程退出。所有工作在子进程中进行形式上脱离了控制终端 。<br>2.在<strong>子进程中创建新会话，setsid函数，使子进程完全独立出来，脱离控制。会话的特点：丢弃原有的控制终端</strong>。<br>3.<strong>改变当前目录</strong>为根目录，<strong>chdir函数，防止占用可卸载的文件系统，也可以换成其它路径</strong>。<br>4.<strong>重设文件权限掩码，umask函数</strong>，防止继承的文件创建屏蔽字拒绝某些权限，增加守护进程灵活性<br>5.<strong>关闭文件描述符，继承的打开文件不会用到（脱离终端）</strong>，浪费系统资源。<br>6.开始执行守护进程核心工作（周期性的执行某种任务或等待处理某些发生的事件）。<br>7.守护进程退出处理模型（基本不用，大多数守护进程不会退出）。<br><img src="https://ae01.alicdn.com/kf/H9d84c50aaad34483894478c86182bee42.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha39d3e3a520c43e6883080230a947d89F.jpg" alt="">  </p>
+<p>守护进程不会随着用户登录、注销而改变，但如果关机重启系统，守护进程会终止，所以<strong>一般写在bash的配置文件中，这样开机自动运行</strong>。  </p>
+<p>在下篇将开始进入线程的学习，这部分知识非常重要。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2020/06/24/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B7/" title="Linux系统编程7">https://zpl-novice.github.io/2020/06/24/Linux系统编程7/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/" rel="prev" title="Linux系统编程6">
+      <i class="fa fa-chevron-left"></i> Linux系统编程6
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SIGCHLD信号"><span class="nav-number">1.</span> <span class="nav-text">SIGCHLD信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中断系统调用"><span class="nav-number">2.</span> <span class="nav-text">中断系统调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络终端"><span class="nav-number">3.</span> <span class="nav-text">网络终端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程组"><span class="nav-number">4.</span> <span class="nav-text">进程组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话"><span class="nav-number">5.</span> <span class="nav-text">会话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#守护进程"><span class="nav-number">6.</span> <span class="nav-text">守护进程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">71</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

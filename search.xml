@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程7</title>
+    <url>/2020/06/24/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B7/</url>
+    <content><![CDATA[<p>摘要：本篇将要介绍的知识是SIGCHLD信号、中断系统调用、网络终端、进程组、会话和守护进程。其中有些只是简单介绍其概念，而有些则需要重点掌握。守护进程可以和前面讲过的僵尸进程、孤儿进程一起记，是三大特殊进程。</p>
+<a id="more"></a>
+<h2 id="SIGCHLD信号"><a href="#SIGCHLD信号" class="headerlink" title="SIGCHLD信号"></a>SIGCHLD信号</h2><p>SIGCHLD信号产生条件：子进程终止时、子进程接收到SIGSTOP信号停止时、子进程处在停止态接收到SIGCONT后唤醒时。<br><strong>即子进程运行状态发生改变时，向父进程发送SIGCHLD信号</strong>。<br>借助SIGCHLD信号回收子进程，循环创建10个子进程，对SIGCHLD信号进行捕捉，这样每个子进程结束时会给父进程发送SIGCHLD信号，转入自定义函数中，对子进程进行回收并打印：<br><img src="https://ae01.alicdn.com/kf/H7bcba1bbcee04beebf497ed6563079b9F.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H9f6351c4bf3747c8bcd9c2145c120f1cG.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H8d6639e91c7f467ab980e66b6b628205H.jpg" alt=""><br>注意事项：在<strong>回收子进程时选用while循环而不是if，如果用if有可能造成某些子进程回收不到，形成僵尸进程。原因是在某一子进程回收期间，其他多个子进程终止发送SIGCHLD信号，但这时对SIGCHLD信号还处于屏蔽，内核只记录一次。当选用whlie循环时，经过循环判断，一次函数可回收多个子进程</strong>。<br>在<strong>父进程注册信号捕捉函数之前要先对信号阻塞，防止还没注册完函数子进程就已经终止发送信号</strong>，在注册完立即解除阻塞处理。  </p>
+<h2 id="中断系统调用"><a href="#中断系统调用" class="headerlink" title="中断系统调用"></a>中断系统调用</h2><p>系统调用可分为两类：慢速系统调用和其他系统调用。<br>1.<strong>慢速系统调用：可能使进程永远阻塞的一类。如果在阻塞期间收到一个信号，该系统调用就被中断，不再继续执行或系统调用重启（看情况）。如：pause、wait、read</strong>…<br>2.<strong>其他系统调用：一调用直接就被执行。如：getpid、fork</strong>…<br><strong>慢速系统调用被中断的相关行为，实际上就是pause的行为</strong>。<br><strong>可修改sa_flags参数来设置被信号中断后系统调用是否重启</strong>。如pause不需要重启，而read却需要。  </p>
+<h2 id="网络终端"><a href="#网络终端" class="headerlink" title="网络终端"></a>网络终端</h2><p><strong>Linux除了符号终端和图形终端，还可以配置网络终端，通过网络连接服务器</strong>。<br><img src="https://ae01.alicdn.com/kf/Hb7a469b337a64b8792fbe0ab69c903b0i.jpg" alt=""><br>每一个按键都要在网络里走一个来回。  </p>
+<h2 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h2><p><strong>计算机启动的第一个进程是init进程，其它进程由其fork而生</strong>。<br><strong>多个进程具有相同的进程组ID，称它们为进程组</strong>。<code>ps -ajx</code>可以<strong>查看父进程ID和进程组ID</strong>。<br><strong>当父进程创建子进程时，默认父进程和子进程同属一个进程组，进程组ID等于组长ID（父进程ID）</strong>。<br>使用 <code>kill -SIGKILL -进程组ID（负的）</code> 可以杀死一整个进程组。<br>进程组操作函数：<br>getpgrp函数：获取<strong>当前进程</strong>的进程组ID。<br><code>pid_t getpgrp(void)</code><br>getpgid函数：获取<strong>指定进程</strong>的进程组ID，若<strong>为0则表示当前进程</strong>。<br><code>pid_t getpgid(pid_t pid)</code><br>setpgid函数：<strong>改变进程默认所属的进程组</strong>，通常可用来加入一个现有的进程组或创建一个新的进程组。<br><code>int setpgid(pid_t pid,pid_t pgid)</code> 参1为进程ID，参2为进程组ID，将进程放到进程组中，没有则创建。  </p>
+<h2 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h2><p><strong>会话是进程组的集合，即多个进程组可以构成一个会话</strong>。<br>创建一个会话注意事项：<br>1.调用进程<strong>不能是进程组组长，该进程变成新会话首进程。如果是组长进程调用，则出错返回</strong>。<br>2.该进程成为一个新进程组的组长进程。<br>3.须有root权限。<br>4.<strong>该会话丢弃原有的控制终端，变成没有控制终端</strong>。<br>5.建立新会话时，<strong>先调用fork，父进程终止，子进程调用setsid</strong>。<br><strong>setsid函数：设置一个新会话。<br>getsid函数：获取进程所属的会话ID</strong>。<br><img src="https://ae01.alicdn.com/kf/H94c29a6552e245f0b9406733b8542fbbO.jpg" alt="">   </p>
+<h2 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h2><p><strong>Daemon（精灵）进程，是Linux中的后台服务进程，通常独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件，一般采用d结尾的名字</strong>。如vsftpd、httpd、sshd<br><strong>Linux后台的一些系统服务进程，没有控制终端，不能直接和用户交互，不受用户登录、注销的影响，一直在运行着，它们都是守护进程。如：预读入缓输出机制的实现、ftp服务器、nfs服务器等</strong><br>创建守护进程模型:<br>1.创建子进程、父进程退出。所有工作在子进程中进行形式上脱离了控制终端 。<br>2.在<strong>子进程中创建新会话，setsid函数，使子进程完全独立出来，脱离控制。会话的特点：丢弃原有的控制终端</strong>。<br>3.<strong>改变当前目录</strong>为根目录，<strong>chdir函数，防止占用可卸载的文件系统，也可以换成其它路径</strong>。<br>4.<strong>重设文件权限掩码，umask函数</strong>，防止继承的文件创建屏蔽字拒绝某些权限，增加守护进程灵活性<br>5.<strong>关闭文件描述符，继承的打开文件不会用到（脱离终端）</strong>，浪费系统资源。<br>6.开始执行守护进程核心工作（周期性的执行某种任务或等待处理某些发生的事件）。<br>7.守护进程退出处理模型（基本不用，大多数守护进程不会退出）。<br><img src="https://ae01.alicdn.com/kf/H9d84c50aaad34483894478c86182bee42.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha39d3e3a520c43e6883080230a947d89F.jpg" alt="">  </p>
+<p>守护进程不会随着用户登录、注销而改变，但如果关机重启系统，守护进程会终止，所以<strong>一般写在bash的配置文件中，这样开机自动运行</strong>。  </p>
+<p>在下篇将开始进入线程的学习，这部分知识非常重要。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux系统编程6</title>
     <url>/2020/06/22/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B6/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍时序竞态的知识。主要包括什么是时序竞态，都用到了哪些函数，以及如何解决时序竞态和时序竞态引起的全局变量异步IO问题。</p>
