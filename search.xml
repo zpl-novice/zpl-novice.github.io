@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程8</title>
+    <url>/2020/06/26/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B8/</url>
+    <content><![CDATA[<p>摘要：本篇将开始对线程的学习，线程与进程的关系需要分清，主要介绍线程与进程的区别，线程的优缺点，如何创建线程、查看线程、退出线程等。</p>
+<a id="more"></a>
+<p>在<strong>Linux环境下，线程LWP：light weight process 轻量级的进程，本质仍是进程。<br>进程：独立地址空间，拥有PCB。<br>线程：也有PCB，但没有独立的地址空间（共享）。<br>区别：在于是否共享地址空间</strong>。<br><img src="https://ae01.alicdn.com/kf/H696f3aafd56e407791cee79a46f788f76.jpg" alt=""><br>当<strong>b进程创建线程后，b也变成了线程，该进程里共有2个线程</strong>。<br><strong>线程：CPU最小的执行单元。<br>进程：最小分配资源单位，可看成是只有一个线程的进程。<br>线程可以看作寄存器和栈的集合，多线程可以提高执行效率</strong>。  </p>
+<h2 id="查看线程号"><a href="#查看线程号" class="headerlink" title="查看线程号"></a>查看线程号</h2><p><code>ps -Lf pid</code> 查看<strong>指定线程的lwp号，pid为线程所属的进程ID</strong>。<br>如打开火狐浏览器并打开多个标签，首先查看进程：<br><img src="https://ae01.alicdn.com/kf/H48a3a6ef8e53490a936608a828e71facr.jpg" alt=""><br>pid是3256，然后查看线程：<br><img src="https://ae01.alicdn.com/kf/Hc267f6c4632a4829b733f72dceff9868Z.jpg" alt=""><br>可以看到有52个的线程，它们有自己的线程号。注意<strong>线程号不是线程ID</strong>。  </p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p>同一进程内的线程共享资源：<br>1.文件描述符表<br>2.每种信号的处理方式<br>3.当前工作目录<br>4.用户ID和组ID<br>5.内存地址空间（.text/.data/.bss/heap/共享库）<br>线程非共享资源：<br>1.线程ID<br>2.处理器现场和栈指针（<strong>内核栈</strong>）<br>3.独立的<strong>栈空间</strong>（<strong>用户空间栈（函数）</strong>）<br>4.errno变量<br>5.信号屏蔽字<br>6.调度优先集<br><strong>优点：1.提高程序并发性 2.开销小（与进程相比） 3.数据通信、共享数据方便<br>缺点：1.库函数，不稳定2.调试、编写困难 3.对信号支持不好<br>优点相对突出，缺点不是硬伤</strong>。  </p>
+<h2 id="线程控制原语"><a href="#线程控制原语" class="headerlink" title="线程控制原语"></a>线程控制原语</h2><p><strong><code>pthread_self</code>函数：获取线程ID，作用对应进程中getpid函数</strong>。<br> <code>pthread_t pthread_self(void)</code><br>pthread_t类型，在Linux下为无符号整数。<br><strong><code>pthread_create</code>函数：创建一个新线程，作用对应进程中fork函数</strong>。<br><code>int pthread_create(pthread_t *thread,const pthread_attr_t *attr,void*(*start_rountine)(void*),void *arg)</code><br>参数1：传出参数，保存系统为我们分配好的线程ID。<br>参数2：通常传NULL，表示使用线程默认属性。<br>参数3：函数指针，指向<strong>线程主函数</strong>（线程体），该函数运行结束，则线程结束。<br>参数4：线程主函数执行期间所使用的参数。<br><img src="https://ae01.alicdn.com/kf/H8623fe9cc6c54a8cb70bf420c0444ce2Z.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/H7f115876446e428a982455d46c0852265.jpg" alt=""><br><strong>线程具有相同的进程ID，不同的线程ID</strong>。<br>循环创建多个子线程（类似于进程）：<br><strong>与创建子进程不同之处在于，创建子线程不需要再用break终止线程，防止子线程创建新的子线程，这是因为子线程只在它对应的线程函数中运行，main函数只属于主控线程。这与进程不同（子进程拥有和父进程相同代码，在main函数中也运行）</strong>。<br><img src="https://ae01.alicdn.com/kf/H1016fb8a6a284390bc2bce547c3ede66Z.jpg" alt=""><br>证明线程共享全局变量（.data）：<br><img src="https://ae01.alicdn.com/kf/H840727dd29bb4b52be6982014945129aG.jpg" alt="">  </p>
+<p><strong>线程共享全局变量，进程则不共享，需要借助mmap建立映射区</strong>。<br><strong><code>pthread_exit</code>函数：将单个线程退出。</strong><br><code>void pthread_exit(void *retval)</code>  参数retval表示线程退出状态，通常传NULL。<br><strong>不能使用exit，因为exit退出的是进程，会使全部线程退出</strong>。<br>如果用<code>pthread_exit</code>可以代替主控线程里的return 0和sleep。这样就不会<strong>主控线程结束退出整个进程，而是只退出主控线程，其他子线程照样执行</strong>。  </p>
+<p>本篇对线程的控制原语就先介绍到这里，下一篇中将会继续介绍。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux系统编程7</title>
     <url>/2020/06/24/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B7/</url>
     <content><![CDATA[<p>摘要：本篇将要介绍的知识是SIGCHLD信号、中断系统调用、网络终端、进程组、会话和守护进程。其中有些只是简单介绍其概念，而有些则需要重点掌握。守护进程可以和前面讲过的僵尸进程、孤儿进程一起记，是三大特殊进程。</p>
