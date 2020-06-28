@@ -46,34 +46,29 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将进入二叉树的学习，二叉树是数据结构中的重点知识，它包含的内容很多，因此将会分为几篇来讲解。在本篇当中将会主要介绍什么是二叉树？二叉树有哪些特点？二叉树有什么性质？二叉树是如何存储的以及二叉树的遍历。">
+  <meta name="description" content="摘要：本篇继续对线程的学习，将介绍如何对线程进行回收，以及怎么分离线程和杀死线程。与进程相对比，线程多了一些控制原语，需要注意区别。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="二叉树知识1">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/03/05/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%861/index.html">
+<meta property="og:title" content="Linux系统编程9">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/28/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B9/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将进入二叉树的学习，二叉树是数据结构中的重点知识，它包含的内容很多，因此将会分为几篇来讲解。在本篇当中将会主要介绍什么是二叉树？二叉树有哪些特点？二叉树有什么性质？二叉树是如何存储的以及二叉树的遍历。">
+<meta property="og:description" content="摘要：本篇继续对线程的学习，将介绍如何对线程进行回收，以及怎么分离线程和杀死线程。与进程相对比，线程多了一些控制原语，需要注意区别。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/LdfCzOhibHrZ9In.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/fEM6cdKr9heqkV7.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/uSts9hV3oRWy86P.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/EvTtyAeJfUB21c7.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/Nv26qUsFZ13OGhb.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/Mcz1Vsihn7ludoA.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/3AD2mSNl7w8dYGZ.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/pgiNvrmFZcJRPfl.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/UoG5eVXNj8zR16D.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/VPrLX6uUkitzoRE.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/xu4q5W6TiM8Jh3X.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/Yp6hCQiTyq3j9Ox.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/TkJoOhWb3axZ1PD.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/05/USK81qYeVfH4uTc.png">
-<meta property="article:published_time" content="2020-03-05T01:22:58.589Z">
-<meta property="article:modified_time" content="2020-03-05T03:11:23.695Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb6d5a102f7a64945a04e7a1fb2dd6a21s.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0fcb3bbed7e240a1aabd87d9e37506b8F.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/He9a572d97c0d45d5b3d0cf5da8b98a76Q.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hf6578e5a4b4c4ea29b47f3f1a4b00bf0p.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd9d70f688c1a4cc78a1f9b3377b898a1A.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb2ae74b5d9534c46987325414dbff1aeH.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/He6a4bfa27b984adbbc7d7725b32c7ba9J.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H3cd3ed8a53b049fba6dcafd31a26ac8bo.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H31256b58684448f3913cacec8b5e8a78O.jpg">
+<meta property="article:published_time" content="2020-06-28T09:16:30.155Z">
+<meta property="article:modified_time" content="2020-06-28T09:34:58.862Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/03/05/LdfCzOhibHrZ9In.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hb6d5a102f7a64945a04e7a1fb2dd6a21s.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/03/05/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%861/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/28/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B9/">
 
 
 <script id="page-configurations">
@@ -85,7 +80,7 @@
   };
 </script>
 
-  <title>二叉树知识1 | zpl-novice</title>
+  <title>Linux系统编程9 | zpl-novice</title>
   
 
 
@@ -215,7 +210,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/05/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%861/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/28/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -228,7 +223,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          二叉树知识1
+          Linux系统编程9
         </h1>
 
         <div class="post-meta">
@@ -239,7 +234,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-05 09:22:58 / 修改时间：11:11:23" itemprop="dateCreated datePublished" datetime="2020-03-05T09:22:58+08:00">2020-03-05</time>
+              <time title="创建时间：2020-06-28 17:16:30 / 修改时间：17:34:58" itemprop="dateCreated datePublished" datetime="2020-06-28T17:16:30+08:00">2020-06-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,8 +242,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -259,7 +254,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
+              <span>814</span>
             </span>
 
         </div>
@@ -271,18 +266,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将进入二叉树的学习，二叉树是数据结构中的重点知识，它包含的内容很多，因此将会分为几篇来讲解。在本篇当中将会主要介绍什么是二叉树？二叉树有哪些特点？二叉树有什么性质？二叉树是如何存储的以及二叉树的遍历。</p>
+        <p>摘要：本篇继续对线程的学习，将介绍如何对线程进行回收，以及怎么分离线程和杀死线程。与进程相对比，线程多了一些控制原语，需要注意区别。</p>
 <a id="more"></a>
-<p>二叉树(binary tree)是一棵树，它的每个结点<strong>最多</strong>有两个孩子，并且子树是有<strong>顺序</strong>的。这也是它与前面学习的树的最主要的区别，二叉树的左子树和右子树严格区分。  </p>
-<h2 id="二叉树特点"><a href="#二叉树特点" class="headerlink" title="二叉树特点"></a>二叉树特点</h2><p>1.每个结点最多有2个子树，所以二叉树不存在度大于2的结点。可以只有1个子树或没有子树。<br>2.左子树和右子树有顺序，且次序不能颠倒。<br>3.即使树中某一结点只有1个子树，也要区分是左子树还是右子树。树1和树2是同一棵树，却是不同的二叉树。<br><img src="https://i.loli.net/2020/03/05/LdfCzOhibHrZ9In.png" alt=""><br>二叉树的基本形态有5种：<br>1.空二叉树<br>2.只有一个根结点<br>3.根结点只有左子树<br>4.根结点只有右子树<br>5.根结点既有左子树又有右子树<br>根据它的基本形态，也就有了一些特殊的二叉树：<br>1.斜树：包括左斜树和右斜树，显然左斜树指每个结点只有左孩子，右斜树则是每个结点只有右孩子。<br>2.满二叉树：所有的结点都有左孩子和右孩子并且<strong>所有的叶子在同一层</strong>上。<br><img src="https://i.loli.net/2020/03/05/fEM6cdKr9heqkV7.png" alt=""><br>3.完全二叉树：对一棵具有n个结点的二叉树按层序编号，如果编号与同样深度的满二叉树的编号位置完全相同，则称为完全二叉树。相当于是满足特定要求的满二叉树的子树。<br><img src="https://i.loli.net/2020/03/05/uSts9hV3oRWy86P.png" alt=""><br>要注意完全二叉树与满二叉树的区别。满二叉树一定是一棵完全二叉树，但完全二叉树不一定是满二叉树。而下面所示的3棵树就不是完全二叉树:<br><img src="https://i.loli.net/2020/03/05/EvTtyAeJfUB21c7.png" alt=""><br>因此可得完全二叉树的特点：叶子结点只能出现在最下两层。最下层的叶子一定是在左部连续的。倒数二层若有叶子结点，则一定在右部且是满叶。同样结点数的二叉树，完全二叉树的深度最小。  </p>
-<h2 id="二叉树性质"><a href="#二叉树性质" class="headerlink" title="二叉树性质"></a>二叉树性质</h2><p>1.在二叉树的第i层上最多有2^(i-1)个结点。这是在满二叉树的情况下最多。<br>2.深度为k的二叉树最多有2^k-1个结点。注意与第一条的区别，上一个求的是第i层上的结点，这个是二叉树的所有结点。也是满二叉树的情况下结点最多。<br>3.对任意一个二叉树T，如果其终端结点数（叶子数）为n0，度为2的结点数为n2，则n0=n2+1。<br>4.具有n个结点的完全二叉树的深度为[logn+1]，括号表示不大于的最大整数，log以2为底。   </p>
-<h2 id="二叉树存储"><a href="#二叉树存储" class="headerlink" title="二叉树存储"></a>二叉树存储</h2><p>前面提到顺序存储对树这一结构是比较困难的。但是二叉树是一种特殊的树，它可以用顺序存储结构实现。我们用数组存储结点，对于如下的完全二叉树：<br><img src="https://i.loli.net/2020/03/05/Nv26qUsFZ13OGhb.png" alt=""><br>它的数组存储如下：<br><img src="https://i.loli.net/2020/03/05/Mcz1Vsihn7ludoA.png" alt=""><br>对于一般的二叉树，将其按照完全二叉树编号，把存在的结点设置成空即可。如下二叉树：<br><img src="https://i.loli.net/2020/03/05/3AD2mSNl7w8dYGZ.png" alt=""><br>若在极端的情况下，一棵深度为k的右斜树，它只有k个结点，却要分配2^k-1个存储空间，这是对存储空间的很大浪费，<strong>所以顺序存储一般只用于完全二叉树</strong>。<br><img src="https://i.loli.net/2020/03/05/pgiNvrmFZcJRPfl.png" alt=""><br>另一种存储为链表存储构成二叉链表。因为二叉树每个结点最多有两个孩子，所以设计一个数据域和两个指针域。<br><img src="https://i.loli.net/2020/03/05/UoG5eVXNj8zR16D.png" alt=""><br><img src="https://i.loli.net/2020/03/05/VPrLX6uUkitzoRE.png" alt=""><br>如果有需要，可以增设一个指针指向其双亲，那样就成了三叉链表。</p>
-<h2 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h2><p>二叉树的遍历就是从根结点出发，按照某种次序依次访问二叉树种的所有结点，使得每个结点被访问一次且仅被访问一次。</p>
-<h3 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h3><p>先访问根结点，然后前序遍历左子树，再前序遍历右子树。如下所示，前序遍历顺序为：ABDGHCEIF。<br><img src="https://i.loli.net/2020/03/05/xu4q5W6TiM8Jh3X.png" alt="">  </p>
-<h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><p>中序遍历左子树，再访问根结点，再中序遍历右子树。如下所示，中序遍历顺序为：GDHBAEICF。<br><img src="https://i.loli.net/2020/03/05/Yp6hCQiTyq3j9Ox.png" alt="">  </p>
-<h3 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h3><p>后序遍历左子树，再后序遍历右子树，最后再访问根结点。后序遍历顺序为：GHDBIEFCA。<br><img src="https://i.loli.net/2020/03/05/TkJoOhWb3axZ1PD.png" alt="">  </p>
-<h3 id="层序遍历"><a href="#层序遍历" class="headerlink" title="层序遍历"></a>层序遍历</h3><p>从上而下逐层遍历，在同一层中，从左到右顺序遍历。层序遍历顺序为：ABCDEFGHI。<br><img src="https://i.loli.net/2020/03/05/USK81qYeVfH4uTc.png" alt="">  </p>
-<p>可以看到，前、中、后序遍历的定义都用到了递归的概念，而二叉树的也可以用递归来定义。这就给了我们一个启示，在用程序将二叉树建立以及遍历二叉树时，是否可以用递归算法来实现呢？在下篇当中，将会讲解如何建立一个二叉树。</p>
+<h2 id="回收线程"><a href="#回收线程" class="headerlink" title="回收线程"></a>回收线程</h2><p><strong><code>pthread_join</code>函数：阻塞等待线程退出，获取线程退出状态，即回收线程。作用对应进程中的waitpid函数</strong>。<br><code>int pthread_join(pthread_t thread,void **(retval))</code><br><img src="https://ae01.alicdn.com/kf/Hb6d5a102f7a64945a04e7a1fb2dd6a21s.jpg" alt=""><br>回收多个子线程：<br><img src="https://ae01.alicdn.com/kf/H0fcb3bbed7e240a1aabd87d9e37506b8F.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/He9a572d97c0d45d5b3d0cf5da8b98a76Q.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/Hf6578e5a4b4c4ea29b47f3f1a4b00bf0p.jpg" alt=""><br>可以看到，<strong>全局变量var共享</strong>。  </p>
+<h2 id="线程分离"><a href="#线程分离" class="headerlink" title="线程分离"></a>线程分离</h2><p><strong><code>pthread_detach</code>函数：实现线程分离</strong>。<br><code>int pthread_detach(pthread_t thread)</code><br>线程分离状态：指定该状态，线程与主控线程断开联系。<strong>线程结束后，其退出状态不由其他线程获取，而直接自己释放</strong>，网络、多线程服务器中常用。<br><strong>线程分离后，就不需要回收</strong>。  </p>
+<h2 id="杀死线程"><a href="#杀死线程" class="headerlink" title="杀死线程"></a>杀死线程</h2><p><strong><code>pthread_cancel</code>函数：杀死线程。对应进程中的kill函数</strong>。<br><code>int pthread_cancel(pthread_t thread)</code><br><img src="https://ae01.alicdn.com/kf/Hd9d70f688c1a4cc78a1f9b3377b898a1A.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hb2ae74b5d9534c46987325414dbff1aeH.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/He6a4bfa27b984adbbc7d7725b32c7ba9J.jpg" alt=""><br><strong>线程1和线程2正常退出，一个使用return，一个使用pthread_exit。线程3不停循环，主控线程里杀死线程3，进行回收，得到回收状态为-1。若不杀死线程3，则回收一直阻塞等待</strong>。<br>注意：<strong>线程的取消或杀死并不是实时的，而是具有一定的延时，需要等到线程到达某个取消点（检查点</strong>）。<br>取消点：<strong>是线程检查是否被取消，并按请求进行动作的一个位置。通常是一些系统调用</strong>create、open、pause、read、write…<br>可粗略的认为一个系统调用（进入内核）即为一个取消点，如<strong>线程中没有取消点，可通过调用<code>pthread_testcancel</code>函数自行设置一个取消点</strong>。<br><strong>即上面代码中，printf调用了write，若循环中什么都没有，将无法杀死线程</strong>。  </p>
+<h2 id="线程属性"><a href="#线程属性" class="headerlink" title="线程属性"></a>线程属性</h2><p><strong>在创建线程时，第二个参数一般传NULL，表示用线程的默认属性，也可以自己设置</strong>。<br><img src="https://ae01.alicdn.com/kf/H3cd3ed8a53b049fba6dcafd31a26ac8bo.jpg" alt=""><br>如通过设置线程属性来将线程变成分离态。<br><img src="https://ae01.alicdn.com/kf/H31256b58684448f3913cacec8b5e8a78O.jpg" alt="">  </p>
+<p>下一篇将介绍线程同步的相关知识。</p>
 
     </div>
 
@@ -298,7 +288,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/05/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%861/" title="二叉树知识1">https://zpl-novice.github.io/2020/03/05/二叉树知识1/</a>
+    <a href="https://zpl-novice.github.io/2020/06/28/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B9/" title="Linux系统编程9">https://zpl-novice.github.io/2020/06/28/Linux系统编程9/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -315,13 +305,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/03/%E6%A0%91%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="prev" title="树的基础知识">
-      <i class="fa fa-chevron-left"></i> 树的基础知识
+    <a href="/2020/06/26/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B8/" rel="prev" title="Linux系统编程8">
+      <i class="fa fa-chevron-left"></i> Linux系统编程8
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9F%A5%E8%AF%862/" rel="next" title="二叉树知识2">
-      二叉树知识2 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -381,7 +368,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树特点"><span class="nav-number">1.</span> <span class="nav-text">二叉树特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树性质"><span class="nav-number">2.</span> <span class="nav-text">二叉树性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树存储"><span class="nav-number">3.</span> <span class="nav-text">二叉树存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树遍历"><span class="nav-number">4.</span> <span class="nav-text">二叉树遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前序遍历"><span class="nav-number">4.1.</span> <span class="nav-text">前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中序遍历"><span class="nav-number">4.2.</span> <span class="nav-text">中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后序遍历"><span class="nav-number">4.3.</span> <span class="nav-text">后序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#层序遍历"><span class="nav-number">4.4.</span> <span class="nav-text">层序遍历</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#回收线程"><span class="nav-number">1.</span> <span class="nav-text">回收线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程分离"><span class="nav-number">2.</span> <span class="nav-text">线程分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#杀死线程"><span class="nav-number">3.</span> <span class="nav-text">杀死线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程属性"><span class="nav-number">4.</span> <span class="nav-text">线程属性</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

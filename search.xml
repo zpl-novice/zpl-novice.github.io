@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程9</title>
+    <url>/2020/06/28/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B9/</url>
+    <content><![CDATA[<p>摘要：本篇继续对线程的学习，将介绍如何对线程进行回收，以及怎么分离线程和杀死线程。与进程相对比，线程多了一些控制原语，需要注意区别。</p>
+<a id="more"></a>
+<h2 id="回收线程"><a href="#回收线程" class="headerlink" title="回收线程"></a>回收线程</h2><p><strong><code>pthread_join</code>函数：阻塞等待线程退出，获取线程退出状态，即回收线程。作用对应进程中的waitpid函数</strong>。<br><code>int pthread_join(pthread_t thread,void **(retval))</code><br><img src="https://ae01.alicdn.com/kf/Hb6d5a102f7a64945a04e7a1fb2dd6a21s.jpg" alt=""><br>回收多个子线程：<br><img src="https://ae01.alicdn.com/kf/H0fcb3bbed7e240a1aabd87d9e37506b8F.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/He9a572d97c0d45d5b3d0cf5da8b98a76Q.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/Hf6578e5a4b4c4ea29b47f3f1a4b00bf0p.jpg" alt=""><br>可以看到，<strong>全局变量var共享</strong>。  </p>
+<h2 id="线程分离"><a href="#线程分离" class="headerlink" title="线程分离"></a>线程分离</h2><p><strong><code>pthread_detach</code>函数：实现线程分离</strong>。<br><code>int pthread_detach(pthread_t thread)</code><br>线程分离状态：指定该状态，线程与主控线程断开联系。<strong>线程结束后，其退出状态不由其他线程获取，而直接自己释放</strong>，网络、多线程服务器中常用。<br><strong>线程分离后，就不需要回收</strong>。  </p>
+<h2 id="杀死线程"><a href="#杀死线程" class="headerlink" title="杀死线程"></a>杀死线程</h2><p><strong><code>pthread_cancel</code>函数：杀死线程。对应进程中的kill函数</strong>。<br><code>int pthread_cancel(pthread_t thread)</code><br><img src="https://ae01.alicdn.com/kf/Hd9d70f688c1a4cc78a1f9b3377b898a1A.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hb2ae74b5d9534c46987325414dbff1aeH.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/He6a4bfa27b984adbbc7d7725b32c7ba9J.jpg" alt=""><br><strong>线程1和线程2正常退出，一个使用return，一个使用pthread_exit。线程3不停循环，主控线程里杀死线程3，进行回收，得到回收状态为-1。若不杀死线程3，则回收一直阻塞等待</strong>。<br>注意：<strong>线程的取消或杀死并不是实时的，而是具有一定的延时，需要等到线程到达某个取消点（检查点</strong>）。<br>取消点：<strong>是线程检查是否被取消，并按请求进行动作的一个位置。通常是一些系统调用</strong>create、open、pause、read、write…<br>可粗略的认为一个系统调用（进入内核）即为一个取消点，如<strong>线程中没有取消点，可通过调用<code>pthread_testcancel</code>函数自行设置一个取消点</strong>。<br><strong>即上面代码中，printf调用了write，若循环中什么都没有，将无法杀死线程</strong>。  </p>
+<h2 id="线程属性"><a href="#线程属性" class="headerlink" title="线程属性"></a>线程属性</h2><p><strong>在创建线程时，第二个参数一般传NULL，表示用线程的默认属性，也可以自己设置</strong>。<br><img src="https://ae01.alicdn.com/kf/H3cd3ed8a53b049fba6dcafd31a26ac8bo.jpg" alt=""><br>如通过设置线程属性来将线程变成分离态。<br><img src="https://ae01.alicdn.com/kf/H31256b58684448f3913cacec8b5e8a78O.jpg" alt="">  </p>
+<p>下一篇将介绍线程同步的相关知识。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux系统编程8</title>
     <url>/2020/06/26/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B8/</url>
     <content><![CDATA[<p>摘要：本篇将开始对线程的学习，线程与进程的关系需要分清，主要介绍线程与进程的区别，线程的优缺点，如何创建线程、查看线程、退出线程等。</p>
