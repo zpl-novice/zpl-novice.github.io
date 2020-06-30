@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将开始介绍线程同步的相关知识，线程同步指的是线程按照预定的顺序先后执行，避免因时间产生的错误造成数据混乱。可以通过锁的机制来完成线程同步，本篇中将介绍什么是互斥锁、读写锁，以及死锁现象的产生和解决，条件变量构建生产者消费者模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统编程10">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/06/30/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B10/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将开始介绍线程同步的相关知识，线程同步指的是线程按照预定的顺序先后执行，避免因时间产生的错误造成数据混乱。可以通过锁的机制来完成线程同步，本篇中将介绍什么是互斥锁、读写锁，以及死锁现象的产生和解决，条件变量构建生产者消费者模型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H49975a666d1e4595b38d041a23ed1aaev.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha3bc7f1837d146f4ae11df61ad70622aW.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H3809d67ad2df4ed68b05b4a272f191d1f.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8ec48a724fd948678e9ea23a15d0f3f1w.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H915fad1b8375496bbd6f4fcb41d42824I.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H348823f9455640c9b2d16b3fb1b94f45T.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H78fd1c1109604a219d608afc6910b8d5o.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H7b1a79c55cca48769956661b5772af48J.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H66e57c13fa644000b8c4f451df760dfef.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hf4d1f7e88b654cc1ac80fa8ba265509aL.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H459f975c84334b648b572abaed94ed0dv.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H505dc215c89545ab89dc96798ca384bdK.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H522301910c67486b8bf663acace21bdeS.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hcd71a34028334094b467736c6df51cc57.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H01211f08323147c793dac0046c5a92efm.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hcc6e5f57301f4cc8bfe04e94f30c8cb5n.jpg">
+<meta property="article:published_time" content="2020-06-30T07:23:06.023Z">
+<meta property="article:modified_time" content="2020-06-30T07:47:09.970Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H49975a666d1e4595b38d041a23ed1aaev.jpg">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2020/06/30/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux系统编程10 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/30/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统编程10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-30 15:23:06 / 修改时间：15:47:09" itemprop="dateCreated datePublished" datetime="2020-06-30T15:23:06+08:00">2020-06-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将开始介绍线程同步的相关知识，线程同步指的是线程按照预定的顺序先后执行，避免因时间产生的错误造成数据混乱。可以通过锁的机制来完成线程同步，本篇中将介绍什么是互斥锁、读写锁，以及死锁现象的产生和解决，条件变量构建生产者消费者模型。</p>
+<a id="more"></a>
+<p>所谓同步，即同时起步，协调一致。然而不同的对象，对同步的理解略有不同。<br><strong>编程中的同步，主旨在协同步调，按预定的先后次序运行</strong>。<br><strong>线程同步，指一个线程发出某一功能调用时，在没有得到结果之前，该调用不返回，同时其它线程为保证数据一致性，不能调用该功能</strong>。<br>例如多个线程同时操作一个共享变量，在竞争的情况下就会发生数据不一致情况。需要线程同步。<br>不仅仅是<strong>线程需要同步，所有多个控制流，共同操作一个共享资源的情况，都需要同步。进程间、信号间等等</strong>。<br><img src="https://ae01.alicdn.com/kf/H49975a666d1e4595b38d041a23ed1aaev.jpg" alt=""><br>可借助锁的机制来实现，即当一个线程调用某一共享资源时，加锁，调用结束后解锁。在加锁状态下其它线程不能再调用。<strong>这里的锁只是建议锁，不具有强制性。线程可以跳过锁直接访问</strong>，但有可能造成数据混乱。  </p>
+<h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p><strong>Linux中提供一把互斥锁mutex（也称之为互斥量）</strong>。<br><strong>每个线程在对资源操作前都尝试先加锁，成功加锁才能操作，操作结束解锁</strong>。<br><strong>资源还是共享的，线程间也还是竞争的，但通过锁就将资源的访问变成互斥操作，而后与时间有关的错误也就不会产生了</strong>。<br>主要应用函数：<br><code>pthread_mutex_init</code>函数：初始化一个互斥锁（互斥量），初值可看作1。<br><code>int pthread_mutex_init(pthread_mutex_t *restrict mutex,const ptread_mutex_t * restrict attr)</code><br>参1 传出参数，参2 互斥锁属性<br><code>pthread_mutex_t mutex</code>可看作一个变量，<strong>mutex只有2个取值1和0。加锁成功由1变成0，解锁由0变成1</strong>。<br><code>pthread_mutex_destroy</code>函数：销毁一个互斥锁。<br><code>int pthread_mutex_destroy(pthread_mutex_t * mutex)</code><br><code>pthread_mutex_lock</code>函数：加锁。<br><code>int pthread_mutex_lock(pthread_mutex_t * mutex)</code><br><code>pthread_mutex_unlock</code>函数：解锁。<br><code>int pthread_mutex_unlock(pthread_mutex_t * mutex)</code><br><code>pthread_mutex_trylock</code>函数：尝试加锁。<br><strong>注意该函数与加锁函数的不同，加锁是阻塞等待，该函数若不成功直接返回，不等待</strong>。<br>例如主线程打印HELLO WORLD，子线程打印hello world，若不加互斥锁：<br><img src="https://ae01.alicdn.com/kf/Ha3bc7f1837d146f4ae11df61ad70622aW.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/H3809d67ad2df4ed68b05b4a272f191d1f.jpg" alt=""><br>可见，出现了数据混乱的情况。解决这种时间错误，需要加锁：<br><img src="https://ae01.alicdn.com/kf/H8ec48a724fd948678e9ea23a15d0f3f1w.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/H915fad1b8375496bbd6f4fcb41d42824I.jpg" alt=""><br>注意，在<strong>访问共享数据之前加锁，访问结束后立即解锁，而不是程序结束再解锁</strong>。  </p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>死锁是一种现象。发生死锁现象的情况有：<br>1.<strong>一个线程对同一个互斥量加锁两次。阻塞死锁</strong>。<br>2.<strong>线程1拥有A锁，请求获得B锁，线程2拥有B锁，请求获得A锁。1阻塞等2，2阻塞等1，陷入死锁</strong>。<br><img src="https://ae01.alicdn.com/kf/H348823f9455640c9b2d16b3fb1b94f45T.jpg" alt="">)<img src="https://ae01.alicdn.com/kf/H78fd1c1109604a219d608afc6910b8d5o.jpg" alt=""><br>死锁现象的解决方法：<br>对第一种，<strong>加锁后访问解锁立即解锁，再次加锁前先判断是否已经加过锁</strong>。<br>对第二种，对第二把锁<strong>使用trylock，且失败时放弃已经占有的锁</strong>，这样另一个线程就会拥有两把锁，执行结束。<br><img src="https://ae01.alicdn.com/kf/H7b1a79c55cca48769956661b5772af48J.jpg" alt="">  </p>
+<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p><strong>与互斥锁类似，但读写锁允许更高的并行性，其特性为：写独占，读共享，写锁优先级高</strong>。<br>一把读写锁具有3种状态：<br>1.读模式下加锁状态（读锁）<br>2.写模式下加锁状态（写锁）<br>3.不加锁状态<br>若<strong>已经加上读锁，此时再有线程读可以共享该锁，若既有线程读，又有线程写，则因为写锁优先级高，线程读被阻塞，无法共享。<br>若已经加上写锁，此时再有线程来全部阻塞等待，只不过线程写优先级高</strong>。<br>主要应用函数:<br><code>pthread_rwlock_init</code>函数；<br><code>pthread_rwlock_destory</code>函数;<br><code>pthread_rwlock_rdlock</code>函数;<br><code>pthread_rwlock_wrlock</code>函数;<br><code>pthread_rwlock_tryrdlock</code>函数;<br><code>pthread_rwlock_trywrlock</code>函数;<br><code>pthread_rwlock_unlock</code>函数;<br><code>pthread_rwlock_t rwlock</code>  读写锁变量。<br><img src="https://ae01.alicdn.com/kf/H66e57c13fa644000b8c4f451df760dfef.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hf4d1f7e88b654cc1ac80fa8ba265509aL.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H459f975c84334b648b572abaed94ed0dv.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/H505dc215c89545ab89dc96798ca384bdK.jpg" alt=""><br>可见，当<strong>线程读的时候，是共享的。线程写的时候，是独占的</strong>。  </p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p><strong>条件变量本身不是锁，但它也可以造成线程阻塞，通常与互斥锁配合使用，给多线程提供一个会合的场所</strong>。<br>主要应用函数：<br><code>pthread_cond_init</code>函数；<br><code>pthread_cond_destroy</code>函数；<br><code>pthread_cond_wait</code>函数；<br><code>pthread_cond_timedwait</code>函数；<br><code>pthread_cond_signal</code>函数；<br><code>pthread_cond_broadcast</code>函数；<br>其中，<code>pthread_cond_wait</code>函数：<br><code>int pthread_cond_wait(pthread_cond_t *restrict cond,pthread_mutex_t *restrict mutex)</code><br>作用：<br>1.阻塞等待条件变量cond（参1）满足。<br>2.释放已掌握的互斥锁（解锁互斥量）相当于unlock。<br>3.当被唤醒，<code>pthread_cond_wait</code>函数返回时，解除阻塞并重新申请获取互斥锁相当于lock。<br>怎么唤醒？<code>pthread_cond_signal</code>函数和<code>pthread_cond_broadcast</code>函数。<br><strong>生产者消费者模型</strong>：<br><img src="https://ae01.alicdn.com/kf/H522301910c67486b8bf663acace21bdeS.jpg" alt=""><br><strong>在生产者没有生产产品之前，消费者们借助条件变量阻塞等待，当有产品时，<code>pthread_cond_wait</code>函数被唤醒，消费者对产品加锁，获得产品</strong>。<br><img src="https://ae01.alicdn.com/kf/Hcd71a34028334094b467736c6df51cc57.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H01211f08323147c793dac0046c5a92efm.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hcc6e5f57301f4cc8bfe04e94f30c8cb5n.jpg" alt="">  </p>
+<p>线程同步剩下的知识将在下篇中继续介绍。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2020/06/30/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B10/" title="Linux系统编程10">https://zpl-novice.github.io/2020/06/30/Linux系统编程10/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/28/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B9/" rel="prev" title="Linux系统编程9">
+      <i class="fa fa-chevron-left"></i> Linux系统编程9
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#互斥锁"><span class="nav-number">1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死锁"><span class="nav-number">2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写锁"><span class="nav-number">3.</span> <span class="nav-text">读写锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件变量"><span class="nav-number">4.</span> <span class="nav-text">条件变量</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">139k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
