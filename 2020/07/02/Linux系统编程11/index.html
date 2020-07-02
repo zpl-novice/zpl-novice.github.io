@@ -46,30 +46,32 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将要讲解的二叉树为伸展树，伸展树其实是一种特殊的二叉查找树，它会调整自己的结构，提高查找效率。本篇将会介绍伸展树的概念，以及伸展树是如何伸展的。">
+  <meta name="description" content="摘要：本篇是Linux系统编程的最后一篇，将主要介绍线程同步中的最后一种方式信号量，以及进程同步当中的知识。其实信号量本身就既可以用于线程也可以用于进程，前面讲过的互斥锁经过修改锁属性也可以用于进程同步，还将介绍文件锁。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="伸展树(splay tree)">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/index.html">
+<meta property="og:title" content="Linux系统编程11">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/07/02/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B11/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将要讲解的二叉树为伸展树，伸展树其实是一种特殊的二叉查找树，它会调整自己的结构，提高查找效率。本篇将会介绍伸展树的概念，以及伸展树是如何伸展的。">
+<meta property="og:description" content="摘要：本篇是Linux系统编程的最后一篇，将主要介绍线程同步中的最后一种方式信号量，以及进程同步当中的知识。其实信号量本身就既可以用于线程也可以用于进程，前面讲过的互斥锁经过修改锁属性也可以用于进程同步，还将介绍文件锁。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/EL9ix51l4uo7TdU.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/6J9uj87YtgcEUFI.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/uKaB5MXGedZ8UnD.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/hntDSNW8gjZBk4z.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/nE5YcAj8O76XVTR.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/8XquI1wSmMCL2VT.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/T7d3zFA8CGMoKQH.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/q4wMVCLurXIR1j7.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/VR4Su6eJOWp9hGY.png">
-<meta property="og:image" content="https://i.loli.net/2020/03/15/8xUjoZM3NXt4197.png">
-<meta property="article:published_time" content="2020-03-15T09:18:02.480Z">
-<meta property="article:modified_time" content="2020-03-15T09:36:09.219Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hdca2038e603f4a92b49b962ac8fea9cem.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hab5ed13f9cbd4ef895474f169f973e21c.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Heb967c70e3fa4ee483be6acc0ac23aefK.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb00e52054da54b329e7aee233f8545d5I.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H7d9fbd07a6bc41e0aa73903984fc2a510.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hec996f712c2a42e98887022b2ae965c6P.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H95ad7878fb0645588792e44e46b8fcc7H.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc63cdb501afc49a5bf380af09b24d4f2I.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc49f2ffce4ec4be3bb8b6c81672b5261n.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hcb5f9cc5d62b46be83c7662fcdc8d95ep.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Heac1c7fd2f0d49b1ac11194f2a3bd1404.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hde229b4521ad4928bbced8c93c11f003L.jpg">
+<meta property="article:published_time" content="2020-07-02T09:08:25.851Z">
+<meta property="article:modified_time" content="2020-07-02T09:27:15.568Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/03/15/EL9ix51l4uo7TdU.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hdca2038e603f4a92b49b962ac8fea9cem.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/07/02/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B11/">
 
 
 <script id="page-configurations">
@@ -81,7 +83,7 @@
   };
 </script>
 
-  <title>伸展树(splay tree) | zpl-novice</title>
+  <title>Linux系统编程11 | zpl-novice</title>
   
 
 
@@ -211,7 +213,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/07/02/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B11/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -224,7 +226,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          伸展树(splay tree)
+          Linux系统编程11
         </h1>
 
         <div class="post-meta">
@@ -235,7 +237,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-15 17:18:02 / 修改时间：17:36:09" itemprop="dateCreated datePublished" datetime="2020-03-15T17:18:02+08:00">2020-03-15</time>
+              <time title="创建时间：2020-07-02 17:08:25 / 修改时间：17:27:15" itemprop="dateCreated datePublished" datetime="2020-07-02T17:08:25+08:00">2020-07-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,8 +245,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -255,7 +257,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>970</span>
+              <span>1.3k</span>
             </span>
 
         </div>
@@ -267,15 +269,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将要讲解的二叉树为伸展树，伸展树其实是一种特殊的二叉查找树，它会调整自己的结构，提高查找效率。本篇将会介绍伸展树的概念，以及伸展树是如何伸展的。</p>
+        <p>摘要：本篇是Linux系统编程的最后一篇，将主要介绍线程同步中的最后一种方式信号量，以及进程同步当中的知识。其实信号量本身就既可以用于线程也可以用于进程，前面讲过的互斥锁经过修改锁属性也可以用于进程同步，还将介绍文件锁。  </p>
 <a id="more"></a>
-<p>伸展树保证从空树开始连续M次对树的操作最多花费O(Mlogn)时间，不过这种保证并不排除单次操作花费O(n)时间的可能，而且这样的界也不如每次操作最坏情形的界为O(logn)那么强，但实际效果是一样的：不存在坏的输入序列。<br>伸展树是基于这样的事实：对于二叉查找树来说，每次操作最坏情形时间O(n)并不坏，只要它相对不常发生就行。于是为了使整个查找时间更小，被查频率高的那些条目就应当经常处于靠近树根的位置。伸展树的基本想法是，当一个结点被访问后，它就要经过一系列AVL旋转向根推进。注意，如果一个结点很深，那么在其路径上就存在许多结点也相对较深，通过重新构造以使得对所有这些结点的进一步访问所花费的时间变少。它是一种自调整形式的二叉查找树。</p>
-<h2 id="简单想法"><a href="#简单想法" class="headerlink" title="简单想法"></a>简单想法</h2><p>实施上面描述的重新构造的一种方法是执行单旋转，从底向上进行。这意味着我们将在访问路径上的每一个结点和它们的父结点实施旋转。注意，<strong>该想法是不能直接使用的</strong>，下面会说明原因。如下所示，对k1进行一次访问后：<br><img src="https://i.loli.net/2020/03/15/EL9ix51l4uo7TdU.png" alt=""><br>虚线是访问的路径，首先单旋转使k1与k2交换：<br><img src="https://i.loli.net/2020/03/15/6J9uj87YtgcEUFI.png" alt=""><br>然后k1和k3之间执行旋转：<br><img src="https://i.loli.net/2020/03/15/uKaB5MXGedZ8UnD.png" alt=""><br>再然后：<br><img src="https://i.loli.net/2020/03/15/hntDSNW8gjZBk4z.png" alt=""><br><img src="https://i.loli.net/2020/03/15/nE5YcAj8O76XVTR.png" alt=""><br>最终使得k1变成了根结点，使得对k1的进一步访问很容易。但是，它把另一个结点k3推向和以前k1一样深，而对k3的访问又会推动下一个结点。所以这个想法存在着问题，需要改进。  </p>
-<h2 id="伸展"><a href="#伸展" class="headerlink" title="伸展"></a>伸展</h2><p>伸展(splaying)的思路类似于前面的旋转，但有一些改变。令X是访问路径上的一个结点，我们将在这个结点上实施伸展。若X的父结点是树的根，那么只需要旋转X和根即可。否则，X就有父亲(P)和祖父(G)，于是存在两种情况外加对称的情形要考虑。  </p>
-<h3 id="之字形"><a href="#之字形" class="headerlink" title="之字形"></a>之字形</h3><p><img src="https://i.loli.net/2020/03/15/8XquI1wSmMCL2VT.png" alt=""><br>这种情况下执行的是双旋转。  </p>
-<h3 id="一字形"><a href="#一字形" class="headerlink" title="一字形"></a>一字形</h3><p><img src="https://i.loli.net/2020/03/15/T7d3zFA8CGMoKQH.png" alt=""><br><strong>注意，这种情况下既不是单旋转，也不是双旋转</strong>。  </p>
-<p>这样，再对上面的例子进行伸展：<br><img src="https://i.loli.net/2020/03/15/q4wMVCLurXIR1j7.png" alt=""><br>这是一个之字形，因此我们执行一次AVL的双旋转，得：<br><img src="https://i.loli.net/2020/03/15/VR4Su6eJOWp9hGY.png" alt=""><br>此时变成了一字形，进行一次一字形的变换，得最终的树：<br><img src="https://i.loli.net/2020/03/15/8xUjoZM3NXt4197.png" alt=""><br>伸展操作不仅将访问的结点移动到根处，而且还有把访问路径上的大部分结点的深度大致减少一半的效果。  </p>
-<p>伸展树因为没有平衡信息要保留所以比平衡二叉树实现简单，情形少，所占用内存也少，它会自调整逐步优化自己，使得最终查找速度变快，更有效率。</p>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p><strong>信号量可认为是进化版的互斥锁，将锁中的数值1变成了n</strong>。由于互斥锁的力度比较大，如果我们希望在<strong>多个线程间对某一对象的部分数据进行共享</strong>，使用互斥锁是没有办法实现的，只能将整个数据对象锁住，这样虽然达到了多线程操作共享数据时保证数据正确性的目的，却无形间导致线程的并发性下降，线程从并行执行，变成了串行执行，与直接使用单进程无异。<br><strong>信号量，是相对折中的一种处理方式，既能保证同步，数据不混乱，又能提高线程并发</strong>。<br>主要应用函数：<br><code>sem_init</code>函数；<code>sem_destroy</code>函数；<code>sem_wait</code>函数；<code>sem_trywait</code>函数；<code>sem_timedwait</code>函数；<code>sem_post</code>函数。<br><strong>可以发现，与前面的几种相比，没有pthread关键字，这说明信号量不止能做用于线程同步，还能作用于进程同步</strong>。<br><code>sem_init</code>：<strong>初始化一个信号量</strong>。<br><code>int sem_init(sem_t *sem,int pshared,unsigned int value)</code><br>参1，sem信号量；参2，<strong>pshared取0用于线程间，取非0（一般为1）用于进程间</strong>；参3，value指信号量初值。<br><strong>信号量的初值，决定了占用信号量的线程的个数</strong>。<br><code>sem_wait</code>：信号量大于0，则信号量–；信号量等于0，造成线程阻塞，类比于<code>pthread_mutex_lock</code>。<br><code>sem_post</code>：将信号量++，同时唤醒阻塞在信号量上的线程，类比于<code>pthread_mutex_unlock</code>。<br>信号量的生产者消费者模型为：<br><img src="https://ae01.alicdn.com/kf/Hdca2038e603f4a92b49b962ac8fea9cem.jpg" alt=""><br><strong>定义两个信号量，生产者和消费者分别对这两个信号量操作</strong>。<br><img src="https://ae01.alicdn.com/kf/Hab5ed13f9cbd4ef895474f169f973e21c.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Heb967c70e3fa4ee483be6acc0ac23aefK.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hb00e52054da54b329e7aee233f8545d5I.jpg" alt=""><br>哲学家用餐模型：<br>5个哲学家吃同一盘面，但他们每个人只有一个筷子，只有都拿到自己左右两边的筷子才可以。5个哲学家相当于5个线程，5根筷子相当于5个锁。根据死锁的解决方法，拿不到第二把锁就放弃自己占有的锁，可能出现5个人同时拿起，同时放下的现象，这种叫做震荡。<br><img src="https://ae01.alicdn.com/kf/H7d9fbd07a6bc41e0aa73903984fc2a510.jpg" alt=""><br>怎么避免震荡？让<strong>A跟B同时争第一把锁，这样E就能拿到两把</strong>，等他结束，D、C等都可以。<br>这是<strong>第三种死锁现象</strong>。<br>避免死锁的方法：<br>1<strong>.当得不到所有所需资源时，放弃已经获得的资源，等待；<br>2.保证资源的获取顺序，要求每个线程获取资源的顺序一致。如A获取顺序1、2、3，B的顺序也是1、2、3，若B是3、2、1，就很容易出现死锁现象</strong>。  </p>
+<h2 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h2><p><strong>可以用上面的信号量，也可以用互斥锁，但是互斥锁应在初始化之前，修改属性为进程间共享</strong>。<br><img src="https://ae01.alicdn.com/kf/Hec996f712c2a42e98887022b2ae965c6P.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H95ad7878fb0645588792e44e46b8fcc7H.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hc63cdb501afc49a5bf380af09b24d4f2I.jpg" alt=""><br>结果为：<br><img src="https://ae01.alicdn.com/kf/Hc49f2ffce4ec4be3bb8b6c81672b5261n.jpg" alt="">  </p>
+<h3 id="文件锁"><a href="#文件锁" class="headerlink" title="文件锁"></a>文件锁</h3><p>借助fcntl函数来实现锁机制，操作文件的进程没有获得锁时，可以打开，但无法执行read、write操作。fcntl函数：获取、设置文件访问控制属性。<br><img src="https://ae01.alicdn.com/kf/Hcb5f9cc5d62b46be83c7662fcdc8d95ep.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Heac1c7fd2f0d49b1ac11194f2a3bd1404.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hde229b4521ad4928bbced8c93c11f003L.jpg" alt=""><br><strong>依然读时共享、写独占</strong>。<br><strong>多线程间共享文件描述符，而给文件加锁，是通过修改文件描述符所指向的文件结构体中的成员变量来实现的，因此多线程中无法使用文件锁</strong>。  </p>
+<p>关于Linux系统编程的介绍就先到这里，下一篇将开始进入网络编程的学习。  </p>
 
     </div>
 
@@ -291,7 +290,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/03/15/%E4%BC%B8%E5%B1%95%E6%A0%91(splay%20tree)/" title="伸展树(splay tree)">https://zpl-novice.github.io/2020/03/15/伸展树(splay tree)/</a>
+    <a href="https://zpl-novice.github.io/2020/07/02/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B11/" title="Linux系统编程11">https://zpl-novice.github.io/2020/07/02/Linux系统编程11/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,13 +307,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/13/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91(AVL)%E6%A6%82%E5%BF%B5/" rel="prev" title="平衡二叉树(AVL)">
-      <i class="fa fa-chevron-left"></i> 平衡二叉树(AVL)
+    <a href="/2020/06/30/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B10/" rel="prev" title="Linux系统编程10">
+      <i class="fa fa-chevron-left"></i> Linux系统编程10
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/17/%E5%A4%9A%E8%B7%AF%E6%9F%A5%E6%89%BE%E6%A0%91%EF%BC%88B%E6%A0%91%EF%BC%89/" rel="next" title="多路查找树（B树）">
-      多路查找树（B树） <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -374,7 +370,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单想法"><span class="nav-number">1.</span> <span class="nav-text">简单想法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伸展"><span class="nav-number">2.</span> <span class="nav-text">伸展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#之字形"><span class="nav-number">2.1.</span> <span class="nav-text">之字形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一字形"><span class="nav-number">2.2.</span> <span class="nav-text">一字形</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量"><span class="nav-number">1.</span> <span class="nav-text">信号量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程同步"><span class="nav-number"></span> <span class="nav-text">进程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件锁"><span class="nav-number">1.</span> <span class="nav-text">文件锁</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
