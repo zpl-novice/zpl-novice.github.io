@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux网络编程3</title>
+    <url>/2020/07/09/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B3/</url>
+    <content><![CDATA[<p>摘要：上篇讲解了套接字实现C/S模型服务器端，本篇将继续介绍客户端的实现，以及如何对它们进行出错处理。除此之外，将进入TCP的学习，讲解TCP的三次握手原理。  </p>
+<a id="more"></a>
+<h2 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h2><p><img src="https://ae01.alicdn.com/kf/H533b40157a3f4914bbeba49cfed9462aZ.jpg" alt=""><br>与流程图相同，在客户端创建套接字，但不用在bind绑定，而是用系统默认绑定，使用connect函数连接服务器的IP和端口，将键盘输入读取写到服务器中，经过服务器的转换再读出。<br>注意，<strong>如果先关闭服务器，再关闭客户端，就会造成端口被占用，无法释放，这样下次启动时就会出错</strong>。可以使用<strong>检查返回值的方式进行出错查找，但影响总体逻辑。还可以使用错误处理函数，将所有错误与原函数封装成一个函数</strong>。<br>以socket函数为例，对其<strong>重新进行封装，将错误处理封装进去，得到新的Socket函数</strong>。这样在服务器端和客户端主程序里，逻辑几乎不受影响。<br><img src="https://ae01.alicdn.com/kf/Hfea58fcc3e45492789c8124865a09f825.jpg" alt=""><br>需要注意的是还要定义一个头文件。<br><img src="https://ae01.alicdn.com/kf/H96ce471db85a44a690deca97af570aaeo.jpg" alt="">  </p>
+<h2 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h2><p>在前面讲解数据通信时，<strong>TCP建立连接后，路由器的选择固定，不再发生改变，因此可靠。而UDP每次数据传输路由器可能会发生改变，因此不可靠</strong>。<br><img src="https://ae01.alicdn.com/kf/H49ef77a1410a4821befa1a888587a224s.jpg" alt="">  </p>
+<p><strong>TCP在建立连接时需要进行三次握手，断开连接时则需要四次握手</strong>。通讯过程如下所示：<br><img src="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg" alt=""><br>1.<strong>客户端首先向服务器发送一个SYN的标志位（用于请求连接）和一个0字节的数据包（这里包号为1000）</strong>。<br>2.<strong>服务器收到后作出应答，应答的过程也是向客户端连接请求，因此发送SYN，8000（0），ACK是对SYN标志位的应答，1001则表示收到了客户端发送的数据包，1000加上SYN标志位为1001</strong>。<br>3.<strong>客户端再对服务器的连接请求作出回应，发送ACK，8001</strong>。  </p>
+<p><strong>TCP三次握手主要用来建立服务器和客户端的连接，确保连接畅通，可靠</strong>。  </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux网络编程2</title>
     <url>/2020/07/07/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B2/</url>
     <content><![CDATA[<p>摘要：本篇继续对网络编程的学习，首先对上节没讲完的NAT映射和打洞机制进行讲解。然后介绍套接字的概念，相关操作函数，并说明如何通过套接字来实现C/S模型，给出其流程和具体代码实现。  </p>
