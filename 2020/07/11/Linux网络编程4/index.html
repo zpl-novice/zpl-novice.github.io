@@ -46,30 +46,31 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。">
+  <meta name="description" content="摘要：本篇将继续讲解断开连接时的TCP四次握手过程，同时对MTU、MSS和滑动窗口进行介绍。最后介绍一下高并发服务器的知识，如何建立多进程并发服务器和多线程并发服务器。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux命令8">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/index.html">
+<meta property="og:title" content="Linux网络编程4">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。">
+<meta property="og:description" content="摘要：本篇将继续讲解断开连接时的TCP四次握手过程，同时对MTU、MSS和滑动窗口进行介绍。最后介绍一下高并发服务器的知识，如何建立多进程并发服务器和多线程并发服务器。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H4b8c4aa04ff0422d8d7e7296838a35777.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H4e75d9db586d4f89be7eb1b82ff18da42.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H3effe84422d24202bfe768ecb1e58401e.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha5ca78c423b4437086462da7213fac7dJ.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hbf2ee9aab65d46989d405244908519ecV.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H6f671b71e1ed4cf1bb03f6cb1f93d3a58.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H386354e5e135450ea8560afb2325d758G.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/He479d7e37b73406f842c903cfbb1cd0cT.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H2541d289606f49fcb7b9bd1f0d35df86u.jpg">
-<meta property="article:published_time" content="2020-06-09T07:40:55.606Z">
-<meta property="article:modified_time" content="2020-06-09T07:52:49.314Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H06c694e27e6948d7845aa492fb7de4bfp.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H8b4b7e61d41844d7a84ff4db97c9e908q.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H720483898ce447639aa97e1230d20eee3.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd38275bbd98143759e9218dd263b1487a.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H711ff79530114f52b98d478d2defc651Y.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H7d288698383b4c74aaa1bcc9658f57beX.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H39e40822ae5546219544aa4c2cfc842fp.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H07e22789bc5c4156b4314a5a493f8f885.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc939427fd36e4235a3cd53a7a207e5ceh.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H77c0b54da6cc49e4af221e296660f81fH.jpg">
+<meta property="article:published_time" content="2020-07-11T11:19:21.620Z">
+<meta property="article:modified_time" content="2020-07-11T12:08:20.419Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/">
 
 
 <script id="page-configurations">
@@ -81,7 +82,7 @@
   };
 </script>
 
-  <title>Linux命令8 | zpl-novice</title>
+  <title>Linux网络编程4 | zpl-novice</title>
   
 
 
@@ -211,7 +212,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -224,7 +225,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux命令8
+          Linux网络编程4
         </h1>
 
         <div class="post-meta">
@@ -235,7 +236,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-06-09 15:40:55 / 修改时间：15:52:49" itemprop="dateCreated datePublished" datetime="2020-06-09T15:40:55+08:00">2020-06-09</time>
+              <time title="创建时间：2020-07-11 19:19:21 / 修改时间：20:08:20" itemprop="dateCreated datePublished" datetime="2020-07-11T19:19:21+08:00">2020-07-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,7 +256,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>497</span>
+              <span>1.7k</span>
             </span>
 
         </div>
@@ -267,12 +268,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将介绍剩下的一些系统IO函数以及文件操作函数，在这里只是简单的介绍，了解它们的使用方法，在后续的学习中还会遇到并更深入的介绍。</p>
+        <p>摘要：本篇将继续讲解断开连接时的TCP四次握手过程，同时对MTU、MSS和滑动窗口进行介绍。最后介绍一下高并发服务器的知识，如何建立多进程并发服务器和多线程并发服务器。</p>
 <a id="more"></a>
-<h3 id="read和write函数"><a href="#read和write函数" class="headerlink" title="read和write函数"></a>read和write函数</h3><p>查看read函数的man文档。<br><img src="https://ae01.alicdn.com/kf/Hdd47fd3107354be5b004ec15debbcbdfM.jpg" alt=""><br><strong>返回值：-1表示读文件失败，0表示文件读完，&gt;0表示读取的字节</strong>。<br>查看write函数的man文档。<br><img src="https://ae01.alicdn.com/kf/H4b8c4aa04ff0422d8d7e7296838a35777.jpg" alt=""><br>读写操作：读一个大文件并将其写到另一个文件中。<strong>创建.c文件来实现上述操作</strong>。<br><img src="https://ae01.alicdn.com/kf/H4e75d9db586d4f89be7eb1b82ff18da42.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H3effe84422d24202bfe768ecb1e58401e.jpg" alt="">  </p>
-<h3 id="lseek函数"><a href="#lseek函数" class="headerlink" title="lseek函数"></a>lseek函数</h3><p>查看lseek的man文档。lseek用来移动文件指针或获取文件长度、文件拓展。<br><img src="https://ae01.alicdn.com/kf/Ha5ca78c423b4437086462da7213fac7dJ.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hbf2ee9aab65d46989d405244908519ecV.jpg" alt="">  </p>
-<h2 id="文件操作函数"><a href="#文件操作函数" class="headerlink" title="文件操作函数"></a>文件操作函数</h2><p>stat函数：获取文件的信息。<br><img src="https://ae01.alicdn.com/kf/H6f671b71e1ed4cf1bb03f6cb1f93d3a58.jpg" alt=""><br>它的man文档为：<br><img src="https://ae01.alicdn.com/kf/H386354e5e135450ea8560afb2325d758G.jpg" alt=""><br>可以看到，作用跟ls -l命令很像。<br>lstat函数：<br>不穿透符号链接。只能读到链接文件，而不能追踪到映射的文件。<br>access函数：<br>测试指定文件是否拥有某种权限。<br><img src="https://ae01.alicdn.com/kf/He479d7e37b73406f842c903cfbb1cd0cT.jpg" alt=""><br>chmod函数：<br>改变文件权限。<br>chown函数：<br>改变文件所有者。<br>truncate函数：<br><strong>截断文件。如果第二个参数比文件大，则会对文件进行拓展，反之进行截断</strong>。<br><img src="https://ae01.alicdn.com/kf/H2541d289606f49fcb7b9bd1f0d35df86u.jpg" alt=""><br>rename函数：<br>对文件进行重命名。<br>fcntl函数：<br>改变已经打开的文件的属性。  </p>
-<p>还有很多的函数，在这里就不一一介绍，我们需要记住一些常见的函数来方便我们对系统进行操作。  </p>
+<h2 id="TCP四次握手"><a href="#TCP四次握手" class="headerlink" title="TCP四次握手"></a>TCP四次握手</h2><p><img src="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg" alt=""><br><strong>TCP四次握手用来断开连接</strong>。为什么有四次呢？因为<strong>Linux操作系统中建立连接的双方允许有一端关闭连接，另一端不关闭。这种状态为半关闭状态</strong>。<br><strong>建立连接用SYN标志位发送，ACK应答。关闭连接则用FIN标志位发送，ACK应答</strong>。<br>1.<strong>客户端断开连接，向服务器发送FIN标志位和0字节的数据包1021，同时对上次的服务器请求作出应答</strong>，ACK 8011。<br>2.服务器接收到客户端请求后，同意断开连接，<strong>作出应答</strong> ACK 1022。<br><strong>此时，客户端断开连接，不再传输数据，服务器没有关闭连接，处于半关闭状态</strong>。<br>3.<strong>服务器断开连接，向客户端发送FIN标志位和0字节的数据包8011，同时对上次客户端请求作出应答</strong>，ACK 1022。<br>4.<strong>客户端作出应答</strong>，ACK 8012。<br>此时，<strong>客户端、服务器均断开连接，全关闭状态。</strong>    </p>
+<p>可见，在<strong>连接和关闭连接的过程中，主要用到的是标志位和数据包包号、字节数。这些东西主要在TCP数据报格式中携带</strong>。<br><img src="https://ae01.alicdn.com/kf/H06c694e27e6948d7845aa492fb7de4bfp.jpg" alt=""><br>其中，<strong>32位序号为发送的数据包号，确认序号则为应答时的数据包号。还可以看到有6个标志位，SYN和FIN在其中。16位窗口大小则是表示滑动窗口，下面会介绍。UDP中没有</strong>。  </p>
+<h2 id="MTU"><a href="#MTU" class="headerlink" title="MTU"></a>MTU</h2><p><strong>最大传输单元</strong>。是指一种通信协议的某一层上面所能通过的最大数据包大小（以字节为单位）。最大传输单元这个单位通常与通信接口有关，<strong>由硬件规定</strong>。以下是一些协议的MTU：<br>FDDI协议：4352字节。<br><strong>以太网协议：1500字节</strong>。<br>PPPoE（ADSL）协议：1492字节。<br><img src="https://ae01.alicdn.com/kf/H8b4b7e61d41844d7a84ff4db97c9e908q.jpg" alt=""><br>以以太网1500字节为例，如果IP层有&lt;=1500 byte 需要发送，只需要一个IP包就可以完成发送任务；如果IP层有&gt; 1500 byte 数据需要发送，需要<strong>分片才能完成发送</strong>，这些分片有一个共同点，即IP Header ID相同。  </p>
+<h2 id="MSS"><a href="#MSS" class="headerlink" title="MSS"></a>MSS</h2><p><strong>最大分段大小</strong>。是<strong>TCP每次传输的数据包的最大分段大小</strong>。如果底层物理接口MTU= 1500 byte，则 <strong>MSS = 1500- 20(IP Header) -20 (TCP Header) = 1460 byte</strong>。如果application 有2000 byte发送，需要<strong>两个segment才可以完成发送</strong>，第一个TCP segment = 1460，第二个TCP segment = 540。  </p>
+<h2 id="滑动窗口（TCP流量控制）"><a href="#滑动窗口（TCP流量控制）" class="headerlink" title="滑动窗口（TCP流量控制）"></a>滑动窗口（TCP流量控制）</h2><p><strong>滑动窗口（Sliding window）是一种流量控制技术</strong>。早期的网络通信中，通信双方不会考虑网络的拥挤情况直接发送数据。由于大家不知道网络拥塞状况，同时发送数据，导致<strong>中间节点阻塞掉包，谁也发不了数据</strong>，所以就有了滑动窗口机制来解决此问题。<br><strong>TCP中采用滑动窗口来进行传输控制，滑动窗口的大小意味着当前本方还有多大的缓冲区可以用于接收数据</strong>。发送方可以通过滑动窗口的大小来确定应该发送多少字节的数据。当滑动窗口为0时，发送方一般不能再发送数据报，但有两种情况除外，一种情况是可以发送紧急数据，例如，允许用户终止在远端机上的运行进程。另一种情况是发送方可以发送一个1字节的数据报来通知接收方重新声明它希望接收的下一字节及发送方的滑动窗口大小。<strong>通过win标志位来表示</strong>。<br><img src="https://ae01.alicdn.com/kf/H720483898ce447639aa97e1230d20eee3.jpg" alt="">  </p>
+<h2 id="高并发服务器"><a href="#高并发服务器" class="headerlink" title="高并发服务器"></a>高并发服务器</h2><h3 id="多进程并发服务器"><a href="#多进程并发服务器" class="headerlink" title="多进程并发服务器"></a>多进程并发服务器</h3><p>现有<strong>多个客户端与服务器进行数据传输</strong>，<strong>若服务器只有一个进程，则当与A建立连接后进行数据传输，就无法再与B、C建立连接</strong>。<br>因此<strong>服务器需要创建子进程，使子进程与客户端通信，而父进程主要来建立连接和创建子进程、回收子进程</strong>。<br>子进程创建出来后，首先关闭lfd，因为lfd不用来数据传输。当<strong>子进程进行完数据交互后，就要关闭cfd，然后退出子进程。此时变成僵尸进程</strong>。<br>父进程创建完子进程后，关闭cfd，<strong>子进程退出后通过信号捕捉，对子进程进行回收</strong>。<br><img src="https://ae01.alicdn.com/kf/Hd38275bbd98143759e9218dd263b1487a.jpg" alt=""><br>首先创建套接字，绑定IP和端口，设置最大同时连接数。父进程循环接收连接请求，每有一个连接就创建一个子进程与之通信，将小写转换成大写。父进程再捕捉信号对子进程进行回收。<br><img src="https://ae01.alicdn.com/kf/H711ff79530114f52b98d478d2defc651Y.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H7d288698383b4c74aaa1bcc9658f57beX.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H39e40822ae5546219544aa4c2cfc842fp.jpg" alt="">  </p>
+<h3 id="多线程并发服务器"><a href="#多线程并发服务器" class="headerlink" title="多线程并发服务器"></a>多线程并发服务器</h3><p>多线程并发服务器原理与多进程并发服务器相同，只不过用线程代替了进程，在<strong>主控线程里对子线程进行分离，这样子线程结束后就不需要再回收</strong>。实现如下：<br><img src="https://ae01.alicdn.com/kf/H07e22789bc5c4156b4314a5a493f8f885.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hc939427fd36e4235a3cd53a7a207e5ceh.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H77c0b54da6cc49e4af221e296660f81fH.jpg" alt="">  </p>
 
     </div>
 
@@ -288,7 +292,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/06/09/Linux%E5%91%BD%E4%BB%A48/" title="Linux命令8">https://zpl-novice.github.io/2020/06/09/Linux命令8/</a>
+    <a href="https://zpl-novice.github.io/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/" title="Linux网络编程4">https://zpl-novice.github.io/2020/07/11/Linux网络编程4/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -305,13 +309,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/06/07/Linux%E5%AD%A6%E4%B9%A07/" rel="prev" title="Linux命令7">
-      <i class="fa fa-chevron-left"></i> Linux命令7
+    <a href="/2020/07/09/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B3/" rel="prev" title="Linux网络编程3">
+      <i class="fa fa-chevron-left"></i> Linux网络编程3
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/06/12/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B1/" rel="next" title="Linux系统编程1">
-      Linux系统编程1 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -371,7 +372,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#read和write函数"><span class="nav-number">1.</span> <span class="nav-text">read和write函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lseek函数"><span class="nav-number">2.</span> <span class="nav-text">lseek函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作函数"><span class="nav-number"></span> <span class="nav-text">文件操作函数</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP四次握手"><span class="nav-number">1.</span> <span class="nav-text">TCP四次握手</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MTU"><span class="nav-number">2.</span> <span class="nav-text">MTU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSS"><span class="nav-number">3.</span> <span class="nav-text">MSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滑动窗口（TCP流量控制）"><span class="nav-number">4.</span> <span class="nav-text">滑动窗口（TCP流量控制）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高并发服务器"><span class="nav-number">5.</span> <span class="nav-text">高并发服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多进程并发服务器"><span class="nav-number">5.1.</span> <span class="nav-text">多进程并发服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程并发服务器"><span class="nav-number">5.2.</span> <span class="nav-text">多线程并发服务器</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
