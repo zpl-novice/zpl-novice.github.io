@@ -46,21 +46,28 @@
   };
 </script>
 
-  <meta name="description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
+  <meta name="description" content="摘要：本篇将主要介绍TCP状态转换，并与程序相结合，分析其流程，并介绍一下端口复用的知识，最后讲解多路I&#x2F;O转接服务器，它与之前介绍的多线程并发服务器和多进程并发服务器不同。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="继承和派生">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/index.html">
+<meta property="og:title" content="Linux网络编程5">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/07/13/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B5/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。">
+<meta property="og:description" content="摘要：本篇将主要介绍TCP状态转换，并与程序相结合，分析其流程，并介绍一下端口复用的知识，最后讲解多路I&#x2F;O转接服务器，它与之前介绍的多线程并发服务器和多进程并发服务器不同。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
-<meta property="article:published_time" content="2020-01-24T04:43:10.083Z">
-<meta property="article:modified_time" content="2020-01-24T07:30:56.722Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha3118d7ab88d4e6e9bb9884c70562d28V.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H82e956a0a87b48e7b37e15535358cd26F.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H21844505ec7a458294f9fc2d9f5930cc1.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hb7196f0479e840d389901f84690baa95x.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd223d7f4b0d047989e7728cd0aae8bd7F.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/Hfd281a6a81614069955614b114f7afa5Y.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H0e9fc0ef026b4b878b3861b2ab119eces.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H03df6530b8c3445288eabe2276d1a531x.jpg">
+<meta property="article:published_time" content="2020-07-13T09:25:58.464Z">
+<meta property="article:modified_time" content="2020-07-13T09:43:35.334Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Ha3118d7ab88d4e6e9bb9884c70562d28V.jpg">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/07/13/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B5/">
 
 
 <script id="page-configurations">
@@ -72,7 +79,7 @@
   };
 </script>
 
-  <title>继承和派生 | zpl-novice</title>
+  <title>Linux网络编程5 | zpl-novice</title>
   
 
 
@@ -202,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/07/13/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          继承和派生
+          Linux网络编程5
         </h1>
 
         <div class="post-meta">
@@ -226,7 +233,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-24 12:43:10 / 修改时间：15:30:56" itemprop="dateCreated datePublished" datetime="2020-01-24T12:43:10+08:00">2020-01-24</time>
+              <time title="创建时间：2020-07-13 17:25:58 / 修改时间：17:43:35" itemprop="dateCreated datePublished" datetime="2020-07-13T17:25:58+08:00">2020-07-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,8 +241,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
                   </a>
                 </span>
             </span>
@@ -246,7 +253,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
+              <span>1.8k</span>
             </span>
 
         </div>
@@ -258,54 +265,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：在前面已经讲了类的有关概念，而不同的类之间是有关系的。相关的关系有继承和复合关系等。在本篇中将会介绍以下继承和派生的相关概念。这也是面向对象中很重要的一个概念，通过继承和派生可以提高代码执行效率。</p>
+        <p>摘要：本篇将主要介绍TCP状态转换，并与程序相结合，分析其流程，并介绍一下端口复用的知识，最后讲解多路I/O转接服务器，它与之前介绍的多线程并发服务器和多进程并发服务器不同。</p>
 <a id="more"></a>
-
-<p>类并不是孤立的存在的，不同的类之间有着不同的关系，正如前面所讲过的友元类。假如已经定义了一个动物类，里面有动物的成员变量和成员函数，此时若要再定义一个哺乳动物类该怎么办？可以看出，哺乳动物属于动物，它也具有动物类的所有特性。因此只需要继承动物类即可。<br>继承：在定义一个新的类B时，如果该类与某个已有的类A相似（B拥有A的全部特点），那么就可以把A作为一个基类，而把B作为基类的一个派生类。派生类是通过对基类进行修改和扩充得到的。在派生类中，可以扩充新的成员变量和成员函数。派生类一经定义后，可以独立使用，不依赖于基类。继承代表了 is a 关系。<strong>派生类成员函数不能访问基类的私有成员</strong>。<br>根据上面的概念可知，派生类是由基类派生而来，因此基类的成员变量和成员函数在派生类也有。一般情况下，在派生类里的指的是派生类定义的成员，若要访问基类的（公共的）同名成员变量和成员函数，需要加上基类名，即<code>base::I</code>、<code>base::func()</code>。<br>派生类的定义格式为：<br><code>class 派生类名：public 基类名</code><br>这里的<code>public</code>也可以换为<code>protected</code>和<code>private</code>，它们表示了继承类型，但我们通常使用的都是<code>public</code>继承。一个基类可以派生出多个派生类。<br>前面讲过公有成员和私有成员，这里讲一下保护成员（protected）。它与私有成员不同的地方在于它可以被派生类的成员函数访问。其他访问方式与私有成员相同。  </p>
-<h2 id="派生类构造函数"><a href="#派生类构造函数" class="headerlink" title="派生类构造函数"></a>派生类构造函数</h2><p>派生类的其他成员函数如前面所讲的定义即可，但构造函数略有不同，因为派生类是继承基类而来，所以在派生类的构造函数中要先去调用基类的构造函数。如果不调用基类构造函数，因为派生类成员函数不能调用基类私有成员，无法实现初始化。派生类的构造函数定义为：<br><code>派生类名（成员变量1，2，3...）：基类构造函数（成员变量1，2...）</code><br>成员变量1，2，3为形参名，以下面代码为例：</p>
-<pre><code>class base
-{
-    private:
-        int n;
-    public:
-        base(int i=0):n(i)
-        {
-            cout&lt;&lt;&quot;基类构造&quot;&lt;&lt;endl&lt;&lt;n&lt;&lt;endl;
-        }
-        ~base()
-        {
-            cout&lt;&lt;&quot;基类析构&quot;&lt;&lt;endl;
-        }
-        void print();
-};
-void base::print()
-{
-    cout&lt;&lt;n&lt;&lt;endl;
-}
-class derive:public base
-{
-    public:
-        int a;
-        derive(int i=0,int j=0);
-        ~derive()
-        {
-            cout&lt;&lt;&quot;继承类析构&quot;&lt;&lt;endl;
-        }
-};
-derive::derive(int i,int j):base(i)
-{
-    a=j;
-    cout&lt;&lt;&quot;继承类构造&quot;&lt;&lt;endl&lt;&lt;a&lt;&lt;endl;
-}
-int main()
-{
-  derive b(2,1);
-  b.print();
-  return 0;
-}</code></pre><p>可以看到，在代码的构造函数和析构函数中，都输出是属于哪个类的。在派生类的构造函数中，定义了两个形参i和j，第一形参i是基类构造函数中的参数，派生类新增加的成员变量a用形参j赋值，这样就实现了派生类的构造函数。而派生类也有基类的成员函数，因此派生类对象b可以调用<code>print()</code>函数输出。运行结果为:<br><img src="https://i.loli.net/2020/01/24/ABGCPKpOb9ZjNed.png" alt=""><br>在结果中我们也可以看到构造函数和析构函数的调用顺序，<strong>先构造的后析构，先基类构造再派生类构造</strong>。<br>假如我们定义基类对象为b，派生类对象为d：  </p>
-<pre><code>base b;
-derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code>b=d</code>。而反过来不行，这也是反映了前面所说的 is a 关系。<br>2.派生类对象可以初始化基类引用，即<code>base &amp;br=d</code>。<br>3.派生类对象的地址可以赋值给基类指针，即<code>base *pd=d</code>。  </p>
-<h2 id="直接基类和间接基类"><a href="#直接基类和间接基类" class="headerlink" title="直接基类和间接基类"></a>直接基类和间接基类</h2><p>上面所讲一个类可以派生出多个类。而派生类也可以作为基类再派生。如动物类可以派生出哺乳动物类，而哺乳动物类又可以派生出人类。这样，动物类和哺乳动物类都是人类的基类。哺乳动物类是直接基类，动物类是间接基类。声明派生类时，只需列出它的直接基类。但是派生类的成员包括自己定义、直接基类、间接基类的所有成员。<br>上面介绍了继承和派生的概念，类与类之间可能是继承关系，但如果一个类的对象是另一个类的成员呢？这属于什么关系？以圆类为例，圆有两个重要的成员，圆心和半径。而圆心是一个点，它属于点类的一个对象。此时定义圆类和点类为复合关系，<strong>复合关系一般把大的类声明为另一个类的友元</strong>。<br>面向对象的三个特征：封装、继承、多态。在下篇中将会进入到多态的学习，多态使得C++变的非常灵活，大大提高效率，是非常重要的一部分。</p>
+<h2 id="TCP状态转换图"><a href="#TCP状态转换图" class="headerlink" title="TCP状态转换图"></a>TCP状态转换图</h2><p>TCP状态转换图如下所示，它分为三部分：<strong>粗实线为一部分，主动发起连接和主动关闭连接。虚线部分为一部分，被动发起连接和关闭连接。细实线部分为两端同时操作部分</strong>。<br><img src="https://ae01.alicdn.com/kf/Ha3118d7ab88d4e6e9bb9884c70562d28V.jpg" alt=""><br>第一部分（主动端）：<br>客户端最开始处于<strong>CLOSED关闭状态</strong>，向服务器发送SYN连接请求（<strong>主动连接</strong>），发送后处于<strong><code>SYN_SENT</code>状态</strong>，服务器作出应答，客户端接收服务器的连接请求和应答SYN,ACK，然后对服务器作出应答，发送ACK。这是<strong>TCP三次握手建立连接</strong>。<br>建立连接后处于<strong>ESTABLISHED状态</strong>，即数据传输状态。主动关闭时，调用close函数、发送FIN标志位，此时由<strong>ESTABLISHED状态变为<code>FIN_WAIT_1</code>状态</strong>，这也是<strong>TCP四次握手的第一次握手结束</strong>，当<strong>接收到ACK应答后，由<code>FIN_WAIT_1</code>状态变成<code>FIN_WAIT_2</code>状态，此时也是主动一端的半关闭状态</strong>。当接收到另一端的断开连接请求后作出应答，由<strong><code>FIN_WAIT_2</code>状态变成<code>TIME_WAIT</code>状态</strong>。<br>注意：<strong>为什么会是<code>TIME_WAIT</code>状态而不是全部断开连接后变成CLOSED状态？<code>TIME_WAIT</code>状态用来等待2MSL时间，在Linux系统中为1分钟左右，目的是保证主动端最后发送的应答ACK能被收到。使TCP四次握手更加可靠</strong>。<br>第二部分（被动端）：<br>首先由<strong>CLOSED关闭状态变成LISTEN状态，等待被动连接</strong>。当接收到主动端的SYN连接请求后发送SYN并作出应答发送ACK。变成<strong><code>SYN_RCVD</code>状态</strong>，当再接收到主动端的应答后，<strong>TCP三次握手建立连接完成，变成ESTABLISHED状态</strong>。<br><strong>被动关闭</strong>时，接收到主动端的FIN，并应答ACK后，变成<strong><code>CLOSE_WAIT</code>状态</strong>，然后发送FIN，变成<strong><code>LAST_ACK</code>状态</strong>，等待应答。当接收到ACK后，<strong>TCP四次握手完成，变成CLOSED状态</strong>。<br>  第三部分（同时操作）：<br><strong>两边都是发送SYN请求，接收ACK以后，变成ESTABLISHED状态</strong>。<br>关闭时，<strong>主动端发送了FIN，同时被动端也发送了FIN，这时处于CLOSING状态。然后变成TIME_WAIT状态</strong>。  </p>
+<p>与程序相结合，当<strong>只启动服务器时，输入命令查看可得服务器处于LISTEN状态，当启动客户端，与服务器三次握手完成，服务器与客户端变成ESTABLISHED状态</strong>。<br><img src="https://ae01.alicdn.com/kf/H82e956a0a87b48e7b37e15535358cd26F.jpg" alt=""><br>将<strong>客户端主动关闭，可得客户端变成<code>FIN_WAIT_2</code>状态，服务器变成<code>CLOSE_WAIT</code>状态</strong>：<br><img src="https://ae01.alicdn.com/kf/H21844505ec7a458294f9fc2d9f5930cc1.jpg" alt=""><br>若<strong>将服务器主动关闭而不是关闭客户端，则客户端变成<code>CLOSE_WAIT</code>状态，服务器变成<code>FIN_WAIT_2</code>状态</strong>：<br><img src="https://ae01.alicdn.com/kf/Hb7196f0479e840d389901f84690baa95x.jpg" alt=""><br><strong>再将客户端关闭，则服务器进入<code>TIME_WAIT</code>状态，等待2MSL时间后全部断开连接，变为CLOSED状态</strong>。  </p>
+<p>TCP状态和程序结合分析流程图如下：<br><img src="https://ae01.alicdn.com/kf/Hd223d7f4b0d047989e7728cd0aae8bd7F.jpg" alt="">  </p>
+<h2 id="shutdown函数"><a href="#shutdown函数" class="headerlink" title="shutdown函数"></a>shutdown函数</h2><p>在半关闭状态，是通过close文件描述符实现的，但其实<strong>close只能关闭文件描述符的一个引用，只有当引用次数减小为0时，才是完全关闭</strong>。因此还可以通过<strong>shutdown函数直接关闭文件，可以设置成关闭文件读或文件写或读写全关闭</strong>。<br><img src="https://ae01.alicdn.com/kf/Hfd281a6a81614069955614b114f7afa5Y.jpg" alt="">  </p>
+<h2 id="端口复用"><a href="#端口复用" class="headerlink" title="端口复用"></a>端口复用</h2><p><strong><code>TIME_WAIT</code>状态可以确保四次握手的可靠，但也带来了问题就是会等待2MSL时间才完全关闭，这种状态下再启动服务器和客户端就会出现端口被占用的情况</strong>。必须等待2MSL时间过后才可以。<br>通过<strong>setsockopt函数可以进行端口复用，允许创建端口号相同但IP地址不同的多个socket描述符</strong>。这样就进行了端口复用，而不需要等待2MSL时间（<strong>并不是消除了2MSL时间，而是复用</strong>）。<br>在server的socket和bind调用之间插入：<br><img src="https://ae01.alicdn.com/kf/H0e9fc0ef026b4b878b3861b2ab119eces.jpg" alt="">  </p>
+<h2 id="多路I-O转接服务器"><a href="#多路I-O转接服务器" class="headerlink" title="多路I/O转接服务器"></a>多路I/O转接服务器</h2><p><strong>多路I/O转接服务器也叫做多任务I/O服务器，该类服务器实现的主旨思想是，不再由应用程序自己监视客户端连接，取而代之由内核替应用程序监视文件</strong>。<br>在前面介绍的多进程并发服务器和多线程并发服务器中，都是由<strong>服务器也就是应用程序来不断监听客户端的连接和处理，然而这会降低效率和增加cpu的消耗</strong>。因为accept和read都是<strong>阻塞等待</strong>的。这种情况下，可以让<strong>内核作为服务器和客户端的转接者</strong>，由内核来监视客户端的连接请求，当收到连接请求后再发给服务器立即建立连接，建立连接后再交由内核监视客户端，当客户端有读或写请求后，发给服务器进行处理。<br><img src="https://ae01.alicdn.com/kf/H03df6530b8c3445288eabe2276d1a531x.jpg" alt=""><br>实现方法主要有3种，将在下篇中一一介绍。  </p>
 
     </div>
 
@@ -321,7 +288,7 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/24/%E7%BB%A7%E6%89%BF%E5%92%8C%E6%B4%BE%E7%94%9F/" title="继承和派生">https://zpl-novice.github.io/2020/01/24/继承和派生/</a>
+    <a href="https://zpl-novice.github.io/2020/07/13/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B5/" title="Linux网络编程5">https://zpl-novice.github.io/2020/07/13/Linux网络编程5/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -338,13 +305,10 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="prev" title="运算符重载">
-      <i class="fa fa-chevron-left"></i> 运算符重载
+    <a href="/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/" rel="prev" title="Linux网络编程4">
+      <i class="fa fa-chevron-left"></i> Linux网络编程4
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/26/%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81/" rel="next" title="虚函数和多态">
-      虚函数和多态 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +368,7 @@ derive d;</code></pre><p>1.派生类对象可以赋值给基类对象，即<code
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#派生类构造函数"><span class="nav-number">1.</span> <span class="nav-text">派生类构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接基类和间接基类"><span class="nav-number">2.</span> <span class="nav-text">直接基类和间接基类</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP状态转换图"><span class="nav-number">1.</span> <span class="nav-text">TCP状态转换图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shutdown函数"><span class="nav-number">2.</span> <span class="nav-text">shutdown函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口复用"><span class="nav-number">3.</span> <span class="nav-text">端口复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多路I-O转接服务器"><span class="nav-number">4.</span> <span class="nav-text">多路I&#x2F;O转接服务器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
