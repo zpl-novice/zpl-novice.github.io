@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux网络编程6</title>
+    <url>/2020/07/15/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B6/</url>
+    <content><![CDATA[<p>摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对select和poll进行介绍，主要说明相关函数，以及它们的具体实现。</p>
+<a id="more"></a>
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p><img src="https://ae01.alicdn.com/kf/Hfbf5d8470c99463a934b259295cb5628k.jpg" alt=""><br>有四个参数。第一个参数nfds表示传入的所有<strong>文件描述符中最大的那个+1</strong>。第二、三、四个参数都是<strong>fd_set类型，即文件描述符的集合</strong>，分别表示所监听的文件描述符<strong>是否可读、可写、异常事件</strong>。最后一个参数则是时间。可以设置成阻塞等待，也可以设定多长时间后返回。<br><strong>返回值成功返回的是所监听的所有监听集合中满足条件的总数。要想知道哪个文件描述符满足需要再判断</strong>。<br>在设置集合时与前面讲过的信号集合有些相同之处，操作函数如下：<br><img src="https://ae01.alicdn.com/kf/He849fee5e9b646c38837104a35c7dbcck.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H7544c86697f14c58836781233bab6d9fX.jpg" alt=""><br><strong>通过<code>FD_ISSET</code>函数判断，若为1，说明文件描述符满足条件，发生了对应的操作事件</strong>。  </p>
+<p>上面所讲的是数据传输过程中的读、写、异常事件。那么在<strong>建立连接时属于哪个集合</strong>呢？<strong>建立连接属于读事件，当第一次监听到lfd的读事件时，调用accept函数立即建立连接，不再阻塞，返回cfd</strong>。<br>缺点：<strong>select能同时监听的文件描述符上限为1024。为了方便找出满足条件的文件描述符，而减少大量的循环判断，需要自定义数组来存放。select会对监听集合作出修改，需要提前将原有集合保存</strong>。<br>具体实现：<br><img src="https://ae01.alicdn.com/kf/H036be9c8186b4accb651e72e818d3aeaW.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H4eb3b88121ef477ab05a0990cba5503fS.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha44d6912c6734544a48ea7efc9df4abdZ.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hedbeaf1278804bdb97fce455c71f83895.jpg" alt="">  </p>
+<h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><p><img src="https://ae01.alicdn.com/kf/H530f938f66ca4b808f3b1fd8d2b3b197c.jpg" alt=""><br>参数只有3个，第三个表示时间。第一个是结构体，第二个表示结构体数组里面元素的个数。<br><strong>poll可以看作select的升级版。poll可以突破监听的文件描述符上限1024，并且传入和传出集合分离，不再是同一个。同时满足条件的放到数组里，搜索范围小</strong>。<br>但<strong>缺点是还需要对数组遍历一遍，效率不够高，最好的情况是直接告诉满足条件的文件描述符，这是epoll</strong>。<br>结构体中第一个参数表示文件描述符，第二个则是<strong>监听的事件，读POLLIN、写POLLOUT、异常POLLERR</strong>。第三个则是返回事件，如果发生了该事件，<strong>内核会自动修改返回事件，通过返回事件判断就知道哪个文件描述符发生事件</strong>了。<br><img src="https://ae01.alicdn.com/kf/Hbd534ebf6bde49c0b1cd57f12ef71ecf6.jpg" alt=""><br>实现如下：<br><img src="https://ae01.alicdn.com/kf/H7bda74989bc54363ad91e8b94efb5e9eg.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H4be0be97a8ac4540a24e26ccfddcce1er.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H634c9432bd144a3e8c82ade1e5c3271f5.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H074637608c114cdc8aa328a76d87b2662.jpg" alt="">  </p>
+<p>下篇将会对最后一种epoll进行介绍。</p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux网络编程5</title>
     <url>/2020/07/13/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B5/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍TCP状态转换，并与程序相结合，分析其流程，并介绍一下端口复用的知识，最后讲解多路I/O转接服务器，它与之前介绍的多线程并发服务器和多进程并发服务器不同。</p>
