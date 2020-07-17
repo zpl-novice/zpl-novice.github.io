@@ -46,31 +46,41 @@
   };
 </script>
 
-  <meta name="description" content="摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对select和poll进行介绍，主要说明相关函数，以及它们的具体实现。">
+  <meta name="description" content="摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对它们进行介绍，主要说明相关函数，以及它们的具体实现。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux网络编程6">
 <meta property="og:url" content="https://zpl-novice.github.io/2020/07/15/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B6/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对select和poll进行介绍，主要说明相关函数，以及它们的具体实现。">
+<meta property="og:description" content="摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对它们进行介绍，主要说明相关函数，以及它们的具体实现。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hfbf5d8470c99463a934b259295cb5628k.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/He849fee5e9b646c38837104a35c7dbcck.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H7544c86697f14c58836781233bab6d9fX.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H036be9c8186b4accb651e72e818d3aeaW.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H4eb3b88121ef477ab05a0990cba5503fS.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha44d6912c6734544a48ea7efc9df4abdZ.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hedbeaf1278804bdb97fce455c71f83895.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H530f938f66ca4b808f3b1fd8d2b3b197c.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hbd534ebf6bde49c0b1cd57f12ef71ecf6.jpg">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/02feb01fe9215e57ddaf832902889b5a.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/51902565d4c461ba90761bcf1d8ffe1a.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/773424115327615379c1744b16e4c6a9.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/4faea83ca3524592e08217df786a42ef.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/e5ca7222175e8b36377870e9a9bc98f4.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/c98f0373277a509c72df58f329cb0503.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/732074746d4971af4b1119d94b7410ee.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/5093590422d236189ad1902a8c754da5.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/147e213847c1b8b077baf9b63666f2b2.png">
 <meta property="og:image" content="https://ae01.alicdn.com/kf/H7bda74989bc54363ad91e8b94efb5e9eg.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H4be0be97a8ac4540a24e26ccfddcce1er.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H634c9432bd144a3e8c82ade1e5c3271f5.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H074637608c114cdc8aa328a76d87b2662.jpg">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/87b99eee00fcdf18ac44880262e62914.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/782700ef00f8ea9aa3f6aaeeac37acba.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/b12cbb790bafc7ac48cd01335244bcf0.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/c9ca404b1d49cc5c7259799de5017d9d.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/e238960ef1699bebbc8b4d49139a5a85.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/58886c41dda8f438af846e9d6fbde684.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/09252ab9cfd1518b5ece570cbb082ab3.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/0e565c7815dd9a7d965bb252526bf230.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/f85fc899202e79c4e552fca76a2964fe.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/1931138b6b61a11b4cac923ad634ce40.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/4e47b853b579031c277ef58929a4fbc4.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/414bc479e8628ea7d772124af301f3f2.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/0c3f0730d0caadee5cad265fbd9f2954.png">
 <meta property="article:published_time" content="2020-07-15T08:51:14.333Z">
-<meta property="article:modified_time" content="2020-07-15T09:05:19.268Z">
+<meta property="article:modified_time" content="2020-07-17T10:15:54.956Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hfbf5d8470c99463a934b259295cb5628k.jpg">
+<meta name="twitter:image" content="https://yanxuan.nosdn.127.net/02feb01fe9215e57ddaf832902889b5a.png">
 
 <link rel="canonical" href="https://zpl-novice.github.io/2020/07/15/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B6/">
 
@@ -236,10 +246,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-15 16:51:14 / 修改时间：17:05:19" itemprop="dateCreated datePublished" datetime="2020-07-15T16:51:14+08:00">2020-07-15</time>
+              <time title="创建时间：2020-07-15 16:51:14" itemprop="dateCreated datePublished" datetime="2020-07-15T16:51:14+08:00">2020-07-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-17 18:15:54" itemprop="dateModified" datetime="2020-07-17T18:15:54+08:00">2020-07-17</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -258,7 +274,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>861</span>
+              <span>1.5k</span>
             </span>
 
         </div>
@@ -270,12 +286,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对select和poll进行介绍，主要说明相关函数，以及它们的具体实现。</p>
+        <p>摘要：上篇介绍了多路IO转接服务器的设计思想，即驱使内核来管理连接和传输数据，主要实现方法有3种，select、poll、epoll。本篇将会对它们进行介绍，主要说明相关函数，以及它们的具体实现。</p>
 <a id="more"></a>
-<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p><img src="https://ae01.alicdn.com/kf/Hfbf5d8470c99463a934b259295cb5628k.jpg" alt=""><br>有四个参数。第一个参数nfds表示传入的所有<strong>文件描述符中最大的那个+1</strong>。第二、三、四个参数都是<strong>fd_set类型，即文件描述符的集合</strong>，分别表示所监听的文件描述符<strong>是否可读、可写、异常事件</strong>。最后一个参数则是时间。可以设置成阻塞等待，也可以设定多长时间后返回。<br><strong>返回值成功返回的是所监听的所有监听集合中满足条件的总数。要想知道哪个文件描述符满足需要再判断</strong>。<br>在设置集合时与前面讲过的信号集合有些相同之处，操作函数如下：<br><img src="https://ae01.alicdn.com/kf/He849fee5e9b646c38837104a35c7dbcck.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H7544c86697f14c58836781233bab6d9fX.jpg" alt=""><br><strong>通过<code>FD_ISSET</code>函数判断，若为1，说明文件描述符满足条件，发生了对应的操作事件</strong>。  </p>
-<p>上面所讲的是数据传输过程中的读、写、异常事件。那么在<strong>建立连接时属于哪个集合</strong>呢？<strong>建立连接属于读事件，当第一次监听到lfd的读事件时，调用accept函数立即建立连接，不再阻塞，返回cfd</strong>。<br>缺点：<strong>select能同时监听的文件描述符上限为1024。为了方便找出满足条件的文件描述符，而减少大量的循环判断，需要自定义数组来存放。select会对监听集合作出修改，需要提前将原有集合保存</strong>。<br>具体实现：<br><img src="https://ae01.alicdn.com/kf/H036be9c8186b4accb651e72e818d3aeaW.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H4eb3b88121ef477ab05a0990cba5503fS.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha44d6912c6734544a48ea7efc9df4abdZ.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hedbeaf1278804bdb97fce455c71f83895.jpg" alt="">  </p>
-<h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><p><img src="https://ae01.alicdn.com/kf/H530f938f66ca4b808f3b1fd8d2b3b197c.jpg" alt=""><br>参数只有3个，第三个表示时间。第一个是结构体，第二个表示结构体数组里面元素的个数。<br><strong>poll可以看作select的升级版。poll可以突破监听的文件描述符上限1024，并且传入和传出集合分离，不再是同一个。同时满足条件的放到数组里，搜索范围小</strong>。<br>但<strong>缺点是还需要对数组遍历一遍，效率不够高，最好的情况是直接告诉满足条件的文件描述符，这是epoll</strong>。<br>结构体中第一个参数表示文件描述符，第二个则是<strong>监听的事件，读POLLIN、写POLLOUT、异常POLLERR</strong>。第三个则是返回事件，如果发生了该事件，<strong>内核会自动修改返回事件，通过返回事件判断就知道哪个文件描述符发生事件</strong>了。<br><img src="https://ae01.alicdn.com/kf/Hbd534ebf6bde49c0b1cd57f12ef71ecf6.jpg" alt=""><br>实现如下：<br><img src="https://ae01.alicdn.com/kf/H7bda74989bc54363ad91e8b94efb5e9eg.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H4be0be97a8ac4540a24e26ccfddcce1er.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H634c9432bd144a3e8c82ade1e5c3271f5.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H074637608c114cdc8aa328a76d87b2662.jpg" alt="">  </p>
-<p>下篇将会对最后一种epoll进行介绍。</p>
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p><img src="https://yanxuan.nosdn.127.net/02feb01fe9215e57ddaf832902889b5a.png" alt=""><br>有四个参数。第一个参数nfds表示传入的所有<strong>文件描述符中最大的那个+1</strong>。第二、三、四个参数都是<strong>fd_set类型，即文件描述符的集合</strong>，分别表示所监听的文件描述符<strong>是否可读、可写、异常事件</strong>。最后一个参数则是时间。可以设置成阻塞等待，也可以设定多长时间后返回。<br><strong>返回值成功返回的是所监听的所有监听集合中满足条件的总数。要想知道哪个文件描述符满足需要再判断</strong>。<br>在设置集合时与前面讲过的信号集合有些相同之处，操作函数如下：<br><img src="https://yanxuan.nosdn.127.net/51902565d4c461ba90761bcf1d8ffe1a.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/773424115327615379c1744b16e4c6a9.png" alt=""><br><strong>通过<code>FD_ISSET</code>函数判断，若为1，说明文件描述符满足条件，发生了对应的操作事件</strong>。  </p>
+<p>上面所讲的是数据传输过程中的读、写、异常事件。那么在<strong>建立连接时属于哪个集合</strong>呢？<strong>建立连接属于读事件，当第一次监听到lfd的读事件时，调用accept函数立即建立连接，不再阻塞，返回cfd</strong>。<br>缺点：<strong>select能同时监听的文件描述符上限为1024。为了方便找出满足条件的文件描述符，而减少大量的循环判断，需要自定义数组来存放。select会对监听集合作出修改，需要提前将原有集合保存</strong>。<br>具体实现：<br><img src="https://yanxuan.nosdn.127.net/4faea83ca3524592e08217df786a42ef.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/e5ca7222175e8b36377870e9a9bc98f4.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/c98f0373277a509c72df58f329cb0503.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/732074746d4971af4b1119d94b7410ee.png" alt="">  </p>
+<h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><p><img src="https://yanxuan.nosdn.127.net/5093590422d236189ad1902a8c754da5.png" alt=""><br>参数只有3个，第三个表示时间。第一个是结构体，第二个表示结构体数组里面元素的个数。<br><strong>poll可以看作select的升级版。poll可以突破监听的文件描述符上限1024，并且传入和传出集合分离，不再是同一个。同时满足条件的放到数组里，搜索范围小</strong>。<br>但<strong>缺点是还需要对数组遍历一遍，效率不够高，最好的情况是直接告诉满足条件的文件描述符，这是epoll</strong>。<br>结构体中第一个参数表示文件描述符，第二个则是<strong>监听的事件，读POLLIN、写POLLOUT、异常POLLERR</strong>。第三个则是返回事件，如果发生了该事件，<strong>内核会自动修改返回事件，通过返回事件判断就知道哪个文件描述符发生事件</strong>了。<br><img src="https://yanxuan.nosdn.127.net/147e213847c1b8b077baf9b63666f2b2.png" alt=""><br>实现如下：<br><img src="https://ae01.alicdn.com/kf/H7bda74989bc54363ad91e8b94efb5e9eg.jpg" alt=""><br><img src="https://yanxuan.nosdn.127.net/87b99eee00fcdf18ac44880262e62914.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/782700ef00f8ea9aa3f6aaeeac37acba.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/b12cbb790bafc7ac48cd01335244bcf0.png" alt="">  </p>
+<h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><p><strong>epoll是Linux下多路IO接口复用select/poll的增强版本。它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统CPU利用率，它可以直接返回发生事件的文件描述符而不再只返回数量。目前，epoll是Linux下创建高并发服务器的首选模型</strong>。<br>基础API函数：<br>1.创建一个<strong>epoll句柄（红黑树的根结点）</strong>，参数size用来告诉内核监听的文件描述符的个数，跟内存大小有关。<br><img src="https://yanxuan.nosdn.127.net/c9ca404b1d49cc5c7259799de5017d9d.png" alt=""><br>通过在用户空间调用epoll_create函数创建句柄，返回一个文件描述符epfd，如pcb文件描述符表中的3号epfd，其实<strong>创建了以epfd为根结点的红黑树。在Linux内核中很多代码都是采用红黑树来完成的</strong>。<br><img src="https://yanxuan.nosdn.127.net/e238960ef1699bebbc8b4d49139a5a85.png" alt="">  </p>
+<p>2.控制某个epoll监控的文件描述符上的事件：注册、修改、删除。<br><img src="https://yanxuan.nosdn.127.net/58886c41dda8f438af846e9d6fbde684.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/09252ab9cfd1518b5ece570cbb082ab3.png" alt=""><br>第<strong>一个参数为epfd，红黑树的树根</strong>。第二个则是动作，对<strong>红黑树的子结点进行增加、修改和删除</strong>。第三个是要监控的文件描述符，第四个则是对应事件。其中有两个参数，第一个就是读、写、异常事件，第二个则是<strong>数据联合体，可以是fd、泛型指针、32位或64位数，这里传fd。后面会用到泛型指针</strong>。<br>3.等待所监控的文件描述符上有事件的产生，类似于select调用<br><img src="https://yanxuan.nosdn.127.net/0e565c7815dd9a7d965bb252526bf230.png" alt=""><br>第一个参数同样是红黑树的根，第二个跟上面函数不同，是一个数组，第三个表示数组的大小，第四个则是时间，与select中作用相同。<br>同时<strong>数组是传出参数，将发生事件的文件描述符放入数组中传出。根据返回值大小就可以循环取出所有发生事件的文件描述符</strong>。<br><img src="https://yanxuan.nosdn.127.net/f85fc899202e79c4e552fca76a2964fe.png" alt=""><br>具体实现：<br><img src="https://yanxuan.nosdn.127.net/1931138b6b61a11b4cac923ad634ce40.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/4e47b853b579031c277ef58929a4fbc4.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/414bc479e8628ea7d772124af301f3f2.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/0c3f0730d0caadee5cad265fbd9f2954.png" alt="">  </p>
 
     </div>
 
@@ -371,7 +388,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#select"><span class="nav-number">1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poll"><span class="nav-number">2.</span> <span class="nav-text">poll</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#select"><span class="nav-number">1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poll"><span class="nav-number">2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll"><span class="nav-number">3.</span> <span class="nav-text">epoll</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -439,7 +456,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">149k</span>
+    <span title="站点总字数">150k</span>
 </div>
 
         

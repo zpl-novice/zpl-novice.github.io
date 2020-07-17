@@ -53,22 +53,22 @@
 <meta property="og:site_name" content="zpl-novice">
 <meta property="og:description" content="摘要：本篇将继续讲解断开连接时的TCP四次握手过程，同时对MTU、MSS和滑动窗口进行介绍。最后介绍一下高并发服务器的知识，如何建立多进程并发服务器和多线程并发服务器。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H06c694e27e6948d7845aa492fb7de4bfp.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H8b4b7e61d41844d7a84ff4db97c9e908q.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H720483898ce447639aa97e1230d20eee3.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hd38275bbd98143759e9218dd263b1487a.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H711ff79530114f52b98d478d2defc651Y.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H7d288698383b4c74aaa1bcc9658f57beX.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H39e40822ae5546219544aa4c2cfc842fp.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H07e22789bc5c4156b4314a5a493f8f885.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc939427fd36e4235a3cd53a7a207e5ceh.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H77c0b54da6cc49e4af221e296660f81fH.jpg">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/834e629709a9fae32df89eb6f6ba270f.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/1a179e0765bfb93b646b3282a8df5ae1.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/baa482627b6b2d6d7f2c7622d6a2f6d9.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/fa2d45471c3d4650169d9b6d459c2c09.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/2b3c6e3574bf6b66411574f1f725e6b8.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/1d51e7f6f311fc3ed66819cf51c69a07.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/70c5ae19b3e30a65f146d1e3bd1c3037.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/dda385a5e0e9a488a2d4da1ca4109720.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/be31195e106910592bfe3eadfbc4190d.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/2042be94064c914db99cd8a860e0fd24.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/eec572fc6c7e8795f4fca8706bdabd76.png">
 <meta property="article:published_time" content="2020-07-11T11:19:21.620Z">
-<meta property="article:modified_time" content="2020-07-11T12:08:20.419Z">
+<meta property="article:modified_time" content="2020-07-17T06:33:49.679Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg">
+<meta name="twitter:image" content="https://yanxuan.nosdn.127.net/834e629709a9fae32df89eb6f6ba270f.png">
 
 <link rel="canonical" href="https://zpl-novice.github.io/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/">
 
@@ -234,10 +234,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-11 19:19:21 / 修改时间：20:08:20" itemprop="dateCreated datePublished" datetime="2020-07-11T19:19:21+08:00">2020-07-11</time>
+              <time title="创建时间：2020-07-11 19:19:21" itemprop="dateCreated datePublished" datetime="2020-07-11T19:19:21+08:00">2020-07-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-17 14:33:49" itemprop="dateModified" datetime="2020-07-17T14:33:49+08:00">2020-07-17</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -270,13 +276,13 @@
       
         <p>摘要：本篇将继续讲解断开连接时的TCP四次握手过程，同时对MTU、MSS和滑动窗口进行介绍。最后介绍一下高并发服务器的知识，如何建立多进程并发服务器和多线程并发服务器。</p>
 <a id="more"></a>
-<h2 id="TCP四次握手"><a href="#TCP四次握手" class="headerlink" title="TCP四次握手"></a>TCP四次握手</h2><p><img src="https://ae01.alicdn.com/kf/H831a30bf1c084faabf52ad8471033bcaH.jpg" alt=""><br><strong>TCP四次握手用来断开连接</strong>。为什么有四次呢？因为<strong>Linux操作系统中建立连接的双方允许有一端关闭连接，另一端不关闭。这种状态为半关闭状态</strong>。<br><strong>建立连接用SYN标志位发送，ACK应答。关闭连接则用FIN标志位发送，ACK应答</strong>。<br>1.<strong>客户端断开连接，向服务器发送FIN标志位和0字节的数据包1021，同时对上次的服务器请求作出应答</strong>，ACK 8011。<br>2.服务器接收到客户端请求后，同意断开连接，<strong>作出应答</strong> ACK 1022。<br><strong>此时，客户端断开连接，不再传输数据，服务器没有关闭连接，处于半关闭状态</strong>。<br>3.<strong>服务器断开连接，向客户端发送FIN标志位和0字节的数据包8011，同时对上次客户端请求作出应答</strong>，ACK 1022。<br>4.<strong>客户端作出应答</strong>，ACK 8012。<br>此时，<strong>客户端、服务器均断开连接，全关闭状态。</strong>    </p>
-<p>可见，在<strong>连接和关闭连接的过程中，主要用到的是标志位和数据包包号、字节数。这些东西主要在TCP数据报格式中携带</strong>。<br><img src="https://ae01.alicdn.com/kf/H06c694e27e6948d7845aa492fb7de4bfp.jpg" alt=""><br>其中，<strong>32位序号为发送的数据包号，确认序号则为应答时的数据包号。还可以看到有6个标志位，SYN和FIN在其中。16位窗口大小则是表示滑动窗口，下面会介绍。UDP中没有</strong>。  </p>
-<h2 id="MTU"><a href="#MTU" class="headerlink" title="MTU"></a>MTU</h2><p><strong>最大传输单元</strong>。是指一种通信协议的某一层上面所能通过的最大数据包大小（以字节为单位）。最大传输单元这个单位通常与通信接口有关，<strong>由硬件规定</strong>。以下是一些协议的MTU：<br>FDDI协议：4352字节。<br><strong>以太网协议：1500字节</strong>。<br>PPPoE（ADSL）协议：1492字节。<br><img src="https://ae01.alicdn.com/kf/H8b4b7e61d41844d7a84ff4db97c9e908q.jpg" alt=""><br>以以太网1500字节为例，如果IP层有&lt;=1500 byte 需要发送，只需要一个IP包就可以完成发送任务；如果IP层有&gt; 1500 byte 数据需要发送，需要<strong>分片才能完成发送</strong>，这些分片有一个共同点，即IP Header ID相同。  </p>
+<h2 id="TCP四次握手"><a href="#TCP四次握手" class="headerlink" title="TCP四次握手"></a>TCP四次握手</h2><p><img src="https://yanxuan.nosdn.127.net/834e629709a9fae32df89eb6f6ba270f.png" alt=""><br><strong>TCP四次握手用来断开连接</strong>。为什么有四次呢？因为<strong>Linux操作系统中建立连接的双方允许有一端关闭连接，另一端不关闭。这种状态为半关闭状态</strong>。<br><strong>建立连接用SYN标志位发送，ACK应答。关闭连接则用FIN标志位发送，ACK应答</strong>。<br>1.<strong>客户端断开连接，向服务器发送FIN标志位和0字节的数据包1021，同时对上次的服务器请求作出应答</strong>，ACK 8011。<br>2.服务器接收到客户端请求后，同意断开连接，<strong>作出应答</strong> ACK 1022。<br><strong>此时，客户端断开连接，不再传输数据，服务器没有关闭连接，处于半关闭状态</strong>。<br>3.<strong>服务器断开连接，向客户端发送FIN标志位和0字节的数据包8011，同时对上次客户端请求作出应答</strong>，ACK 1022。<br>4.<strong>客户端作出应答</strong>，ACK 8012。<br>此时，<strong>客户端、服务器均断开连接，全关闭状态。</strong>    </p>
+<p>可见，在<strong>连接和关闭连接的过程中，主要用到的是标志位和数据包包号、字节数。这些东西主要在TCP数据报格式中携带</strong>。<br><img src="https://yanxuan.nosdn.127.net/1a179e0765bfb93b646b3282a8df5ae1.png" alt=""><br>其中，<strong>32位序号为发送的数据包号，确认序号则为应答时的数据包号。还可以看到有6个标志位，SYN和FIN在其中。16位窗口大小则是表示滑动窗口，下面会介绍。UDP中没有</strong>。  </p>
+<h2 id="MTU"><a href="#MTU" class="headerlink" title="MTU"></a>MTU</h2><p><strong>最大传输单元</strong>。是指一种通信协议的某一层上面所能通过的最大数据包大小（以字节为单位）。最大传输单元这个单位通常与通信接口有关，<strong>由硬件规定</strong>。以下是一些协议的MTU：<br>FDDI协议：4352字节。<br><strong>以太网协议：1500字节</strong>。<br>PPPoE（ADSL）协议：1492字节。<br><img src="https://yanxuan.nosdn.127.net/baa482627b6b2d6d7f2c7622d6a2f6d9.png" alt=""><br>以以太网1500字节为例，如果IP层有&lt;=1500 byte 需要发送，只需要一个IP包就可以完成发送任务；如果IP层有&gt; 1500 byte 数据需要发送，需要<strong>分片才能完成发送</strong>，这些分片有一个共同点，即IP Header ID相同。  </p>
 <h2 id="MSS"><a href="#MSS" class="headerlink" title="MSS"></a>MSS</h2><p><strong>最大分段大小</strong>。是<strong>TCP每次传输的数据包的最大分段大小</strong>。如果底层物理接口MTU= 1500 byte，则 <strong>MSS = 1500- 20(IP Header) -20 (TCP Header) = 1460 byte</strong>。如果application 有2000 byte发送，需要<strong>两个segment才可以完成发送</strong>，第一个TCP segment = 1460，第二个TCP segment = 540。  </p>
-<h2 id="滑动窗口（TCP流量控制）"><a href="#滑动窗口（TCP流量控制）" class="headerlink" title="滑动窗口（TCP流量控制）"></a>滑动窗口（TCP流量控制）</h2><p><strong>滑动窗口（Sliding window）是一种流量控制技术</strong>。早期的网络通信中，通信双方不会考虑网络的拥挤情况直接发送数据。由于大家不知道网络拥塞状况，同时发送数据，导致<strong>中间节点阻塞掉包，谁也发不了数据</strong>，所以就有了滑动窗口机制来解决此问题。<br><strong>TCP中采用滑动窗口来进行传输控制，滑动窗口的大小意味着当前本方还有多大的缓冲区可以用于接收数据</strong>。发送方可以通过滑动窗口的大小来确定应该发送多少字节的数据。当滑动窗口为0时，发送方一般不能再发送数据报，但有两种情况除外，一种情况是可以发送紧急数据，例如，允许用户终止在远端机上的运行进程。另一种情况是发送方可以发送一个1字节的数据报来通知接收方重新声明它希望接收的下一字节及发送方的滑动窗口大小。<strong>通过win标志位来表示</strong>。<br><img src="https://ae01.alicdn.com/kf/H720483898ce447639aa97e1230d20eee3.jpg" alt="">  </p>
-<h2 id="高并发服务器"><a href="#高并发服务器" class="headerlink" title="高并发服务器"></a>高并发服务器</h2><h3 id="多进程并发服务器"><a href="#多进程并发服务器" class="headerlink" title="多进程并发服务器"></a>多进程并发服务器</h3><p>现有<strong>多个客户端与服务器进行数据传输</strong>，<strong>若服务器只有一个进程，则当与A建立连接后进行数据传输，就无法再与B、C建立连接</strong>。<br>因此<strong>服务器需要创建子进程，使子进程与客户端通信，而父进程主要来建立连接和创建子进程、回收子进程</strong>。<br>子进程创建出来后，首先关闭lfd，因为lfd不用来数据传输。当<strong>子进程进行完数据交互后，就要关闭cfd，然后退出子进程。此时变成僵尸进程</strong>。<br>父进程创建完子进程后，关闭cfd，<strong>子进程退出后通过信号捕捉，对子进程进行回收</strong>。<br><img src="https://ae01.alicdn.com/kf/Hd38275bbd98143759e9218dd263b1487a.jpg" alt=""><br>首先创建套接字，绑定IP和端口，设置最大同时连接数。父进程循环接收连接请求，每有一个连接就创建一个子进程与之通信，将小写转换成大写。父进程再捕捉信号对子进程进行回收。<br><img src="https://ae01.alicdn.com/kf/H711ff79530114f52b98d478d2defc651Y.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H7d288698383b4c74aaa1bcc9658f57beX.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H39e40822ae5546219544aa4c2cfc842fp.jpg" alt="">  </p>
-<h3 id="多线程并发服务器"><a href="#多线程并发服务器" class="headerlink" title="多线程并发服务器"></a>多线程并发服务器</h3><p>多线程并发服务器原理与多进程并发服务器相同，只不过用线程代替了进程，在<strong>主控线程里对子线程进行分离，这样子线程结束后就不需要再回收</strong>。实现如下：<br><img src="https://ae01.alicdn.com/kf/H07e22789bc5c4156b4314a5a493f8f885.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hc939427fd36e4235a3cd53a7a207e5ceh.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H77c0b54da6cc49e4af221e296660f81fH.jpg" alt="">  </p>
+<h2 id="滑动窗口（TCP流量控制）"><a href="#滑动窗口（TCP流量控制）" class="headerlink" title="滑动窗口（TCP流量控制）"></a>滑动窗口（TCP流量控制）</h2><p><strong>滑动窗口（Sliding window）是一种流量控制技术</strong>。早期的网络通信中，通信双方不会考虑网络的拥挤情况直接发送数据。由于大家不知道网络拥塞状况，同时发送数据，导致<strong>中间节点阻塞掉包，谁也发不了数据</strong>，所以就有了滑动窗口机制来解决此问题。<br><strong>TCP中采用滑动窗口来进行传输控制，滑动窗口的大小意味着当前本方还有多大的缓冲区可以用于接收数据</strong>。发送方可以通过滑动窗口的大小来确定应该发送多少字节的数据。当滑动窗口为0时，发送方一般不能再发送数据报，但有两种情况除外，一种情况是可以发送紧急数据，例如，允许用户终止在远端机上的运行进程。另一种情况是发送方可以发送一个1字节的数据报来通知接收方重新声明它希望接收的下一字节及发送方的滑动窗口大小。<strong>通过win标志位来表示</strong>。<br><img src="https://yanxuan.nosdn.127.net/fa2d45471c3d4650169d9b6d459c2c09.png" alt="">  </p>
+<h2 id="高并发服务器"><a href="#高并发服务器" class="headerlink" title="高并发服务器"></a>高并发服务器</h2><h3 id="多进程并发服务器"><a href="#多进程并发服务器" class="headerlink" title="多进程并发服务器"></a>多进程并发服务器</h3><p>现有<strong>多个客户端与服务器进行数据传输</strong>，<strong>若服务器只有一个进程，则当与A建立连接后进行数据传输，就无法再与B、C建立连接</strong>。<br>因此<strong>服务器需要创建子进程，使子进程与客户端通信，而父进程主要来建立连接和创建子进程、回收子进程</strong>。<br>子进程创建出来后，首先关闭lfd，因为lfd不用来数据传输。当<strong>子进程进行完数据交互后，就要关闭cfd，然后退出子进程。此时变成僵尸进程</strong>。<br>父进程创建完子进程后，关闭cfd，<strong>子进程退出后通过信号捕捉，对子进程进行回收</strong>。<br><img src="https://yanxuan.nosdn.127.net/2b3c6e3574bf6b66411574f1f725e6b8.png" alt=""><br>首先创建套接字，绑定IP和端口，设置最大同时连接数。父进程循环接收连接请求，每有一个连接就创建一个子进程与之通信，将小写转换成大写。父进程再捕捉信号对子进程进行回收。<br><img src="https://yanxuan.nosdn.127.net/1d51e7f6f311fc3ed66819cf51c69a07.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/70c5ae19b3e30a65f146d1e3bd1c3037.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/dda385a5e0e9a488a2d4da1ca4109720.png" alt="">  </p>
+<h3 id="多线程并发服务器"><a href="#多线程并发服务器" class="headerlink" title="多线程并发服务器"></a>多线程并发服务器</h3><p>多线程并发服务器原理与多进程并发服务器相同，只不过用线程代替了进程，在<strong>主控线程里对子线程进行分离，这样子线程结束后就不需要再回收</strong>。实现如下：<br><img src="https://yanxuan.nosdn.127.net/be31195e106910592bfe3eadfbc4190d.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/2042be94064c914db99cd8a860e0fd24.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/eec572fc6c7e8795f4fca8706bdabd76.png" alt="">  </p>
 
     </div>
 
@@ -443,7 +449,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">149k</span>
+    <span title="站点总字数">150k</span>
 </div>
 
         
