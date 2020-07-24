@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux网络编程8</title>
+    <url>/2020/07/24/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B8/</url>
+    <content><![CDATA[<p>摘要：本篇将对UDP进行学习，首先分析TCP和UDP的各自优缺点，然后介绍如何使用UDP来实现C/S模型，最后再介绍一下使用UDP发送广播和组播。</p>
+<a id="more"></a>
+<h2 id="UDP介绍"><a href="#UDP介绍" class="headerlink" title="UDP介绍"></a>UDP介绍</h2><p><strong>传输层主要协议有两种：TCP和UDP。TCP在网络通信中占主导地位，绝大多数的网络协议借助TCP协议完成数据传输，但UDP也是网络通信中不可或缺的重要通信手段</strong>。<br><strong>TCP：面向连接的可靠的数据包传递。—对网络环境完全弥补</strong><br>优点：稳定：<br>1.<strong>数据稳定</strong>—回执机制，发送数据包会应答，丢包回传<br>2.<strong>速率稳定</strong>—传输路径固定<br>3.<strong>流量稳定</strong>—滑动窗口机制<br>缺点：<strong>效率低、速度慢（需要三次握手，传输数据都要应答</strong>）<br><strong>适用场景：大文件、重要文件传输</strong>。  </p>
+<p><strong>UDP：无连接的不可靠的报文传递。—对网络环境完全不弥补</strong><br>优点：<strong>效率高、速度快</strong>（不需要握手，不需要回执，直接发数据）<br>缺点：不稳定：<br>数据（容易丢包且不重传）<br>速率（路径不固定，有些数据包发送快，有些慢）<br>流量（没有滑动窗口，当对方缓冲区被填满，还会一直发送数据，容易丢失）<br><strong>适用场景：对实时性要求较高，如视频电话、广播、视频会议等。</strong></p>
+<p>上面是TCP和UDP的基本特点，虽然UDP有着缺点，但它的优点也很突出，因此以腾讯为例，早期使用TCP通信，后来变成<strong>TCP和UDP相结合，当传输文件时使用TCP，而视频时则用UDP，为了弥补UDP的丢包，在应用层自定义协议来弥补</strong>。</p>
+<p><strong>UDP没有TCP滑动窗口的机制，会出现在缓冲区被填满后，再接收数据时丢包的现象</strong>，解决方法：<br>1.服务器应用层设计流量控制，控制发送数据速度。<br>2.借助setsockopt函数改变缓冲区大小，如：<br><img src="https://yanxuan.nosdn.127.net/24fef272d4fd3a79e7739cd3fe326e41.png" alt="">  </p>
+<h2 id="UDP实现C-S模型"><a href="#UDP实现C-S模型" class="headerlink" title="UDP实现C/S模型"></a>UDP实现C/S模型</h2><p>服务器：<br>与TCP实现C/S模型相比，UDP实现服务器代码中在创建套接字，绑定IP和端口后，<strong>不再有listen函数监听和accept函数建立连接（因为UDP直接发送数据，不再三次握手建立连接）</strong>，然后<strong>通过recvfrom函数从客户端读取数据，并获取客户端的IP和端口。将数据小写转大写然后再通过sendto函数发送给客户端，这里的参数客户端IP和端口号由上面recvfrom函数传出</strong>，循环即可。<br><img src="https://yanxuan.nosdn.127.net/66b77c6e41f6d64fc9a3cef612674619.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/e944bf3aefb3a47479a65ca670e33f7e.png" alt="">    </p>
+<p>客户端：<br>客户端创建套接字，然后用<strong>sendto函数通过服务器的IP和端口号直接向服务器发送数据，不再用connect函数建立连接，然后再用recvfrom函数从服务器读取数据，因为已知服务器的IP和端口号，所以这里的传出参数可直接设置为空，将处理后的数据输出</strong>。<br><img src="https://yanxuan.nosdn.127.net/8a5c5b0dc606067cdf067fe728d5943c.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/e4423edd55b99119145c3224430fa651.png" alt=""><br>查看服务器客户端通信时状态可得，<strong>与TCP的ESTABLISHED状态不同，显示为udp通信，数据报格式</strong>。<br><img src="https://yanxuan.nosdn.127.net/7dfc264da36d17b4958bcabdbb366c16.png" alt=""><br><strong>UDP协议默认支持并发，不用再创建多进程或多线程或IO转接</strong>。<br><img src="https://yanxuan.nosdn.127.net/39fb46e259a747996b9ff364467f417f.png" alt="">  </p>
+<h2 id="UDP实现广播"><a href="#UDP实现广播" class="headerlink" title="UDP实现广播"></a>UDP实现广播</h2><p><strong>IP地址为192.168.42.255为广播IP</strong>，IP地址总共32位，最大为255.255.255.255。<br><strong>一般在局域网内使用UDP。如服务器想要发送广播，就在数据封装时，网络层的IP为192.168.42.255，当交换机收到数据解包时，发现是广播IP，就向它连接的所有客户端发送一份该数据包</strong>。<br><img src="https://yanxuan.nosdn.127.net/c12c9b21f37efb52a0cd8da3e5504e93.png" alt=""><br>在<strong>广播时需要给sockfd设置广播权限</strong>，这依然是通过前面讲过的setsockopt函数来完成。<br><img src="https://yanxuan.nosdn.127.net/8de1211e582bcd10ff3524daf2948356.png" alt=""><br><strong>服务器自身的端口号不重要，因为客户端不向服务器发送数据，将客户端的IP设置为广播IP，端口号设定，循环向客户端发送广播</strong>。<br><img src="https://yanxuan.nosdn.127.net/2d844c2aa3c68c2b0b73d0c0a5a1df65.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/e9d8050a6767ce2f490f7909de0bcf86.png" alt=""><br>客户端：<br>客户端端口设定与服务器的设定相同，<strong>不再隐式绑定，而是显式绑定到该端口号</strong>。<br><img src="https://yanxuan.nosdn.127.net/78ee59aa8129e35a31d471b03fc84f81.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/a9f050b9a18e87487981881e877ad664.png" alt="">  </p>
+<h2 id="多播（组播）"><a href="#多播（组播）" class="headerlink" title="多播（组播）"></a>多播（组播）</h2><p><strong>组播可以是永久的，也可以是临时的，组播地址中，有一部分由官方分配的，称为永久组播组，永久组播组保持不变的是它的ip地址，组中的成员构成可以发生改变</strong>。<br><img src="https://yanxuan.nosdn.127.net/e1a0182c21480bb3b7f4c8cf069278b5.png" alt=""><br>可以通过ip ad命令查看网卡编号：<br><img src="https://yanxuan.nosdn.127.net/8ea66e9cc990489737b1e0c3b68b5497.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/0fe589a066a90a72b42a4dc02293f904.png" alt="">  </p>
+<p>目前<strong>所学过的setsockopt的功能</strong>有：<br><img src="https://yanxuan.nosdn.127.net/74a46e2e418fa47802269bc6d4d478cc.png" alt="">  </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux网络编程7</title>
     <url>/2020/07/22/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B7/</url>
     <content><![CDATA[<p>摘要：本篇将介绍epoll反应堆有关的知识，epoll反应堆模型是libevent库的核心思想实现，它与前面所讲的传统epoll有两点区别，将介绍epoll反应堆模型的原理和实现，还会讲解心跳包的概念，以及线程池的原理和实现。</p>
