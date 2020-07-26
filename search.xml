@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Shell编程1</title>
+    <url>/2020/07/26/Shell%E7%BC%96%E7%A8%8B1/</url>
+    <content><![CDATA[<p>摘要：本篇进入Shell编程的学习。Shell是解释性语言，可以用来写脚本。本篇将会介绍Shell编程的基本语法，如何来编写一些简单的脚本。  </p>
+<a id="more"></a>
+<p><strong>Shell是命令解析器</strong>，它是用户和内核沟通的桥梁。<strong>Shell也是一个可执行程序，它运行时是一个进程。</strong><br><strong>Shell可以用来进行脚本编程。它是解释性语言（python，ruby），而不是编译性语言（c，c++）</strong>。<br><strong>Shell编程的脚本，第一行加上#! /bin/sh，用来指定解释器</strong>。<br>例如用echo输出字符串，执行/bin/pwd命令，查看当前所在目录，再执行/bin下的ls，查看当前目录下的内容。<br><img src="https://i.loli.net/2020/07/26/IeBY92WhntHi3Qq.png" alt="Shell编程1.png"><br><strong>在执行时需要给文件权限</strong>。   </p>
+<p>命令分为两种，内建命令和非内建命令，<strong>内建命令不需要bash也能运行，而非内建命令则不行。命令外可以加上小括号，来使当前路径不变</strong>。如 cd .. ls -l 执行完结果后会返回到上一级目录，而(cd .. ls -l)则不会改变所在目录。 </p>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p><strong>变量分为环境变量和本地变量</strong>。环境变量可以从父进程传给子进程。本地变量只存在于当前Shell进程，<strong>在Shell定义一个变量用=，如 VAR=hello，但是这是一个本地变量，通过export VAR 导出，可以将本地变量变成环境变量</strong>。<br><strong>unset可删除已经定义的环境变量或本地变量</strong>。<br><img src="https://i.loli.net/2020/07/26/J4X1W5xB6zwLsC3.png" alt="Shell编程2.png">  </p>
+<h3 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h3><p>用于匹配的字符称为通配符，如* ? []。<br><img src="https://i.loli.net/2020/07/26/rLAVNtgxh9pXOfW.png" alt="Shell编程3.png"><br>例如*<em>查找所有的.c文件，只需要ls *.c即可，若查找2个字符的.c文件，ls ??.c *</em> </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux网络编程9</title>
+    <url>/2020/07/26/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B9/</url>
+    <content><![CDATA[<p>摘要：本篇是Linux网络编程的最后一篇，主要讲解本地套接字的相关知识，以及对开源库作一下介绍，本地套接字在前面进程间通信时提及过，在本篇将讲述它的工作原理。</p>
+<a id="more"></a>
+<h2 id="本地套接字"><a href="#本地套接字" class="headerlink" title="本地套接字"></a>本地套接字</h2><p><strong>前面在讲进程间通信（IPC）时，提到共有5种方法：管道（pipe）、有名管道（FIFO）、信号（开销小）、共享内存、本地套接字</strong>。<br>本地套接字的<strong>基本流程和网络套接字的基本一样</strong>，但是在函数参数上有些不同，首先是创建套接字：<br><img src="https://i.loli.net/2020/07/26/KRXk4eU6yZFIlL8.png" alt="本地套接字1.png"><br>在前面讲解网络套接字时，<strong>第一个参数domain选择<code>AF_INET</code>，在本地套接字时选择<code>AF_UNIX</code></strong>。第二个参数跟网络套接字一样，选择流式或报式传输，第三个一般传0。<br>接下来绑定，<strong>不再绑定一个IP地址+端口号，而是绑定一个具体路径，bind函数会创建一个新文件，因此要保证bind之前该文件不存在，使用unlink函数，否则会出错</strong>。<br><img src="https://i.loli.net/2020/07/26/WUCSPJfi8ThyrpM.png" alt="本地套接字2.png"><br>服务器：<br><img src="https://i.loli.net/2020/07/26/d5gwkfH4mQoqzeR.png" alt="本地套接字3.png"><br><img src="https://i.loli.net/2020/07/26/eAfMDbP7lkTBhHy.png" alt="本地套接字4.png"><br>客户端：<br><img src="https://i.loli.net/2020/07/26/6dHv7y1mYpuoib3.png" alt="本地套接字5.png"><br><img src="https://i.loli.net/2020/07/26/y2wdjlCE1PKsRSL.png" alt="本地套接字6.png"><br>可以看到，<strong>bind函数第三个参数不能再用sizeof来输入，因为我们要求的不是结构体的大小（110B），而是文件名大小加上AF_UNIX</strong>。<br><img src="https://i.loli.net/2020/07/26/ytT4fLXxnE58vgs.png" alt="本地套接字7.png">  </p>
+<h2 id="开源库"><a href="#开源库" class="headerlink" title="开源库"></a>开源库</h2><p>libevent库：<br>首先网上下载压缩包解压，打开README文档：<br><img src="https://i.loli.net/2020/07/26/KrRmOShdcun9EDG.png" alt="本地套接字8.png"><br>第一步./configure 检查当前环境是否可安装<br>第二步 make 编译<br>第三步 make install 安装<br><strong>安装完成后会出现一个.libs的目录，里面即为libevent的动态和静态库</strong>。<br><img src="https://i.loli.net/2020/07/26/U36V5TAfHtgqG41.png" alt="本地套接字9.png"><br>还有一个<strong>sample文件，里面都是一些demo</strong>。<br><img src="https://i.loli.net/2020/07/26/rzNxdJu5neASCUF.png" alt="本地套接字10.png"><br>打开helloworld，它的作用就是对客户端发送Hello,world！<br><img src="https://i.loli.net/2020/07/26/1LqMPsalUX98JNW.png" alt="本地套接字11.png"><br>libv库：<br><strong>libv库是对libevent库的升级，它补充了线程相关的知识</strong>。 </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux网络编程8</title>
     <url>/2020/07/24/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B8/</url>
     <content><![CDATA[<p>摘要：本篇将对UDP进行学习，首先分析TCP和UDP的各自优缺点，然后介绍如何使用UDP来实现C/S模型，最后再介绍一下使用UDP发送广播和组播。</p>
