@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Shell编程1</title>
+    <title>Shell编程</title>
     <url>/2020/07/26/Shell%E7%BC%96%E7%A8%8B1/</url>
     <content><![CDATA[<p>摘要：本篇进入Shell编程的学习。Shell是解释性语言，可以用来写脚本。本篇将会介绍Shell编程的基本语法，如何来编写一些简单的脚本。  </p>
 <a id="more"></a>
