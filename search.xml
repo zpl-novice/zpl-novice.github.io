@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数据库初识</title>
+    <url>/2020/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E8%AF%86/</url>
+    <content><![CDATA[<p>摘要：本篇开始将进入数据库相关知识的学习，主要介绍什么是数据库，数据库的分类及特点，怎么对数据库进行简单的操作。通过在Linux下安装MYSQL，对其进行各种操作来表示数据库的作用。</p>
+<a id="more"></a>
+<p><strong>数据库（电子化的文件柜）：数据库是“按照数据结构来组织、存储和管理数据的仓库”。是一个长期存储在计算机内的、有组织的、可共享的、统一管理的大量数据的集合</strong>。<br><strong>数据库是以一定方式储存在一起、能与多个用户共享、具有尽可能小的冗余度、与应用程序彼此独立的数据集合，可视为电子化的文件柜——存储电子文件的处所，用户可以对文件中的数据进行新增、查询、更新、删除等操作</strong>。  </p>
+<p>SQL：<strong>结构化查询语言</strong>，是一种特殊目的的编程语言，是一种数据库查询和程序设计语言，用于存取数据以及查询、更新和管理关系数据库系统。  </p>
+<p>数据库种类大体分为：关系型数据库和非关系型数据库。  </p>
+<h2 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h2><p>关系型数据库模型是把复杂的数据结构归结为简单的二元关系（即二维表格形式）。<strong>在关系型数据库中，对数据的操作几乎全部建立在一个或多个关系表格上，通过对这些关联的表格分类、合并、连接或选取等运算来实现数据库的管理</strong>。<br>典型产品：<strong>Mysql、Oracle</strong>、DB2、Sqlserver。  </p>
+<h2 id="非关系型数据库"><a href="#非关系型数据库" class="headerlink" title="非关系型数据库"></a>非关系型数据库</h2><p>NoSQL是非关系型数据库的广义定义，如下小结：<br><strong>NOSQL不是否定关系数据库，而是作为关系数据库的一个重要补充</strong>。<br>NOSQL为了高性能、高并发而生，忽略影响高性能、高并发的功能。<br>NOSQL典型产品memcached（纯内存），redis（持久化缓存），mongodb（面向文档）<br>1：键值存储数据库（key-value）<br>     <strong>键值数据库就类似传统语言中使用的哈希表</strong>。可以通过key来添加、查询或者删除数据库，因为使用key主键访问，所以会获得很高的性能及扩展性。<br>键值数据库主要使用一个哈希表，这个表中有一个特定的键和一个指针指向特定的数据。Key/value模型对于IT系统来说的优势在于简单、易部署、高并发。<br>典型产品：Memcached、<strong>Redis</strong>、MemcacheDB。<br>2：列存储（Column-oriented）数据库:<br><strong>列存储数据库将数据存储在列族中，一个列族存储经常被一起查询的相关数据</strong>，比如人类，我们经常会查询某个人的姓名和年龄，而不是薪资。这种情况下姓名和年龄会被放到一个列族中，薪资会被放到另一个列族中。<br>这种数据库通常用来应对分布式存储海量数据。<br>典型产品：Cassandra、HBase<br>3：面向文档（Document-Oriented）数据库存储:<br>文档型数据库的灵感是来自于Lotus Notes办公软件，而且它同第一种键值数据库类似。该类型的数据模型是版本化的文档，半结构化的文档以特定的格式存储，比如JSON。文档型数据库可以 看作是键值数据库的升级版，允许之间嵌套键值。而且文档型数据库比键值数据库的查询效率更高。<br>面向文档数据库会将数据以文档形式存储。每个文档都是自包含的数据单元，是一系列数据项的集合。每个数据项都有一个名词与对应值，值既可以是简单的数据类型，如字符串、数字和日期等；也可以是复杂的类型，如有序列表和关联对象。数据存储的最小单位是文档，同一个表中存储的文档属性可以是不同的，数据可以使用XML、JSON或JSONB等多种形式存储。<br>典型产品：<strong>MongoDB</strong>、CouchDB<br>4：图形数据库存储<br>图形数据库允许我们将数据以图的方式存储。实体会被作为顶点，而实体之间的关系则会被作为边。比如我们有三个实体，Steve Jobs、Apple和Next，则会有两个“Founded by”的边将Apple和Next连接到Steve Jobs。<br>典型产品：Neo4J、InforGrid  </p>
+<h2 id="关系型和非关系型数据库区别"><a href="#关系型和非关系型数据库区别" class="headerlink" title="关系型和非关系型数据库区别"></a>关系型和非关系型数据库区别</h2><p><strong>关系型数据库最典型的数据结构是表，由二维表及其之间的联系所组成的一个数据组织。</strong><br>优点：<br>1：易于维护：都是使用表结构，格式一致；<br>2：使用方便：SQL语言通用，可用于复杂查询；<br>3：复杂操作：支持SQL，可用于一个表以及多个表之间非常复杂的查询。<br>缺点：<br>1：读写性能比较差，尤其是海量数据的高效率读写；<br>2：固定的表结构，灵活度稍欠；<br>3：高并发读写需求，传统关系型数据库来说，硬盘I/O是一个很大的瓶颈。  </p>
+<p><strong>非关系型数据库严格上不是一种数据库，应该是一种数据结构化存储方式的集合，可以是文档或者键值对等</strong>。<br>优点：<br>1：格式灵活：存储数据的格式可以是key,value形式、文档形式、图片形式等等，文档形式、图片形式等等，使用灵活，应用场景广泛，而关系型数据库则只支持基础类型。<br>2：速度快：nosql可以使用硬盘或者随机存储器作为载体，而关系型数据库只能使用硬盘；<br>3：高扩展性；<br>4：成本低：nosql数据库部署简单，基本都是开源软件。<br>缺点：<br>1：不提供sql支持，学习和使用成本较高；<br>2：无事务处理；<br>3：数据结构相对复杂，复杂查询方面稍欠。  </p>
+<h2 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h2><p>M<strong>ySQL是一种关系型数据库管理系统，关系数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性</strong>。<br><strong>MySQL所使用的 SQL 语言是用于访问数据库的最常用标准化语言</strong>。<br>在Linux下下载安装好MySQL以后，使用账号密码登录，进入MYSQL界面，而且<strong>查看mysql进程，可以看到它是一个守护进程</strong>，即使把它杀死，它还会再启动。<br><img src="https://i.loli.net/2020/08/03/Q81muTnlVK7Xz5O.png" alt="MYSQL1.png"><br><img src="https://i.loli.net/2020/08/03/UvGWKRDzC4xoqiO.png" alt="MYSQL2.png"><br>登录完成以后，即可<strong>使用sql语句来进行操作。查看数据库，用<code>show databases;</code></strong>，注意要加分号<code>;</code>，可以看到有4个数据库，以表格形式列出：<br><img src="https://i.loli.net/2020/08/03/iRd6oXL3F14VJDB.png" alt="MYSQL3.png"><br>首先需要<strong>选中一个数据库进行操作，使用<code>use database</code></strong>来进入：<br><img src="https://i.loli.net/2020/08/03/is9uxtfnGdeO4TH.png" alt="MYSQL4.png"><br>接下来就可以在该数据库中对数据进行操作。退出数据库使用<code>exit;</code>或者<code>quit;</code>:<br><img src="https://i.loli.net/2020/08/03/d4fjHTmUxeqDFy9.png" alt="MYSQL5.png">  </p>
+<p><strong>创建数据库使用<code>create database 数据库名;</code></strong> ，如创建一个名字为test的数据库：<br><img src="https://i.loli.net/2020/08/03/EYfSe75HFwoTMnC.png" alt="MYSQL6.png">  </p>
+<p>进入数据库，<strong>查看其中的表，使用<code>show tables;</code></strong>:<br><img src="https://i.loli.net/2020/08/03/yCuKFm3YiPjQE2f.png" alt="MYSQL7.png">  </p>
+<p><strong>创建数据表的操作比创建库麻烦一点，不仅需要指定表的名字，还需要表中的数据和数据类型</strong>，如创建一个宠物的表：<br><img src="https://i.loli.net/2020/08/03/61omNvPwYj5DbB8.png" alt="MYSQL8.png"> </p>
+<p>注意表中每项以逗号，结尾。name、owner等为数据字段，<strong>VARCHAR和CHAR都表示字符串的数据类型，DATE表示日期相关类型</strong>。<br><strong>查看数据表的结构使用<code>describe 数据表;</code></strong>语句：<br><img src="https://i.loli.net/2020/08/03/MvhUyFpHVm7sOnf.png" alt="MYSQL9.png"><br>列出了<strong>数据表中数据的字段、类型、是否允许为空、约束、默认值、额外</strong>等。  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>正则表达式和sed、awk</title>
+    <url>/2020/07/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Csed%E3%80%81awk/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍正则表达式相关的知识，正则表达式用于字符串匹配，能极大的提高效率。除此之外，还会介绍sed和awk命令，它们以行和列来操作文件，进行添加、删除、替换等操作。</p>
+<a id="more"></a>
+<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><p><strong>正则表达式是独立于Shell之外的，在C、C++中都能使用，主要用来字符串匹配</strong>。<br>在很多情况下，<strong>使用通配符无法完成字符串的查找，需要用到正则表达式来帮助匹配</strong>。<br><strong>egrep指扩展正则下的grep</strong>，如在一个文本中查找符合IP格式的IP地址，若只使用通配符<code>*</code>，则第一个<code>*</code>就会匹配到全部文本。若使用[]来匹配，需要对.进行转义，同时使用命令在每一段最少匹配一个，最多匹配3个数字。但又可能出现匹配到一行文本的一部分，因此还需要加^和$。可以看到<strong>正则表达式虽然用到符号较多，但比C++中拆分匹配方便许多</strong>。<br><img src="https://i.loli.net/2020/07/30/ShaxDpKRfHlGuqV.png" alt="正则表达式1.png"><br><img src="https://i.loli.net/2020/07/30/9EVRBX6cwrLQgzh.png" alt="正则表达式2.png"><br><img src="https://i.loli.net/2020/07/30/eDNpH5ChQ78aGwA.png" alt="正则表达式3.png"><br>根据上面例子，来介绍正则表达式基本语法：  </p>
+<h3 id="字符类"><a href="#字符类" class="headerlink" title="字符类"></a>字符类</h3><p><img src="https://i.loli.net/2020/07/30/BWIFvdhTG7bNLgs.png" alt="正则表达式4.png"><br><img src="https://i.loli.net/2020/07/30/PcgLj4RBAqVpatU.png" alt="正则表达式5.png">  </p>
+<h3 id="数量限定符"><a href="#数量限定符" class="headerlink" title="数量限定符"></a>数量限定符</h3><p><img src="https://i.loli.net/2020/07/30/uo961gkfOyVNwnA.png" alt="正则表达式6.png"><br>再次注意，<strong>grep是查找包含某一模式的行，而不是完全匹配某一模式的行</strong>。  </p>
+<h3 id="位置限定符"><a href="#位置限定符" class="headerlink" title="位置限定符"></a>位置限定符</h3><p><img src="https://i.loli.net/2020/07/30/48dPDQOFz6LCpjT.png" alt="正则表达式7.png"><br><strong>位置限定符可以帮助grep更准确的查找</strong>。<br><img src="https://i.loli.net/2020/07/30/uFlzxLG2W1evwOA.png" alt="正则表达式8.png"><br><img src="https://i.loli.net/2020/07/30/YMopZPjuv2S5Cbm.png" alt="正则表达式9.png">  </p>
+<h3 id="其他特殊字符"><a href="#其他特殊字符" class="headerlink" title="其他特殊字符"></a>其他特殊字符</h3><p><img src="https://i.loli.net/2020/07/30/km4FrhvXyRCMwTp.png" alt="正则表达式10.png">  </p>
+<p>基础正则和扩展正则区别：<br><strong>上面介绍的是正则表达式的Extended规范，Basic规范也有这些语法，只是字符?+{}|()应解释为普通字符，要表示上述特殊含义则需要加\转义，如果用grep不用egrep，并且不加-E参数，应遵照基本正则规范来写</strong>。  </p>
+<h2 id="sed工具"><a href="#sed工具" class="headerlink" title="sed工具"></a>sed工具</h2><p>sed意为流编辑器，在Shell脚本和Makefile中作为过滤器使用非常普遍，也就是把上一个程序的输出引入sed的输入，<strong>经过一系列编辑命令转换为另一种格式输出，sed和vi都属于早期unix的ed工具</strong>。<br>sed命令行的基本格式为<code>sed 选项 ‘脚本’ 文件</code>：<br><img src="https://i.loli.net/2020/07/30/sQLzgv7bVliwnrA.png" alt="sed1.png"><br>常用的选项为：<br><img src="https://i.loli.net/2020/07/30/RZcTAh3QSklUgG2.png" alt="sed2.png"><br>如在第4行后追加xxxxxxxx，但是<strong>注意这并不会修改源文件内容，只是修改命令执行后显示的内容，若需要修改源文件，需要加上选项-i</strong>：<br><img src="https://i.loli.net/2020/07/30/ZHn2qtCs7OXNDkE.png" alt="sed3.png"><br><strong>替换则是<code>sed ‘s/BUF/buffer/g’ 文件</code>，将文件中的BUF替换成buffer，其中g表示同一行有多个BUF时都替换</strong>。<br><img src="https://i.loli.net/2020/07/30/JAyDGHgPaX46Lzv.png" alt="sed4.png"><br>打印含有abc的行：<br><img src="https://i.loli.net/2020/07/30/YityK6dPH5f8WMs.png" alt="sed5.png"><br>删除含有abc的行：<br><img src="https://i.loli.net/2020/07/30/hTDlrEIubL14Afa.png" alt="sed6.png"><br>注意，<strong>源文件中abc并没有被删除</strong>。<br><strong>sed默认使用Basic正则表达式规范，如果选项指定了-r，可以使用Extended规范，不用再对()转义</strong>。  </p>
+<p>去掉html标签，即匹配&lt;&gt;内容并将其替换成空，<strong>为了解决正则表达式贪心匹配全部（第一个&lt;和最后一个&gt;），需要在&lt;&gt;里使用[^]匹配除&lt;&gt;的内容</strong>：<br><img src="https://i.loli.net/2020/07/30/lYv37arRXD94hCA.png" alt="sed7.png">  </p>
+<h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><p><strong>sed以行为单位处理文件，awk比sed强的地方在于不仅能以行为单位，还能以列为单位处理文件。awk缺省的行分隔符是换行，缺省的列分隔符是连续的空格和Tab</strong>。<br>如打印进程的第二列，即pid，<strong>$0表示所有，$2表示第二列</strong>：<br><img src="https://p.pstatp.com/origin/137bb00007b7a1b2b2ca0" alt=""><br>若要以：当列分隔符，需要用<strong>选项指定</strong>：<br><img src="http://graph.baidu.com/resource/1227c1aa89f1125d54f6801596121403.jpg" alt=""><br>若产品数量小于75，则标注补货：<br><img src="http://graph.baidu.com/resource/1224ef1950694e44bd15d01596121412.jpg" alt=""><br><strong>awk可以像C语言一样使用变量，不需要定义，如统计进程id在2600到2700之间的进程数目</strong>：<br><img src="http://graph.baidu.com/resource/1229fabff6bcd8cfaa28f01596121416.jpg" alt="">  </p>
+]]></content>
+      <categories>
+        <category>Linux学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Shell编程</title>
     <url>/2020/07/26/Shell%E7%BC%96%E7%A8%8B1/</url>
     <content><![CDATA[<p>摘要：本篇进入Shell编程的学习。Shell是解释性语言，可以用来写脚本。本篇将会介绍Shell编程的基本语法，如何来编写一些简单的脚本。  </p>

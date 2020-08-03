@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将介绍正则表达式相关的知识，正则表达式用于字符串匹配，能极大的提高效率。除此之外，还会介绍sed和awk命令，它们以行和列来操作文件，进行添加、删除、替换等操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式和sed、awk">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/07/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Csed%E3%80%81awk/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将介绍正则表达式相关的知识，正则表达式用于字符串匹配，能极大的提高效率。除此之外，还会介绍sed和awk命令，它们以行和列来操作文件，进行添加、删除、替换等操作。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/ShaxDpKRfHlGuqV.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/9EVRBX6cwrLQgzh.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/eDNpH5ChQ78aGwA.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/BWIFvdhTG7bNLgs.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/PcgLj4RBAqVpatU.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/uo961gkfOyVNwnA.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/48dPDQOFz6LCpjT.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/uFlzxLG2W1evwOA.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/YMopZPjuv2S5Cbm.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/km4FrhvXyRCMwTp.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/sQLzgv7bVliwnrA.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/RZcTAh3QSklUgG2.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/ZHn2qtCs7OXNDkE.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/JAyDGHgPaX46Lzv.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/YityK6dPH5f8WMs.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/hTDlrEIubL14Afa.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/30/lYv37arRXD94hCA.png">
+<meta property="og:image" content="https://p.pstatp.com/origin/137bb00007b7a1b2b2ca0">
+<meta property="og:image" content="http://graph.baidu.com/resource/1227c1aa89f1125d54f6801596121403.jpg">
+<meta property="og:image" content="http://graph.baidu.com/resource/1224ef1950694e44bd15d01596121412.jpg">
+<meta property="og:image" content="http://graph.baidu.com/resource/1229fabff6bcd8cfaa28f01596121416.jpg">
+<meta property="article:published_time" content="2020-07-30T14:31:50.583Z">
+<meta property="article:modified_time" content="2020-08-03T14:43:22.744Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/30/ShaxDpKRfHlGuqV.png">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2020/07/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Csed%E3%80%81awk/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>正则表达式和sed、awk | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/07/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Csed%E3%80%81awk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          正则表达式和sed、awk
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-30 22:31:50" itemprop="dateCreated datePublished" datetime="2020-07-30T22:31:50+08:00">2020-07-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-03 22:43:22" itemprop="dateModified" datetime="2020-08-03T22:43:22+08:00">2020-08-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将介绍正则表达式相关的知识，正则表达式用于字符串匹配，能极大的提高效率。除此之外，还会介绍sed和awk命令，它们以行和列来操作文件，进行添加、删除、替换等操作。</p>
+<a id="more"></a>
+<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><p><strong>正则表达式是独立于Shell之外的，在C、C++中都能使用，主要用来字符串匹配</strong>。<br>在很多情况下，<strong>使用通配符无法完成字符串的查找，需要用到正则表达式来帮助匹配</strong>。<br><strong>egrep指扩展正则下的grep</strong>，如在一个文本中查找符合IP格式的IP地址，若只使用通配符<code>*</code>，则第一个<code>*</code>就会匹配到全部文本。若使用[]来匹配，需要对.进行转义，同时使用命令在每一段最少匹配一个，最多匹配3个数字。但又可能出现匹配到一行文本的一部分，因此还需要加^和$。可以看到<strong>正则表达式虽然用到符号较多，但比C++中拆分匹配方便许多</strong>。<br><img src="https://i.loli.net/2020/07/30/ShaxDpKRfHlGuqV.png" alt="正则表达式1.png"><br><img src="https://i.loli.net/2020/07/30/9EVRBX6cwrLQgzh.png" alt="正则表达式2.png"><br><img src="https://i.loli.net/2020/07/30/eDNpH5ChQ78aGwA.png" alt="正则表达式3.png"><br>根据上面例子，来介绍正则表达式基本语法：  </p>
+<h3 id="字符类"><a href="#字符类" class="headerlink" title="字符类"></a>字符类</h3><p><img src="https://i.loli.net/2020/07/30/BWIFvdhTG7bNLgs.png" alt="正则表达式4.png"><br><img src="https://i.loli.net/2020/07/30/PcgLj4RBAqVpatU.png" alt="正则表达式5.png">  </p>
+<h3 id="数量限定符"><a href="#数量限定符" class="headerlink" title="数量限定符"></a>数量限定符</h3><p><img src="https://i.loli.net/2020/07/30/uo961gkfOyVNwnA.png" alt="正则表达式6.png"><br>再次注意，<strong>grep是查找包含某一模式的行，而不是完全匹配某一模式的行</strong>。  </p>
+<h3 id="位置限定符"><a href="#位置限定符" class="headerlink" title="位置限定符"></a>位置限定符</h3><p><img src="https://i.loli.net/2020/07/30/48dPDQOFz6LCpjT.png" alt="正则表达式7.png"><br><strong>位置限定符可以帮助grep更准确的查找</strong>。<br><img src="https://i.loli.net/2020/07/30/uFlzxLG2W1evwOA.png" alt="正则表达式8.png"><br><img src="https://i.loli.net/2020/07/30/YMopZPjuv2S5Cbm.png" alt="正则表达式9.png">  </p>
+<h3 id="其他特殊字符"><a href="#其他特殊字符" class="headerlink" title="其他特殊字符"></a>其他特殊字符</h3><p><img src="https://i.loli.net/2020/07/30/km4FrhvXyRCMwTp.png" alt="正则表达式10.png">  </p>
+<p>基础正则和扩展正则区别：<br><strong>上面介绍的是正则表达式的Extended规范，Basic规范也有这些语法，只是字符?+{}|()应解释为普通字符，要表示上述特殊含义则需要加\转义，如果用grep不用egrep，并且不加-E参数，应遵照基本正则规范来写</strong>。  </p>
+<h2 id="sed工具"><a href="#sed工具" class="headerlink" title="sed工具"></a>sed工具</h2><p>sed意为流编辑器，在Shell脚本和Makefile中作为过滤器使用非常普遍，也就是把上一个程序的输出引入sed的输入，<strong>经过一系列编辑命令转换为另一种格式输出，sed和vi都属于早期unix的ed工具</strong>。<br>sed命令行的基本格式为<code>sed 选项 ‘脚本’ 文件</code>：<br><img src="https://i.loli.net/2020/07/30/sQLzgv7bVliwnrA.png" alt="sed1.png"><br>常用的选项为：<br><img src="https://i.loli.net/2020/07/30/RZcTAh3QSklUgG2.png" alt="sed2.png"><br>如在第4行后追加xxxxxxxx，但是<strong>注意这并不会修改源文件内容，只是修改命令执行后显示的内容，若需要修改源文件，需要加上选项-i</strong>：<br><img src="https://i.loli.net/2020/07/30/ZHn2qtCs7OXNDkE.png" alt="sed3.png"><br><strong>替换则是<code>sed ‘s/BUF/buffer/g’ 文件</code>，将文件中的BUF替换成buffer，其中g表示同一行有多个BUF时都替换</strong>。<br><img src="https://i.loli.net/2020/07/30/JAyDGHgPaX46Lzv.png" alt="sed4.png"><br>打印含有abc的行：<br><img src="https://i.loli.net/2020/07/30/YityK6dPH5f8WMs.png" alt="sed5.png"><br>删除含有abc的行：<br><img src="https://i.loli.net/2020/07/30/hTDlrEIubL14Afa.png" alt="sed6.png"><br>注意，<strong>源文件中abc并没有被删除</strong>。<br><strong>sed默认使用Basic正则表达式规范，如果选项指定了-r，可以使用Extended规范，不用再对()转义</strong>。  </p>
+<p>去掉html标签，即匹配&lt;&gt;内容并将其替换成空，<strong>为了解决正则表达式贪心匹配全部（第一个&lt;和最后一个&gt;），需要在&lt;&gt;里使用[^]匹配除&lt;&gt;的内容</strong>：<br><img src="https://i.loli.net/2020/07/30/lYv37arRXD94hCA.png" alt="sed7.png">  </p>
+<h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><p><strong>sed以行为单位处理文件，awk比sed强的地方在于不仅能以行为单位，还能以列为单位处理文件。awk缺省的行分隔符是换行，缺省的列分隔符是连续的空格和Tab</strong>。<br>如打印进程的第二列，即pid，<strong>$0表示所有，$2表示第二列</strong>：<br><img src="https://p.pstatp.com/origin/137bb00007b7a1b2b2ca0" alt=""><br>若要以：当列分隔符，需要用<strong>选项指定</strong>：<br><img src="http://graph.baidu.com/resource/1227c1aa89f1125d54f6801596121403.jpg" alt=""><br>若产品数量小于75，则标注补货：<br><img src="http://graph.baidu.com/resource/1224ef1950694e44bd15d01596121412.jpg" alt=""><br><strong>awk可以像C语言一样使用变量，不需要定义，如统计进程id在2600到2700之间的进程数目</strong>：<br><img src="http://graph.baidu.com/resource/1229fabff6bcd8cfaa28f01596121416.jpg" alt="">  </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2020/07/30/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Csed%E3%80%81awk/" title="正则表达式和sed、awk">https://zpl-novice.github.io/2020/07/30/正则表达式和sed、awk/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/26/Shell%E7%BC%96%E7%A8%8B1/" rel="prev" title="Shell编程">
+      <i class="fa fa-chevron-left"></i> Shell编程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E8%AF%86/" rel="next" title="数据库初识">
+      数据库初识 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#正则表达式"><span class="nav-number">1.</span> <span class="nav-text">正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符类"><span class="nav-number">1.1.</span> <span class="nav-text">字符类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数量限定符"><span class="nav-number">1.2.</span> <span class="nav-text">数量限定符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位置限定符"><span class="nav-number">1.3.</span> <span class="nav-text">位置限定符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他特殊字符"><span class="nav-number">1.4.</span> <span class="nav-text">其他特殊字符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sed工具"><span class="nav-number">2.</span> <span class="nav-text">sed工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awk"><span class="nav-number">3.</span> <span class="nav-text">awk</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">87</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">159k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
