@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数据类型和约束条件</title>
+    <url>/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/</url>
+    <content><![CDATA[<p>摘要：上篇简单介绍了数据库的一些操作，以及数据表的结构，本篇将主要介绍数据库的数据类型和约束条件，其中约束条件本篇先介绍主键约束，剩下的在下篇中进行介绍。  </p>
+<a id="more"></a>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>在前面的例子中看到数据表中定义了数据类型，如VARCHAR、CHAR、DATE等。<br><strong>MySQL支持多种类型，大致可以分为三类：数值、日期/时间和字符串(字符)类型</strong>。  </p>
+<h3 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h3><p><img src="https://i.loli.net/2020/08/05/scAMZgr8LqC5Seb.png" alt="MYSQL11.png"><br>在定义时需要<strong>注意每种类型的大小范围，当超出其范围时会报错</strong>。如定义一个存放数据类型为TINYINT的数据表。当存放数据127时成功，存放数据128时出错：<br><img src="https://i.loli.net/2020/08/05/wz7CakIGiMNQ8tA.png" alt="MYSQL12.png">  </p>
+<h3 id="日期和时间类型"><a href="#日期和时间类型" class="headerlink" title="日期和时间类型"></a>日期和时间类型</h3><p><strong>每个时间类型有一个有效值范围和一个”零”值，当指定不合法的MySQL不能表示的值时使用”零”值</strong>。<br><img src="https://i.loli.net/2020/08/05/KMtEpyWUbCmH4nN.png" alt="MYSQL13.png">  </p>
+<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><p><img src="https://i.loli.net/2020/08/05/i2KvqeMJWHrwNth.png" alt="MYSQL14.png"><br>注意：<strong>char(n)和varchar(n)中括号中n代表字符的个数，并不代表字节个数，比如CHAR(30)就可以存储30个字符</strong>。  </p>
+<p><strong>向数据表中添加数据记录，<code>insert into pet
+          -&gt;values(‘xiaohei’,’zhangsan’,’dog’,’f’,’2010-09-09’,’null’);</code></strong>：<br><img src="https://i.loli.net/2020/08/05/udSpfyjTGgn6riD.png" alt="MYSQL15.png">  </p>
+<p>再查看：<br><img src="https://i.loli.net/2020/08/05/vjRiD3teQVzMmcC.png" alt="MYSQL16.png">  </p>
+<p><strong>删除表中的数据，<code>delete from pet where name=’xiaohei’;</code> 用where来加限定条件</strong>：<br><img src="https://i.loli.net/2020/08/05/Mxy6BSJXVqtneb1.png" alt="MYSQL17.png">  </p>
+<p><strong>修改数据表中的数据</strong>，<code>update pet set name=’xiaobai’ where owner=’lisi’;</code> ：<br><img src="https://i.loli.net/2020/08/05/PQN7Cbz5lTVonYk.png" alt="MYSQL18.png"><br><img src="https://i.loli.net/2020/08/05/TqrpPNDR9vg4Ucw.png" alt="MYSQL19.png">  </p>
+<h2 id="建表约束条件"><a href="#建表约束条件" class="headerlink" title="建表约束条件"></a>建表约束条件</h2><h3 id="主键约束"><a href="#主键约束" class="headerlink" title="主键约束"></a>主键约束</h3><p><strong>能够唯一的确定一张表中的一条记录。使得该字段不重复且不为空</strong>。<br>如创建一个id为主键约束，name无约束的表user，<code>create table user( id int primary key, name varchar(20));</code>：<br><img src="https://i.loli.net/2020/08/05/xPgU92nHifCa1wd.png" alt="MYSQL20.png"><br>查看其结构，可见id<strong>字段的key为PRI</strong>。插入两次<code>1 zhangsan</code>，可见第二次插入失败，这是由于id有<strong>主键约束不能重复和为空</strong>，将id改为2后，插入成功，改为null，同样失败：<br><img src="https://i.loli.net/2020/08/05/bdTlKNEa6Q24txv.png" alt="MYSQL21.png">  </p>
+<p>上面是对表中单个字段进行主键约束的情况，还可以<strong>对多个字段进行联合主键约束。但是联合主键只要不是联合的所有字段都重复或有字段为空就可以，个别字段重复不会报错</strong>。如创建一个id和name联合主键约束的表，<code>primary key(id,name)</code>：<br> <img src="https://i.loli.net/2020/08/05/JVCG1n3HvlhWKdQ.png" alt="MYSQL22.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>数据库初识</title>
     <url>/2020/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E8%AF%86/</url>
     <content><![CDATA[<p>摘要：本篇开始将进入数据库相关知识的学习，主要介绍什么是数据库，数据库的分类及特点，怎么对数据库进行简单的操作。通过在Linux下安装MYSQL，对其进行各种操作来表示数据库的作用。</p>
@@ -17,6 +38,7 @@
 <p>进入数据库，<strong>查看其中的表，使用<code>show tables;</code></strong>:<br><img src="https://i.loli.net/2020/08/03/yCuKFm3YiPjQE2f.png" alt="MYSQL7.png">  </p>
 <p><strong>创建数据表的操作比创建库麻烦一点，不仅需要指定表的名字，还需要表中的数据和数据类型</strong>，如创建一个宠物的表：<br><img src="https://i.loli.net/2020/08/03/61omNvPwYj5DbB8.png" alt="MYSQL8.png"> </p>
 <p>注意表中每项以逗号，结尾。name、owner等为数据字段，<strong>VARCHAR和CHAR都表示字符串的数据类型，DATE表示日期相关类型</strong>。<br><strong>查看数据表的结构使用<code>describe 数据表;</code></strong>语句：<br><img src="https://i.loli.net/2020/08/03/MvhUyFpHVm7sOnf.png" alt="MYSQL9.png"><br>列出了<strong>数据表中数据的字段、类型、是否允许为空、约束、默认值、额外</strong>等。  </p>
+<p><strong>查看数据表中的记录，<code>select * from 数据表;</code></strong>：<br><img src="https://i.loli.net/2020/08/05/xBXKjDG4vHTFmLS.png" alt="MYSQL10.png"><br>可以看到表中记录为空。  </p>
 ]]></content>
       <categories>
         <category>数据库学习</category>

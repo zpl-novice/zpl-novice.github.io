@@ -46,26 +46,32 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将介绍最后一个算法设计技巧，回溯算法。它相比穷举算法有了很大的性能改善。通过它的一个应用，收费公路重建问题能够让我们更加形象的对该算法进行理解。">
+  <meta name="description" content="摘要：上篇简单介绍了数据库的一些操作，以及数据表的结构，本篇将主要介绍数据库的数据类型和约束条件，其中约束条件本篇先介绍主键约束，剩下的在下篇中进行介绍。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="回溯算法">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/04/26/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:title" content="数据类型和约束条件">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将介绍最后一个算法设计技巧，回溯算法。它相比穷举算法有了很大的性能改善。通过它的一个应用，收费公路重建问题能够让我们更加形象的对该算法进行理解。">
+<meta property="og:description" content="摘要：上篇简单介绍了数据库的一些操作，以及数据表的结构，本篇将主要介绍数据库的数据类型和约束条件，其中约束条件本篇先介绍主键约束，剩下的在下篇中进行介绍。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hc5c23a9c8bb542468010817dfc82c794V.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H7f810f6b4e69439fa5b1f23cf66acf4a0.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H33e943225e844a638392e447ba2ecb8fM.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hf201d9c900a64748a366d329983a96e99.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H767f121848e14a57b29806789ea804abd.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H9709d067f2ab4e59a9895824e22cfdbcz.jpg">
-<meta property="article:published_time" content="2020-04-26T07:39:55.722Z">
-<meta property="article:modified_time" content="2020-04-28T05:43:09.639Z">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/scAMZgr8LqC5Seb.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/wz7CakIGiMNQ8tA.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/KMtEpyWUbCmH4nN.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/i2KvqeMJWHrwNth.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/udSpfyjTGgn6riD.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/vjRiD3teQVzMmcC.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/Mxy6BSJXVqtneb1.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/PQN7Cbz5lTVonYk.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/TqrpPNDR9vg4Ucw.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/xPgU92nHifCa1wd.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/bdTlKNEa6Q24txv.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/05/JVCG1n3HvlhWKdQ.png">
+<meta property="article:published_time" content="2020-08-05T14:50:36.555Z">
+<meta property="article:modified_time" content="2020-08-05T15:02:36.753Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/Hc5c23a9c8bb542468010817dfc82c794V.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/05/scAMZgr8LqC5Seb.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/04/26/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/">
 
 
 <script id="page-configurations">
@@ -77,7 +83,7 @@
   };
 </script>
 
-  <title>回溯算法 | zpl-novice</title>
+  <title>数据类型和约束条件 | zpl-novice</title>
   
 
 
@@ -207,7 +213,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/26/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -220,7 +226,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          回溯算法
+          数据类型和约束条件
         </h1>
 
         <div class="post-meta">
@@ -229,24 +235,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-26 15:39:55" itemprop="dateCreated datePublished" datetime="2020-04-26T15:39:55+08:00">2020-04-26</time>
+              <time title="创建时间：2020-08-05 22:50:36 / 修改时间：23:02:36" itemprop="dateCreated datePublished" datetime="2020-08-05T22:50:36+08:00">2020-08-05</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-28 13:43:09" itemprop="dateModified" datetime="2020-04-28T13:43:09+08:00">2020-04-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库学习</span>
                   </a>
                 </span>
             </span>
@@ -257,7 +257,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>894</span>
             </span>
 
         </div>
@@ -269,13 +269,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将介绍最后一个算法设计技巧，回溯算法。它相比穷举算法有了很大的性能改善。通过它的一个应用，收费公路重建问题能够让我们更加形象的对该算法进行理解。</p>
+        <p>摘要：上篇简单介绍了数据库的一些操作，以及数据表的结构，本篇将主要介绍数据库的数据类型和约束条件，其中约束条件本篇先介绍主键约束，剩下的在下篇中进行介绍。  </p>
 <a id="more"></a>
-<p>在许多情况下，<strong>回溯算法相当于穷举搜索的巧妙实现，但性能一般不理想</strong>。即使是如此，在某些情况下，它相对于蛮力穷举搜索的工作量也有显著的节省。性能是相对的：<strong>对于排序而言，O(n^2)的算法是相当差的，但对旅行售货员（或任何NP完全）问题，O(n^5)算法则是里程碑式的结果</strong>。  </p>
-<p>回溯算法的一个具体实例是在一套房子里摆放家具的问题。存在许多尝试的可能性，但一般只有一部分可能是具体要考虑的。开始什么也不摆，然后是每件家具被摆放在某个部位。如果所有的家具都摆好并且户主满意，那么算法终止。如果摆到某一步，该步之后的所有家具摆放方法都不理想，那么就撤销这一步并尝试另外的摆放方法。注意，<strong>虽然这个算法基本上是蛮力的，但它并不直接尝试所有的可能。例如，把沙发放进厨房的各种摆法是不会尝试的，许多明显不合适的摆法早就废弃了，因为令人讨厌的摆法的子集是知道的。在一步内删除一大组可能性的做法叫裁剪</strong>。  </p>
-<h2 id="收费公路重建问题"><a href="#收费公路重建问题" class="headerlink" title="收费公路重建问题"></a>收费公路重建问题</h2><p>设给定n个点，p1,p2,p3…,pn，它们位于x轴上。xi是点pi的x坐标。并假设x1=0，这些点从左到右给出。这n个点确定了在每一对点间的n(n-1)/2个形如|xi-xj|的距离。显然，如果给定点集，那么容易以O(n^2)时间构造距离的集合。这个集合将不是排好序的，但如果愿意花O(n^2logn)时间界整理，那么这些距离也可以被排序。<strong>收费公路重建问题是从这些距离重新构造出点集。正像大数分解比乘法困难一样，重建问题也比构建问题困难。我们将要介绍的算法一般以O(n^2logn)运行，但最坏情况下可能要花费指数时间</strong>。<br>当然，若给定一个解，则可以通过对所有的点加上一个偏移量而构建无穷多其他的解。<strong>这就是为什么一定要将第一个点置于0处以及构成解的点集以非减顺序输出的原因</strong>。  </p>
-<p>令D是距离的集合，|D|=M=n(n-1)/2，举例设：  D={1,2,2,2,3,3,3,4,5,5,5,6,7,8,10}。显然，可求n=6。算法以x1=0开始，又可得x6=10，因为x6与x1为最大距离10。将10从D中删除可得：<br><img src="https://ae01.alicdn.com/kf/Hc5c23a9c8bb542468010817dfc82c794V.jpg" alt=""><br>剩下的数中，最大的距离为8，那么x2=2或者x5=8，因为这时x1和x5或者x2和x6之间为最大距离。由对称性可以判定究竟选择哪个是不重要的，因为或者两个解都引向解（它们互为镜像），或者都不会引向最终的解。所以可置x5=8，这样x5到x6的2也能删除，得：<br><img src="https://ae01.alicdn.com/kf/H7f810f6b4e69439fa5b1f23cf66acf4a0.jpg" alt=""><br>现在7变成了D中最大的数，因此距x1和x6为7的点可能是x2=3或者x4=7。如果选择x2=3，它距x1为3，距x5为5都在D中，满足。如果选择x4=7，它距x5为1，距x6为3，也满足。因此我们先尝试一种求解，若不行再尝试另一种。置x4=7，那么变为：<br><img src="https://ae01.alicdn.com/kf/H33e943225e844a638392e447ba2ecb8fM.jpg" alt=""><br>此时最大的距离变为了6，因此x3=6，或者x2=4。但x3=6不成立，因为x3与x4的距离为1，D中没有。而x2=4则x2与x1和x5的距离都为4，而D中只有1个4，不成立。所以<strong>回溯</strong>。<br>在上一步里，不再选择x4=7，而是选择x2=3。变为：<br><img src="https://ae01.alicdn.com/kf/Hf201d9c900a64748a366d329983a96e99.jpg" alt=""><br>这样，D中最大值为6，即x4=6，或者x3=4。若x4=6，与x2距离为3，与x5距离为2，与x6距离为4，满足条件。若x3=4，与x1距离为4，与x2距离为1，与x5距离4，不满足条件。因此选择x4=6，得：<br><img src="https://ae01.alicdn.com/kf/H767f121848e14a57b29806789ea804abd.jpg" alt=""><br>这样只剩下x3=5，同时它使得D变成空集。因此这是问题的一个解。<br><img src="https://ae01.alicdn.com/kf/H9709d067f2ab4e59a9895824e22cfdbcz.jpg" alt="">  </p>
-<p>本篇就是回溯算法的内容了，在下篇开始，将会进入几种高级数据结构的学习。</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>在前面的例子中看到数据表中定义了数据类型，如VARCHAR、CHAR、DATE等。<br><strong>MySQL支持多种类型，大致可以分为三类：数值、日期/时间和字符串(字符)类型</strong>。  </p>
+<h3 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h3><p><img src="https://i.loli.net/2020/08/05/scAMZgr8LqC5Seb.png" alt="MYSQL11.png"><br>在定义时需要<strong>注意每种类型的大小范围，当超出其范围时会报错</strong>。如定义一个存放数据类型为TINYINT的数据表。当存放数据127时成功，存放数据128时出错：<br><img src="https://i.loli.net/2020/08/05/wz7CakIGiMNQ8tA.png" alt="MYSQL12.png">  </p>
+<h3 id="日期和时间类型"><a href="#日期和时间类型" class="headerlink" title="日期和时间类型"></a>日期和时间类型</h3><p><strong>每个时间类型有一个有效值范围和一个”零”值，当指定不合法的MySQL不能表示的值时使用”零”值</strong>。<br><img src="https://i.loli.net/2020/08/05/KMtEpyWUbCmH4nN.png" alt="MYSQL13.png">  </p>
+<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><p><img src="https://i.loli.net/2020/08/05/i2KvqeMJWHrwNth.png" alt="MYSQL14.png"><br>注意：<strong>char(n)和varchar(n)中括号中n代表字符的个数，并不代表字节个数，比如CHAR(30)就可以存储30个字符</strong>。  </p>
+<p><strong>向数据表中添加数据记录，<code>insert into pet
+          -&gt;values(‘xiaohei’,’zhangsan’,’dog’,’f’,’2010-09-09’,’null’);</code></strong>：<br><img src="https://i.loli.net/2020/08/05/udSpfyjTGgn6riD.png" alt="MYSQL15.png">  </p>
+<p>再查看：<br><img src="https://i.loli.net/2020/08/05/vjRiD3teQVzMmcC.png" alt="MYSQL16.png">  </p>
+<p><strong>删除表中的数据，<code>delete from pet where name=’xiaohei’;</code> 用where来加限定条件</strong>：<br><img src="https://i.loli.net/2020/08/05/Mxy6BSJXVqtneb1.png" alt="MYSQL17.png">  </p>
+<p><strong>修改数据表中的数据</strong>，<code>update pet set name=’xiaobai’ where owner=’lisi’;</code> ：<br><img src="https://i.loli.net/2020/08/05/PQN7Cbz5lTVonYk.png" alt="MYSQL18.png"><br><img src="https://i.loli.net/2020/08/05/TqrpPNDR9vg4Ucw.png" alt="MYSQL19.png">  </p>
+<h2 id="建表约束条件"><a href="#建表约束条件" class="headerlink" title="建表约束条件"></a>建表约束条件</h2><h3 id="主键约束"><a href="#主键约束" class="headerlink" title="主键约束"></a>主键约束</h3><p><strong>能够唯一的确定一张表中的一条记录。使得该字段不重复且不为空</strong>。<br>如创建一个id为主键约束，name无约束的表user，<code>create table user( id int primary key, name varchar(20));</code>：<br><img src="https://i.loli.net/2020/08/05/xPgU92nHifCa1wd.png" alt="MYSQL20.png"><br>查看其结构，可见id<strong>字段的key为PRI</strong>。插入两次<code>1 zhangsan</code>，可见第二次插入失败，这是由于id有<strong>主键约束不能重复和为空</strong>，将id改为2后，插入成功，改为null，同样失败：<br><img src="https://i.loli.net/2020/08/05/bdTlKNEa6Q24txv.png" alt="MYSQL21.png">  </p>
+<p>上面是对表中单个字段进行主键约束的情况，还可以<strong>对多个字段进行联合主键约束。但是联合主键只要不是联合的所有字段都重复或有字段为空就可以，个别字段重复不会报错</strong>。如创建一个id和name联合主键约束的表，<code>primary key(id,name)</code>：<br> <img src="https://i.loli.net/2020/08/05/JVCG1n3HvlhWKdQ.png" alt="MYSQL22.png">  </p>
 
     </div>
 
@@ -291,7 +297,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/04/26/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/" title="回溯算法">https://zpl-novice.github.io/2020/04/26/回溯算法/</a>
+    <a href="https://zpl-novice.github.io/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/" title="数据类型和约束条件">https://zpl-novice.github.io/2020/08/05/数据类型和约束条件/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,13 +314,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/24/%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%AE%97%E6%B3%95/" rel="prev" title="随机化算法">
-      <i class="fa fa-chevron-left"></i> 随机化算法
+    <a href="/2020/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E8%AF%86/" rel="prev" title="数据库初识">
+      <i class="fa fa-chevron-left"></i> 数据库初识
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/29/%E4%BC%98%E5%8C%96%E7%9A%84%E4%BC%B8%E5%B1%95%E6%A0%91/" rel="next" title="优化的伸展树">
-      优化的伸展树 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -374,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#收费公路重建问题"><span class="nav-number">1.</span> <span class="nav-text">收费公路重建问题</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">1.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数值类型"><span class="nav-number">1.1.</span> <span class="nav-text">数值类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日期和时间类型"><span class="nav-number">1.2.</span> <span class="nav-text">日期和时间类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串类型"><span class="nav-number">1.3.</span> <span class="nav-text">字符串类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建表约束条件"><span class="nav-number">2.</span> <span class="nav-text">建表约束条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主键约束"><span class="nav-number">2.1.</span> <span class="nav-text">主键约束</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
