@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>数据类型和约束条件</title>
+    <title>约束条件2</title>
+    <url>/2020/08/07/%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B62/</url>
+    <content><![CDATA[<p>摘要：本篇继续对mysql建表约束进行介绍，将剩下的自增约束、非空约束、默认约束、唯一约束、外键约束进行讲解，并通过具体实例来说明它们的作用。  </p>
+<a id="more"></a>
+<h3 id="自增约束"><a href="#自增约束" class="headerlink" title="自增约束"></a>自增约束</h3><p><strong>自增约束一般与主键约束一起使用，用于设定一个自增列，这样每次插入不需要输入参数，数据库会自动给出值</strong>。如建立一个id字段为主键自增约束的表user3，<code>create table user3( id int primary key auto_increment, name varchar(20));</code>：<br><img src="https://i.loli.net/2020/08/07/oqANYCpe157kIWR.png" alt="约束1.png">  </p>
+<p>这样插入数据时可以<strong>只插入名字，id会按顺序给出</strong>：<br><img src="https://i.loli.net/2020/08/07/kVwCtLr6NGcTfgY.png" alt="约束2.png">  </p>
+<p>如果创建表时忘记创建约束，需要通过<code>alter table user4 add primary key(id);</code>：<br><img src="https://i.loli.net/2020/08/07/qjZvTWUtgA8Iiy2.png" alt="约束3.png">  </p>
+<p> 同样使用通过<code>alter table user4 drop primary key;</code>来删除约束。<br>还可以通过<code>alter table user4 modify id int primary key;</code>来修改约束。  </p>
+<h3 id="唯一约束"><a href="#唯一约束" class="headerlink" title="唯一约束"></a>唯一约束</h3><p><strong>约束修饰的字段的值不可以重复，注意与主键约束的区别，唯一约束可以为空，主键约束不能为空。</strong>添加唯一约束使用<code>alter table user5 add unique(name);</code>：<br><img src="https://i.loli.net/2020/08/07/GlJ1aiMhkqnF5Yj.png" alt="约束4.png">  </p>
+<p>插入数据时name不能重复，但可以为空：<br><img src="https://i.loli.net/2020/08/07/QzTUAGYFEBvDH8u.png" alt="约束5.png">  </p>
+<p>同样的，<strong>联合唯一约束和联合主键约束规则类似，只要不是全部相同就可以，但联合主键约束中任何一个都不能为空</strong>。<br>删除唯一约束时使用<code>alter table user5 drop index name;</code>：<br><img src="https://i.loli.net/2020/08/07/eAzXLCMSJkY2KlN.png" alt="约束6.png">  </p>
+<p>注意<strong>这里的删除与上面主键约束的删除不同，这是因为主键约束只能设置一个（可以是联合主键），而唯一约束可以设置多个，删除唯一约束时需要用索引index来区分要删除的字段</strong>。  </p>
+<h3 id="非空约束"><a href="#非空约束" class="headerlink" title="非空约束"></a>非空约束</h3><p><strong>修饰的字段不能为空null</strong>。如创建一个name字段为非空约束的表user6：<br><img src="https://i.loli.net/2020/08/07/MUuO2aAmLlyT19c.png" alt="约束7.png"><br>可以看到在<strong>name字段的是否允许为空下是NO，表示不允许name字段数据为空，当插入null时出错</strong>。  </p>
+<h3 id="默认约束"><a href="#默认约束" class="headerlink" title="默认约束"></a>默认约束</h3><p><strong>当插入数据时，若某些字段没有传值，则使用默认值。</strong>如建立一个字段age默认约束为10的表user7：<br><img src="https://i.loli.net/2020/08/07/vcNDIalmkUubXoS.png" alt="约束8.png">  </p>
+<p>可以看到<strong>age字段的default值为10，这样当不传入age字段的数据，只传入id和name数据时，默认为10，不设默认约束则默认值为null（无非空约束）</strong>：<br><img src="https://i.loli.net/2020/08/07/idbKQvk8FgPTMtU.png" alt="约束9.png">  </p>
+<h3 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h3><p><strong>涉及到两个表：父表和子表，父表对子表的某个字段进行外键约束，保证数据的完整性和一致性。</strong>例如一个班级表classes，里面包含id和name，一个学生表students，里面包含id、name和<code>class_id</code>，其中<strong><code>class_id</code>的外键约束是classes表中的id</strong>：<br><img src="https://i.loli.net/2020/08/07/6GePUM9qJYa4sRt.png" alt="约束10.png"><br>查看两个表的结构，可以看到<strong>students中字段<code>class_id</code>具有约束MUL，其实这就是外键约束</strong>，例如插入班级数据，<br><code>insert into classes values (1,’yiban’);</code>、<code>insert into classes values (2,’erban’);</code>、<code>insert into classes values (3,’sanban’);</code>、<code>insert into classes values (4,’siban’);</code>：<br><img src="https://i.loli.net/2020/08/07/mMlQwZUu9NPeRsd.png" alt="约束11.png">  </p>
+<p>当再插入学生数据时，<strong>学生的<code>class_id</code>不能超出classes表中的id范围，这就是外键约束</strong>。如插入<code>insert into students values (1,’zhangsna’,1);</code>、<code>insert into students values (2,’lisi’,2);</code>时没问题，而插入<code>insert into students values (3,’lili’,5);</code>时出错：<br><img src="https://i.loli.net/2020/08/07/kRniP9Hqc3mQDFy.png" alt="约束12.png">  </p>
+<p><strong>主表（父表）classes中没有的数据，在副表（子表）中不能使用</strong>，如<code>class_id</code>不能为5。<strong>且主表中的记录被副表引用，不能够删除</strong>，如students中有数据<code>class_id</code>为1，不能删除classes中id为1的字段，<code>delete from classes where id=1;</code>：<br><img src="https://i.loli.net/2020/08/07/TiPuJe6O2w73ZXG.png" alt="约束13.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数据类型和约束条件1</title>
     <url>/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/</url>
     <content><![CDATA[<p>摘要：上篇简单介绍了数据库的一些操作，以及数据表的结构，本篇将主要介绍数据库的数据类型和约束条件，其中约束条件本篇先介绍主键约束，剩下的在下篇中进行介绍。  </p>
 <a id="more"></a>
