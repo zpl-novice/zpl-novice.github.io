@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>查询练习1</title>
+    <url>/2020/08/09/%E6%9F%A5%E8%AF%A2%E7%BB%83%E4%B9%A01/</url>
+    <content><![CDATA[<p>摘要：本片将介绍sql查询语句，通过建立一些数据表，然后对各种条件下的数据进行查询，在实际掌握如何操作数据库中数据表的数据，获得需要的信息。</p>
+<a id="more"></a>
+<p>首先建立数据表：学生表、课程表、成绩表、教师表。<br>学生表中定义了学号（主键）、姓名、性别、出生日期、所在班级。<br>教师表中定义了教师编号（主键）、教师姓名、教师性别、出生日期、职称、所在部分。<br>课程表中定义了课程号（主键）、课程名、教师编号（<strong>以教师表的教师编号为外键约束</strong>）。<br>成绩表中定义了（<strong>学号，课程号）联合主键</strong>、成绩。其中<strong>学号的外键约束为表student中的sno</strong>，<strong>课程号的外键约束为课程表中的cno</strong>。<br><img src="https://i.loli.net/2020/08/09/Hc7GuUjYNzdJeny.png" alt="查询1.png"><br><img src="https://i.loli.net/2020/08/09/5N1U7lgFmcRKz9J.png" alt="查询2.png"><br><img src="https://i.loli.net/2020/08/09/BYsUSjCpANi37TE.png" alt="查询3.png"><br><img src="https://i.loli.net/2020/08/09/PnjbIHCrLkwzFOU.png" alt="查询4.png"><br><img src="https://i.loli.net/2020/08/09/XIPFlhWDvdaMgyL.png" alt="查询5.png">  </p>
+<p>建表完成后向表中插入数据：<br><img src="https://i.loli.net/2020/08/09/fVBipecbMloKdNn.png" alt="查询6.png"><br><img src="https://i.loli.net/2020/08/09/QGwUsHKuy5almC7.png" alt="查询7.png"><br><img src="https://i.loli.net/2020/08/09/on8MBHWilJ7rkNe.png" alt="查询8.png"><br><img src="https://i.loli.net/2020/08/09/2pRlLySd7ibhY5M.png" alt="查询9.png">  </p>
+<p>查询student表中的所有记录的sname、ssex和class列，<code>select sname,ssex,class from student;</code>：<br><img src="https://i.loli.net/2020/08/09/PxvIz1Tc5jgYs34.png" alt="查询10.png">  </p>
+<p>查询教师的所有单位即不重复的depart列，若<code>select depart from teacher;</code>会出现重复，因此要用<strong>关键字distinct排重</strong>，<code>select distinct depart from teacher;</code>：<br><img src="https://i.loli.net/2020/08/09/VgOmvRa95StzicD.png" alt="查询11.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>设计范式</title>
+    <url>/2020/08/09/%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F/</url>
+    <content><![CDATA[<p>摘要：本篇将要介绍数据库中建表时的一些范式，主要介绍第一范式1NF、第二范式2NF、第三范式3NF、BCNF。通过对范式的学习，能让我们更加理解如何在数据库中建表更加合理。</p>
+<a id="more"></a>
+<p><strong>除了约束以外，设计数据表还需要注意范式</strong>。<br><strong>范式是符合某一种级别的关系模式的集合</strong>。关系数据库中的关系必须满足一定的要求，满足不同程度要求的为不同范式。<strong>数据库范式也分为1NF，2NF，3NF，BCNF，4NF，5NF</strong>。一般在我们设计关系型数据库的时候，最多考虑到BCNF就够。<strong>符合高一级范式的设计，必定符合低一级范式</strong>，例如符合2NF的关系模式，必定符合1NF。<br><img src="https://i.loli.net/2020/08/09/1erbPW2yCAMqaLk.png" alt="范式1.png">  </p>
+<h2 id="第一范式1NF"><a href="#第一范式1NF" class="headerlink" title="第一范式1NF"></a>第一范式1NF</h2><p><strong>第一范式1NF：数据表中的所有字段都是不可分割的原子值</strong>。<br>例如下图所示的表，就不符合第一范式，因为其<strong>字段进货和字段销售都可以再分</strong>。<br><img src="https://i.loli.net/2020/08/09/uSdIcOQaEbkjqM8.png" alt="范式2.png"><br>需要对其进行修改，使其符合第一范式：<br><img src="https://i.loli.net/2020/08/09/FuI1CveYT7ozAgP.png" alt="范式3.png"><br>在<strong>任何一个关系数据库中，第一范式（1NF）是对关系模式的基本要求，不满足第一范式（1NF）的数据库就不是关系数据库</strong>。<br>第一范式使得数据表设计很详细，但也会带来<strong>数据冗余过大，插入异常，删除异常，修改异常的问题</strong>。需要在其基础上进行修改，<strong>提高设计标准</strong>，即接下来要讲的其它范式。  </p>
+<h2 id="第二范式2NF"><a href="#第二范式2NF" class="headerlink" title="第二范式2NF"></a>第二范式2NF</h2><p><strong>第二范式是在满足第一范式的前提下，要求除主键外的每一列都必须完全依赖于主键</strong>。如果在<strong>联合主键的情况下，发生不完全依赖情况，即主键外的其它列，只依赖于主键的部分字段。这种情况不满足第二范式，需要进行拆分</strong>。如下所示学生选课表：<br><img src="https://i.loli.net/2020/08/09/vTAUrgxztRPN5Lb.png" alt="范式4.png"><br>将<strong>学生和课程设为联合主键</strong>，可以确定教师、教师职称，教材，教室和上课时间。但是<strong>教材并不完全依赖于（学生，课程），只拿出课程就可以确定教材，因此发生部分依赖情况</strong>，不满足第二范式，进行拆分成2个表：<br><img src="https://i.loli.net/2020/08/09/z7c2DM9bCYIaKNr.png" alt="范式7.png"><br><img src="https://i.loli.net/2020/08/09/pl9hARq24ev7GJD.png" alt="范式6.png">  </p>
+<h2 id="第三范式3NF"><a href="#第三范式3NF" class="headerlink" title="第三范式3NF"></a>第三范式3NF</h2><p><strong>第三范式的前提是必须满足第二范式。第三范式要求除开主键列的其它列之间不能有传递依赖关系，即属性不依赖于其它非主属性</strong>。<br>如上面第二范式的表：<br><img src="https://i.loli.net/2020/08/09/z7c2DM9bCYIaKNr.png" alt="范式7.png"><br>其中<strong>教师依赖于联合主键（学生，课程），但教师职称又依赖于教师，即发生了属性依赖于其它非主属性，不满足第三范式</strong>，需要将教师职称拆分出去。  </p>
+<h2 id="BCNF范式"><a href="#BCNF范式" class="headerlink" title="BCNF范式"></a>BCNF范式</h2><p><strong>BCNF范式是对第三范式的改进，即前提是满足第三范式</strong>。假设上面第三范式中每个学生只能有一个课程，那么在<strong>联合主键中（学生，课程），关键字段课程就可以由学生确定，即关键字段依赖于关键字段，这种情况不符合BCNF范式，需要拆分</strong>。  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>约束条件2</title>
     <url>/2020/08/07/%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B62/</url>
     <content><![CDATA[<p>摘要：本篇继续对mysql建表约束进行介绍，将剩下的自增约束、非空约束、默认约束、唯一约束、外键约束进行讲解，并通过具体实例来说明它们的作用。  </p>
