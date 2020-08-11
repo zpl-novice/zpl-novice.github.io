@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>查询练习2</title>
+    <url>/2020/08/11/%E6%9F%A5%E8%AF%A2%E7%BB%83%E4%B9%A02/</url>
+    <content><![CDATA[<p>摘要：本篇继续对查询练习进行介绍，将重点讲解多表查询、子查询等条件较多、复杂的查询，面对这种情况，需要先实现条件，再实现结果，一步步完成。  </p>
+<a id="more"></a>
+<p><strong>多表查询</strong>，查询所有学生的sname、cno和degree列。这是在两个表student和score中，<strong>它们都有一个共同的字段sno，因此多表查询的条件是对应字段相等</strong>。<code>select sname,cno,degree from student,score where student.sno=score.sno;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXPMo8.png" alt="aXPMo8.png"><br>若<strong>不加条件会把两个表中的内容都列出来</strong>。  </p>
+<p>查询所有学生的sname、cname和degree列，这来自<strong>3张表</strong>，student、course、score。这时<strong>条件就需要改为两两联合，以score作为中间表</strong>，<code>select sname,cname,degree from student,course,score where student.sno=score.sno and course.cno=score.cno;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXPlFS.png" alt="aXPlFS.png">  </p>
+<p>查询95031班的学生每门课的平均分。这里需要用到<strong>子查询</strong>，首先需要<strong>查出95031班的学生的学号</strong>，<code>select sno from student where class=’95031’;</code>，然后再去看学生的每门课的<strong>分数</strong>，<code>select degree from score where sno in (select sno from student where class=’95031’);</code>，最后再按课程号<strong>分组查看平均分</strong>，<code>select cno,avg(degree) from score where sno in (select sno from student where class=’95031’) group by cno;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXPueP.png" alt="aXPueP.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>查询练习1</title>
     <url>/2020/08/09/%E6%9F%A5%E8%AF%A2%E7%BB%83%E4%B9%A01/</url>
     <content><![CDATA[<p>摘要：本片将介绍sql查询语句，通过建立一些数据表，然后对各种条件下的数据进行查询，在实际掌握如何操作数据库中数据表的数据，获得需要的信息。</p>
@@ -9,6 +22,14 @@
 <p>建表完成后向表中插入数据：<br><img src="https://i.loli.net/2020/08/09/fVBipecbMloKdNn.png" alt="查询6.png"><br><img src="https://i.loli.net/2020/08/09/QGwUsHKuy5almC7.png" alt="查询7.png"><br><img src="https://i.loli.net/2020/08/09/on8MBHWilJ7rkNe.png" alt="查询8.png"><br><img src="https://i.loli.net/2020/08/09/2pRlLySd7ibhY5M.png" alt="查询9.png">  </p>
 <p>查询student表中的所有记录的sname、ssex和class列，<code>select sname,ssex,class from student;</code>：<br><img src="https://i.loli.net/2020/08/09/PxvIz1Tc5jgYs34.png" alt="查询10.png">  </p>
 <p>查询教师的所有单位即不重复的depart列，若<code>select depart from teacher;</code>会出现重复，因此要用<strong>关键字distinct排重</strong>，<code>select distinct depart from teacher;</code>：<br><img src="https://i.loli.net/2020/08/09/VgOmvRa95StzicD.png" alt="查询11.png">  </p>
+<p><strong>查询区间</strong>，score表中成绩在60到80之间的所有记录，<code>select * from score where degree between 60 and 80;</code>，或者直接使用运算符<code>select * from score where degree &gt; 60 and degree &lt;80;</code>：<br><a href="https://imgchr.com/i/aXPCdK" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/11/aXPCdK.png" alt="aXPCdK.png"></a>  </p>
+<p><strong>或查询</strong>，查询score表中成绩为85，86或88的记录。使用<strong>in或or</strong>，<code>select * from score where degree in (85,86,88);</code>或<code>select * from score where degree=85 or degree=86 or degree=88;</code>：<br><a href="https://imgchr.com/i/aXPtLq" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/11/aXPtLq.md.png" alt="aXPtLq.md.png"></a><br>注意：<strong>in只能查同一字段的记录，而or可以查不同字段的</strong>。  </p>
+<p><strong>升序、降序查询</strong>。以class升序/降序查询student表中的所有记录，使用<code>order by class asc/desc</code>，其中<strong>asc为ascend上升，desc为descend下降</strong>，<code>select * from student order by class desc;</code>：<br><a href="https://imgchr.com/i/aXPYyn" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/11/aXPYyn.png" alt="aXPYyn.png"></a><br>其中<strong>默认为升序，即不写asc也可以</strong>。    </p>
+<p>若<strong>混合排序，如以cno升序，degree降序查询score表中的记录</strong>，<code>select * from score order by cno asc,degree desc;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXPJQs.png" alt="aXPJQs.png"><br>可以看到<strong>先以cno升序排列，当cno相同时再以degree降序排列</strong>。  </p>
+<p><strong>统计</strong>。查询95031班的学生人数。需要用到<strong>关键字count</strong>。<code>select count(*) from student where class=’95031’;</code>：<br><a href="https://imgchr.com/i/aXP8zj" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/11/aXP8zj.png" alt="aXP8zj.png"></a>  </p>
+<p><strong>子查询。查找score表中的最高分的学生学号和课程号</strong>。<code>select sno,cno from score where degree=(select max(degree) from score);</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXP3WQ.png" alt="aXP3WQ.png"><br>可以看到在<strong>查询中又用到了查询，为子查询</strong>。  </p>
+<p>查询每门课的<strong>平均成绩</strong>。需要用到<strong>关键字avg</strong>，<code>select avg(degree) from score where cno=’3-105’;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXP1Jg.png" alt="aXP1Jg.png"><br>那么如何在<strong>一句里面得到所有课程的平均成绩呢？需要分组group by，即先按cno分组，再计算平均成绩</strong>，<code>select cno,avg(degree) from score group by cno;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXPKdf.png" alt="aXPKdf.png">  </p>
+<p>查询score表中以3开头并且至少有2名学生选修的课程的平均分数。条件是以3开头并且至少有2名学生选修的课程，要求结果为平均分数。<strong>为了满足条件按cno分组后需要<code>having count(cno)&gt;=2 and cno like ‘3%’</code>，这里like的作用是模糊查询，%为通配符。</strong><code>select cno,avg(degree) from score group by cno having count(cno)&gt;=2 and cno like ‘3%’;</code>：<br><img src="https://s1.ax1x.com/2020/08/11/aXPmLt.png" alt="aXPmLt.png"><br>注意：<strong>分组之后的条件用having，不分组的条件用where</strong>。  </p>
 ]]></content>
       <categories>
         <category>数据库学习</category>
