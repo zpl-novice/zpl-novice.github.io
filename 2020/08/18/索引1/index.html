@@ -46,21 +46,27 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。">
+  <meta name="description" content="摘要：本篇将开始进入mysql高级课程的学习，主要学习数据库的对象、体系结构、应用优化以及一些常用工具。索引是数据库中用来提高性能的最常用的工具。本篇将主要对索引进行概述。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="类及类的成员3">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/index.html">
+<meta property="og:title" content="索引1">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/08/18/%E7%B4%A2%E5%BC%951/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。">
+<meta property="og:description" content="摘要：本篇将开始进入mysql高级课程的学习，主要学习数据库的对象、体系结构、应用优化以及一些常用工具。索引是数据库中用来提高性能的最常用的工具。本篇将主要对索引进行概述。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png">
-<meta property="article:published_time" content="2020-01-19T05:07:25.666Z">
-<meta property="article:modified_time" content="2020-01-21T09:37:02.882Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMYpPs.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMtbB8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMNQHO.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMNDUg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMNBVS.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMNwb8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/18/dMNr5Q.png">
+<meta property="article:published_time" content="2020-08-18T14:00:23.771Z">
+<meta property="article:modified_time" content="2020-08-18T14:19:50.704Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/08/18/dMYpPs.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/08/18/%E7%B4%A2%E5%BC%951/">
 
 
 <script id="page-configurations">
@@ -72,7 +78,7 @@
   };
 </script>
 
-  <title>类及类的成员3 | zpl-novice</title>
+  <title>索引1 | zpl-novice</title>
   
 
 
@@ -202,7 +208,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/18/%E7%B4%A2%E5%BC%951/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +221,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          类及类的成员3
+          索引1
         </h1>
 
         <div class="post-meta">
@@ -224,24 +230,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-01-19 13:07:25" itemprop="dateCreated datePublished" datetime="2020-01-19T13:07:25+08:00">2020-01-19</time>
+              <time title="创建时间：2020-08-18 22:00:23 / 修改时间：22:19:50" itemprop="dateCreated datePublished" datetime="2020-08-18T22:00:23+08:00">2020-08-18</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-21 17:37:02" itemprop="dateModified" datetime="2020-01-21T17:37:02+08:00">2020-01-21</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库学习</span>
                   </a>
                 </span>
             </span>
@@ -252,7 +252,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>1.5k</span>
             </span>
 
         </div>
@@ -264,75 +264,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇博客中将主要介绍this指针、常量对象及常量成员函数、运算符重载方面的知识。其中运算符重载是应用很广泛的，也是C++中很重要的一个知识，对运算符重载进行掌握是很有必要的。</p>
+        <p>摘要：本篇将开始进入mysql高级课程的学习，主要学习数据库的对象、体系结构、应用优化以及一些常用工具。索引是数据库中用来提高性能的最常用的工具。本篇将主要对索引进行概述。</p>
 <a id="more"></a>
-
-<p>C++是从C发展而来的，而在C语言中是没有类的概念的，C语言中的函数都是全局函数，C++中则有成员函数，所以问题来了，成员函数在C中该如何表达？C中用<code>struct</code>结构体可以将类表示出来，而成员函数则需要借助this指针。</p>
-<h2 id="this指针"><a href="#this指针" class="headerlink" title="this指针"></a>this指针</h2><p>this指针指向了成员函数作用的对象，在成员函数执行的过程中，正是通过this指针才能找到对象所在的地址，因而也就能找到对象的所有非静态成员变量的地址。<br>C++ 规定，在非静态成员函数内部可以直接使用<code>this</code>关键字，<code>this</code>就代表指向该函数所作用的对象的指针。我们以下面运算符重载的代码中的一部分为例：</p>
-<pre><code>complex&amp; complex::operator+(const complex &amp;s1)
-{
-    real=real+s1.real;
-    image=image+s1.image;
-    return *this ;
- } </code></pre><p>return应该返回的是函数的返回值类型<code>complex&amp;</code>，所以此时this指针指向的对象就是<code>complex</code>的一个对象的引用（返回对象同理）。这里的<code>this-&gt;real</code>和<code>real</code>是等价的。</p>
-<h2 id="常量对象和常量成员函数"><a href="#常量对象和常量成员函数" class="headerlink" title="常量对象和常量成员函数"></a>常量对象和常量成员函数</h2><p>假如不希望某些东西被修改，可以使用<code>const</code>关键字进行限定。C++中，<code>const</code>可以用来修饰对象、成员变量和成员函数。<br>在类的成员函数说明后面加<code>const</code>，const成员函数可以使用类中的所有成员变量，但是不能修改它们的值，这种措施主要还是为了保护数据而设置的。const成员函数也称为常量成员函数。需要强调的是，必须在成员函数的声明和定义处同时加上<code>const</code>关键字。</p>
-<pre><code>class sample
-{
-    public:
-        int value;
-        void getvalue() const;    
-};
-void sample::getvalue() const
-{
-    value=0;  //出错，不能改变变量的值 
-}</code></pre><p><code>const</code>的位置不同，表示的含义也不同，函数开头的<code>const</code>用来修饰函数的返回值，表示返回值是<code>const</code>类型，也就是不能被修改。函数头部的结尾加上<code>const</code>表示常量成员函数，这种函数只能读取成员变量的值，而不能修改成员变量的值。<br>定义对象时同样可以定义为常量对象，这样对象初始化以后就不会再改变。<br>常量成员变量就和普通的const变量相似。</p>
-<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><p>前面我们已经学过函数重载的概念，一个类中可以有多个构造函数，它们也是通过重载实现的。函数重载可以让一个函数有多种功能，在不同情况下实现不同的操作。运算符重载也是相同的道理，使运算符具有不同的功能。<br>C++本身已经对运算符进行了重载，比如我们进行<code>int</code>型数据相加时，直接调用加号就行。但是当我们使两个对象相加时，该怎么办呢？例如我们定义了复数类的两个对象，使它们相加，只用加号是无法实现的。这时候就需要我们自己对运算符重载，使得复数的实部和实部相加，虚部和虚部相加。<br>运算符重载可以重载为成员函数，普通函数和友元函数。声明格式一般为：</p>
-<p><code>返回值类型 operator 运算符 (形参表)</code><br>以下面的代码为例，可知运算符重载的方法和作用：</p>
-<pre><code>class complex
-{
-    public:
-        int real,image;
-        complex(int,int);
-        ~complex();
-        complex&amp; operator+(const complex&amp;);
-        complex&amp; operator-(const complex&amp;);
-        void showcomplex();
-};
-complex::complex(int a=0,int b=0)
-{
-    real=a;
-    image=b;
-}
-complex::~complex()
-{
-}
-complex&amp; complex::operator+(const complex &amp;s1)
-{
-    real=real+s1.real;
-    image=image+s1.image;
-    return *this ;
- } 
- complex&amp; complex::operator-(const complex &amp;s2)
- {
-     real=real-s2.real;
-     image=image-s2.image;
-     return *this;
- }
- void complex::showcomplex()
- {
-     cout&lt;&lt;real&lt;&lt;&quot;+j&quot;&lt;&lt;image&lt;&lt;endl;
- }
-int main()
-{
-    complex s1(2,3);
-    complex s2(3,4);
-    complex s3,s4;
-    s3=s1+s2;
-    s3.showcomplex();
-    s4=s3-s2;
-    s4.showcomplex();
-    return 0;
-} </code></pre><p>代码的运行结果为:<br><img src="https://i.loli.net/2020/01/19/Y2ki3ZNgez7ElKX.png" alt=""><br>可见通过运算符重载，实现了复数类对象的运算。上面讲的只是简单的加减乘除运算符的重载。在下篇博客里，将会针对运算符重载深入研究，讲解赋值运算符、流插入和流提取运算符等其他运算符重载的用法。</p>
+<p><strong>索引index是帮助mysql高效获取数据的数据结构（有序）</strong>。在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些<strong>数据结构以某种方式引用（指向）数据，这样就可以在这些数据结构上实现高级查找算法，这种数据结构就是索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/18/dMYpPs.png" alt="dMYpPs.png"><br>左边的数据表有2列七条记录，为了加快Col2的查找，可以维护一个右边所示的<strong>二叉查找树，每个节点包含索引键值和一个指向对应数据记录的指针，这样就可以运用二叉查找快速获取到相应数据</strong>。<br>一般来说索引本身也很大，不可能全部存储在内存中，因此<strong>索引往往以索引文件的形式存储在磁盘上，索引是数据库中用来提高性能的最常用的工具</strong>。  </p>
+<p>优点：<br>1.类似于书籍的目录，<strong>提高数据检索的效率，降低数据库的IO成本</strong>。<br>2.通过索引对数据进行排序，<strong>降低数据排序的成本，降低cpu消耗</strong>。<br>缺点：<br>1.实际上索引也是一张表，需要<strong>占用空间</strong>。<br>2.索引虽然能提高查询效率，但也<strong>降低了表的更新速度，在对表的数据进行操作时，也需要对索引进行更新</strong>。  </p>
+<p>索引结构：<br><strong>索引是在mysql的存储引擎层中实现的，而不是在服务器层实现的。所以每种存储引擎的索引都不一定完全相同，也不是所有的存储引擎都支持所有的索引类型的</strong>。Mysql目前提供了以下四种索引：<br><strong>BTREE索引：最常见的索引类型，大部分索引都支持B树索引</strong>。<br>HASH索引：只有Memory引擎支持，使用场景简单。<br>R-TREE索引（空间索引）：空间索引是MyISAM引擎的一个特殊索引类型，主要用于地理空间数据类型，使用较少。<br>Full-text（全文索引）：全文索引也是MyISAM引擎的一个特殊索引类型，主要用于全文索引。<br><img src="https://s1.ax1x.com/2020/08/18/dMtbB8.png" alt="dMtbB8.png"><br><strong>平常所说的索引，一般都是指B+树（多路搜索树，并不一定是二叉的）结构组织的索引</strong>。  </p>
+<p>BTREE索引：<br>把数据结构中B树的定义拿过来：<br>B树（B-tree）是一种平衡的多路查找树，2-3树和2-3-4树都是B树的特例。结点最大的孩子数目称为B树的阶，因此2-3树是3阶B树，2-3-4树是4阶B树。<br>一个m阶的B树具有如下属性：<br>1.如果根结点不是叶结点，那么它至少有两棵子树。<br>2.<strong>每一个非根的分支结点都有k-1个元素和k个孩子</strong>，每一个叶结点都有k-1个元素，其中k介于m/2和m之间（可以等于边界）。<br>3.<strong>所有叶子结点都位于同一层次。</strong><br>4.所有分支结点包含下列信息数据(n,A0,K1,A1,K2,…,Kn,An)，其中，Ki为关键字，i=1,2,3…，且Ki&lt;K(i+1)。Ai为指向子树根结点的指针，且指针A(i-1)所指向的子树中所有结点的关键字都小于Ki。An所指子树中所有结点的关键字都大于Kn。n为关键字的个数，或者说n+1为子树的个数。<br>如下一个5阶B树：<br><a href="https://imgchr.com/i/dMNQHO" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/18/dMNQHO.png" alt="dMNQHO.png"></a><br>当插入D时，若放到AC和EF中间，结点中的元素个数大于4个，需要分裂，将中间元素D向上变为父结点，AC和EF拆分，得：<br><a href="https://imgchr.com/i/dMNDUg" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/18/dMNDUg.png" alt="dMNDUg.png"></a><br><a href="https://imgchr.com/i/dMNBVS" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/18/dMNBVS.png" alt="dMNBVS.png"></a><br><strong>BTREE树和二叉树相比，查询数据的效率更高，因为对于相同的数据量来说，BTREE的层级结构比二叉树小，因此搜索速度快</strong>。  </p>
+<p><strong>B+树是一种B树的变形树，在B树中，每一个元素在该树中只出现一次，有可能在叶结点上，也有可能在分支结点上。而在B+树中，出现在分支结点中的元素会在它们的中序后继者（叶结点）中再次列出，另外，每一个叶结点都会保存一个指向后一叶结点的指针</strong>。<br><a href="https://imgchr.com/i/dMNwb8" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/18/dMNwb8.png" alt="dMNwb8.png"></a><br><strong>叶结点保存所有的信息，且叶结点通过指针相连，非叶结点可以看作索引。B+树查询任何信息都要从root走到叶子，所以查询效率更加稳定</strong>。  </p>
+<p>MYSQL索引数据结构对经典的B+树进行了优化，在原有的基础上，<strong>增加了叶结点间的顺序指针，提高区间访问的性能</strong>。<br><a href="https://imgchr.com/i/dMNr5Q" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/18/dMNr5Q.png" alt="dMNr5Q.png"></a>   </p>
 
     </div>
 
@@ -348,7 +287,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" title="类及类的成员3">https://zpl-novice.github.io/2020/01/19/类及类的成员3/</a>
+    <a href="https://zpl-novice.github.io/2020/08/18/%E7%B4%A2%E5%BC%951/" title="索引1">https://zpl-novice.github.io/2020/08/18/索引1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -365,13 +304,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" rel="prev" title="类及类的成员2">
-      <i class="fa fa-chevron-left"></i> 类及类的成员2
+    <a href="/2020/08/16/%E4%BA%8B%E5%8A%A1/" rel="prev" title="事务">
+      <i class="fa fa-chevron-left"></i> 事务
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/21/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="next" title="运算符重载">
-      运算符重载 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -431,7 +367,6 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#this指针"><span class="nav-number">1.</span> <span class="nav-text">this指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量对象和常量成员函数"><span class="nav-number">2.</span> <span class="nav-text">常量对象和常量成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运算符重载"><span class="nav-number">3.</span> <span class="nav-text">运算符重载</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
