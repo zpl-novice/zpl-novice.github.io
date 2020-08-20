@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>索引2和视图</title>
+    <url>/2020/08/20/%E7%B4%A2%E5%BC%952%E5%92%8C%E8%A7%86%E5%9B%BE/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍索引剩下的相关知识，主要包括索引的分类、语法和设计原则。并介绍视图相关的概念和应用。</p>
+<a id="more"></a>
+<h2 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h2><p>1.单值索引：<strong>一个索引只包含单个列，一个表可以有多个单值索引</strong>。即只对一个字段列建立索引。<br>2.唯一索引：<strong>索引列的值必须唯一，但允许有空值</strong>。<br>3.复合索引：即<strong>一个索引中可以包含多个列</strong>。<br>有关复合索引相关知识后面还会再介绍。</p>
+<h2 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a>索引语法</h2><p><strong>索引在创建表的时候，可以同时创建，也可以随时增加新的索引。Mysql默认会为主键创建主键索引</strong>。<br><strong>创建索引时可以指定索引类型以及数据结构，默认为B+树</strong>：<br><img src="https://s1.ax1x.com/2020/08/20/dJQOhQ.png" alt="dJQOhQ.png"><br>以表person为例：<br><img src="https://s1.ax1x.com/2020/08/20/dJQLtg.png" alt="dJQLtg.png"><br><code>create index idx_name on person(name);</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJQqAS.png" alt="dJQqAS.png">  </p>
+<p>查看索引：<br> 使用命令<code>show index from person;</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJQH78.png" alt="dJQH78.png"><br>为了便于查看，可以加上\G，<code>show index from person\G;</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJQIXt.png" alt="dJQIXt.png"><br>可见有两个索引，<strong>一个是主键索引，另一个就是我们添加的idx_name索引，默认都是BTREE索引</strong>。<br>删除索引：<br>删除索引使用<code>drop index idx_name on person;</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJQTnP.png" alt="dJQTnP.png"><br>还可以通过alter来操作：<br><img src="https://s1.ax1x.com/2020/08/20/dJQ70f.png" alt="dJQ70f.png"><br>如添加唯一索引，<code>alter table person add unique idx_name(name);</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJQ56I.png" alt="dJQ56I.png">  </p>
+<p>可以看到与最开始添加的普通索引的区别在于，Non_unique为0，意思为唯一。  </p>
+<p>索引设计原则：<br>索引的设计可以遵循一些已有的原则，创建索引时应尽量符合这些原则：<br>1.对<strong>查询频次较高，且数据量比较大</strong>的表建立索引。<br>2.索引<strong>字段的选择</strong>，最佳候选列应当从where子句的条件中提取。<br>3.使用<strong>唯一索引，区分度越高，使用索引的效率越高</strong>。<br>4.索引不是多多益善，<strong>索引越多，维护的代价越大</strong>。<br>5.使用<strong>短索引，占用的空间小，可以有效提高访问索引的I/O效率</strong>。<br>6.利用<strong>最左前缀，N个列组合而成的组合索引，相当于创建了N个索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/20/dJQ41A.png" alt="dJQ41A.png">  </p>
+<h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p><strong>视图（View）是一种虚拟存在的表，视图并不在数据库中实际存在</strong>，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。<strong>通俗的讲，视图就是一条select语句执行后返回的结果集</strong>。<br>视图相对于普通的表的优势：<br>1.<strong>简单</strong>，使用视图不需要关心后面对应表的结构、关系和条件，主要看关心视图中的字段即可。<br>2.<strong>安全</strong>，使用视图可以只看到指定的列，而不暴露整个表。<br>3.<strong>数据独立</strong>，一旦视图的结构确定了，源表的改变对视图影响不大。  </p>
+<p>创建视图：<br><img src="https://s1.ax1x.com/2020/08/20/dJy8PJ.png" alt="dJy8PJ.png"><br>继续以表card和person为例，若要查找每个人和他所有的卡，<code>select person.id,person.name,card.name as cardname from card,person where card.id=person.cardid;</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJyGG9.png" alt="dJyGG9.png"><br>可以<strong>将查询的结果封装到一个视图里面，这样就不用每次写复杂的多表查询</strong>，<code>create view view_person_card as select person.id,person.name,card.name as cardname from card,person where card.id=person.cardid;</code>，然后再<strong>按查询表的方式查询视图</strong>，<code>select * from view_person_card;</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJyNKx.png" alt="dJyNKx.png"><br>若<strong>对视图进行更新，其实是对源表进行更新。不建议更新视图</strong>。  </p>
+<p> 在mysql中，通过命令<code>show tables</code>，<strong>既可以显示所有的表，也会显示所有的视图</strong>：<br><img src="https://s1.ax1x.com/2020/08/20/dJyJ2R.png" alt="dJyJ2R.png">  </p>
+<p>删除视图：<br>删除视图使用命令<code>drop view view_person_card;</code>：<br><img src="https://s1.ax1x.com/2020/08/20/dJyYx1.png" alt="dJyYx1.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>索引1</title>
     <url>/2020/08/18/%E7%B4%A2%E5%BC%951/</url>
     <content><![CDATA[<p>摘要：本篇将开始进入mysql高级课程的学习，主要学习数据库的对象、体系结构、应用优化以及一些常用工具。索引是数据库中用来提高性能的最常用的工具。本篇将主要对索引进行概述。</p>
