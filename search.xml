@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>存储过程和函数、触发器</title>
+    <url>/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>摘要：本篇将要介绍的是存储过程、存储函数和触发器，其中存储过程和存储函数的区别在于有无返回值，调用存储过程和函数可以简化应用开发人员的很多工作。而触发器则用来监视insert、update、delete操作。  </p>
+<a id="more"></a>
+<h2 id="存储过程和函数"><a href="#存储过程和函数" class="headerlink" title="存储过程和函数"></a>存储过程和函数</h2><p><strong>存储过程和函数是事先经过编译并存储在数据库中的一段SQL语句的集合</strong>，调用存储过程和函数可以简化应用开发人员的很多工作，减少数据在数据库和应用服务器之间的传输，对于<strong>提高数据处理的效率</strong>是有好处的。<br><strong>存储过程和函数的区别在于函数必须有返回值，而存储过程没有</strong>。<br>创建存储过程：<br><img src="https://s1.ax1x.com/2020/08/23/dwX238.png" alt="dwX238.png">  </p>
+<p><strong>需要用关键字delimiter来修改分隔符，使;失效来创建存储过程</strong>：<br><img src="https://s1.ax1x.com/2020/08/23/dwXg9f.png" alt="dwXg9f.png">  </p>
+<p>调用存储过程，<code>call test();</code>：<br><img src="https://s1.ax1x.com/2020/08/23/dwXRgS.png" alt="dwXRgS.png">  </p>
+<p>删除存储过程，<code>drop procedure test;</code>：<br><img src="https://s1.ax1x.com/2020/08/23/dwXyNt.png" alt="dwXyNt.png">  </p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p><strong>存储过程是可以编程的，意味着可以使用变量，表达式，控制结构，来完成比较复杂的功能</strong>。<br>1.变量<br><strong>declare：定义一个局部变量，该变量的作用范围只在begin…end模块中</strong>。如定义一个默认值为10的int类型的变量num：<br><img src="https://s1.ax1x.com/2020/08/23/dwX64P.png" alt="dwX64P.png">  </p>
+<p>set：对变量进行赋值。<br><a href="https://imgchr.com/i/dwXdje" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXdje.png" alt="dwXdje.png"></a>  </p>
+<p>还可以用select…into对变量进行赋值，如将person中数据的数量赋值给num：<br><a href="https://imgchr.com/i/dwXDHA" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXDHA.png" alt="dwXDHA.png"></a>  </p>
+<p>2.if条件判断<br><a href="https://imgchr.com/i/dwX0nH" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwX0nH.png" alt="dwX0nH.png"></a><br>注意最后要加<code>end if;</code>，示例如下：<br><a href="https://imgchr.com/i/dwXBBd" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXBBd.png" alt="dwXBBd.png"></a>  </p>
+<p>3.输入参数<br>在上一个if判断中，变量的值已经定好，本次将如何<strong>输入参数</strong>。<br><a href="https://imgchr.com/i/dwXsAI" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXsAI.png" alt="dwXsAI.png"></a><br>如在上一个存储过程中，根据输入的参数，判断数字的size：<br><img src="https://s1.ax1x.com/2020/08/23/dwzGrD.png" alt="dwzGrD.png"><br>这种情况下，因为<strong>有输入参数num，就不需要再在begin…end里定义</strong>。  </p>
+<p>4.输出参数<br>输出参数相当于返回值。将size以返回值的形式返回：<br><img src="https://s1.ax1x.com/2020/08/23/dwz8KO.png" alt="dwz8KO.png"><br><strong>调用存储过程时，输出参数用@加变量名表示，这表示用户变量，然后用select显示变量值</strong>。  </p>
+<p>5.case<br><img src="https://s1.ax1x.com/2020/08/23/dwzl26.png" alt="dwzl26.png"><br>用case替换上述存储过程中的if：<br><img src="https://s1.ax1x.com/2020/08/23/dwz1xK.png" alt="dwz1xK.png">  </p>
+<p>6.while循环<br><img src="https://s1.ax1x.com/2020/08/23/dwzMP1.png" alt="dwzMP1.png">  </p>
+<p>7.repeat循环<br>有条件的循环控制语句，当满足条件时退出循环。<strong>while是满足条件才执行，repeat是满足条件就退出</strong>。<br><img src="https://s1.ax1x.com/2020/08/23/dwzZb4.png" alt="dwzZb4.png">  </p>
+<p>8.loop循环<br><strong>loop实现简单的循环，退出循环的条件需要使用其它的语句定义，通常可以使用LEAVE语句实现</strong>：<br><img src="https://s1.ax1x.com/2020/08/23/dwzmVJ.png" alt="dwzmVJ.png"><br>如果不在statement_list中增加退出循环的语句，那么loop语句可以用来实现简单的死循环。  </p>
+<p>9.游标/光标<br><strong>游标是用来存储查询结果集的数据类型，在存储过程和函数中可以使用游标对结果集进行循环的处理</strong>，游标的使用包括游标的声明、OPEN（打开游标）、FETCH（抓取游标中的一行数据）和CLOSE，语法为：<br><img src="https://s1.ax1x.com/2020/08/23/dwzna9.png" alt="dwzna9.png"><br>如<strong>将表person中的数据用游标存储，并逐行进行展示</strong>：<br><img src="https://s1.ax1x.com/2020/08/23/dwzQ8x.png" alt="dwzQ8x.png"><br>注意，<strong>当fetch次数超出记录数据数量时，就会对超出的fetch显示出错</strong>。<br>可以<strong>使用循环来简化fetch的编写，同时增加边界条件</strong>。<br><img src="https://s1.ax1x.com/2020/08/23/dwzu5R.png" alt="dwzu5R.png"><br><a href="https://imgchr.com/i/d0p64s" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0p64s.png" alt="d0p64s.png"></a>  </p>
+<pre><code>delimiter $
+create procedure test10() 
+begin 
+declare id int(10);
+declare name varchar(10);
+declare cardid int(5);
+declare has_data int default 1;
+declare p_c cursor for select * from person;
+declare exit handler for not found set has_data=0;
+open p_c;
+repeat 
+fetch p_c into id,name,cardid;
+select concat(&apos;id=&apos;,id, &apos;name=&apos;,name, &apos;cardid=&apos;,cardid);
+until has_data=0
+end repeat;
+close p_c;
+end $
+delimiter ;</code></pre><p>存储函数：<br><strong>存储函数是有返回值的存储过程</strong>。<br><a href="https://imgchr.com/i/d0pyNj" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pyNj.png" alt="d0pyNj.png"></a>  </p>
+<h2 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h2><p><strong>触发器是与表有关的数据库对象，指在insert/update/delete 之前或之后，触发并执行触发器中定义的SQL语句集合</strong>。触发器的这种特性可以协助应用在数据库端<strong>确保数据的完整性，日志记录，数据校验等操作</strong>。<br><strong>new和old是触发器中的两个变量，但在不同类型的触发器中表示的含义不同</strong>。<br><a href="https://imgchr.com/i/d0pdjf" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pdjf.png" alt="d0pdjf.png"></a>  </p>
+<p>创建触发器：<br><a href="https://imgchr.com/i/d0pDHg" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pDHg.png" alt="d0pDHg.png"></a><br>如通过<strong>触发器记录person表的数据变更日志，包括增加、修改、删除</strong>。首先创建一张日志表：  </p>
+<pre><code>create table person_logs(
+id int(11) not null auto_increment,
+operation varchar(20) not null comment &apos;操作类型,insert/update/delete&apos;,
+operate_time datetime not null comment &apos;操作时间&apos;,
+operate_id int(11) not null comment &apos;操作表的id&apos;,
+operate_params varchar(50) comment &apos;操作参数&apos;,
+primary key (id)
+);  </code></pre><p><a href="https://imgchr.com/i/d0p0u8" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0p0u8.png" alt="d0p0u8.png"></a>  </p>
+<p>insert触发器：  </p>
+<pre><code>delimiter $
+create trigger person_insert
+after insert
+on person
+for each row
+begin
+insert into person_logs(id,operation,operate_time, operate_id, operate_params) values(null, &apos;insert&apos;,now(),new.id,concat(&apos;插入后id:&apos;,new.id, &apos;,name:&apos;,new.name, &apos;,cardid:&apos;,new.cardid));
+end $
+delimiter ;  </code></pre><p><strong>插入数据查看person_logs表可见insert触发器触发</strong>：<br><a href="https://imgchr.com/i/d0psEQ" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0psEQ.png" alt="d0psEQ.png"></a><br><strong>update触发器和delete触发器同理可创建</strong>。<br>查看触发器使用命令<code>show triggers\G;</code>：<br><a href="https://imgchr.com/i/d0pBDS" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pBDS.png" alt="d0pBDS.png"></a><br>删除触发器则用drop。  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>索引2和视图</title>
     <url>/2020/08/20/%E7%B4%A2%E5%BC%952%E5%92%8C%E8%A7%86%E5%9B%BE/</url>
     <content><![CDATA[<p>摘要：本篇将介绍索引剩下的相关知识，主要包括索引的分类、语法和设计原则。并介绍视图相关的概念和应用。</p>

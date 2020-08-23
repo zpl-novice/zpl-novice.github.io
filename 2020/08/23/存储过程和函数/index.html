@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将要介绍的是存储过程、存储函数和触发器，其中存储过程和存储函数的区别在于有无返回值，调用存储过程和函数可以简化应用开发人员的很多工作。而触发器则用来监视insert、update、delete操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="存储过程和函数、触发器">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将要介绍的是存储过程、存储函数和触发器，其中存储过程和存储函数的区别在于有无返回值，调用存储过程和函数可以简化应用开发人员的很多工作。而触发器则用来监视insert、update、delete操作。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwX238.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXg9f.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXRgS.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXyNt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwX64P.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXdje.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXDHA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwX0nH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXBBd.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwXsAI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzGrD.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwz8KO.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzl26.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwz1xK.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzMP1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzZb4.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzmVJ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzna9.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzQ8x.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/dwzu5R.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0p64s.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0pyNj.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0pdjf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0pDHg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0p0u8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0psEQ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/23/d0pBDS.png">
+<meta property="article:published_time" content="2020-08-23T06:09:02.533Z">
+<meta property="article:modified_time" content="2020-08-23T06:58:25.479Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/08/23/dwX238.png">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>存储过程和函数、触发器 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          存储过程和函数、触发器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-23 14:09:02 / 修改时间：14:58:25" itemprop="dateCreated datePublished" datetime="2020-08-23T14:09:02+08:00">2020-08-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将要介绍的是存储过程、存储函数和触发器，其中存储过程和存储函数的区别在于有无返回值，调用存储过程和函数可以简化应用开发人员的很多工作。而触发器则用来监视insert、update、delete操作。  </p>
+<a id="more"></a>
+<h2 id="存储过程和函数"><a href="#存储过程和函数" class="headerlink" title="存储过程和函数"></a>存储过程和函数</h2><p><strong>存储过程和函数是事先经过编译并存储在数据库中的一段SQL语句的集合</strong>，调用存储过程和函数可以简化应用开发人员的很多工作，减少数据在数据库和应用服务器之间的传输，对于<strong>提高数据处理的效率</strong>是有好处的。<br><strong>存储过程和函数的区别在于函数必须有返回值，而存储过程没有</strong>。<br>创建存储过程：<br><img src="https://s1.ax1x.com/2020/08/23/dwX238.png" alt="dwX238.png">  </p>
+<p><strong>需要用关键字delimiter来修改分隔符，使;失效来创建存储过程</strong>：<br><img src="https://s1.ax1x.com/2020/08/23/dwXg9f.png" alt="dwXg9f.png">  </p>
+<p>调用存储过程，<code>call test();</code>：<br><img src="https://s1.ax1x.com/2020/08/23/dwXRgS.png" alt="dwXRgS.png">  </p>
+<p>删除存储过程，<code>drop procedure test;</code>：<br><img src="https://s1.ax1x.com/2020/08/23/dwXyNt.png" alt="dwXyNt.png">  </p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p><strong>存储过程是可以编程的，意味着可以使用变量，表达式，控制结构，来完成比较复杂的功能</strong>。<br>1.变量<br><strong>declare：定义一个局部变量，该变量的作用范围只在begin…end模块中</strong>。如定义一个默认值为10的int类型的变量num：<br><img src="https://s1.ax1x.com/2020/08/23/dwX64P.png" alt="dwX64P.png">  </p>
+<p>set：对变量进行赋值。<br><a href="https://imgchr.com/i/dwXdje" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXdje.png" alt="dwXdje.png"></a>  </p>
+<p>还可以用select…into对变量进行赋值，如将person中数据的数量赋值给num：<br><a href="https://imgchr.com/i/dwXDHA" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXDHA.png" alt="dwXDHA.png"></a>  </p>
+<p>2.if条件判断<br><a href="https://imgchr.com/i/dwX0nH" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwX0nH.png" alt="dwX0nH.png"></a><br>注意最后要加<code>end if;</code>，示例如下：<br><a href="https://imgchr.com/i/dwXBBd" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXBBd.png" alt="dwXBBd.png"></a>  </p>
+<p>3.输入参数<br>在上一个if判断中，变量的值已经定好，本次将如何<strong>输入参数</strong>。<br><a href="https://imgchr.com/i/dwXsAI" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/dwXsAI.png" alt="dwXsAI.png"></a><br>如在上一个存储过程中，根据输入的参数，判断数字的size：<br><img src="https://s1.ax1x.com/2020/08/23/dwzGrD.png" alt="dwzGrD.png"><br>这种情况下，因为<strong>有输入参数num，就不需要再在begin…end里定义</strong>。  </p>
+<p>4.输出参数<br>输出参数相当于返回值。将size以返回值的形式返回：<br><img src="https://s1.ax1x.com/2020/08/23/dwz8KO.png" alt="dwz8KO.png"><br><strong>调用存储过程时，输出参数用@加变量名表示，这表示用户变量，然后用select显示变量值</strong>。  </p>
+<p>5.case<br><img src="https://s1.ax1x.com/2020/08/23/dwzl26.png" alt="dwzl26.png"><br>用case替换上述存储过程中的if：<br><img src="https://s1.ax1x.com/2020/08/23/dwz1xK.png" alt="dwz1xK.png">  </p>
+<p>6.while循环<br><img src="https://s1.ax1x.com/2020/08/23/dwzMP1.png" alt="dwzMP1.png">  </p>
+<p>7.repeat循环<br>有条件的循环控制语句，当满足条件时退出循环。<strong>while是满足条件才执行，repeat是满足条件就退出</strong>。<br><img src="https://s1.ax1x.com/2020/08/23/dwzZb4.png" alt="dwzZb4.png">  </p>
+<p>8.loop循环<br><strong>loop实现简单的循环，退出循环的条件需要使用其它的语句定义，通常可以使用LEAVE语句实现</strong>：<br><img src="https://s1.ax1x.com/2020/08/23/dwzmVJ.png" alt="dwzmVJ.png"><br>如果不在statement_list中增加退出循环的语句，那么loop语句可以用来实现简单的死循环。  </p>
+<p>9.游标/光标<br><strong>游标是用来存储查询结果集的数据类型，在存储过程和函数中可以使用游标对结果集进行循环的处理</strong>，游标的使用包括游标的声明、OPEN（打开游标）、FETCH（抓取游标中的一行数据）和CLOSE，语法为：<br><img src="https://s1.ax1x.com/2020/08/23/dwzna9.png" alt="dwzna9.png"><br>如<strong>将表person中的数据用游标存储，并逐行进行展示</strong>：<br><img src="https://s1.ax1x.com/2020/08/23/dwzQ8x.png" alt="dwzQ8x.png"><br>注意，<strong>当fetch次数超出记录数据数量时，就会对超出的fetch显示出错</strong>。<br>可以<strong>使用循环来简化fetch的编写，同时增加边界条件</strong>。<br><img src="https://s1.ax1x.com/2020/08/23/dwzu5R.png" alt="dwzu5R.png"><br><a href="https://imgchr.com/i/d0p64s" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0p64s.png" alt="d0p64s.png"></a>  </p>
+<pre><code>delimiter $
+create procedure test10() 
+begin 
+declare id int(10);
+declare name varchar(10);
+declare cardid int(5);
+declare has_data int default 1;
+declare p_c cursor for select * from person;
+declare exit handler for not found set has_data=0;
+open p_c;
+repeat 
+fetch p_c into id,name,cardid;
+select concat(&apos;id=&apos;,id, &apos;name=&apos;,name, &apos;cardid=&apos;,cardid);
+until has_data=0
+end repeat;
+close p_c;
+end $
+delimiter ;</code></pre><p>存储函数：<br><strong>存储函数是有返回值的存储过程</strong>。<br><a href="https://imgchr.com/i/d0pyNj" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pyNj.png" alt="d0pyNj.png"></a>  </p>
+<h2 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h2><p><strong>触发器是与表有关的数据库对象，指在insert/update/delete 之前或之后，触发并执行触发器中定义的SQL语句集合</strong>。触发器的这种特性可以协助应用在数据库端<strong>确保数据的完整性，日志记录，数据校验等操作</strong>。<br><strong>new和old是触发器中的两个变量，但在不同类型的触发器中表示的含义不同</strong>。<br><a href="https://imgchr.com/i/d0pdjf" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pdjf.png" alt="d0pdjf.png"></a>  </p>
+<p>创建触发器：<br><a href="https://imgchr.com/i/d0pDHg" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pDHg.png" alt="d0pDHg.png"></a><br>如通过<strong>触发器记录person表的数据变更日志，包括增加、修改、删除</strong>。首先创建一张日志表：  </p>
+<pre><code>create table person_logs(
+id int(11) not null auto_increment,
+operation varchar(20) not null comment &apos;操作类型,insert/update/delete&apos;,
+operate_time datetime not null comment &apos;操作时间&apos;,
+operate_id int(11) not null comment &apos;操作表的id&apos;,
+operate_params varchar(50) comment &apos;操作参数&apos;,
+primary key (id)
+);  </code></pre><p><a href="https://imgchr.com/i/d0p0u8" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0p0u8.png" alt="d0p0u8.png"></a>  </p>
+<p>insert触发器：  </p>
+<pre><code>delimiter $
+create trigger person_insert
+after insert
+on person
+for each row
+begin
+insert into person_logs(id,operation,operate_time, operate_id, operate_params) values(null, &apos;insert&apos;,now(),new.id,concat(&apos;插入后id:&apos;,new.id, &apos;,name:&apos;,new.name, &apos;,cardid:&apos;,new.cardid));
+end $
+delimiter ;  </code></pre><p><strong>插入数据查看person_logs表可见insert触发器触发</strong>：<br><a href="https://imgchr.com/i/d0psEQ" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0psEQ.png" alt="d0psEQ.png"></a><br><strong>update触发器和delete触发器同理可创建</strong>。<br>查看触发器使用命令<code>show triggers\G;</code>：<br><a href="https://imgchr.com/i/d0pBDS" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/08/23/d0pBDS.png" alt="d0pBDS.png"></a><br>删除触发器则用drop。  </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/" title="存储过程和函数、触发器">https://zpl-novice.github.io/2020/08/23/存储过程和函数/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/20/%E7%B4%A2%E5%BC%952%E5%92%8C%E8%A7%86%E5%9B%BE/" rel="prev" title="索引2和视图">
+      <i class="fa fa-chevron-left"></i> 索引2和视图
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储过程和函数"><span class="nav-number">1.</span> <span class="nav-text">存储过程和函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#触发器"><span class="nav-number">2.</span> <span class="nav-text">触发器</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">175k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
