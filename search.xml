@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>体系结构、存储引擎和优化SQL步骤</title>
+    <url>/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<p>摘要：今天将介绍mysql的体系结构，主要分为四层，以及它们的作用，mysql所支持的存储引擎，并对其中最常用的几种进行简单的介绍，最后还会讲解一下优化sql步骤。</p>
+<a id="more"></a>
+<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p><img src="https://s1.ax1x.com/2020/08/26/dWciX4.png" alt="dWciX4.png"><br><strong>第一层：连接层，接受客户端的连接请求，开启线程来处理</strong>。<br><strong>第二层：服务层，对SQL语句备份、封装、解析、优化等</strong>。<br><strong>第三层：引擎层，对数据进行相关的处理</strong>。<br><strong>第四层：存储层，将数据保存在文件系统、磁盘上</strong>。    </p>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p><strong>和大多数的数据库不同，Mysql有一个存储引擎的概念，不同的存储引擎有不同的特点，针对不同的存储需求可以选择最优的存储引擎</strong>。<br><strong>存储引擎就是存储数据，建立索引，更新查询数据等技术的实现方式。存储引擎是基于表的</strong>，而不是基于库的，<strong>同一个数据库的多张表可以用多个存储引擎</strong>。所以存储引擎也可被称为表类型。<br>Oracle，SQL server等数据库只有一种存储引擎，<strong>mysql提供了插件式的存储引擎架构，可使用多种存储引擎</strong>。<br>Mysql支持的存储引擎包含：<strong>InnoDB、MyISAM</strong>、BDB、MEMORY等。可通过命令<code>show engines;</code>查看：<br><img src="https://s1.ax1x.com/2020/08/26/dWcC1U.png" alt="dWcC1U.png"><br>可见<strong>默认支持的存储引擎为InnoDB（mysql5.5之前为MyISAM，5.5之后改为InnoDB）。该引擎支持事务、行级锁、外键</strong>。<br>各引擎特点：<br><strong>InnoDB支持事务安全和行锁（适合高并发）以及外键</strong>。而<strong>MyISAM不支持事务安全和外键，且锁机制为表锁</strong>。<br><img src="https://s1.ax1x.com/2020/08/26/dWcPcF.png" alt="dWcPcF.png"><br>若要<strong>使用引擎MyISAM建表，如建一个name1表</strong>，<code>create table name1(id int(10) primary key,name varchar(10))engine=myisam;</code>：<br><img src="https://s1.ax1x.com/2020/08/26/dWcShV.png" alt="dWcShV.png"><br><strong>Memory存储引擎将表的数据存放在内存中，有利于数据的快速处理，提高整个表的效率，但服务一旦关闭，数据就会丢失</strong>。<br><strong>Merge存储引擎是一组MyISAM表的组合，这些MyISAM表必须结构完全相同。可将MyISAM表中的数据集合到一起</strong>。<br><img src="https://s1.ax1x.com/2020/08/26/dW6zt0.png" alt="dW6zt0.png">  </p>
+<p>存储引擎的选择：<br>在选择存储引擎时，应该根<strong>据应用系统的特点选择合适的存储引擎</strong>，对于复杂的应用系统，还可以根据实际情况选择多种存储引擎进行组合，以下是几种常用的存储引擎的使用环境：<br><img src="https://s1.ax1x.com/2020/08/26/dWc9pT.png" alt="dWc9pT.png">  </p>
+<h2 id="优化SQL步骤"><a href="#优化SQL步骤" class="headerlink" title="优化SQL步骤"></a>优化SQL步骤</h2><p>在应用的开发中，由于初期的数据量较小，开发人员写SQL语句更注重功能上的实现，但是随着数据量的增长，sql语句开始显露出性能问题，<strong>有些sql语句成为整个系统性能的瓶颈，因此必须对它们进行优化</strong>。<br>查看SQL执行频率：<br>通过命令<code>show global status;</code>可以显示<strong>自数据库上次启动到现在的状态信息</strong>，通过模糊匹配可看增删改查的频率，<code>show global status like ‘com_______’;</code>：<br><img src="https://s1.ax1x.com/2020/08/26/dW6j7n.png" alt="dW6j7n.png"><br>上述命令是针对服务器的，还可以针对InnoDB引擎查询，<code>show global status like ‘innodb_rows_%’;</code>：<br><img src="https://s1.ax1x.com/2020/08/26/dW6Omj.png" alt="dW6Omj.png"><br>其中查询的各参数的含义为：<br><img src="https://s1.ax1x.com/2020/08/26/dW6X0s.png" alt="dW6X0s.png">  </p>
+<p>定位低执行效率SQL：<br>可以通过两种方式定位执行效率较低的SQL语句。<br>1.慢查询日志：通过<strong>慢查询日志</strong>定位那些执行效率较低的SQL语句，在后面讲解日志时会再介绍。<br>2.show processlist：<strong>慢查询日志在查询结束后才记录，所以不能及时定位问题，可以使用show processlist命令查看当前mysql在进行的线程，包括线程的状态，是否锁表等，可以实时的查看SQL的执行情况，同时对一些锁表操作进行优化</strong>。<br><img src="https://s1.ax1x.com/2020/08/26/dW6qXQ.png" alt="dW6qXQ.png"><br><img src="https://s1.ax1x.com/2020/08/26/dW6xkq.png" alt="dW6xkq.png"><br>当<strong>有查询效率较低的sql语句时，就会在processlist中显示</strong>。<br>explain分析执行计划：<br>通过上述步骤查询到效率低的sql语句后，就可以<strong>通过explain或desc命令获取mysql如何执行select语句的信息</strong>，包括在select语句执行过程中表如何连接和连接的顺序。<br><img src="https://s1.ax1x.com/2020/08/26/dW6b6g.png" alt="dW6b6g.png"><br><img src="https://s1.ax1x.com/2020/08/26/dW5py6.png" alt="dW5py6.png">  </p>
+<p><strong>show profile分析sql</strong>：<br><strong>show profile能够在做SQL优化时帮助了解时间耗费在哪</strong>，通过<code>have_profiling</code>参数，能够看到当前mysql是否支持profile：<br><img src="https://s1.ax1x.com/2020/08/26/dW4vWR.png" alt="dW4vWR.png"><br>默认profile是关闭的，通过命令开启：<br><img src="https://s1.ax1x.com/2020/08/26/dW5SQx.png" alt="dW5SQx.png">  </p>
+<p><strong>这样就可以使用命令<code>show profiles;</code>查看上面各个sql语句所耗费的时间</strong>：<br><img src="https://s1.ax1x.com/2020/08/26/dW4zS1.png" alt="dW4zS1.png">  </p>
+<p>要<strong>查询某个sql语句的时间耗费，只需要加上其id</strong>：<br><img src="https://s1.ax1x.com/2020/08/26/dW59OK.png" alt="dW59OK.png">  </p>
+<p>trace文件：<br>通过trace文件能够进一步了解为什么优化器选择A计划，而不是B计划。</p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>存储过程和函数、触发器</title>
     <url>/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<p>摘要：本篇将要介绍的是存储过程、存储函数和触发器，其中存储过程和存储函数的区别在于有无返回值，调用存储过程和函数可以简化应用开发人员的很多工作。而触发器则用来监视insert、update、delete操作。  </p>

@@ -46,27 +46,37 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)期望时间的性能。查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间。">
+  <meta name="description" content="摘要：今天将介绍mysql的体系结构，主要分为四层，以及它们的作用，mysql所支持的存储引擎，并对其中最常用的几种进行简单的介绍，最后还会讲解一下优化sql步骤。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="treap树">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/index.html">
+<meta property="og:title" content="体系结构、存储引擎和优化SQL步骤">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)期望时间的性能。查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间。">
+<meta property="og:description" content="摘要：今天将介绍mysql的体系结构，主要分为四层，以及它们的作用，mysql所支持的存储引擎，并对其中最常用的几种进行简单的介绍，最后还会讲解一下优化sql步骤。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg">
-<meta property="article:published_time" content="2020-05-03T12:10:55.985Z">
-<meta property="article:modified_time" content="2020-05-03T12:23:45.594Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dWciX4.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dWcC1U.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dWcPcF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dWcShV.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6zt0.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dWc9pT.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6j7n.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6Omj.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6X0s.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6qXQ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6xkq.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW6b6g.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW5py6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW4vWR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW5SQx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW4zS1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/26/dW59OK.png">
+<meta property="article:published_time" content="2020-08-25T15:32:57.870Z">
+<meta property="article:modified_time" content="2020-08-26T11:40:04.350Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/08/26/dWciX4.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/">
 
 
 <script id="page-configurations">
@@ -78,7 +88,7 @@
   };
 </script>
 
-  <title>treap树 | zpl-novice</title>
+  <title>体系结构、存储引擎和优化SQL步骤 | zpl-novice</title>
   
 
 
@@ -208,7 +218,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -221,7 +231,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          treap树
+          体系结构、存储引擎和优化SQL步骤
         </h1>
 
         <div class="post-meta">
@@ -230,18 +240,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-05-03 20:10:55 / 修改时间：20:23:45" itemprop="dateCreated datePublished" datetime="2020-05-03T20:10:55+08:00">2020-05-03</time>
+              <time title="创建时间：2020-08-25 23:32:57" itemprop="dateCreated datePublished" datetime="2020-08-25T23:32:57+08:00">2020-08-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-26 19:40:04" itemprop="dateModified" datetime="2020-08-26T19:40:04+08:00">2020-08-26</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库学习</span>
                   </a>
                 </span>
             </span>
@@ -252,7 +268,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
+              <span>1.7k</span>
             </span>
 
         </div>
@@ -264,189 +280,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)<strong>期望时间</strong>的性能。<strong>查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间</strong>。  </p>
+        <p>摘要：今天将介绍mysql的体系结构，主要分为四层，以及它们的作用，mysql所支持的存储引擎，并对其中最常用的几种进行简单的介绍，最后还会讲解一下优化sql步骤。</p>
 <a id="more"></a>
-<p>treap是tree 和 heap组合的结构。treap树中每个结点存储一项，一个左指针和一个右指针，以及一个优先级，这个<strong>优先级是建立结点时随机指定的</strong>。一个treap树就是一个二叉查找树，但其<strong>结点优先级满足堆序性质：任意结点的优先级必须至少和它父结点的优先级一样大</strong>。<br>查找时与普通的二叉查找树相同。<br>插入时：先按二叉查找树找到插入的位置，插入数据并生成随机值，因为插入的都是叶结点，所以影响到堆性质的为插入结点和它的父结点。<strong>若插入结点的优先级比父结点小，旋转操作使其满足性质</strong>。<br>示例如下：<br><img src="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg" alt=""><br>删除时分为两种情况：<br>1.有两个孩子<br>2.只有一个孩子或无孩子<br>第二种情况无孩子直接删除，有一个孩子就用孩子代替该结点然后删除。第一种情况，<strong>旋转使其变成第二种情况。如果该结点的左孩子优先级比右孩子优先级小，右旋。否则左旋，重复下去直至变为第二种情况</strong>。示例如下：<br><img src="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg" alt=""><br>具体代码实现如下：  </p>
-<pre><code>typedef struct node                     
-{
-    int data;
-    node* lchild;
-    node* rchild;
-    int priority;    
-}node,*Node;
- class treap
- {
-     private:
-         Node root;
-         int searchtreap(Node &amp;T,int key);
-         int inserttreap(Node &amp;T,int key);
-         void delete1(Node &amp;T,int key);
-         void delete2(Node &amp;T);
-         Node leftrotate(Node &amp;T);
-         Node rightrotate(Node &amp;T);
-         void preorder(Node T);
-     public:
-         treap()
-         {
-             root=NULL;
-         }
-         void search(int key)
-         {
-             searchtreap(root,key);
-        }
-         void insert(int key)
-         {
-             inserttreap(root,key);
-         }
-        void deletetreap(int key)
-        {
-            delete1(root,key);
-        }
-        void preord()                 //前序遍历 
-        {
-            preorder(root);    
-        }
- };    
- int treap::searchtreap(Node &amp;T,int key)                          
- {
-     if(T!=NULL)
-     {
-         if(T-&gt;data==key)
-         {
-             cout&lt;&lt;&quot;find &quot;&lt;&lt;key&lt;&lt;endl;
-        }
-        else if(key&lt;T-&gt;data)
-        {
-             searchtreap(T-&gt;lchild,key);
-        }
-        else if(key&gt;T-&gt;data)
-        {
-            searchtreap(T-&gt;rchild,key);
-        }
-    }
-    else
-        cout&lt;&lt;&quot;can&apos;t find &quot;&lt;&lt;key&lt;&lt;endl;
-    return 0;
- }
- void treap::delete2(Node &amp;T)                                    
-{
-    Node q;
-    if(T-&gt;rchild==NULL)
-    {
-        q=T;
-        T=T-&gt;lchild;
-        delete q; 
-    }
-    if(T-&gt;lchild==NULL)
-    {
-        q=T;
-        T=T-&gt;rchild;
-        delete q; 
-    }
-    else                               //既有左孩子又有右孩子 
-    {
-        if(T-&gt;lchild-&gt;priority&gt;T-&gt;rchild-&gt;priority)
-        {
-            leftrotate(T);
-            delete2(T);
-        }
-        else
-        {
-            rightrotate(T);
-            delete2(T);
-        }
-    }
-}
-int treap::inserttreap(Node &amp;T,int key)         
-{
-    if(T==NULL)
-    {
-        Node p;
-        p=new node;
-        p-&gt;data=key;
-        p-&gt;lchild=p-&gt;rchild=NULL;
-        p-&gt;priority=rand()%500;
-        T=p;
-        return 1;
-    }
-    else if(key&lt;T-&gt;data)
-    {
-        inserttreap(T-&gt;lchild,key);
-        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
-        {
-            T=rightrotate(T);
-        }
-    }
-    else 
-    {
-        inserttreap(T-&gt;rchild,key);
-        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
-        {
-            T=leftrotate(T);
-        }
-    }
-    return 0;
-}
-void treap::delete1(Node &amp;T,int key)
-{
-    if(T!=NULL)
-    {
-        if(T-&gt;data==key)
-        {
-            delete2(T);
-        }
-        else if(key&lt;T-&gt;data)
-        {
-            delete1(T-&gt;lchild,key);
-        }
-        else if(key&gt;T-&gt;data)
-        {
-            delete1(T-&gt;rchild,key);
-        }
-    }
-    else
-        cout&lt;&lt;&quot;can&apos;t find and delete &quot;&lt;&lt;key&lt;&lt;endl;
-}
-Node treap::leftrotate(Node &amp;T)
-{
-    Node tem;
-    tem=T-&gt;rchild;
-    T-&gt;rchild=tem-&gt;lchild;
-    tem-&gt;lchild=T;
-    return tem;
-}
-Node treap::rightrotate(Node &amp;T)
-{
-    Node tem;
-    tem=T-&gt;lchild;
-    T-&gt;lchild=tem-&gt;rchild;
-    tem-&gt;rchild=T;
-    return tem;
-}
-void treap::preorder(Node T)
-{
-    if(T!=NULL)
-    {
-        cout&lt;&lt;&quot;关键字：&quot;&lt;&lt;T-&gt;data&lt;&lt;&quot; 随机值&quot;&lt;&lt;T-&gt;priority&lt;&lt;endl;
-        preorder(T-&gt;lchild);
-        preorder(T-&gt;rchild);
-    }
-}
-int main()
-{
-    treap t;
-    srand(0);
-    t.insert(5);
-    t.insert(3);
-    t.insert(15);
-    t.insert(2);
-    t.insert(4);
-    t.preord();
-    t.search(5);
-    t.search(3);
-    t.search(21);
-    return 0;
-}</code></pre><p>本篇主要讲解了treap树的有关知识，它将二叉查找树和堆结合起来，并通过随机选取优先级的方式获得了不错的期望时间，能够满足在O(logn)期望时间内完成各种操作，且实现相对平衡二叉树简单，因此是一种很好的数据结构。</p>
+<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p><img src="https://s1.ax1x.com/2020/08/26/dWciX4.png" alt="dWciX4.png"><br><strong>第一层：连接层，接受客户端的连接请求，开启线程来处理</strong>。<br><strong>第二层：服务层，对SQL语句备份、封装、解析、优化等</strong>。<br><strong>第三层：引擎层，对数据进行相关的处理</strong>。<br><strong>第四层：存储层，将数据保存在文件系统、磁盘上</strong>。    </p>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p><strong>和大多数的数据库不同，Mysql有一个存储引擎的概念，不同的存储引擎有不同的特点，针对不同的存储需求可以选择最优的存储引擎</strong>。<br><strong>存储引擎就是存储数据，建立索引，更新查询数据等技术的实现方式。存储引擎是基于表的</strong>，而不是基于库的，<strong>同一个数据库的多张表可以用多个存储引擎</strong>。所以存储引擎也可被称为表类型。<br>Oracle，SQL server等数据库只有一种存储引擎，<strong>mysql提供了插件式的存储引擎架构，可使用多种存储引擎</strong>。<br>Mysql支持的存储引擎包含：<strong>InnoDB、MyISAM</strong>、BDB、MEMORY等。可通过命令<code>show engines;</code>查看：<br><img src="https://s1.ax1x.com/2020/08/26/dWcC1U.png" alt="dWcC1U.png"><br>可见<strong>默认支持的存储引擎为InnoDB（mysql5.5之前为MyISAM，5.5之后改为InnoDB）。该引擎支持事务、行级锁、外键</strong>。<br>各引擎特点：<br><strong>InnoDB支持事务安全和行锁（适合高并发）以及外键</strong>。而<strong>MyISAM不支持事务安全和外键，且锁机制为表锁</strong>。<br><img src="https://s1.ax1x.com/2020/08/26/dWcPcF.png" alt="dWcPcF.png"><br>若要<strong>使用引擎MyISAM建表，如建一个name1表</strong>，<code>create table name1(id int(10) primary key,name varchar(10))engine=myisam;</code>：<br><img src="https://s1.ax1x.com/2020/08/26/dWcShV.png" alt="dWcShV.png"><br><strong>Memory存储引擎将表的数据存放在内存中，有利于数据的快速处理，提高整个表的效率，但服务一旦关闭，数据就会丢失</strong>。<br><strong>Merge存储引擎是一组MyISAM表的组合，这些MyISAM表必须结构完全相同。可将MyISAM表中的数据集合到一起</strong>。<br><img src="https://s1.ax1x.com/2020/08/26/dW6zt0.png" alt="dW6zt0.png">  </p>
+<p>存储引擎的选择：<br>在选择存储引擎时，应该根<strong>据应用系统的特点选择合适的存储引擎</strong>，对于复杂的应用系统，还可以根据实际情况选择多种存储引擎进行组合，以下是几种常用的存储引擎的使用环境：<br><img src="https://s1.ax1x.com/2020/08/26/dWc9pT.png" alt="dWc9pT.png">  </p>
+<h2 id="优化SQL步骤"><a href="#优化SQL步骤" class="headerlink" title="优化SQL步骤"></a>优化SQL步骤</h2><p>在应用的开发中，由于初期的数据量较小，开发人员写SQL语句更注重功能上的实现，但是随着数据量的增长，sql语句开始显露出性能问题，<strong>有些sql语句成为整个系统性能的瓶颈，因此必须对它们进行优化</strong>。<br>查看SQL执行频率：<br>通过命令<code>show global status;</code>可以显示<strong>自数据库上次启动到现在的状态信息</strong>，通过模糊匹配可看增删改查的频率，<code>show global status like ‘com_______’;</code>：<br><img src="https://s1.ax1x.com/2020/08/26/dW6j7n.png" alt="dW6j7n.png"><br>上述命令是针对服务器的，还可以针对InnoDB引擎查询，<code>show global status like ‘innodb_rows_%’;</code>：<br><img src="https://s1.ax1x.com/2020/08/26/dW6Omj.png" alt="dW6Omj.png"><br>其中查询的各参数的含义为：<br><img src="https://s1.ax1x.com/2020/08/26/dW6X0s.png" alt="dW6X0s.png">  </p>
+<p>定位低执行效率SQL：<br>可以通过两种方式定位执行效率较低的SQL语句。<br>1.慢查询日志：通过<strong>慢查询日志</strong>定位那些执行效率较低的SQL语句，在后面讲解日志时会再介绍。<br>2.show processlist：<strong>慢查询日志在查询结束后才记录，所以不能及时定位问题，可以使用show processlist命令查看当前mysql在进行的线程，包括线程的状态，是否锁表等，可以实时的查看SQL的执行情况，同时对一些锁表操作进行优化</strong>。<br><img src="https://s1.ax1x.com/2020/08/26/dW6qXQ.png" alt="dW6qXQ.png"><br><img src="https://s1.ax1x.com/2020/08/26/dW6xkq.png" alt="dW6xkq.png"><br>当<strong>有查询效率较低的sql语句时，就会在processlist中显示</strong>。<br>explain分析执行计划：<br>通过上述步骤查询到效率低的sql语句后，就可以<strong>通过explain或desc命令获取mysql如何执行select语句的信息</strong>，包括在select语句执行过程中表如何连接和连接的顺序。<br><img src="https://s1.ax1x.com/2020/08/26/dW6b6g.png" alt="dW6b6g.png"><br><img src="https://s1.ax1x.com/2020/08/26/dW5py6.png" alt="dW5py6.png">  </p>
+<p><strong>show profile分析sql</strong>：<br><strong>show profile能够在做SQL优化时帮助了解时间耗费在哪</strong>，通过<code>have_profiling</code>参数，能够看到当前mysql是否支持profile：<br><img src="https://s1.ax1x.com/2020/08/26/dW4vWR.png" alt="dW4vWR.png"><br>默认profile是关闭的，通过命令开启：<br><img src="https://s1.ax1x.com/2020/08/26/dW5SQx.png" alt="dW5SQx.png">  </p>
+<p><strong>这样就可以使用命令<code>show profiles;</code>查看上面各个sql语句所耗费的时间</strong>：<br><img src="https://s1.ax1x.com/2020/08/26/dW4zS1.png" alt="dW4zS1.png">  </p>
+<p>要<strong>查询某个sql语句的时间耗费，只需要加上其id</strong>：<br><img src="https://s1.ax1x.com/2020/08/26/dW59OK.png" alt="dW59OK.png">  </p>
+<p>trace文件：<br>通过trace文件能够进一步了解为什么优化器选择A计划，而不是B计划。</p>
 
     </div>
 
@@ -462,7 +306,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/" title="treap树">https://zpl-novice.github.io/2020/05/03/treap树/</a>
+    <a href="https://zpl-novice.github.io/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/" title="体系结构、存储引擎和优化SQL步骤">https://zpl-novice.github.io/2020/08/25/体系结构、存储引擎和优化SQL步骤/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -479,13 +323,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/01/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="prev" title="红黑树">
-      <i class="fa fa-chevron-left"></i> 红黑树
+    <a href="/2020/08/23/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0/" rel="prev" title="存储过程和函数、触发器">
+      <i class="fa fa-chevron-left"></i> 存储过程和函数、触发器
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/05/05/%E5%AD%97%E5%85%B8%E6%A0%91%E5%92%8C%E5%90%8E%E7%BC%80%E6%A0%91/" rel="next" title="字典树和后缀树">
-      字典树和后缀树 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -545,6 +386,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#体系结构"><span class="nav-number">1.</span> <span class="nav-text">体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储引擎"><span class="nav-number">2.</span> <span class="nav-text">存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化SQL步骤"><span class="nav-number">3.</span> <span class="nav-text">优化SQL步骤</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
