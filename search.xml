@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>索引的使用</title>
+    <url>/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍索引在优化SQL中的作用，索引是数据库优化最常用也最重要的手段之一，通过索引通常可以帮助用户解决大多数的mysql的性能优化问题。但索引也可能出现失效的情况，因此要避免索引失效，正确的使用索引。</p>
+<a id="more"></a>
+<p><strong>索引是数据库优化最常用也最重要的手段之一</strong>。如对有30000个数据的表进行查询，若对<strong>有索引的主键字段</strong>查询，时间很短：<br><img src="https://s1.ax1x.com/2020/08/27/d47b9S.png" alt="d47b9S.png"><br>若对没有索引的字段数据进行查询：<br><img src="https://s1.ax1x.com/2020/08/27/d47Ttf.png" alt="d47Ttf.png"><br>可见<strong>有无索引所耗费的时间差别很大</strong>。<br>对该title字段<strong>建立索引</strong>，<code>create index idx_title on tb_item(title);</code>：<br><img src="https://s1.ax1x.com/2020/08/27/d47oAP.png" alt="d47oAP.png"><br>建立索引花费了约1分钟时间，当<strong>建立完成索引以后，再对title字段数据进行查询，可见时间显著缩短</strong>。<br><strong>建立索引并不一定能够提高查询效率，需要正确的运用索引，避免索引失效才可以提高查询效率</strong>。</p>
+<p>如何避免索引失效？<br>创建一个表tb_seller，并插入数据，对name、status、address3个字段建立联合索引。  </p>
+<p>1.<strong>全值匹配，对索引中所有列都指定具体值。该情况下，索引生效，执行效率高</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d477h8.png" alt="d477h8.png"><br>对该sql语句进行分析，type为ref，<strong>key为新建的联合索引</strong>，即使用了索引查询。  </p>
+<p>2.<strong>最左前缀法则，如果索引了多列，要遵守最左前缀法则，指的是从索引的最左前列开始，并且不跳过索引中的列</strong>。<br>显然全值匹配遵守该法则。<br><img src="https://s1.ax1x.com/2020/08/27/d4757t.png" alt="d4757t.png"><br>当只查询索引的最左前列，或者不跳过索引的列时，同样查询使用了新建的联合索引，执行效率高。而<strong>不包含最左前列时，如下所示，索引失效；跳过索引时，可见key的长度与只查询索引的最左前列的长度相同，说明只有name走了索引，而address没有走索引</strong>。注意，<strong>该法则与查询语句中列的顺序无关，只要包含即可</strong>：<br><img src="https://s1.ax1x.com/2020/08/27/d47WXd.png" alt="d47WXd.png"><br><img src="https://s1.ax1x.com/2020/08/27/d47R6H.png" alt="d47R6H.png">  </p>
+<p>3.<strong>范围查询右边的列，不能使用索引</strong>。如下所示，当status字段变成范围查询时，索引的长度发生改变，<strong>范围查询右边的列address没有使用索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4721e.png" alt="d4721e.png">  </p>
+<p>4.<strong>对索引的列上进行运算操作，索引将失效</strong>。例如截取name字段中第3、4两个字为科技的数据，对其分析，发现并没有使用索引，是全表扫描的方式：<br><img src="https://s1.ax1x.com/2020/08/27/d4740I.png" alt="d4740I.png">  </p>
+<p>5.<strong>字符串不加单引号，索引将失效</strong>。对于status字段的字符串数据虽然不加单引号也能正确查询，但是不会使用该字段的索引。<br><img src="https://s1.ax1x.com/2020/08/27/d47hnA.png" alt="d47hnA.png">  </p>
+<p>6.<strong>尽量使用覆盖索引，避免<code>select *</code>。索引列完全包含查询列</strong>。这样就不需要再<strong>回表查询</strong>，提高查询效率。<br><img src="https://s1.ax1x.com/2020/08/27/d4bmrj.png" alt="d4bmrj.png"><br><img src="https://s1.ax1x.com/2020/08/27/d4beMQ.png" alt="d4beMQ.png">  </p>
+<p>7.<strong>用or分割的条件，如果or前面的条件中列有索引，而后面的列中没有索引，那么涉及的索引都不会被用到。</strong>如以索引列name和非索引列nickname为例：<br><img src="https://s1.ax1x.com/2020/08/27/d4bERS.png" alt="d4bERS.png">  </p>
+<p>8.<strong>以%开头的like模糊查询，索引失效</strong>。如果仅仅是尾部模糊匹配，索引不会失效，而头部匹配会使索引失效。<br><img src="https://s1.ax1x.com/2020/08/27/d4bVxg.png" alt="d4bVxg.png">  </p>
+<p>9.<strong>如果mysql评估使用索引比全表更慢，则不使用索引</strong>。如下所示，对address单独建立一个单列索引，然而当查询地址为北京市时，不使用索引；当查询地址为西安市时，使用了索引。这是因为<strong>在表中北京市数据过多，mysql评估使用索引还不如全表扫描。就不使用索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4bAG8.png" alt="d4bAG8.png">  </p>
+<p>10.<strong>is NULL,is not NULL 有时索引失效。跟9类似，看mysql评估</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4bpqA.png" alt="d4bpqA.png">  </p>
+<p>11.<strong>in走索引，not in 索引失效</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4bPat.png" alt="d4bPat.png">  </p>
+<p>12.<strong>单列索引和复合索引。尽量使用复合索引，而少使用单列索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4biIP.png" alt="d4biIP.png">  </p>
+<p>查看索引使用情况：<br>通过命令<code>show global status like ‘handler_read%’;</code>可以查看索引使用情况：<br><img src="https://s1.ax1x.com/2020/08/27/d4bCVI.png" alt="d4bCVI.png"><br>其中各个指标的含义为：<br><img src="https://s1.ax1x.com/2020/08/27/d4bkPf.png" alt="d4bkPf.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>体系结构、存储引擎和优化SQL步骤</title>
     <url>/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/</url>
     <content><![CDATA[<p>摘要：今天将介绍mysql的体系结构，主要分为四层，以及它们的作用，mysql所支持的存储引擎，并对其中最常用的几种进行简单的介绍，最后还会讲解一下优化sql步骤。</p>
