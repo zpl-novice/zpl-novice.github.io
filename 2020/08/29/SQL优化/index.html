@@ -46,27 +46,37 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)期望时间的性能。查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间。">
+  <meta name="description" content="摘要：本篇将介绍如何对SQL语句进行优化，主要包括大批量插入数据、insert语句、order by语句、group by语句、子查询、or条件、分页查询、sql提示等几个方面的优化。通过这些优化方法的学习，更够更加了解如何提高sql查询的效率。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="treap树">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/index.html">
+<meta property="og:title" content="SQL优化">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/08/29/SQL%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)期望时间的性能。查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间。">
+<meta property="og:description" content="摘要：本篇将介绍如何对SQL语句进行优化，主要包括大批量插入数据、insert语句、order by语句、group by语句、子查询、or条件、分页查询、sql提示等几个方面的优化。通过这些优化方法的学习，更够更加了解如何提高sql查询的效率。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg">
-<meta property="article:published_time" content="2020-05-03T12:10:55.985Z">
-<meta property="article:modified_time" content="2020-05-03T12:23:45.594Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTI5h6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTI4tx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTIhA1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTIW7R.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTIy1U.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTIspT.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTI2nJ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTIcX4.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTI6cF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTIRB9.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dT7kYq.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dT7Fkn.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dT79mQ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dT7Cwj.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dT7SOg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dTTz6S.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/29/dT7PTs.png">
+<meta property="article:published_time" content="2020-08-29T02:02:08.416Z">
+<meta property="article:modified_time" content="2020-08-29T02:28:28.520Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/08/29/dTI5h6.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/08/29/SQL%E4%BC%98%E5%8C%96/">
 
 
 <script id="page-configurations">
@@ -78,7 +88,7 @@
   };
 </script>
 
-  <title>treap树 | zpl-novice</title>
+  <title>SQL优化 | zpl-novice</title>
   
 
 
@@ -208,7 +218,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/29/SQL%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -221,7 +231,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          treap树
+          SQL优化
         </h1>
 
         <div class="post-meta">
@@ -232,7 +242,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-03 20:10:55 / 修改时间：20:23:45" itemprop="dateCreated datePublished" datetime="2020-05-03T20:10:55+08:00">2020-05-03</time>
+              <time title="创建时间：2020-08-29 10:02:08 / 修改时间：10:28:28" itemprop="dateCreated datePublished" datetime="2020-08-29T10:02:08+08:00">2020-08-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,8 +250,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库学习</span>
                   </a>
                 </span>
             </span>
@@ -252,7 +262,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
+              <span>1.2k</span>
             </span>
 
         </div>
@@ -264,189 +274,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇要讲解的数据结构是treap树，它可能是我们讲的最简单的一种类型的二叉查找树。它像跳跃表一样使用随机数，并且对任意的输入给出的是O(logn)<strong>期望时间</strong>的性能。<strong>查找时间等同于非平衡二叉查找树（从而比平衡二叉树要慢），插入的实现稍慢，删除则慢的多，但仍满足O(logn)的期望时间</strong>。  </p>
+        <p>摘要：本篇将介绍如何对SQL语句进行优化，主要包括大批量插入数据、insert语句、order by语句、group by语句、子查询、or条件、分页查询、sql提示等几个方面的优化。通过这些优化方法的学习，更够更加了解如何提高sql查询的效率。</p>
 <a id="more"></a>
-<p>treap是tree 和 heap组合的结构。treap树中每个结点存储一项，一个左指针和一个右指针，以及一个优先级，这个<strong>优先级是建立结点时随机指定的</strong>。一个treap树就是一个二叉查找树，但其<strong>结点优先级满足堆序性质：任意结点的优先级必须至少和它父结点的优先级一样大</strong>。<br>查找时与普通的二叉查找树相同。<br>插入时：先按二叉查找树找到插入的位置，插入数据并生成随机值，因为插入的都是叶结点，所以影响到堆性质的为插入结点和它的父结点。<strong>若插入结点的优先级比父结点小，旋转操作使其满足性质</strong>。<br>示例如下：<br><img src="https://ae01.alicdn.com/kf/H12155f92ea364e3fb20ebbb9db1b7dd7d.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Hf06cbbfca9a8494b851fbf6f6435b80ap.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/Ha36bd71a7b4940ff98e2f734e3725c58B.jpg" alt=""><br>删除时分为两种情况：<br>1.有两个孩子<br>2.只有一个孩子或无孩子<br>第二种情况无孩子直接删除，有一个孩子就用孩子代替该结点然后删除。第一种情况，<strong>旋转使其变成第二种情况。如果该结点的左孩子优先级比右孩子优先级小，右旋。否则左旋，重复下去直至变为第二种情况</strong>。示例如下：<br><img src="https://ae01.alicdn.com/kf/H484f36155dc24406b77d69181c2b8229w.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H8033a39780c14dad90bfc1bb0983a6a94.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H2fc8fbe98072437995213900162664100.jpg" alt=""><br><img src="https://ae01.alicdn.com/kf/H56f347a6d7814715b296f3ef32f447a04.jpg" alt=""><br>具体代码实现如下：  </p>
-<pre><code>typedef struct node                     
-{
-    int data;
-    node* lchild;
-    node* rchild;
-    int priority;    
-}node,*Node;
- class treap
- {
-     private:
-         Node root;
-         int searchtreap(Node &amp;T,int key);
-         int inserttreap(Node &amp;T,int key);
-         void delete1(Node &amp;T,int key);
-         void delete2(Node &amp;T);
-         Node leftrotate(Node &amp;T);
-         Node rightrotate(Node &amp;T);
-         void preorder(Node T);
-     public:
-         treap()
-         {
-             root=NULL;
-         }
-         void search(int key)
-         {
-             searchtreap(root,key);
-        }
-         void insert(int key)
-         {
-             inserttreap(root,key);
-         }
-        void deletetreap(int key)
-        {
-            delete1(root,key);
-        }
-        void preord()                 //前序遍历 
-        {
-            preorder(root);    
-        }
- };    
- int treap::searchtreap(Node &amp;T,int key)                          
- {
-     if(T!=NULL)
-     {
-         if(T-&gt;data==key)
-         {
-             cout&lt;&lt;&quot;find &quot;&lt;&lt;key&lt;&lt;endl;
-        }
-        else if(key&lt;T-&gt;data)
-        {
-             searchtreap(T-&gt;lchild,key);
-        }
-        else if(key&gt;T-&gt;data)
-        {
-            searchtreap(T-&gt;rchild,key);
-        }
-    }
-    else
-        cout&lt;&lt;&quot;can&apos;t find &quot;&lt;&lt;key&lt;&lt;endl;
-    return 0;
- }
- void treap::delete2(Node &amp;T)                                    
-{
-    Node q;
-    if(T-&gt;rchild==NULL)
-    {
-        q=T;
-        T=T-&gt;lchild;
-        delete q; 
-    }
-    if(T-&gt;lchild==NULL)
-    {
-        q=T;
-        T=T-&gt;rchild;
-        delete q; 
-    }
-    else                               //既有左孩子又有右孩子 
-    {
-        if(T-&gt;lchild-&gt;priority&gt;T-&gt;rchild-&gt;priority)
-        {
-            leftrotate(T);
-            delete2(T);
-        }
-        else
-        {
-            rightrotate(T);
-            delete2(T);
-        }
-    }
-}
-int treap::inserttreap(Node &amp;T,int key)         
-{
-    if(T==NULL)
-    {
-        Node p;
-        p=new node;
-        p-&gt;data=key;
-        p-&gt;lchild=p-&gt;rchild=NULL;
-        p-&gt;priority=rand()%500;
-        T=p;
-        return 1;
-    }
-    else if(key&lt;T-&gt;data)
-    {
-        inserttreap(T-&gt;lchild,key);
-        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
-        {
-            T=rightrotate(T);
-        }
-    }
-    else 
-    {
-        inserttreap(T-&gt;rchild,key);
-        if(T-&gt;priority&gt;T-&gt;lchild-&gt;priority)
-        {
-            T=leftrotate(T);
-        }
-    }
-    return 0;
-}
-void treap::delete1(Node &amp;T,int key)
-{
-    if(T!=NULL)
-    {
-        if(T-&gt;data==key)
-        {
-            delete2(T);
-        }
-        else if(key&lt;T-&gt;data)
-        {
-            delete1(T-&gt;lchild,key);
-        }
-        else if(key&gt;T-&gt;data)
-        {
-            delete1(T-&gt;rchild,key);
-        }
-    }
-    else
-        cout&lt;&lt;&quot;can&apos;t find and delete &quot;&lt;&lt;key&lt;&lt;endl;
-}
-Node treap::leftrotate(Node &amp;T)
-{
-    Node tem;
-    tem=T-&gt;rchild;
-    T-&gt;rchild=tem-&gt;lchild;
-    tem-&gt;lchild=T;
-    return tem;
-}
-Node treap::rightrotate(Node &amp;T)
-{
-    Node tem;
-    tem=T-&gt;lchild;
-    T-&gt;lchild=tem-&gt;rchild;
-    tem-&gt;rchild=T;
-    return tem;
-}
-void treap::preorder(Node T)
-{
-    if(T!=NULL)
-    {
-        cout&lt;&lt;&quot;关键字：&quot;&lt;&lt;T-&gt;data&lt;&lt;&quot; 随机值&quot;&lt;&lt;T-&gt;priority&lt;&lt;endl;
-        preorder(T-&gt;lchild);
-        preorder(T-&gt;rchild);
-    }
-}
-int main()
-{
-    treap t;
-    srand(0);
-    t.insert(5);
-    t.insert(3);
-    t.insert(15);
-    t.insert(2);
-    t.insert(4);
-    t.preord();
-    t.search(5);
-    t.search(3);
-    t.search(21);
-    return 0;
-}</code></pre><p>本篇主要讲解了treap树的有关知识，它将二叉查找树和堆结合起来，并通过随机选取优先级的方式获得了不错的期望时间，能够满足在O(logn)期望时间内完成各种操作，且实现相对平衡二叉树简单，因此是一种很好的数据结构。</p>
+<p>本篇主要将对SQL语句的优化：  </p>
+<h2 id="大批量插入数据"><a href="#大批量插入数据" class="headerlink" title="大批量插入数据"></a>大批量插入数据</h2><p>创建两张结构一样的表<code>tb_user_1</code>和<code>tb_user_2</code>：<br><img src="https://s1.ax1x.com/2020/08/29/dTI5h6.png" alt="dTI5h6.png"><br>当使用load命令导入数据时，适当的设置可以提高导入的效率。<br>对于InnoDB类型的表，有以下几种方式可以提高导入的效率。<br>（1）主键顺序插入<br>因为InnoDB类型的表是按照主键的顺序保存的，所以<strong>导入的数据按照主键的顺序排列，可以有效的提高导入数据的效率</strong>。如以导入大小一样的主键有序文件sql1.log和主键无序文件sql2.log为例：<br><img src="https://s1.ax1x.com/2020/08/29/dTI4tx.png" alt="dTI4tx.png"><br>（2）关闭唯一性校验<br>在<strong>导入数据前执行<code>SET UNIQUE_CHECK=0</code>，关闭唯一性校验，在导入结束后<code>SET UNIQUE_CHECK=1</code>，恢复唯一性校验，可以提高导入的效率</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTIhA1.png" alt="dTIhA1.png"><br>（3）手动提交事务<br><strong>导入数据前关闭自动提交，导入结束后恢复自动提交，也可以提高导入的效率</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTIW7R.png" alt="dTIW7R.png">  </p>
+<h2 id="优化insert语句"><a href="#优化insert语句" class="headerlink" title="优化insert语句"></a>优化insert语句</h2><p>当进行数据的insert操作的时候（非大批量插入数据），可以考虑以下几种优化方法：<br>当<strong>插入多行数据时，将它们合并成一个insert语句，而不是分开插入</strong>：<br><img src="https://s1.ax1x.com/2020/08/29/dTIy1U.png" alt="dTIy1U.png"><br> 在<strong>事务中进行数据插入</strong>：<br>  <img src="https://s1.ax1x.com/2020/08/29/dTIspT.png" alt="dTIspT.png"><br>数据<strong>有序插入</strong>，与大批量插入类似：<br><img src="https://s1.ax1x.com/2020/08/29/dTI2nJ.png" alt="dTI2nJ.png">  </p>
+<h2 id="优化order-by语句"><a href="#优化order-by语句" class="headerlink" title="优化order by语句"></a>优化order by语句</h2><p><strong>与前面的覆盖索引类似，避免使用<code>*</code>，而是用索引字段</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTIcX4.png" alt="dTIcX4.png">  </p>
+<h2 id="优化group-by语句"><a href="#优化group-by语句" class="headerlink" title="优化group by语句"></a>优化group by语句</h2><p><strong>group by实际上也会进行排序操作，与order by相比，多了排序之后的分组操作，所以在实现过程中也可以利用到索引</strong>。<br>如果只想查询分组而不需要排序，就可以执行<strong>order by null来禁止排序</strong>，避免排序结果的消耗：<br><img src="https://s1.ax1x.com/2020/08/29/dTI6cF.png" alt="dTI6cF.png">  </p>
+<h2 id="优化子查询"><a href="#优化子查询" class="headerlink" title="优化子查询"></a>优化子查询</h2><p>尽量<strong>使用多表连接查询来代替子查询</strong>。<br> <img src="https://s1.ax1x.com/2020/08/29/dTIRB9.png" alt="dTIRB9.png">  </p>
+<h2 id="优化or条件"><a href="#优化or条件" class="headerlink" title="优化or条件"></a>优化or条件</h2><p>对于<strong>包含or的查询子句，如果要利用索引，则or之间的每个条件列都必须用到索引，而且不能使用到复合索引，如果没有索引，则应考虑增加索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7kYq.png" alt="dT7kYq.png"><br>建议<strong>使用union替换or</strong>。  </p>
+<h2 id="优化分页查询"><a href="#优化分页查询" class="headerlink" title="优化分页查询"></a>优化分页查询</h2><p><strong>分页查询用limit关键字表示</strong>，如以10个数据为一页，第一页则为：<br><img src="https://s1.ax1x.com/2020/08/29/dT7Fkn.png" alt="dT7Fkn.png"><br>第二页则用<code>limit 10,10</code>表示，第三页则是<code>limit 20,10</code>。然而越往后查询，花费的时间越多：<br><img src="https://s1.ax1x.com/2020/08/29/dT79mQ.png" alt="dT79mQ.png"><br>优化思路：<strong>在索引上完成分页查询操作，然后根据主键关联回原表查询所需要的其它列内容</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7Cwj.png" alt="dT7Cwj.png">  </p>
+<h2 id="使用SQL提示"><a href="#使用SQL提示" class="headerlink" title="使用SQL提示"></a>使用SQL提示</h2><p><strong>SQL提示，是优化数据库的一个重要手段，简单的说，就是在SQL语句中加入一些人为的提示来达到优化操作的目的</strong>。<br>（1）use index<br>在<strong>查询表名的后面，添加use index来提供希望mysql去参考的索引列表，就可以让mysql不再考虑其它可用的索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7SOg.png" alt="dT7SOg.png"><br>（2）ignore index<br>在查询表名的后面，<strong>添加ignore index来提供希望mysql去忽略的索引列表</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTTz6S.png" alt="dTTz6S.png"><br>（3）force index<br><strong>强制使用某一个索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7PTs.png" alt="dT7PTs.png">  </p>
 
     </div>
 
@@ -462,7 +300,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/05/03/treap%E6%A0%91/" title="treap树">https://zpl-novice.github.io/2020/05/03/treap树/</a>
+    <a href="https://zpl-novice.github.io/2020/08/29/SQL%E4%BC%98%E5%8C%96/" title="SQL优化">https://zpl-novice.github.io/2020/08/29/SQL优化/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -479,13 +317,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/01/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="prev" title="红黑树">
-      <i class="fa fa-chevron-left"></i> 红黑树
+    <a href="/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="索引的使用">
+      <i class="fa fa-chevron-left"></i> 索引的使用
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/05/05/%E5%AD%97%E5%85%B8%E6%A0%91%E5%92%8C%E5%90%8E%E7%BC%80%E6%A0%91/" rel="next" title="字典树和后缀树">
-      字典树和后缀树 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -545,6 +380,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#大批量插入数据"><span class="nav-number">1.</span> <span class="nav-text">大批量插入数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化insert语句"><span class="nav-number">2.</span> <span class="nav-text">优化insert语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化order-by语句"><span class="nav-number">3.</span> <span class="nav-text">优化order by语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化group-by语句"><span class="nav-number">4.</span> <span class="nav-text">优化group by语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化子查询"><span class="nav-number">5.</span> <span class="nav-text">优化子查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化or条件"><span class="nav-number">6.</span> <span class="nav-text">优化or条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化分页查询"><span class="nav-number">7.</span> <span class="nav-text">优化分页查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用SQL提示"><span class="nav-number">8.</span> <span class="nav-text">使用SQL提示</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

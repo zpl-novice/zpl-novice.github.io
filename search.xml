@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SQL优化</title>
+    <url>/2020/08/29/SQL%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍如何对SQL语句进行优化，主要包括大批量插入数据、insert语句、order by语句、group by语句、子查询、or条件、分页查询、sql提示等几个方面的优化。通过这些优化方法的学习，更够更加了解如何提高sql查询的效率。</p>
+<a id="more"></a>
+<p>本篇主要将对SQL语句的优化：  </p>
+<h2 id="大批量插入数据"><a href="#大批量插入数据" class="headerlink" title="大批量插入数据"></a>大批量插入数据</h2><p>创建两张结构一样的表<code>tb_user_1</code>和<code>tb_user_2</code>：<br><img src="https://s1.ax1x.com/2020/08/29/dTI5h6.png" alt="dTI5h6.png"><br>当使用load命令导入数据时，适当的设置可以提高导入的效率。<br>对于InnoDB类型的表，有以下几种方式可以提高导入的效率。<br>（1）主键顺序插入<br>因为InnoDB类型的表是按照主键的顺序保存的，所以<strong>导入的数据按照主键的顺序排列，可以有效的提高导入数据的效率</strong>。如以导入大小一样的主键有序文件sql1.log和主键无序文件sql2.log为例：<br><img src="https://s1.ax1x.com/2020/08/29/dTI4tx.png" alt="dTI4tx.png"><br>（2）关闭唯一性校验<br>在<strong>导入数据前执行<code>SET UNIQUE_CHECK=0</code>，关闭唯一性校验，在导入结束后<code>SET UNIQUE_CHECK=1</code>，恢复唯一性校验，可以提高导入的效率</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTIhA1.png" alt="dTIhA1.png"><br>（3）手动提交事务<br><strong>导入数据前关闭自动提交，导入结束后恢复自动提交，也可以提高导入的效率</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTIW7R.png" alt="dTIW7R.png">  </p>
+<h2 id="优化insert语句"><a href="#优化insert语句" class="headerlink" title="优化insert语句"></a>优化insert语句</h2><p>当进行数据的insert操作的时候（非大批量插入数据），可以考虑以下几种优化方法：<br>当<strong>插入多行数据时，将它们合并成一个insert语句，而不是分开插入</strong>：<br><img src="https://s1.ax1x.com/2020/08/29/dTIy1U.png" alt="dTIy1U.png"><br> 在<strong>事务中进行数据插入</strong>：<br>  <img src="https://s1.ax1x.com/2020/08/29/dTIspT.png" alt="dTIspT.png"><br>数据<strong>有序插入</strong>，与大批量插入类似：<br><img src="https://s1.ax1x.com/2020/08/29/dTI2nJ.png" alt="dTI2nJ.png">  </p>
+<h2 id="优化order-by语句"><a href="#优化order-by语句" class="headerlink" title="优化order by语句"></a>优化order by语句</h2><p><strong>与前面的覆盖索引类似，避免使用<code>*</code>，而是用索引字段</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTIcX4.png" alt="dTIcX4.png">  </p>
+<h2 id="优化group-by语句"><a href="#优化group-by语句" class="headerlink" title="优化group by语句"></a>优化group by语句</h2><p><strong>group by实际上也会进行排序操作，与order by相比，多了排序之后的分组操作，所以在实现过程中也可以利用到索引</strong>。<br>如果只想查询分组而不需要排序，就可以执行<strong>order by null来禁止排序</strong>，避免排序结果的消耗：<br><img src="https://s1.ax1x.com/2020/08/29/dTI6cF.png" alt="dTI6cF.png">  </p>
+<h2 id="优化子查询"><a href="#优化子查询" class="headerlink" title="优化子查询"></a>优化子查询</h2><p>尽量<strong>使用多表连接查询来代替子查询</strong>。<br> <img src="https://s1.ax1x.com/2020/08/29/dTIRB9.png" alt="dTIRB9.png">  </p>
+<h2 id="优化or条件"><a href="#优化or条件" class="headerlink" title="优化or条件"></a>优化or条件</h2><p>对于<strong>包含or的查询子句，如果要利用索引，则or之间的每个条件列都必须用到索引，而且不能使用到复合索引，如果没有索引，则应考虑增加索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7kYq.png" alt="dT7kYq.png"><br>建议<strong>使用union替换or</strong>。  </p>
+<h2 id="优化分页查询"><a href="#优化分页查询" class="headerlink" title="优化分页查询"></a>优化分页查询</h2><p><strong>分页查询用limit关键字表示</strong>，如以10个数据为一页，第一页则为：<br><img src="https://s1.ax1x.com/2020/08/29/dT7Fkn.png" alt="dT7Fkn.png"><br>第二页则用<code>limit 10,10</code>表示，第三页则是<code>limit 20,10</code>。然而越往后查询，花费的时间越多：<br><img src="https://s1.ax1x.com/2020/08/29/dT79mQ.png" alt="dT79mQ.png"><br>优化思路：<strong>在索引上完成分页查询操作，然后根据主键关联回原表查询所需要的其它列内容</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7Cwj.png" alt="dT7Cwj.png">  </p>
+<h2 id="使用SQL提示"><a href="#使用SQL提示" class="headerlink" title="使用SQL提示"></a>使用SQL提示</h2><p><strong>SQL提示，是优化数据库的一个重要手段，简单的说，就是在SQL语句中加入一些人为的提示来达到优化操作的目的</strong>。<br>（1）use index<br>在<strong>查询表名的后面，添加use index来提供希望mysql去参考的索引列表，就可以让mysql不再考虑其它可用的索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7SOg.png" alt="dT7SOg.png"><br>（2）ignore index<br>在查询表名的后面，<strong>添加ignore index来提供希望mysql去忽略的索引列表</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dTTz6S.png" alt="dTTz6S.png"><br>（3）force index<br><strong>强制使用某一个索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/29/dT7PTs.png" alt="dT7PTs.png">  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>索引的使用</title>
     <url>/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p>摘要：本篇将介绍索引在优化SQL中的作用，索引是数据库优化最常用也最重要的手段之一，通过索引通常可以帮助用户解决大多数的mysql的性能优化问题。但索引也可能出现失效的情况，因此要避免索引失效，正确的使用索引。</p>
