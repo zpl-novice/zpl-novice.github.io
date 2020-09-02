@@ -46,33 +46,38 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇继续对mysql建表约束进行介绍，将剩下的自增约束、非空约束、默认约束、唯一约束、外键约束进行讲解，并通过具体实例来说明它们的作用。">
+  <meta name="description" content="摘要：本篇将主要介绍mysql锁相关的知识以及一些sql技巧。mysql锁分为表锁和行锁，会对MyISAM表锁和InnoDB行锁分别进行介绍，在sql技巧中会讲解正则表达式和一些常见函数的使用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="约束条件2">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/08/07/%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B62/index.html">
+<meta property="og:title" content="mysql锁和sql技巧">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/09/02/mysql%E9%94%81%E5%92%8Csql%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇继续对mysql建表约束进行介绍，将剩下的自增约束、非空约束、默认约束、唯一约束、外键约束进行讲解，并通过具体实例来说明它们的作用。">
+<meta property="og:description" content="摘要：本篇将主要介绍mysql锁相关的知识以及一些sql技巧。mysql锁分为表锁和行锁，会对MyISAM表锁和InnoDB行锁分别进行介绍，在sql技巧中会讲解正则表达式和一些常见函数的使用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/oqANYCpe157kIWR.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/kVwCtLr6NGcTfgY.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/qjZvTWUtgA8Iiy2.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/GlJ1aiMhkqnF5Yj.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/QzTUAGYFEBvDH8u.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/eAzXLCMSJkY2KlN.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/MUuO2aAmLlyT19c.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/vcNDIalmkUubXoS.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/idbKQvk8FgPTMtU.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/6GePUM9qJYa4sRt.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/mMlQwZUu9NPeRsd.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/kRniP9Hqc3mQDFy.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/TiPuJe6O2w73ZXG.png">
-<meta property="article:published_time" content="2020-08-07T13:28:55.089Z">
-<meta property="article:modified_time" content="2020-08-07T13:51:25.503Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpv4Wd.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvhJH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvRoD.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvfFe.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpv2dO.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpv6L6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvgeK.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvsQ1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvDzR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpvysx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpzW2d.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpz4KI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpzR8H.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpzIqP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpzTVf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpz5rt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpz2Pe.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/02/wpzc5D.png">
+<meta property="article:published_time" content="2020-09-02T12:23:16.877Z">
+<meta property="article:modified_time" content="2020-09-02T12:48:31.581Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/08/07/oqANYCpe157kIWR.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/02/wpv4Wd.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/08/07/%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B62/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/09/02/mysql%E9%94%81%E5%92%8Csql%E6%8A%80%E5%B7%A7/">
 
 
 <script id="page-configurations">
@@ -84,7 +89,7 @@
   };
 </script>
 
-  <title>约束条件2 | zpl-novice</title>
+  <title>mysql锁和sql技巧 | zpl-novice</title>
   
 
 
@@ -214,7 +219,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/07/%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B62/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/09/02/mysql%E9%94%81%E5%92%8Csql%E6%8A%80%E5%B7%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -227,7 +232,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          约束条件2
+          mysql锁和sql技巧
         </h1>
 
         <div class="post-meta">
@@ -238,7 +243,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-08-07 21:28:55 / 修改时间：21:51:25" itemprop="dateCreated datePublished" datetime="2020-08-07T21:28:55+08:00">2020-08-07</time>
+              <time title="创建时间：2020-09-02 20:23:16 / 修改时间：20:48:31" itemprop="dateCreated datePublished" datetime="2020-09-02T20:23:16+08:00">2020-09-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,7 +263,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>1.7k</span>
             </span>
 
         </div>
@@ -270,22 +275,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇继续对mysql建表约束进行介绍，将剩下的自增约束、非空约束、默认约束、唯一约束、外键约束进行讲解，并通过具体实例来说明它们的作用。  </p>
+        <p>摘要：本篇将主要介绍mysql锁相关的知识以及一些sql技巧。mysql锁分为表锁和行锁，会对MyISAM表锁和InnoDB行锁分别进行介绍，在sql技巧中会讲解正则表达式和一些常见函数的使用。</p>
 <a id="more"></a>
-<h3 id="自增约束"><a href="#自增约束" class="headerlink" title="自增约束"></a>自增约束</h3><p><strong>自增约束一般与主键约束一起使用，用于设定一个自增列，这样每次插入不需要输入参数，数据库会自动给出值</strong>。如建立一个id字段为主键自增约束的表user3，<code>create table user3( id int primary key auto_increment, name varchar(20));</code>：<br><img src="https://i.loli.net/2020/08/07/oqANYCpe157kIWR.png" alt="约束1.png">  </p>
-<p>这样插入数据时可以<strong>只插入名字，id会按顺序给出</strong>：<br><img src="https://i.loli.net/2020/08/07/kVwCtLr6NGcTfgY.png" alt="约束2.png">  </p>
-<p>如果创建表时忘记创建约束，需要通过<code>alter table user4 add primary key(id);</code>：<br><img src="https://i.loli.net/2020/08/07/qjZvTWUtgA8Iiy2.png" alt="约束3.png">  </p>
-<p> 同样使用通过<code>alter table user4 drop primary key;</code>来删除约束。<br>还可以通过<code>alter table user4 modify id int primary key;</code>来修改约束。  </p>
-<h3 id="唯一约束"><a href="#唯一约束" class="headerlink" title="唯一约束"></a>唯一约束</h3><p><strong>约束修饰的字段的值不可以重复，注意与主键约束的区别，唯一约束可以为空，主键约束不能为空。</strong>添加唯一约束使用<code>alter table user5 add unique(name);</code>：<br><img src="https://i.loli.net/2020/08/07/GlJ1aiMhkqnF5Yj.png" alt="约束4.png">  </p>
-<p>插入数据时name不能重复，但可以为空：<br><img src="https://i.loli.net/2020/08/07/QzTUAGYFEBvDH8u.png" alt="约束5.png">  </p>
-<p>同样的，<strong>联合唯一约束和联合主键约束规则类似，只要不是全部相同就可以，但联合主键约束中任何一个都不能为空</strong>。<br>删除唯一约束时使用<code>alter table user5 drop index name;</code>：<br><img src="https://i.loli.net/2020/08/07/eAzXLCMSJkY2KlN.png" alt="约束6.png">  </p>
-<p>注意<strong>这里的删除与上面主键约束的删除不同，这是因为主键约束只能设置一个（可以是联合主键），而唯一约束可以设置多个，删除唯一约束时需要用索引index来区分要删除的字段</strong>。  </p>
-<h3 id="非空约束"><a href="#非空约束" class="headerlink" title="非空约束"></a>非空约束</h3><p><strong>修饰的字段不能为空null</strong>。如创建一个name字段为非空约束的表user6：<br><img src="https://i.loli.net/2020/08/07/MUuO2aAmLlyT19c.png" alt="约束7.png"><br>可以看到在<strong>name字段的是否允许为空下是NO，表示不允许name字段数据为空，当插入null时出错</strong>。  </p>
-<h3 id="默认约束"><a href="#默认约束" class="headerlink" title="默认约束"></a>默认约束</h3><p><strong>当插入数据时，若某些字段没有传值，则使用默认值。</strong>如建立一个字段age默认约束为10的表user7：<br><img src="https://i.loli.net/2020/08/07/vcNDIalmkUubXoS.png" alt="约束8.png">  </p>
-<p>可以看到<strong>age字段的default值为10，这样当不传入age字段的数据，只传入id和name数据时，默认为10，不设默认约束则默认值为null（无非空约束）</strong>：<br><img src="https://i.loli.net/2020/08/07/idbKQvk8FgPTMtU.png" alt="约束9.png">  </p>
-<h3 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h3><p><strong>涉及到两个表：父表和子表，父表对子表的某个字段进行外键约束，保证数据的完整性和一致性。</strong>例如一个班级表classes，里面包含id和name，一个学生表students，里面包含id、name和<code>class_id</code>，其中<strong><code>class_id</code>的外键约束是classes表中的id</strong>：<br><img src="https://i.loli.net/2020/08/07/6GePUM9qJYa4sRt.png" alt="约束10.png"><br>查看两个表的结构，可以看到<strong>students中字段<code>class_id</code>具有约束MUL，其实这就是外键约束</strong>，例如插入班级数据，<br><code>insert into classes values (1,’yiban’);</code>、<code>insert into classes values (2,’erban’);</code>、<code>insert into classes values (3,’sanban’);</code>、<code>insert into classes values (4,’siban’);</code>：<br><img src="https://i.loli.net/2020/08/07/mMlQwZUu9NPeRsd.png" alt="约束11.png">  </p>
-<p>当再插入学生数据时，<strong>学生的<code>class_id</code>不能超出classes表中的id范围，这就是外键约束</strong>。如插入<code>insert into students values (1,’zhangsna’,1);</code>、<code>insert into students values (2,’lisi’,2);</code>时没问题，而插入<code>insert into students values (3,’lili’,5);</code>时出错：<br><img src="https://i.loli.net/2020/08/07/kRniP9Hqc3mQDFy.png" alt="约束12.png">  </p>
-<p><strong>主表（父表）classes中没有的数据，在副表（子表）中不能使用</strong>，如<code>class_id</code>不能为5。<strong>且主表中的记录被副表引用，不能够删除</strong>，如students中有数据<code>class_id</code>为1，不能删除classes中id为1的字段，<code>delete from classes where id=1;</code>：<br><img src="https://i.loli.net/2020/08/07/TiPuJe6O2w73ZXG.png" alt="约束13.png">  </p>
+<h2 id="mysql锁"><a href="#mysql锁" class="headerlink" title="mysql锁"></a>mysql锁</h2><p><strong>锁是计算机协调多个进程或线程并发访问某一资源的机制</strong>。在数据库中，除传统的计算资源（CPU、RAM等）的争用以外，<strong>数据也是一种供许多用户共享的资源</strong>。<strong>如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题，锁冲突也是影响数据库并发访问性能的一个重要因素</strong>。<br>Mysql中锁的分类：<br>从对数据操作的<strong>粒度</strong>分：<br>（1）<strong>表锁</strong>：操作时，会锁定整个表。  </p>
+<p>（2）<strong>行锁</strong>：操作时，会锁定当前操作行。  </p>
+<p>从对数据操作的<strong>类型</strong>分：<br>（1）<strong>读锁（共享锁）</strong>：针对同一份数据，多个读操作可以同时进行而互不影响。 </p>
+<p>（2）<strong>写锁（独占锁）</strong>：当前操作没有完成之前，会阻断其它写锁和读锁。<br>相比其它数据库而言，mysql的锁机制比较简单，其<strong>显著的特点就是不同的存储引擎支持不同的锁机制</strong>。<br><img src="https://s1.ax1x.com/2020/09/02/wpv4Wd.png" alt="wpv4Wd.png"><br><img src="https://s1.ax1x.com/2020/09/02/wpvhJH.png" alt="wpvhJH.png">  </p>
+<h3 id="MyISAM表锁"><a href="#MyISAM表锁" class="headerlink" title="MyISAM表锁"></a>MyISAM表锁</h3><p><strong>MyISAM存储引擎只支持表锁</strong>。<br>加表锁：<br><strong>MyISAM在执行查询语句（select）前，会自动给涉及的所有表加读锁，在执行更新操作前，会自动给涉及的表加写锁，这个过程并不需要用户干预</strong>，因此，用户一般不需要用lock table命令给MyISAM表显式加锁。<br><img src="https://s1.ax1x.com/2020/09/02/wpvRoD.png" alt="wpvRoD.png"><br><strong>读锁：只能读，不能写，读时共享，读锁会阻塞其它线程的写操作</strong>：<br><img src="https://s1.ax1x.com/2020/09/02/wpvfFe.png" alt="wpvfFe.png">  </p>
+<p><strong>写锁：能读，能写，写时独占，写锁会阻塞其它线程的读和写操作</strong>：<br><img src="https://s1.ax1x.com/2020/09/02/wpv2dO.png" alt="wpv2dO.png">  </p>
+<h3 id="InnoDB行锁"><a href="#InnoDB行锁" class="headerlink" title="InnoDB行锁"></a>InnoDB行锁</h3><p><strong>InnoDB与MyISAM的不同：InnoDB支持事务，行锁和外键</strong>。<br>复习一下事务相关知识：<br><img src="https://s1.ax1x.com/2020/09/02/wpv6L6.png" alt="wpv6L6.png"><br><img src="https://s1.ax1x.com/2020/09/02/wpvgeK.png" alt="wpvgeK.png"><br><img src="https://s1.ax1x.com/2020/09/02/wpvsQ1.png" alt="wpvsQ1.png">  </p>
+<p>InnoDB实现了以下两种类型的行锁：<br>（1）<strong>共享行锁：又称读锁，简称S锁，</strong>共享锁就是多个事务对于同一数据可以共享一把锁，都能访问到数据，但是只能读不能修改。  </p>
+<p>（2）<strong>独占行锁：又称写锁，简称X锁</strong>，独占锁就是不能与其它锁并存，如<strong>一个事务获取了一个数据行的独占锁，其它事务就不能再获取该行的其它锁，包括共享锁和独占锁，获取独占锁的事务可以对数据进行读取和修改</strong>。<br><strong>对于update、delete、insert语句，InnoDB会自动给涉及数据集加独占锁。<br>对于普通select语句，InnoDB不会加任何锁</strong>。  </p>
+<p>可以通过以下语句显式给记录集加共享锁或排他锁：<br><img src="https://s1.ax1x.com/2020/09/02/wpvDzR.png" alt="wpvDzR.png">  </p>
+<p>无索引行锁会升级为表锁：<br>如果<strong>不通过索引条件检索数据，那么InnoDB将对表中的所有记录加锁，实际效果跟行锁一样</strong>。如下所示更新时<strong>where条件为name字段，虽然name字段有索引，但没加单引号，使得索引失效，等同于无索引，行锁升级为表锁</strong>：<br><img src="https://s1.ax1x.com/2020/09/02/wpvysx.png" alt="wpvysx.png">  </p>
+<h3 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h3><p>当我们用<strong>范围条件，而不是使用相等条件检索数据，并请求共享或排他锁时，InnoDB会给符合条件的已有数据进行加锁； 对于键值在条件范围内但并不存在的记录，叫做”间隙（GAP）”，InnoDB也会对这个 “间隙” 加锁，这种锁机制就是所谓的间隙锁（Next-Key锁）</strong>。<br><img src="https://s1.ax1x.com/2020/09/02/wpzW2d.png" alt="wpzW2d.png">  </p>
+<p>使用命令<code>show status like &#39;innodb_row_lock%&#39;;</code>可以查看InnoDB行锁争用情况：<br><img src="https://s1.ax1x.com/2020/09/02/wpz4KI.png" alt="wpz4KI.png"><br>其中：<br><img src="https://s1.ax1x.com/2020/09/02/wpzR8H.png" alt="wpzR8H.png">  </p>
+<p>总结：<br><strong>InnoDB存储引擎由于实现了行级锁定，虽然在锁定机制的实现方面带来了性能损耗可能比表锁会更高一些，但是在整体并发处理能力方面要远远优于MyISAM的表锁的。当系统并发量较高的时候，InnoDB的整体性能和MyISAM 相比就会有比较明显的优势</strong>。<br>但是，InnoDB的行级锁同样也有其脆弱的一面，当我们使用不当的时候，可能会让InnoDB的整体性能表现不仅不能比MyISAM高，甚至可能会更差。<br>优化建议：<br>（1）尽可能让所有数据检索都能<strong>通过索引来完成，避免无索引行锁升级为表锁</strong>。<br>（2）合理设计索引，尽量<strong>缩小锁的范围</strong>。<br>（3）尽可能<strong>减少索引条件，及索引范围，避免间隙锁</strong>。<br>（4）尽量<strong>控制事务大小，减少锁定资源量和时间长度</strong>。<br>（5）尽可使用低级别事务隔离（但是需要业务层面满足需求）。  </p>
+<h2 id="sql技巧"><a href="#sql技巧" class="headerlink" title="sql技巧"></a>sql技巧</h2><h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p><strong>在前面讲解的查询中，模糊查询都使用like来匹配，也可以使用正则表达式，like变为regexp。如查看j开头和s结尾的name字段</strong>：<br><img src="https://s1.ax1x.com/2020/09/02/wpzIqP.png" alt="wpzIqP.png"><br><strong>正则表达式的使用与Linux学习中的正则表达式相同</strong>。  </p>
+<h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><p>1.数字函数<br><img src="https://s1.ax1x.com/2020/09/02/wpzTVf.png" alt="wpzTVf.png">  </p>
+<p>2.字符串函数<br><img src="https://s1.ax1x.com/2020/09/02/wpz5rt.png" alt="wpz5rt.png">  </p>
+<p>3.日期函数<br><img src="https://s1.ax1x.com/2020/09/02/wpz2Pe.png" alt="wpz2Pe.png">  </p>
+<p>4.<strong>聚合函数</strong><br><img src="https://s1.ax1x.com/2020/09/02/wpzc5D.png" alt="wpzc5D.png">  </p>
 
     </div>
 
@@ -301,7 +311,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/08/07/%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B62/" title="约束条件2">https://zpl-novice.github.io/2020/08/07/约束条件2/</a>
+    <a href="https://zpl-novice.github.io/2020/09/02/mysql%E9%94%81%E5%92%8Csql%E6%8A%80%E5%B7%A7/" title="mysql锁和sql技巧">https://zpl-novice.github.io/2020/09/02/mysql锁和sql技巧/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -318,13 +328,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/05/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6/" rel="prev" title="数据类型和约束条件1">
-      <i class="fa fa-chevron-left"></i> 数据类型和约束条件1
+    <a href="/2020/08/31/%E5%BA%94%E7%94%A8%E4%BC%98%E5%8C%96%E3%80%81%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E5%92%8C%E5%B9%B6%E5%8F%91%E5%8F%82%E6%95%B0%E8%B0%83%E6%95%B4/" rel="prev" title="应用优化、内存优化和并发参数调整">
+      <i class="fa fa-chevron-left"></i> 应用优化、内存优化和并发参数调整
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/08/09/%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F/" rel="next" title="设计范式">
-      设计范式 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -384,7 +391,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#自增约束"><span class="nav-number">1.</span> <span class="nav-text">自增约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#唯一约束"><span class="nav-number">2.</span> <span class="nav-text">唯一约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非空约束"><span class="nav-number">3.</span> <span class="nav-text">非空约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认约束"><span class="nav-number">4.</span> <span class="nav-text">默认约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外键约束"><span class="nav-number">5.</span> <span class="nav-text">外键约束</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql锁"><span class="nav-number">1.</span> <span class="nav-text">mysql锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM表锁"><span class="nav-number">1.1.</span> <span class="nav-text">MyISAM表锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB行锁"><span class="nav-number">1.2.</span> <span class="nav-text">InnoDB行锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#间隙锁"><span class="nav-number">1.3.</span> <span class="nav-text">间隙锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql技巧"><span class="nav-number">2.</span> <span class="nav-text">sql技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#正则表达式"><span class="nav-number">2.1.</span> <span class="nav-text">正则表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用函数"><span class="nav-number">2.2.</span> <span class="nav-text">常用函数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
