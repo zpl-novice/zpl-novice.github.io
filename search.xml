@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>设计模式和设计原则</title>
+    <url>/2020/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
+    <content><![CDATA[<p>摘要：本篇将开始进入设计模式的学习，设计模式是可复用面向对象软件的基础。学习设计模式有助于培养良好的面向对象思维和编程习惯，是程序开发人员必备的知识之一。本篇将主要介绍什么是设计模式以及设计模式的原则。</p>
+<a id="more"></a>
+<p><strong>设计模式—可复用面向对象软件的基础。设计模式是一套被反复使用的、多数人知晓、经过分类编目的优秀代码设计经验的总结。特定环境下特定问题的处理方法</strong>。<br><a href="https://imgchr.com/i/wmiv8g" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/06/wmiv8g.png" alt="wmiv8g.png"></a><br><strong>底层思维：向下，如何把握机器底层，从微观理解机器构造</strong>。包括：语言构造、编译转换、内存模型、运行时机制等。<br><strong>抽象思维：向上，如何将世界抽象为程序代码。</strong>包括：面向对象、组件封装、设计模式、架构模式等。<br>深入理解面向对象：<br>向下：深入理解<strong>三大面向对象机制</strong><br><strong>封装，隐藏内部实现<br>继承，复用现有代码<br>多态，改写对象行为</strong><br>向上：深刻把握面向对象机制所带来的抽象意义，理解如何使用这些机制来表达现实世界，掌握什么是好的面向对象设计。  </p>
+<h2 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h2><p><strong>依赖倒置原则（DIP）</strong>：<br><strong>高层模块（稳定）不应该依赖于低层模块（变化），二者都应该依赖于抽象。<br>抽象（稳定）不应该依赖于实现细节（变化），实现细节应该依赖于抽象</strong>。<br><a href="https://imgchr.com/i/wmijPS" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/06/wmijPS.png" alt="wmijPS.png"></a>  </p>
+<p><strong>开放封闭原则（OCP）</strong>：<br><strong>对扩展开放，对更改封闭</strong>。<br>类模块应该是可扩展的，但是不可修改。  </p>
+<p><strong>单一职责原则（SRP）</strong>：<br><strong>一个类应该仅有一个引起它变化的原因</strong>。<br>变化的方向隐含着类的责任。  </p>
+<p><strong>Liskov 替换原则（LSP）</strong>：<br><strong>子类必须能够替换它们的基类（is-a）</strong>。<br>继承表达类型抽象。   </p>
+<p><strong>接口隔离原则（ISP）</strong>：<br>不应该强迫客户程序依赖它们不用的方法。<br><strong>接口应该小而完备</strong>。  </p>
+<p><strong>优先使用对象组合，而不是类继承</strong>：<br>类继承（class B 继承class A）通常为“白箱复用”，对象组合（class B 包含 class A）通常为“黑箱复用”。<br><strong>继承在某种程度上破坏了封装性，子类父类耦合度高</strong>。<br>而对象组合则只要求被组合的对象具有良好定义的接口，耦合度低。  </p>
+<p><strong>封装变化点</strong>：<br><strong>使用封装来创建对象之间的分界层，让设计者可以在分界层的一侧进行修改，而不会对另一侧产生不良的影响</strong>，从而实现层次间的松耦合。  </p>
+<p><strong>针对接口编程而不是针对实现编程</strong>：<br><strong>不将变量类型声明为某个特定的具体类，而是声明为某个接口</strong>。客户程序无需获知对象的具体类型，只需要知道对象所具有的接口。<br><strong>与依赖倒置原则相辅相成</strong>。  </p>
+<p><strong>设计模式的要点是寻找变化点，然后在变化点应用设计模式</strong>。  </p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>mysql常用工具、日志和复制</title>
+    <url>/2020/09/03/mysql%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E3%80%81%E6%97%A5%E5%BF%97%E5%92%8C%E5%A4%8D%E5%88%B6/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍mysql的一些客户端常用工具、mysql的日志及分类和作用，以及mysql的主从复制，其实现原理和优势。</p>
+<a id="more"></a>
+<h2 id="mysql常用客户端工具"><a href="#mysql常用客户端工具" class="headerlink" title="mysql常用客户端工具"></a>mysql常用客户端工具</h2><p>1.mysql<br><img src="https://s1.ax1x.com/2020/09/04/wk7mTO.png" alt="wk7mTO.png"><br><strong>执行选项-e，可以在mysql客户端执行sql语句，而不用连接到数据库再执行</strong>，对于一些批处理脚本，这种方式很方便。<br><img src="https://s1.ax1x.com/2020/09/04/wk7EOx.png" alt="wk7EOx.png"><br>2.mysqladmin<br><strong>mysqladmin是一个执行管理操作的客户端程序，可以用它来检查服务器的配置和当前状态、创建并删除数据库等</strong>。<br><img src="https://s1.ax1x.com/2020/09/04/wk7e0K.png" alt="wk7e0K.png"><br>3.mysqlbinlog<br>由于<strong>服务器生成的二进制日志文件以二进制格式保存，所以如果想要检查这些文件的文本格式，就会用到mysqlbinlog日志管理工具</strong>。<br><img src="https://s1.ax1x.com/2020/09/04/wk7Zm6.png" alt="wk7Zm6.png"><br>4.mysqldump<br>mysqldump客户端工具用来备份数据库或在不同数据库之间进行数据迁移，备份内容包含创建表，及插入表的SQL语句。<br><img src="https://s1.ax1x.com/2020/09/04/wk7A61.png" alt="wk7A61.png"><br>5.mysqlimport<br><strong>mysqlimport是客户端数据导入工具，用来导入mysqldump加-T参数后导出的文本文件</strong>。<br><img src="https://s1.ax1x.com/2020/09/04/wk7CY4.png" alt="wk7CY4.png"><br>6.mysqlshow<br><strong>mysqlshow客户端对象查找工具，用来很快地查找存在哪些数据库、数据库中的表、表中的列或者索引</strong>。<br><img src="https://s1.ax1x.com/2020/09/04/wk7PfJ.png" alt="wk7PfJ.png"><br><img src="https://s1.ax1x.com/2020/09/04/wk7Fp9.png" alt="wk7Fp9.png"><br><img src="https://s1.ax1x.com/2020/09/04/wk7klR.png" alt="wk7klR.png">  </p>
+<h2 id="mysql日志"><a href="#mysql日志" class="headerlink" title="mysql日志"></a>mysql日志</h2><p>在<strong>任何一种数据库中，都会有各种各样的日志，记录着数据库工作的方方面面，以帮助数据库管理员追踪数据库曾经发生过的各种事件</strong>，mysql也不例外，在<strong>mysql中，有4种不同的日志，分别是错误日志、二进制日志（binlog日志）、查询日志和慢查询日志</strong>，这些日志记录着数据库在不同方面的踪迹。<br>1.错误日志<br><strong>错误日志是mysql中最重要的日志之一，它记录了当mysql启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息</strong>。当数据库出现任何故障导致无法正常使用时，可以首先查看该日志。<br>错误日志默认是开启的，通过指令<code>show variables like ‘log_error%’;</code>可以查看：<br><img src="https://s1.ax1x.com/2020/09/04/wkH9DP.png" alt="wkH9DP.png"><br>2.二进制日志<br><strong>二进制日志（binlog）记录了所有的DDL（数据定义语言）和DML（数据操作语言）语句，但是不包括数据查询语句。此日志对于灾难时的数据恢复起着极其重要的作用，MySQL的主从复制，就是通过该binlog实现的</strong>。<br>日志格式：<br><img src="https://s1.ax1x.com/2020/09/04/wk7j9H.png" alt="wk7j9H.png"><br>3.查询日志<br><strong>查询日志中记录了客户端的所有操作语句，而二进制日志不包含查询语句的SQL语句。</strong>默认情况下，查询日志未开启。<br><img src="https://s1.ax1x.com/2020/09/04/wk7xgA.png" alt="wk7xgA.png"><br>4.慢查询日志<br><strong>慢查询日志记录了所有执行时间超过参数 long_query_time 设置值并且扫描记录数不小于 min_examined_row_limit 的所有的SQL语句的日志</strong>。<strong>long_query_time 默认为10秒</strong>，最小为 0，精度可以到微秒。<br><img src="https://s1.ax1x.com/2020/09/04/wk7v3d.png" alt="wk7v3d.png"><br><img src="https://s1.ax1x.com/2020/09/04/wkHput.png" alt="wkHput.png">  </p>
+<h2 id="mysql主从复制"><a href="#mysql主从复制" class="headerlink" title="mysql主从复制"></a>mysql主从复制</h2><p><strong>复制是指将主数据库的DDL和DML操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重新执行（也叫重做），从而使得从库和主库的数据保持同步</strong>。<br>Mysql支持一台主库同时对多台从库进行复制，从库同时也可以作为其它从服务器的主库，实现<strong>链状复制</strong>。<br><img src="https://s1.ax1x.com/2020/09/04/wkbX6A.png" alt="wkbX6A.png"><br>1.主库在事务提交时，会<strong>把数据变更作为时间记录在二进制文件binlog中</strong>。<br>2.<strong>从库读取主库的binlog文件，并写到中继日志relay log</strong>。<br>3.<strong>从库重做中继日志的事件</strong>。<br><strong>复制优势</strong>：<br>1.<strong>主库出现问题，可以快速切换到从库提供服务</strong>。<br>2.<strong>可以在从库上执行查询操作，从主库中更新，实现读写分离，降低主库的访问压力</strong>。<br>3.<strong>可以在从库中执行备份，以避免备份期间影响主库的服务</strong>。  </p>
+]]></content>
+      <categories>
+        <category>数据库学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>mysql锁和sql技巧</title>
     <url>/2020/09/02/mysql%E9%94%81%E5%92%8Csql%E6%8A%80%E5%B7%A7/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍mysql锁相关的知识以及一些sql技巧。mysql锁分为表锁和行锁，会对MyISAM表锁和InnoDB行锁分别进行介绍，在sql技巧中会讲解正则表达式和一些常见函数的使用。</p>
