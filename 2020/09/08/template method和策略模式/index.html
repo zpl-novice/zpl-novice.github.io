@@ -46,19 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="摘要:从本篇开始将进入到数据结构与算法的学习。前面已经讲解了C++的相关知识，使我们有了编写程序解决问题的能力。然而面对同一个问题，可能有很多种的解决方法，每种方法的效率也不相同。学会了数据结构与算法，才能使我们的程序更加健壮，更加具有效率。本篇将会对数据结构与算法进行一下简单介绍。">
+  <meta name="description" content="摘要：本篇将要讲解设计模式中的template method和策略模式，它们属于组件协作模式，其中Template Method模式是一种非常基础性的设计模式，在面向对象系统中有着大量的应用。而策略模式为组件提供了一系列可重用的算法，从而可以使得类型在运行时方便地根据需要在各个算法之间进行切换。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构与算法初识">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%9D%E8%AF%86/index.html">
+<meta property="og:title" content="template method和策略模式">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/09/08/template%20method%E5%92%8C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要:从本篇开始将进入到数据结构与算法的学习。前面已经讲解了C++的相关知识，使我们有了编写程序解决问题的能力。然而面对同一个问题，可能有很多种的解决方法，每种方法的效率也不相同。学会了数据结构与算法，才能使我们的程序更加健壮，更加具有效率。本篇将会对数据结构与算法进行一下简单介绍。">
+<meta property="og:description" content="摘要：本篇将要讲解设计模式中的template method和策略模式，它们属于组件协作模式，其中Template Method模式是一种非常基础性的设计模式，在面向对象系统中有着大量的应用。而策略模式为组件提供了一系列可重用的算法，从而可以使得类型在运行时方便地根据需要在各个算法之间进行切换。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-24T05:22:33.397Z">
-<meta property="article:modified_time" content="2020-02-28T07:41:28.430Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/08/wQzVN6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/08/wQzFBR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/08/wQzEAx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/08/wQzkH1.png">
+<meta property="article:published_time" content="2020-09-08T11:09:41.492Z">
+<meta property="article:modified_time" content="2020-09-08T11:27:28.650Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/08/wQzVN6.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%9D%E8%AF%86/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/09/08/template%20method%E5%92%8C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
 
 
 <script id="page-configurations">
@@ -70,7 +75,7 @@
   };
 </script>
 
-  <title>数据结构与算法初识 | zpl-novice</title>
+  <title>template method和策略模式 | zpl-novice</title>
   
 
 
@@ -200,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%9D%E8%AF%86/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/09/08/template%20method%E5%92%8C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数据结构与算法初识
+          template method和策略模式
         </h1>
 
         <div class="post-meta">
@@ -222,24 +227,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-02-24 13:22:33" itemprop="dateCreated datePublished" datetime="2020-02-24T13:22:33+08:00">2020-02-24</time>
+              <time title="创建时间：2020-09-08 19:09:41 / 修改时间：19:27:28" itemprop="dateCreated datePublished" datetime="2020-09-08T19:09:41+08:00">2020-09-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-28 15:41:28" itemprop="dateModified" datetime="2020-02-28T15:41:28+08:00">2020-02-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
             </span>
@@ -250,7 +249,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
+              <span>3.5k</span>
             </span>
 
         </div>
@@ -262,56 +261,179 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要:从本篇开始将进入到数据结构与算法的学习。前面已经讲解了C++的相关知识，使我们有了编写程序解决问题的能力。然而面对同一个问题，可能有很多种的解决方法，每种方法的效率也不相同。学会了数据结构与算法，才能使我们的程序更加健壮，更加具有效率。本篇将会对数据结构与算法进行一下简单介绍。</p>
+        <p>摘要：本篇将要讲解设计模式中的template method和策略模式，它们属于组件协作模式，其中Template Method模式是一种非常基础性的设计模式，在面向对象系统中有着大量的应用。而策略模式为组件提供了一系列可重用的算法，从而可以使得类型在运行时方便地根据需要在各个算法之间进行切换。  </p>
 <a id="more"></a>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。在计算机科学的发展过程中，数据结构也随之发展。程序设计中常用的数据结构包括如下几个：<br>数组(Array)、栈( Stack)、队列(Queue)、链表(List)、树(Tree)、图(Graph)、堆(Heap)、散列表(Hash)。<br>后续的学习中会对这些数据结构一一介绍。 </p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>算法是用来操作数据结构的。举个例子，设有一组N个数而要确定其中的第k个最大者，这种问题为选择问题。我们编写一个程序来解决这个问题是很简单的。其中一个解法是将这N个数读进一个数组中，再通过某种简单的算法，比如冒泡排序法，以递减顺序将数组排序，然后返回位置k上的元素。<br>稍微好一点的算法可以先把前k个元素读入数组并(以递减的顺序)对其排序。然后，剩下的元素再逐个读入。当新元素被读到时，如果它小于数组中的第k个元素则忽略之，否则就将其放到数组中的正确位置上，同时将原数组中的最后一个元素挤出数组。当算法终止时，位十第k个位置上的元素作为答案返回。<br>那么哪个算法更好？两个算法都足够好吗？使用3000万个元素的随机文件和k=15000000进行模拟指出，两个算法在合理的时间量内均不能结束计算;每种算法都需要计算机处理若干天才能算完(不过最终还是给出了正确的答案)。在后面会讨论另一种算法，该算法将在1秒种左右给出问题的解。因此，虽然我们提出的两个算法都能算出结果，但是它们不能看作是好的算法，因为对于第三种算法能够在合理的时间内处理的输入数据量而言，这两种算法是完全不切实际的。<br>同一个问题的不同解决方法会花费的时间，内存各不相同。即使计算机在不停进步，有些算法依然需要花费大量时间，因此需要找到最优效率的算法。</p>
-<h3 id="递归和迭代算法"><a href="#递归和迭代算法" class="headerlink" title="递归和迭代算法"></a>递归和迭代算法</h3><p>为了不使本篇全部都是概念理论上的内容，在这里我要讲一下递归和迭代算法。递归算法是非常有用的算法，在后续的学习中，它会被非常频繁的使用。递归算法在计算机科学中是指一种通过重复将问题分解为同类的子问题而解决问题的方法。一个用其自身来定义的函数就称为递归的。递归的基本法则为：<br>1.基准情形。必须要有某些基准的情形，它们不用递归就能求解。<br>2.要有进展。对于那些要被递归求解的情形，递归调用必须总能够朝着一个基准情形进展。<br>3.设计法则。假设所有的递归调用都能运行。<br>4.合成效益法则。在求解一个问题的同一实例时，切勿在不同的递归调用中做重复性的工作。<br>举个例子，斐波那契数列，它的第n项等于第n-1和第n-2项的和。递归算法如下：  </p>
-<pre><code>int q(int n)
-{
-    if(n==1)
-    {
-    return 1;
+<p>组件协作模式：<br>现代软件专业分工之后的第一个结果是“框架和应用程序之间的划分”，<strong>“组件协作”模式通过晚期绑定，来实现框架和应用间的松耦合</strong>，是二者之间协作时常用的模式。  </p>
+<h2 id="template-method"><a href="#template-method" class="headerlink" title="template method"></a>template method</h2><p>在软件构建过程中，对于某一项任务，它常常有<strong>稳定的整体操作结构，但各个子步骤却有很多改变的需求</strong>，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？<br>示例，第一种写法：  </p>
+<pre><code>//程序库开发人员
+class library{
+    public:
+    void step1(){
+    //…
     }
-    if(n==2)
-    {
-    return 1;
+    void step3(){
+    //…
     }
-    else
-    {
-    return (q(n-1)+q(n-2));
+    void step5(){
+    //…
     }
 }
-int main()
-{
-    int n;
-    cin&gt;&gt;n;
-    for(int i=1;i&lt;n+1;i++)
-    cout&lt;&lt;q(i)&lt;&lt;&quot; &quot;;
-    return 0;
-}</code></pre><p>从代码中可以看到，基准情形就是n=1和n=2的情况，发展情形就是在n&gt;2时，会调用它的前两项，最终调用到基准情形。在函数当中调用了它本身。假设n=4，它会返回q(3)+q(2)的值，当运行到q(3)时，会调用函数自身，返回q(2)+q(1)的值，然后q(2)、q(1)又调用函数，返回1，最终求得q(3)为2，这时再去求解q(2)，最终q(4)为3。<br><strong>递归是重复调用函数本身，而迭代则是重复函数的一部分</strong>。上述斐波那契数列同样可以用迭代算法来写，如下：  </p>
-<pre><code>int fib(int n)
-{
-    int i;
-    vector&lt;int&gt; v(n);
-    v[0]=0;
-    v[1]=1;
-    v[2]=1;
-    i=3;
-    while(i&lt;=n)
-    {
-        v[i]=v[i-1]+v[i-2];
-        i++;
+//应用程序开发人员
+class application{
+    public:
+    bool step2(){
+    //…
     }
-    return v[n];    
-}
+    void step4(){
+    //…
+    }
+    }
+
 int main()
 {
-    int n;
-    cin&gt;&gt;n;
-        cout&lt;&lt;fib(n);
+    library lib();
+    application app();
+    lib.step1();
+    if(app.step2){
+    lib.step3();
+    }
+    for(i=0;i&lt;4;i++){
+     app.step4();
+    }
+    Lib.step5();
     return 0;
-}</code></pre><p>将斐波那契数列存放在数组中，通过while循环来迭代求解。一般情况下，迭代的执行速度比递归快。</p>
+}</code></pre><p>第二种写法：</p>
+<pre><code>//程序库开发人员
+class Library
+{
+  public:
+    //稳定 template method
+    void Run()
+        {
+        Step1();
+        if (Step2())
+        { //支持变化 ==&gt; 虚函数的多态调用
+            Step3();
+        }
+        for (int i = 0; i &lt; 4; i++)
+        {
+            Step4(); //支持变化 ==&gt; 虚函数的多态调用
+        }
+        Step5();
+        }
+    virtual ~Library() {}
+  protected:
+        void Step1()
+        { //稳定
+        cout &lt;&lt; &quot;Step1&quot; &lt;&lt; endl;
+    }
+    void Step3()
+    { //稳定
+        cout &lt;&lt; &quot;Step3&quot; &lt;&lt; endl;
+        }
+        void Step5()
+        {   //稳定
+        cout &lt;&lt; &quot;Step5&quot; &lt;&lt; endl;
+        }
+        virtual bool Step2() = 0; //变化
+        virtual void Step4() = 0; //变化
+};
+//应用程序开发人员
+class Application : public Library
+{
+      protected:
+    virtual bool Step2()
+    {
+        //... 子类重写实现
+        cout &lt;&lt; &quot;override Step2&quot; &lt;&lt; endl;
+        return true;
+    }
+    virtual void Step4()
+    {
+        //... 子类重写实现
+        cout &lt;&lt; &quot;override Step4&quot; &lt;&lt; endl;
+    }
+};
+int main()
+{
+    Library *pLib = new Application();
+    pLib-&gt;Run();
+    delete pLib;
+}</code></pre><p>对于第一种：<br><img src="https://s1.ax1x.com/2020/09/08/wQzVN6.png" alt="wQzVN6.png"><br>因为library肯定是先于application写好的，后面写的application调用前面的library，<strong>晚绑早，称为早绑定</strong>。<br><img src="https://s1.ax1x.com/2020/09/08/wQzFBR.png" alt="wQzFBR.png"><br>对于第二种：<br><img src="https://s1.ax1x.com/2020/09/08/wQzEAx.png" alt="wQzEAx.png"><br>这样就变成先写好的library绑定后面写的application，<strong>通过虚函数调用的方式，早绑晚，称为晚绑定</strong>。<br><img src="https://s1.ax1x.com/2020/09/08/wQzkH1.png" alt="wQzkH1.png"><br>模式定义：定义一个操作中的<strong>算法的骨架 (稳定)</strong> ，而将一些步骤<strong>延迟 (变化)</strong> 到子类中。 Template Method使得子类可以不改变(复用)一个算法的结构即可重定义(override 重写)该算法的某些特定步骤。 ——《 设计模式》 GoF<br>将<strong>稳定的代码写成非虚函数，变化的代码写成虚函数，稳定中包含着变化</strong>。<br>总结：<br><strong>Template Method模式是一种非常基础性的设计模式，在面向对象系统中有着大量的应用。它用最简洁的机制（虚函数的多态性） 为很多应用程序框架提供了灵活的扩展点，是代码复用方面的基本实现结构</strong>。<br>除了可以灵活应对子步骤的变化外， “不要调用我，让我来调用你” 的反向控制结构是Template Method的典型应用。<br>在具体实现方面，被Template Method调用的虚方法可以具有实现，也可以没有任何实现（抽象方法、纯虚方法），但一般推荐将它们设置为protected方法。  </p>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>在软件构建过程中，<strong>某些对象使用的算法可能多种多样，经常改变</strong>，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。<br>如何在运行时<strong>根据需要透明地更改对象的算法？将算法与对象本身解耦</strong>，从而避免上述问题？<br>示例，第一种写法：  </p>
+<pre><code>enum TaxBase {
+    CN_Tax,
+    US_Tax,
+    DE_Tax,
+    FR_Tax    //更改
+};
+class SalesOrder{
+        TaxBase tax;
+public:
+    double CalculateTax(){
+        //...
+        if (tax == CN_Tax){
+            //CN***********
+        }
+    else if (tax == US_Tax){
+        //US***********
+    }
+    else if (tax == DE_Tax){
+        //DE***********
+    }
+    else if (tax == FR_Tax){  //¸更改
+        //..
+    }
+    //...
+     }
+};</code></pre><p>若<strong>新添加一种枚举类型，法国。则需要在类里进行更改，增加代价</strong>。可改写为：   </p>
+<pre><code>class TaxStrategy{
+public:
+    virtual double Calculate(const Context&amp; context)=0;
+       virtual ~TaxStrategy(){}
+};
+class CNTax : public TaxStrategy{
+public:
+    virtual double Calculate(const Context&amp; context){
+        //***********
+    }
+};
+class USTax : public TaxStrategy{
+public:
+    virtual double Calculate(const Context&amp; context){
+        //***********
+    }
+};
+class DETax : public TaxStrategy{
+public:
+    virtual double Calculate(const Context&amp; context){
+        //***********
+    }
+}
+//*********************************
+class FRTax : public TaxStrategy{
+public:
+    virtual double Calculate(const Context&amp; context){
+        //.........
+    }
+class SalesOrder{
+private:
+    TaxStrategy* strategy;
+public:
+    SalesOrder(StrategyFactory* strategyFactory){
+        this-&gt;strategy = strategyFactory-&gt;NewStrategy();
+    }
+    ~SalesOrder(){
+        delete this-&gt;strategy;
+    }
+    public double CalculateTax(){
+        //...
+        Context context();
+        double val = 
+            strategy-&gt;Calculate(context); //多态调用
+        //...
+    }
+};</code></pre><p>可见<strong>第二种方法遵循了开放封闭原则，而第一种方法打破了开放封闭原则，违背了复用性</strong>。<br>模式定义：<br>定义一系列算法，<strong>把它们一个个封装起来，并且使它们可互相替换（变化）</strong>。该模式使得算法可独立于使用它的客户程序(稳定)而变化（扩展，子类化）。 ——《设计模式》 GoF<br>总结：<br><strong>Strategy及其子类为组件提供了一系列可重用的算法，从而可以使得类型在运行时方便地根据需要在各个算法之间进行切换</strong>。<br>Strategy模式提供了用条件判断语句以外的另一种选择，<strong>消除条件判断语句，就是在解耦合。含有许多条件判断语句的代码通常都需要Strategy模式。</strong><br>如果Strategy对象没有实例变量，那么各个上下文可以共享同一个Strategy对象，从而节省对象开销。</p>
 
     </div>
 
@@ -327,7 +449,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/24/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%9D%E8%AF%86/" title="数据结构与算法初识">https://zpl-novice.github.io/2020/02/24/数据结构与算法初识/</a>
+    <a href="https://zpl-novice.github.io/2020/09/08/template%20method%E5%92%8C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="template method和策略模式">https://zpl-novice.github.io/2020/09/08/template method和策略模式/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -344,13 +466,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/22/%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="prev" title="预处理器和多线程">
-      <i class="fa fa-chevron-left"></i> 预处理器和多线程
+    <a href="/2020/09/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" rel="prev" title="设计模式和设计原则">
+      <i class="fa fa-chevron-left"></i> 设计模式和设计原则
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/26/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" rel="next" title="算法分析相关概念">
-      算法分析相关概念 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -410,7 +529,7 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构"><span class="nav-number">1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法"><span class="nav-number">2.</span> <span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#递归和迭代算法"><span class="nav-number">2.1.</span> <span class="nav-text">递归和迭代算法</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#template-method"><span class="nav-number">1.</span> <span class="nav-text">template method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#策略模式"><span class="nav-number">2.</span> <span class="nav-text">策略模式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
