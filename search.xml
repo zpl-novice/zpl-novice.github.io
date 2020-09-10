@@ -1,6 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>装饰模式和桥模式</title>
+    <url>/2020/09/10/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%A1%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>本篇将要讲解第二类模式–单一职责模式，其中包含装饰模式和桥模式。该模式的主要特点是对责任进行划分，将多个维度的变化进行分离，以组合代替继承来减少子类的数量膨胀。</p>
+<a id="more"></a>
+<p>单一职责模式：<br>在软件组件的设计中，如果<strong>责任划分的不清晰，使用继承得到的结果往往是随着需求的变化，子类急剧膨胀，同时充斥着重复代码，这时候的关键是划分责任</strong>。<br><strong>将多个维度的变化进行分离各自独立变化，再组合，来解决继承过多，责任不清晰</strong>。  </p>
+<h2 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h2><p>在某些情况下我们可能会“<strong>过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性； 并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀</strong>。<br>如何使“对象功能的扩展”能够根据需要来<strong>动态地实现</strong>？同时避免“扩展功能的增多”带来的子类膨胀问题？从而使得任何“功能扩展变化”所导致的影响将为最低？<br>示例，对于一个流操作，有文件流、网络流、内存流，其中每个流又有多种操作，如果全部使用继承，就会使得子类急剧膨胀，同时缺乏灵活性。<br><img src="https://s1.ax1x.com/2020/09/10/wYJdj1.png" alt="wYJdj1.png"><br>而当我们<strong>使用组合而非继承的手法，就可以根据需要扩展多个功能，同时避免了继承带来的子类过多</strong>。<br><img src="https://s1.ax1x.com/2020/09/10/wYJacR.png" alt="wYJacR.png"><br><strong>动态（组合）地给一个对象增加一些额外的职责。就增加功能而言，Decorator模式比生成子类（继承）更为灵活（消除重复代码 &amp; 减少子类个数）</strong>。 ——《设计模式》GoF<br>总结：<br>通过<strong>采用组合而非继承的手法， Decorator模式实现了在运行时动态扩展对象功能的能力，而且可以根据需要扩展多个功能。 避免了使用继承带来的“灵活性差”和“多子类衍生问题”</strong>。<br>Decorator类在接口上表现为is-a Component的继承关系，即Decorator类继承了Component类所具有的接口。 但在实现上又表现为has-a Component的组合关系，即Decorator类又使用了另外一个Component类。<br>Decorator模式的目的并非解决“多子类衍生的多继承”问题，<strong>Decorator模式应用的要点在于解决“主体类在多个方向上的扩展功能”——是为“装饰”的含义</strong>。</p>
+<h2 id="bridge桥模式"><a href="#bridge桥模式" class="headerlink" title="bridge桥模式"></a>bridge桥模式</h2><p>由于某些类型的固有的实现逻辑，使得它们具有两个变化的维度，乃至多个纬度的变化。<br>如何应对这种“多维度的变化”？如何利用面向对象技术来使得类型可以轻松地沿着两个乃至多个方向变化，而不引入额外的复杂度？<br>示例：图形有多种形状，如矩形、三角形、圆形等，而每个形状又有多个颜色，如白色、黑色、蓝色等，若新添加一个形状，还要再扩展其颜色，使用继承的方式会添加大量子类，因此要将形状和颜色分离开，进行组合。<br><strong>桥模式与上面的装饰者模式相似，解决了继承造成的子类膨胀，同时实现了多维度变化</strong>。<br><strong>将抽象部分(业务功能)与实现部分(平台实现)分离，使它们都可以独立地变化</strong>。 ——《设计模式》GoF<br>总结：<br>Bridge模式使用“对象间的组合关系”解耦了抽象和实现之间固有的绑定关系，<strong>使得抽象和实现可以沿着各自的维度来变化。所谓抽象和实现沿着各自纬度的变化，即“子类化”它们</strong>。<br>Bridge模式有时候类似于多继承方案，但是多继承方案往往违背单一职责原则（即一个类只有一个变化的原因），复用性比较差。Bridge模式是比多继承方案更好的解决方法。<br><strong>Bridge模式的应用一般在“两个非常强的变化维度”，有时一个类也有多于两个的变化维度，这时可以使用Bridge的扩展模式</strong>。  </p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>观察者模式</title>
+    <url>/2020/09/10/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>摘要：观察者模式也属于组件协作模式，它主要用来解决对象间的通知依赖关系。</p>
+<a id="more"></a>
+<p>在软件构建过程中，我们需要<strong>为某些对象建立一种“通知依赖关系” ——一个对象（目标对象）的状态发生改变，所有的依赖对象（观察者对象）都将得到通知</strong>。如果这样的依赖关系过于紧密，将使软件不能很好地抵御变化。<br>使用面向对象技术，可以<strong>将这种依赖关系弱化，并形成一种稳定的依赖关系</strong>。从而实现软件体系结构的松耦合。<br>示例，文件分割系统：  </p>
+<pre><code>class MainForm : public Form
+{
+    TextBox* txtFilePath;
+    TextBox* txtFileNumber;
+    ProgressBar* progressBar;    //更改
+public:
+    void Button1_Click(){
+        string filePath = txtFilePath-&gt;getText();
+        int number = atoi(txtFileNumber-&gt;getText().c_str());
+        FileSplitter splitter(filePath, number, progressBar);
+        splitter.split();
+    }
+};
+class FileSplitter
+{
+    string m_filePath;
+    int m_fileNumber;
+    ProgressBar* m_progressBar;    //更改
+public:
+    FileSplitter(const string&amp; filePath, int fileNumber, ProgressBar* progressBar) :
+        m_filePath(filePath), 
+        m_fileNumber(fileNumber),
+        m_progressBar(progressBar){
+    }
+    void split(){
+        //1.读取大文件
+        //2.分批次向小文件中写入
+        for (int i = 0; i &lt; m_fileNumber; i++){
+            //...
+            float progressValue = m_fileNumber;
+            progressValue = (i + 1) / progressValue;
+            m_progressBar-&gt;setValue(progressValue);    //更新进度条
+        }
+    }
+};</code></pre><p>假设现<strong>增加需求，在分割文件时增加进度条显示，则需要添加。如果按代码所示添加，可以发现违背了上面所讲的第一个原则—依赖倒置原则</strong>。抽象不应该依赖于细节实现。可将代码改写为：  </p>
+<pre><code>class MainForm : public Form, public IProgress
+{
+    TextBox* txtFilePath;
+    TextBox* txtFileNumber;
+    ProgressBar* progressBar;
+public:
+    void Button1_Click(){
+        string filePath = txtFilePath-&gt;getText();
+        int number = atoi(txtFileNumber-&gt;getText().c_str());
+        ConsoleNotifier cn;
+        FileSplitter splitter(filePath, number);
+        splitter.addIProgress(this); 
+        splitter.addIProgress(&amp;cn); 
+        splitter.split();
+        splitter.removeIProgress(this);
+    }
+    virtual void DoProgress(float value){
+        progressBar-&gt;setValue(value);
+    }
+};
+class ConsoleNotifier : public IProgress {
+public:
+    virtual void DoProgress(float value){
+        cout &lt;&lt; &quot;.&quot;;
+    }
+};
+class IProgress{
+public:
+    virtual void DoProgress(float value)=0;
+    virtual ~IProgress(){}
+};
+class FileSplitter
+{
+    string m_filePath;
+    int m_fileNumber;
+    List&lt;IProgress*&gt;  m_iprogressList; // 抽象通知机制，支持多个观察者
+public:
+    FileSplitter(const string&amp; filePath, int fileNumber) :
+        m_filePath(filePath), 
+        m_fileNumber(fileNumber){
+    } 
+    void split(){
+        //1.读取大文件
+        //2.分批次向小文件中写入
+        for (int i = 0; i &lt; m_fileNumber; i++){
+            //...
+            float progressValue = m_fileNumber;
+            progressValue = (i + 1) / progressValue;
+            onProgress(progressValue);//发送通知
+        }
+    }
+    void addIProgress(IProgress* iprogress){
+        m_iprogressList.push_back(iprogress);
+    }
+    void removeIProgress(IProgress* iprogress){
+        m_iprogressList.remove(iprogress);
+    }
+protected:
+    virtual void onProgress(float value){
+        List&lt;IProgress*&gt;::iterator itor=m_iprogressList.begin();
+        while (itor != m_iprogressList.end() )
+            (*itor)-&gt;DoProgress(value); //更新进度条
+            itor++;
+        }
+    }
+};</code></pre><p><strong>将通知控件变成一个抽象通知机制，这样就完成了实现细节到抽象的转变。被观察对象自身包含一个容器来存放观察者对象，当被观察者自身发生改变时通知容器内所有的观察者对象自动更新</strong>。<br><strong>定义对象间的一种一对多（变化）的依赖关系，以便当一个对象(Subject)的状态发生改变时，所有依赖于它的对象都得到通知并自动更新</strong>。 ——《设计模式》 GoF<br>总结：<br>使用面向对象的抽象，<strong>Observer模式使得我们可以独立地改变目标与观察者，从而使二者之间的依赖关系达致松耦合</strong>。<br>目标发送通知时，无需指定观察者，通知（可以携带通知信息作为参数）会自动传播。<br>观察者自己决定是否需要订阅通知，目标对象对此一无所知。<br>Observer模式是基于事件的UI框架中非常常用的设计模式，也是MVC模式的一个重要组成部分。  </p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+  </entry>
+  <entry>
     <title>template method和策略模式</title>
     <url>/2020/09/08/template%20method%E5%92%8C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>摘要：本篇将要讲解设计模式中的template method和策略模式，它们属于组件协作模式，其中Template Method模式是一种非常基础性的设计模式，在面向对象系统中有着大量的应用。而策略模式为组件提供了一系列可重用的算法，从而可以使得类型在运行时方便地根据需要在各个算法之间进行切换。  </p>
