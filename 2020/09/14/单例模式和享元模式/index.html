@@ -46,25 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="摘要：上篇讲解了套接字实现C&#x2F;S模型服务器端，本篇将继续介绍客户端的实现，以及如何对它们进行出错处理。除此之外，将进入TCP的学习，讲解TCP的三次握手原理。">
+  <meta name="description" content="摘要：本篇将介绍对象性能模式，主要包括单例模式和享元模式。该种模式主要用来解决面向对象所带来的成本问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux网络编程3">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/07/09/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B3/index.html">
+<meta property="og:title" content="单例模式和享元模式">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/09/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：上篇讲解了套接字实现C&#x2F;S模型服务器端，本篇将继续介绍客户端的实现，以及如何对它们进行出错处理。除此之外，将进入TCP的学习，讲解TCP的三次握手原理。">
+<meta property="og:description" content="摘要：本篇将介绍对象性能模式，主要包括单例模式和享元模式。该种模式主要用来解决面向对象所带来的成本问题。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yanxuan.nosdn.127.net/180bf476341c4b179b3440d805bd6c0a.png">
-<meta property="og:image" content="https://ae01.alicdn.com/kf/Hfea58fcc3e45492789c8124865a09f825.jpg">
-<meta property="og:image" content="https://yanxuan.nosdn.127.net/dbc2adb01dbd19b0cd6335520f99acc7.png">
-<meta property="og:image" content="https://yanxuan.nosdn.127.net/77e7671bb4c01f004ceec7b1b009dae5.png">
-<meta property="og:image" content="https://yanxuan.nosdn.127.net/834e629709a9fae32df89eb6f6ba270f.png">
-<meta property="article:published_time" content="2020-07-09T06:20:51.699Z">
-<meta property="article:modified_time" content="2020-07-17T06:27:29.895Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/14/wsVMkT.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/14/wsVu7V.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/14/wsVQtU.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/14/wsVlhF.png">
+<meta property="article:published_time" content="2020-09-14T14:09:38.388Z">
+<meta property="article:modified_time" content="2020-09-14T14:47:11.764Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yanxuan.nosdn.127.net/180bf476341c4b179b3440d805bd6c0a.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/14/wsVMkT.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/07/09/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B3/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/09/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">
 
 
 <script id="page-configurations">
@@ -76,7 +75,7 @@
   };
 </script>
 
-  <title>Linux网络编程3 | zpl-novice</title>
+  <title>单例模式和享元模式 | zpl-novice</title>
   
 
 
@@ -206,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/07/09/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B3/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/09/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -219,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux网络编程3
+          单例模式和享元模式
         </h1>
 
         <div class="post-meta">
@@ -228,24 +227,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-07-09 14:20:51" itemprop="dateCreated datePublished" datetime="2020-07-09T14:20:51+08:00">2020-07-09</time>
+              <time title="创建时间：2020-09-14 22:09:38 / 修改时间：22:47:11" itemprop="dateCreated datePublished" datetime="2020-09-14T22:09:38+08:00">2020-09-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-17 14:27:29" itemprop="dateModified" datetime="2020-07-17T14:27:29+08:00">2020-07-17</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux学习</span>
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
             </span>
@@ -256,7 +249,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>872</span>
+              <span>1.2k</span>
             </span>
 
         </div>
@@ -268,12 +261,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：上篇讲解了套接字实现C/S模型服务器端，本篇将继续介绍客户端的实现，以及如何对它们进行出错处理。除此之外，将进入TCP的学习，讲解TCP的三次握手原理。  </p>
+        <p>摘要：本篇将介绍对象性能模式，主要包括单例模式和享元模式。该种模式主要用来解决面向对象所带来的成本问题。</p>
 <a id="more"></a>
-<h2 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h2><p><img src="https://yanxuan.nosdn.127.net/180bf476341c4b179b3440d805bd6c0a.png" alt=""><br>与流程图相同，在客户端创建套接字，但不用在bind绑定，而是用系统默认绑定，使用connect函数连接服务器的IP和端口，将键盘输入读取写到服务器中，经过服务器的转换再读出。<br>注意，<strong>如果先关闭服务器，再关闭客户端，就会造成端口被占用，无法释放，这样下次启动时就会出错</strong>。可以使用<strong>检查返回值的方式进行出错查找，但影响总体逻辑。还可以使用错误处理函数，将所有错误与原函数封装成一个函数</strong>。<br>以socket函数为例，对其<strong>重新进行封装，将错误处理封装进去，得到新的Socket函数</strong>。这样在服务器端和客户端主程序里，逻辑几乎不受影响。<br><img src="https://ae01.alicdn.com/kf/Hfea58fcc3e45492789c8124865a09f825.jpg" alt=""><br>需要注意的是还要定义一个头文件。<br><img src="https://yanxuan.nosdn.127.net/dbc2adb01dbd19b0cd6335520f99acc7.png" alt="">  </p>
-<h2 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h2><p>在前面讲解数据通信时，<strong>TCP建立连接后，路由器的选择固定，不再发生改变，因此可靠。而UDP每次数据传输路由器可能会发生改变，因此不可靠</strong>。<br><img src="https://yanxuan.nosdn.127.net/77e7671bb4c01f004ceec7b1b009dae5.png" alt="">  </p>
-<p><strong>TCP在建立连接时需要进行三次握手，断开连接时则需要四次握手</strong>。通讯过程如下所示：<br><img src="https://yanxuan.nosdn.127.net/834e629709a9fae32df89eb6f6ba270f.png" alt=""><br>1.<strong>客户端首先向服务器发送一个SYN的标志位（用于请求连接）和一个0字节的数据包（这里包号为1000）</strong>。<br>2.<strong>服务器收到后作出应答，应答的过程也是向客户端连接请求，因此发送SYN，8000（0），ACK是对SYN标志位的应答，1001则表示收到了客户端发送的数据包，1000加上SYN标志位为1001</strong>。<br>3.<strong>客户端再对服务器的连接请求作出回应，发送ACK，8001</strong>。  </p>
-<p><strong>TCP三次握手主要用来建立服务器和客户端的连接，确保连接畅通，可靠</strong>。<br>接下来数据传输过程：<br><strong>客户端向服务器发送一个20字节的数据包1001，同时再对服务器的数据包8000作出应答，ACK 8001。<br>服务器接收到客户端的数据包以后，发送回一个10字节的数据包8001，同时作出应答，ACK 1021</strong>。<br><strong>客户端接收到数据包以后，再对服务器作出应答</strong>，ACK 8011。<br>当然，不一定是客户端发送，服务器返回这一固定顺序。<strong>客户端可以多次发送，然后服务器返回</strong>。  </p>
+<p><strong>对象性能模式：面向对象很好的解决了抽象的问题，但是必不可免的要付出一定的代价。对于通常情况来讲，面向对象的成本大都可以忽略不计。但是某些情况，面向对象所带来的成本必须谨慎处理</strong>。  </p>
+<h2 id="单例模式（singleton）"><a href="#单例模式（singleton）" class="headerlink" title="单例模式（singleton）"></a>单例模式（singleton）</h2><p>在软件系统中，经常有这样一些特殊的类，必须保证<strong>它们在系统中只存在一个实例，才能确保它们的逻辑正确性、以及良好的效率</strong>。<br>如何<strong>绕过常规的构造器，提供一种机制来保证一个类只有一个实例</strong>？<br>这应该是类设计者的责任，而不是使用者的责任。<br><strong>将构造函数定义为私有变量，同时再定义静态变量，就可以实现单例模式</strong>。<br><a href="https://imgchr.com/i/wsVMkT" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVMkT.png" alt="wsVMkT.png"></a><br><strong>在静态函数中判断系统是否已经有这个单例，如果有则返回，如果没有则创建</strong>。<br><a href="https://imgchr.com/i/wsVu7V" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVu7V.png" alt="wsVu7V.png"></a><br>注意当<strong>有多线程时，如上所示将不安全，有可能多个线程都执行创建对象。</strong>为了解决这个问题，可以<strong>加锁</strong>：<br><a href="https://imgchr.com/i/wsVQtU" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVQtU.png" alt="wsVQtU.png"></a><br>然而，<strong>当都是读的时候，即已经创建完对象后，后续线程每次访问都要加锁解锁，耗费代价太大，在高并发时尤为严重，解决这个问题，可以使用双检查锁，这样读取操作时就不再加锁</strong>：<br><a href="https://imgchr.com/i/wsVlhF" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVlhF.png" alt="wsVlhF.png"></a><br>但是，本来<strong>cpu会先分配内存，再初始化该内存，最后让指针指向该内存返回，但由于内存读写reorder会使得先把指针指向内存，再给内存赋值，这样第二个线程判断不为空会直接返回指针，然而此时对象并未初始化完成</strong>。要解决这个问题，需要用<strong>volatile，来构建内存屏障，屏蔽reorder</strong>。不用volatile，很容易出问题，不能使用。<br><strong>保证一个类仅有一个实例，并提供一个该实例的全局访问点。</strong>——《设计模式》GoF<br>总结：<br>Singleton模式中的实例构造器可以设置为protected以允许子类派生。<br>Singleton模式一般不要支持拷贝构造函数和Clone接口，因为这有可能导致多个对象实例，与Singleton模式的初衷违背。<br>如何实现多线程环境下安全的Singleton？注意对双检查锁的正确实现。  </p>
+<h2 id="享元模式（flyweight）"><a href="#享元模式（flyweight）" class="headerlink" title="享元模式（flyweight）"></a>享元模式（flyweight）</h2><p><strong>在软件系统采用纯粹对象（一切皆对象）方案的问题在于大量细粒度的对象会很快充斥在系统中，从而带来很高的运行时代价——主要指内存需求方面的代价</strong>。<br>如何在避免大量细粒度对象问题的同时，让外部客户程序仍然能够透明地使用面向对象的方式来进行操作？<br><strong>运用共享技术有效地支持大量细粒度的对象</strong>。——《设计模式》GoF<br>如<strong>线程池、字符串缓存池等。在创建对象时，享元池中如果有则返回，如果没有则创建该对象，将其放入享元池中并返回</strong>。<br>总结：<br>面向对象很好地解决了抽象性的问题，但是作为yield运行机器中的程序实体，我们需要考虑<strong>对象的代价问题</strong>， Flyweight主要解决面向对象的大家问题，一般不触及面向对象的抽象性问题。<br>Flyweight采用<strong>对象共享</strong>的做法来降低系统中对象的个数，从而降低细粒度对象给系统带来的压力。在具体实现方面，要注意对象状态的处理。<br><strong>对象的数量太大从而导致对象内存开销加大——什么样的数量才算大？</strong>这需要我们仔细的根据具体应用情况进行评估，而不能凭空臆断。    </p>
 
     </div>
 
@@ -289,7 +281,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/07/09/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B3/" title="Linux网络编程3">https://zpl-novice.github.io/2020/07/09/Linux网络编程3/</a>
+    <a href="https://zpl-novice.github.io/2020/09/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" title="单例模式和享元模式">https://zpl-novice.github.io/2020/09/14/单例模式和享元模式/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -306,13 +298,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/07/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B2/" rel="prev" title="Linux网络编程2">
-      <i class="fa fa-chevron-left"></i> Linux网络编程2
+    <a href="/2020/09/12/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8Cbuilder%E6%A8%A1%E5%BC%8F/" rel="prev" title="工厂模式、抽象工厂、原型模式和builder模式">
+      <i class="fa fa-chevron-left"></i> 工厂模式、抽象工厂、原型模式和builder模式
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/07/11/Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B4/" rel="next" title="Linux网络编程4">
-      Linux网络编程4 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -372,7 +361,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端实现"><span class="nav-number">1.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP三次握手"><span class="nav-number">2.</span> <span class="nav-text">TCP三次握手</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式（singleton）"><span class="nav-number">1.</span> <span class="nav-text">单例模式（singleton）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#享元模式（flyweight）"><span class="nav-number">2.</span> <span class="nav-text">享元模式（flyweight）</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

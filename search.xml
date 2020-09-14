@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>单例模式和享元模式</title>
+    <url>/2020/09/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍对象性能模式，主要包括单例模式和享元模式。该种模式主要用来解决面向对象所带来的成本问题。</p>
+<a id="more"></a>
+<p><strong>对象性能模式：面向对象很好的解决了抽象的问题，但是必不可免的要付出一定的代价。对于通常情况来讲，面向对象的成本大都可以忽略不计。但是某些情况，面向对象所带来的成本必须谨慎处理</strong>。  </p>
+<h2 id="单例模式（singleton）"><a href="#单例模式（singleton）" class="headerlink" title="单例模式（singleton）"></a>单例模式（singleton）</h2><p>在软件系统中，经常有这样一些特殊的类，必须保证<strong>它们在系统中只存在一个实例，才能确保它们的逻辑正确性、以及良好的效率</strong>。<br>如何<strong>绕过常规的构造器，提供一种机制来保证一个类只有一个实例</strong>？<br>这应该是类设计者的责任，而不是使用者的责任。<br><strong>将构造函数定义为私有变量，同时再定义静态变量，就可以实现单例模式</strong>。<br><a href="https://imgchr.com/i/wsVMkT" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVMkT.png" alt="wsVMkT.png"></a><br><strong>在静态函数中判断系统是否已经有这个单例，如果有则返回，如果没有则创建</strong>。<br><a href="https://imgchr.com/i/wsVu7V" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVu7V.png" alt="wsVu7V.png"></a><br>注意当<strong>有多线程时，如上所示将不安全，有可能多个线程都执行创建对象。</strong>为了解决这个问题，可以<strong>加锁</strong>：<br><a href="https://imgchr.com/i/wsVQtU" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVQtU.png" alt="wsVQtU.png"></a><br>然而，<strong>当都是读的时候，即已经创建完对象后，后续线程每次访问都要加锁解锁，耗费代价太大，在高并发时尤为严重，解决这个问题，可以使用双检查锁，这样读取操作时就不再加锁</strong>：<br><a href="https://imgchr.com/i/wsVlhF" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/09/14/wsVlhF.png" alt="wsVlhF.png"></a><br>但是，本来<strong>cpu会先分配内存，再初始化该内存，最后让指针指向该内存返回，但由于内存读写reorder会使得先把指针指向内存，再给内存赋值，这样第二个线程判断不为空会直接返回指针，然而此时对象并未初始化完成</strong>。要解决这个问题，需要用<strong>volatile，来构建内存屏障，屏蔽reorder</strong>。不用volatile，很容易出问题，不能使用。<br><strong>保证一个类仅有一个实例，并提供一个该实例的全局访问点。</strong>——《设计模式》GoF<br>总结：<br>Singleton模式中的实例构造器可以设置为protected以允许子类派生。<br>Singleton模式一般不要支持拷贝构造函数和Clone接口，因为这有可能导致多个对象实例，与Singleton模式的初衷违背。<br>如何实现多线程环境下安全的Singleton？注意对双检查锁的正确实现。  </p>
+<h2 id="享元模式（flyweight）"><a href="#享元模式（flyweight）" class="headerlink" title="享元模式（flyweight）"></a>享元模式（flyweight）</h2><p><strong>在软件系统采用纯粹对象（一切皆对象）方案的问题在于大量细粒度的对象会很快充斥在系统中，从而带来很高的运行时代价——主要指内存需求方面的代价</strong>。<br>如何在避免大量细粒度对象问题的同时，让外部客户程序仍然能够透明地使用面向对象的方式来进行操作？<br><strong>运用共享技术有效地支持大量细粒度的对象</strong>。——《设计模式》GoF<br>如<strong>线程池、字符串缓存池等。在创建对象时，享元池中如果有则返回，如果没有则创建该对象，将其放入享元池中并返回</strong>。<br>总结：<br>面向对象很好地解决了抽象性的问题，但是作为yield运行机器中的程序实体，我们需要考虑<strong>对象的代价问题</strong>， Flyweight主要解决面向对象的大家问题，一般不触及面向对象的抽象性问题。<br>Flyweight采用<strong>对象共享</strong>的做法来降低系统中对象的个数，从而降低细粒度对象给系统带来的压力。在具体实现方面，要注意对象状态的处理。<br><strong>对象的数量太大从而导致对象内存开销加大——什么样的数量才算大？</strong>这需要我们仔细的根据具体应用情况进行评估，而不能凭空臆断。    </p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+  </entry>
+  <entry>
     <title>工厂模式、抽象工厂、原型模式和builder模式</title>
     <url>/2020/09/12/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8Cbuilder%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>摘要：本篇将要介绍对象创建模式，其中包括工厂模式、抽象工厂、原型模式和builder模式，主要用来绕开new，来避免对象创建（new）过程中所导致的紧耦合（依赖具体类），从而支持对象创建的稳定。</p>
