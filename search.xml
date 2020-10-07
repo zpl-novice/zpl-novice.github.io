@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币1</title>
+    <url>/2020/10/07/%E7%BF%BB%E7%A1%AC%E5%B8%811/</url>
+    <content><![CDATA[<p>本篇是翻硬币项目的第一篇，主要介绍该项目的目标以及实现方法。翻硬币游戏是基于QT图形界面开发的一款小游戏，内部设立各关关卡，通过正确的操作来通关，并配有音效，在实现该游戏基础上又对其进行拓展，加入登录界面，通过数据库来存储各用户账号信息。本篇将主要对QT开发软件进行介绍。项目具体实现在接下来会一一介绍。</p>
+<a id="more"></a>
+<p><strong>Qt是C++写的一个跨平台的应用框架，它可以用来图形化编程（GUI），同时通过调用库函数能够更好的使用C++</strong>。<br>qt的程序框架与我们平常所写的程序有一些区别，因为qt调用了QApplication应用程序类，所以在主函数里会首先声明一个该类的对象，然后进行用户自身程序的编写，最后通过一个exec函数调用，让程序一直执行，等待用户操作，如下所示：<br><img src="https://i.loli.net/2020/10/07/iGQmWpuJ54nxtKX.png" alt="qt1.png"><br>在12到17行是我们自己写的代码。其它框架保持不变。可以看到调用了QWidget，它是一个窗口基类，在QT中应用非常广泛，QT5的基本模块如下：<br><img src="https://i.loli.net/2020/10/07/6vgcCrQKlGeItd1.png" alt="qt2.png"><br>除此之外，还有按钮、文本框等都需要用到，若是自己编写程序，需要指定其父对象，若是通过ui界面来设计，会带来一些方便：<br><img src="https://i.loli.net/2020/10/07/WBVtLF4gPRhny6S.png" alt="qt3.png"><br>信号和槽：<br><strong>当有按钮后，需要对其按下作出响应。按钮按下会发出信号（信号类型通过帮助文档查找），接收信号并通过槽函数对其进行处理</strong>。信号和槽是qt中非常重要的知识。<br><img src="https://i.loli.net/2020/10/07/TxmGhtwSr5ybioH.png" alt="qt4.png"><br>除了库自带的信号和槽，还<strong>可以自定义信号和槽函数</strong>。<br><img src="https://i.loli.net/2020/10/07/2dhBvfRW4SN9ICO.png" alt="qt6.png"><br><img src="https://i.loli.net/2020/10/07/wiGOYKnp7WZfjBo.png" alt="qt7.png"><br><img src="https://i.loli.net/2020/10/07/5nzfrRq8YKsk7A6.png" alt="qt5.png"><br><strong>信号和槽是QT对象之间通信的接口</strong>。<br>信号可以重载，带参数的信号：<br><img src="https://i.loli.net/2020/10/07/ZNGOpYn5al9gCK7.png" alt="qt8.png"><br><strong>槽函数同样也要有2个参数对应</strong>。qDebug()等同于cout。<br><img src="https://i.loli.net/2020/10/07/2bKJpMeCm79YwlX.png" alt="qt9.png">  </p>
+<p>在C++11中学习过的Lambda表达式，也可以在QT中使用，这样直接<strong>用Lambda表达式来表示槽函数</strong>，提高了效率，在qt中配合信号一起使用，非常方便。<br><img src="https://i.loli.net/2020/10/07/lo4fZSOcVQEH36p.png" alt="qt10.png"><br><img src="https://i.loli.net/2020/10/07/8YwuET2frJk5XvH.png" alt="qt11.png">  </p>
+<p>除此之外qt还有许多知识，如坐标系统：对于父窗口，原点相当于屏幕左上角。对于子窗口或按钮，原点为父窗口空白区域（不包括边框）的左上角。内存回收机制：Qt内部生成了对象树，当程序结束时，会自动回收所有的内存。以及一些常用控件的使用等，这里就不再一一介绍，主要介绍一个ui界面：<br><img src="https://i.loli.net/2020/10/07/iUbLQ1TnZJWw7x9.png" alt="qt13.png"><br>通过该ui，可以将控件拖到窗口中，对其进行定义和修改，带来便利。  </p>
+<p>有关qt更深入的学习，在这里就不再介绍，只介绍和该项目相关的qt使用。在下一篇中将讲解游戏登录界面的设计。  </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>命令模式、访问器模式和解析器模式</title>
     <url>/2020/09/27/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E3%80%81%E8%AE%BF%E9%97%AE%E5%99%A8%E6%A8%A1%E5%BC%8F%E5%92%8C%E8%A7%A3%E6%9E%90%E5%99%A8%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>摘要：本篇将要介绍最后三个模式，命令模式、访问器模式和解析器模式，它们主要用于行为变化和领域相关的方面，命令模式和访问器模式将组件的行为和组件本身进行解耦，从而支持组件行为的变化。而解析器模式则是构建一个解释器来将特定领域的问题表达为某种语法规则下的句子。</p>
