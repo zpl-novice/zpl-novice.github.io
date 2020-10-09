@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币2</title>
+    <url>/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍翻硬币游戏中登录界面的设计，主要包括标题的显示设计，以及用户名，密码等控件的调用和实现，还有如何将该项目与数据库相连接，能够在登录时调用数据库中的数据进行判断，并对用户信息进行保存。</p>
+<a id="more"></a>
+<p>首先是游戏登录界面的设计，对窗口标题设置为翻硬币，增加菜单栏，可以实现退出选项，然后在窗口中间设置显示用户名，密码，并设置输入框，登录按钮，界面如下：<br><img src="https://i.loli.net/2020/10/09/vjWpoTC59DEt7gl.png" alt="翻硬币1.png"><br>实现代码如下：  </p>
+<pre><code>connect(ui-&gt;exitaction,&amp;QAction::triggered,this,&amp;QMainWindow::close);
+resize(380,588);
+setWindowTitle(&quot;翻金币&quot;);
+// setWindowIcon(QIcon(&quot;:/Coin0001.png&quot;));
+QFont font(&quot;Microsoft YaHei&quot;,20,75);
+ui-&gt;labeluser-&gt;setFont(font);
+ui-&gt;labelpassword-&gt;setFont(font);
+QFont font2(&quot;Microsoft YaHei&quot;,5,75);
+ui-&gt;label1-&gt;setFont(font2);
+ui-&gt;lineEditpassword-&gt;setEchoMode(QLineEdit::Password);</code></pre><p>接下来进行背景图片的设置，对paintEvent进行重写：  </p>
+<pre><code>void MainWindow::paintEvent(QPaintEvent *)
+{
+    //创建画家，指定绘图设备
+        QPainter painter(this);
+        //创建QPixmap对象
+        QPixmap pix;
+        //加载图片
+       pix.load(&quot;:/PlayLevelSceneBg.png&quot;);
+        //绘制背景图
+        painter.drawPixmap(0,0,this-&gt;width(),this-&gt;height(),pix);
+
+
+        //加载标题
+     pix.load(&quot;:/Title.png&quot;);
+        //缩放图片
+        pix = pix.scaled(pix.width()*0.5,pix.height()*0.5);
+    //绘制标题
+       painter.drawPixmap( 10,30,pix.width(),pix.height(),pix);
+}</code></pre><p>这里说明一下，代码中用到的图片都需要提前加载到资源文件中。<br>当加载完图片后，运行结果为：<br><img src="https://i.loli.net/2020/10/09/nLqkdNbSrxAOT2Z.png" alt="翻硬币2.png">  </p>
+<p>接下来将项目和数据库相连接，判断是否有数据库，没有数据库就创建，有数据就连接，我使用的是sqlite数据库，当然也可以使用mysql等其它数据库。<br><strong>SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。</strong>它是一个零配置的数据库，这意味着与其他数据库不一样，您不需要在系统中配置。  </p>
+<p>就像其他数据库，SQLite 引擎不是一个独立的进程，可以按应用程序需求进行静态或动态连接。SQLite 直接访问其存储文件。  </p>
+<pre><code>void MainWindow::connectDB()
+{
+        QString filename = &quot;./coin.db&quot;;
+     //判断是否有数据库
+     QFileInfo info(filename);
+     bool ret = info.exists();
+
+     //创建或打开数据库
+     QSqlDatabase db = QSqlDatabase::addDatabase(&quot;QSQLITE&quot;);
+     //db.setHostName(&quot;127.0.0.1&quot;);
+    // db.setUserName(&quot;root&quot;);
+    // db.setPassword(&quot;123456&quot;);
+     db.setDatabaseName(filename);
+
+     if(db.open())
+     {
+        if(ret == false)             //创建表
+            {
+                QString cmd = &quot;create table account(name text primary key,password text,grade int);&quot;;
+                 QSqlQuery query(db);
+               query.exec(cmd);
+        }
+        }
+}</code></pre><p>接下来就是登录按钮点击时的动作，进入登录按钮点击的槽函数，设置若用户名或密码为空时，提示出错。都不为空时对输入的用户名和密码在数据库中进行查询，若不存在则新建，同时将新用户的关卡等级设为0：  </p>
+<pre><code>void MainWindow::on_pushButtonlogin_clicked()
+{
+    if(ui-&gt;lineEdituser-&gt;text().isEmpty() || ui-&gt;lineEditpassword-&gt;text().isEmpty())
+    {
+         QMessageBox::warning(this,&quot;error&quot;,&quot;add more infomation&quot;);
+      }
+    else
+       {
+         QSqlQuery temquery;
+          QSqlQuery temquery2;
+         bool tem = temquery.exec(&quot;select name , password from manager where manager_ID = &apos;&quot;+ ui-&gt;lineEdituser-&gt;text()
+
+        +&quot;&apos;AND password = &apos;&quot;+ ui-&gt;lineEditpassword-&gt;text()+&quot;&apos;;&quot;);
+             if(tem)
+          {
+                user_grade = temquery.value(2).toInt();
+             }
+          else
+         {
+                QString cmd2 = &quot;insert into account values(&apos;&quot;+ ui-&gt;lineEdituser-&gt;text()
+
+                +&quot;&apos;,&apos;&quot;+ ui-&gt;lineEditpassword-&gt;text()+&quot;&apos;,0);&quot;;
+                temquery2.exec(cmd2);
+                user_grade = 0;
+         }
+       }
+}</code></pre><p>如将用户名密码输入为admin，点击登录，可见生成了coin.db文件，对数据库中的数据进行查询，得：<br><img src="https://i.loli.net/2020/10/09/Os9BcSNbqy8RzYo.png" alt="翻硬币3.png"><br><img src="https://i.loli.net/2020/10/09/oDBQx6WuhKayAkr.png" alt="翻硬币4.png">  </p>
+<p>实现了上述功能。  </p>
+<p>再接下来就是切换游戏界面，进行关卡选择，将在下一篇中介绍其实现。</p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>翻硬币1</title>
     <url>/2020/10/07/%E7%BF%BB%E7%A1%AC%E5%B8%811/</url>
     <content><![CDATA[<p>本篇是翻硬币项目的第一篇，主要介绍该项目的目标以及实现方法。翻硬币游戏是基于QT图形界面开发的一款小游戏，内部设立各关关卡，通过正确的操作来通关，并配有音效，在实现该游戏基础上又对其进行拓展，加入登录界面，通过数据库来存储各用户账号信息。本篇将主要对QT开发软件进行介绍。项目具体实现在接下来会一一介绍。</p>

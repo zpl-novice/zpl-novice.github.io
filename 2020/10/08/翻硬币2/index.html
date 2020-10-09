@@ -46,40 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将介绍索引在优化SQL中的作用，索引是数据库优化最常用也最重要的手段之一，通过索引通常可以帮助用户解决大多数的mysql的性能优化问题。但索引也可能出现失效的情况，因此要避免索引失效，正确的使用索引。">
+  <meta name="description" content="摘要：本篇将主要介绍翻硬币游戏中登录界面的设计，主要包括标题的显示设计，以及用户名，密码等控件的调用和实现，还有如何将该项目与数据库相连接，能够在登录时调用数据库中的数据进行判断，并对用户信息进行保存。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="索引的使用">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:title" content="翻硬币2">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将介绍索引在优化SQL中的作用，索引是数据库优化最常用也最重要的手段之一，通过索引通常可以帮助用户解决大多数的mysql的性能优化问题。但索引也可能出现失效的情况，因此要避免索引失效，正确的使用索引。">
+<meta property="og:description" content="摘要：本篇将主要介绍翻硬币游戏中登录界面的设计，主要包括标题的显示设计，以及用户名，密码等控件的调用和实现，还有如何将该项目与数据库相连接，能够在登录时调用数据库中的数据进行判断，并对用户信息进行保存。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d47b9S.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d47Ttf.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d47oAP.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d477h8.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4757t.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d47WXd.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d47R6H.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4721e.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4740I.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d47hnA.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bmrj.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4beMQ.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bERS.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bVxg.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bAG8.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bpqA.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bPat.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4biIP.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bCVI.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/08/27/d4bkPf.png">
-<meta property="article:published_time" content="2020-08-27T12:05:12.885Z">
-<meta property="article:modified_time" content="2020-08-27T12:32:00.747Z">
+<meta property="og:image" content="https://i.loli.net/2020/10/09/vjWpoTC59DEt7gl.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/09/nLqkdNbSrxAOT2Z.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/09/Os9BcSNbqy8RzYo.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/09/oDBQx6WuhKayAkr.png">
+<meta property="article:published_time" content="2020-10-08T14:59:47.368Z">
+<meta property="article:modified_time" content="2020-10-09T13:38:28.987Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1.ax1x.com/2020/08/27/d47b9S.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/09/vjWpoTC59DEt7gl.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/">
 
 
 <script id="page-configurations">
@@ -91,7 +75,7 @@
   };
 </script>
 
-  <title>索引的使用 | zpl-novice</title>
+  <title>翻硬币2 | zpl-novice</title>
   
 
 
@@ -221,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -234,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          索引的使用
+          翻硬币2
         </h1>
 
         <div class="post-meta">
@@ -243,18 +227,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-08-27 20:05:12 / 修改时间：20:32:00" itemprop="dateCreated datePublished" datetime="2020-08-27T20:05:12+08:00">2020-08-27</time>
+              <time title="创建时间：2020-10-08 22:59:47" itemprop="dateCreated datePublished" datetime="2020-10-08T22:59:47+08:00">2020-10-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-09 21:38:28" itemprop="dateModified" datetime="2020-10-09T21:38:28+08:00">2020-10-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库学习</span>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
                   </a>
                 </span>
             </span>
@@ -265,7 +255,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>2.7k</span>
             </span>
 
         </div>
@@ -277,23 +267,93 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将介绍索引在优化SQL中的作用，索引是数据库优化最常用也最重要的手段之一，通过索引通常可以帮助用户解决大多数的mysql的性能优化问题。但索引也可能出现失效的情况，因此要避免索引失效，正确的使用索引。</p>
+        <p>摘要：本篇将主要介绍翻硬币游戏中登录界面的设计，主要包括标题的显示设计，以及用户名，密码等控件的调用和实现，还有如何将该项目与数据库相连接，能够在登录时调用数据库中的数据进行判断，并对用户信息进行保存。</p>
 <a id="more"></a>
-<p><strong>索引是数据库优化最常用也最重要的手段之一</strong>。如对有30000个数据的表进行查询，若对<strong>有索引的主键字段</strong>查询，时间很短：<br><img src="https://s1.ax1x.com/2020/08/27/d47b9S.png" alt="d47b9S.png"><br>若对没有索引的字段数据进行查询：<br><img src="https://s1.ax1x.com/2020/08/27/d47Ttf.png" alt="d47Ttf.png"><br>可见<strong>有无索引所耗费的时间差别很大</strong>。<br>对该title字段<strong>建立索引</strong>，<code>create index idx_title on tb_item(title);</code>：<br><img src="https://s1.ax1x.com/2020/08/27/d47oAP.png" alt="d47oAP.png"><br>建立索引花费了约1分钟时间，当<strong>建立完成索引以后，再对title字段数据进行查询，可见时间显著缩短</strong>。<br><strong>建立索引并不一定能够提高查询效率，需要正确的运用索引，避免索引失效才可以提高查询效率</strong>。</p>
-<p>如何避免索引失效？<br>创建一个表tb_seller，并插入数据，对name、status、address3个字段建立联合索引。  </p>
-<p>1.<strong>全值匹配，对索引中所有列都指定具体值。该情况下，索引生效，执行效率高</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d477h8.png" alt="d477h8.png"><br>对该sql语句进行分析，type为ref，<strong>key为新建的联合索引</strong>，即使用了索引查询。  </p>
-<p>2.<strong>最左前缀法则，如果索引了多列，要遵守最左前缀法则，指的是从索引的最左前列开始，并且不跳过索引中的列</strong>。<br>显然全值匹配遵守该法则。<br><img src="https://s1.ax1x.com/2020/08/27/d4757t.png" alt="d4757t.png"><br>当只查询索引的最左前列，或者不跳过索引的列时，同样查询使用了新建的联合索引，执行效率高。而<strong>不包含最左前列时，如下所示，索引失效；跳过索引时，可见key的长度与只查询索引的最左前列的长度相同，说明只有name走了索引，而address没有走索引</strong>。注意，<strong>该法则与查询语句中列的顺序无关，只要包含即可</strong>：<br><img src="https://s1.ax1x.com/2020/08/27/d47WXd.png" alt="d47WXd.png"><br><img src="https://s1.ax1x.com/2020/08/27/d47R6H.png" alt="d47R6H.png">  </p>
-<p>3.<strong>范围查询右边的列，不能使用索引</strong>。如下所示，当status字段变成范围查询时，索引的长度发生改变，<strong>范围查询右边的列address没有使用索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4721e.png" alt="d4721e.png">  </p>
-<p>4.<strong>对索引的列上进行运算操作，索引将失效</strong>。例如截取name字段中第3、4两个字为科技的数据，对其分析，发现并没有使用索引，是全表扫描的方式：<br><img src="https://s1.ax1x.com/2020/08/27/d4740I.png" alt="d4740I.png">  </p>
-<p>5.<strong>字符串不加单引号，索引将失效</strong>。对于status字段的字符串数据虽然不加单引号也能正确查询，但是不会使用该字段的索引。<br><img src="https://s1.ax1x.com/2020/08/27/d47hnA.png" alt="d47hnA.png">  </p>
-<p>6.<strong>尽量使用覆盖索引，避免<code>select *</code>。索引列完全包含查询列</strong>。这样就不需要再<strong>回表查询</strong>，提高查询效率。<br><img src="https://s1.ax1x.com/2020/08/27/d4bmrj.png" alt="d4bmrj.png"><br><img src="https://s1.ax1x.com/2020/08/27/d4beMQ.png" alt="d4beMQ.png">  </p>
-<p>7.<strong>用or分割的条件，如果or前面的条件中列有索引，而后面的列中没有索引，那么涉及的索引都不会被用到。</strong>如以索引列name和非索引列nickname为例：<br><img src="https://s1.ax1x.com/2020/08/27/d4bERS.png" alt="d4bERS.png">  </p>
-<p>8.<strong>以%开头的like模糊查询，索引失效</strong>。如果仅仅是尾部模糊匹配，索引不会失效，而头部匹配会使索引失效。<br><img src="https://s1.ax1x.com/2020/08/27/d4bVxg.png" alt="d4bVxg.png">  </p>
-<p>9.<strong>如果mysql评估使用索引比全表更慢，则不使用索引</strong>。如下所示，对address单独建立一个单列索引，然而当查询地址为北京市时，不使用索引；当查询地址为西安市时，使用了索引。这是因为<strong>在表中北京市数据过多，mysql评估使用索引还不如全表扫描。就不使用索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4bAG8.png" alt="d4bAG8.png">  </p>
-<p>10.<strong>is NULL,is not NULL 有时索引失效。跟9类似，看mysql评估</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4bpqA.png" alt="d4bpqA.png">  </p>
-<p>11.<strong>in走索引，not in 索引失效</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4bPat.png" alt="d4bPat.png">  </p>
-<p>12.<strong>单列索引和复合索引。尽量使用复合索引，而少使用单列索引</strong>。<br><img src="https://s1.ax1x.com/2020/08/27/d4biIP.png" alt="d4biIP.png">  </p>
-<p>查看索引使用情况：<br>通过命令<code>show global status like ‘handler_read%’;</code>可以查看索引使用情况：<br><img src="https://s1.ax1x.com/2020/08/27/d4bCVI.png" alt="d4bCVI.png"><br>其中各个指标的含义为：<br><img src="https://s1.ax1x.com/2020/08/27/d4bkPf.png" alt="d4bkPf.png">  </p>
+<p>首先是游戏登录界面的设计，对窗口标题设置为翻硬币，增加菜单栏，可以实现退出选项，然后在窗口中间设置显示用户名，密码，并设置输入框，登录按钮，界面如下：<br><img src="https://i.loli.net/2020/10/09/vjWpoTC59DEt7gl.png" alt="翻硬币1.png"><br>实现代码如下：  </p>
+<pre><code>connect(ui-&gt;exitaction,&amp;QAction::triggered,this,&amp;QMainWindow::close);
+resize(380,588);
+setWindowTitle(&quot;翻金币&quot;);
+// setWindowIcon(QIcon(&quot;:/Coin0001.png&quot;));
+QFont font(&quot;Microsoft YaHei&quot;,20,75);
+ui-&gt;labeluser-&gt;setFont(font);
+ui-&gt;labelpassword-&gt;setFont(font);
+QFont font2(&quot;Microsoft YaHei&quot;,5,75);
+ui-&gt;label1-&gt;setFont(font2);
+ui-&gt;lineEditpassword-&gt;setEchoMode(QLineEdit::Password);</code></pre><p>接下来进行背景图片的设置，对paintEvent进行重写：  </p>
+<pre><code>void MainWindow::paintEvent(QPaintEvent *)
+{
+    //创建画家，指定绘图设备
+        QPainter painter(this);
+        //创建QPixmap对象
+        QPixmap pix;
+        //加载图片
+       pix.load(&quot;:/PlayLevelSceneBg.png&quot;);
+        //绘制背景图
+        painter.drawPixmap(0,0,this-&gt;width(),this-&gt;height(),pix);
+
+
+        //加载标题
+     pix.load(&quot;:/Title.png&quot;);
+        //缩放图片
+        pix = pix.scaled(pix.width()*0.5,pix.height()*0.5);
+    //绘制标题
+       painter.drawPixmap( 10,30,pix.width(),pix.height(),pix);
+}</code></pre><p>这里说明一下，代码中用到的图片都需要提前加载到资源文件中。<br>当加载完图片后，运行结果为：<br><img src="https://i.loli.net/2020/10/09/nLqkdNbSrxAOT2Z.png" alt="翻硬币2.png">  </p>
+<p>接下来将项目和数据库相连接，判断是否有数据库，没有数据库就创建，有数据就连接，我使用的是sqlite数据库，当然也可以使用mysql等其它数据库。<br><strong>SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。</strong>它是一个零配置的数据库，这意味着与其他数据库不一样，您不需要在系统中配置。  </p>
+<p>就像其他数据库，SQLite 引擎不是一个独立的进程，可以按应用程序需求进行静态或动态连接。SQLite 直接访问其存储文件。  </p>
+<pre><code>void MainWindow::connectDB()
+{
+        QString filename = &quot;./coin.db&quot;;
+     //判断是否有数据库
+     QFileInfo info(filename);
+     bool ret = info.exists();
+
+     //创建或打开数据库
+     QSqlDatabase db = QSqlDatabase::addDatabase(&quot;QSQLITE&quot;);
+     //db.setHostName(&quot;127.0.0.1&quot;);
+    // db.setUserName(&quot;root&quot;);
+    // db.setPassword(&quot;123456&quot;);
+     db.setDatabaseName(filename);
+
+     if(db.open())
+     {
+        if(ret == false)             //创建表
+            {
+                QString cmd = &quot;create table account(name text primary key,password text,grade int);&quot;;
+                 QSqlQuery query(db);
+               query.exec(cmd);
+        }
+        }
+}</code></pre><p>接下来就是登录按钮点击时的动作，进入登录按钮点击的槽函数，设置若用户名或密码为空时，提示出错。都不为空时对输入的用户名和密码在数据库中进行查询，若不存在则新建，同时将新用户的关卡等级设为0：  </p>
+<pre><code>void MainWindow::on_pushButtonlogin_clicked()
+{
+    if(ui-&gt;lineEdituser-&gt;text().isEmpty() || ui-&gt;lineEditpassword-&gt;text().isEmpty())
+    {
+         QMessageBox::warning(this,&quot;error&quot;,&quot;add more infomation&quot;);
+      }
+    else
+       {
+         QSqlQuery temquery;
+          QSqlQuery temquery2;
+         bool tem = temquery.exec(&quot;select name , password from manager where manager_ID = &apos;&quot;+ ui-&gt;lineEdituser-&gt;text()
+
+        +&quot;&apos;AND password = &apos;&quot;+ ui-&gt;lineEditpassword-&gt;text()+&quot;&apos;;&quot;);
+             if(tem)
+          {
+                user_grade = temquery.value(2).toInt();
+             }
+          else
+         {
+                QString cmd2 = &quot;insert into account values(&apos;&quot;+ ui-&gt;lineEdituser-&gt;text()
+
+                +&quot;&apos;,&apos;&quot;+ ui-&gt;lineEditpassword-&gt;text()+&quot;&apos;,0);&quot;;
+                temquery2.exec(cmd2);
+                user_grade = 0;
+         }
+       }
+}</code></pre><p>如将用户名密码输入为admin，点击登录，可见生成了coin.db文件，对数据库中的数据进行查询，得：<br><img src="https://i.loli.net/2020/10/09/Os9BcSNbqy8RzYo.png" alt="翻硬币3.png"><br><img src="https://i.loli.net/2020/10/09/oDBQx6WuhKayAkr.png" alt="翻硬币4.png">  </p>
+<p>实现了上述功能。  </p>
+<p>再接下来就是切换游戏界面，进行关卡选择，将在下一篇中介绍其实现。</p>
 
     </div>
 
@@ -309,7 +369,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/08/27/%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8/" title="索引的使用">https://zpl-novice.github.io/2020/08/27/索引的使用/</a>
+    <a href="https://zpl-novice.github.io/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/" title="翻硬币2">https://zpl-novice.github.io/2020/10/08/翻硬币2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -326,13 +386,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/25/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%92%8C%E4%BC%98%E5%8C%96SQL%E6%AD%A5%E9%AA%A4/" rel="prev" title="体系结构、存储引擎和优化SQL步骤">
-      <i class="fa fa-chevron-left"></i> 体系结构、存储引擎和优化SQL步骤
+    <a href="/2020/10/07/%E7%BF%BB%E7%A1%AC%E5%B8%811/" rel="prev" title="翻硬币1">
+      <i class="fa fa-chevron-left"></i> 翻硬币1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/08/29/SQL%E4%BC%98%E5%8C%96/" rel="next" title="SQL优化">
-      SQL优化 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
