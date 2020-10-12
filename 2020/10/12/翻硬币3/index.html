@@ -46,19 +46,24 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。">
+  <meta name="description" content="摘要：本篇将主要介绍登录以后，关卡界面的设计，主要包括关卡界面的背景、内容，以及各关卡选择按钮的封装，返回按钮的设计和场景之间的切换。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="类及类的成员2">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/index.html">
+<meta property="og:title" content="翻硬币3">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。">
+<meta property="og:description" content="摘要：本篇将主要介绍登录以后，关卡界面的设计，主要包括关卡界面的背景、内容，以及各关卡选择按钮的封装，返回按钮的设计和场景之间的切换。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-15T08:14:53.080Z">
-<meta property="article:modified_time" content="2020-01-15T12:39:53.784Z">
+<meta property="og:image" content="https://i.loli.net/2020/10/12/VCBOpTEJax5vZtn.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/12/7fM2zwc1lSYeVJA.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/12/JqPy5RYj8MWE7Bk.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/12/TaQDcs3rtb9GzwR.png">
+<meta property="article:published_time" content="2020-10-12T12:13:40.677Z">
+<meta property="article:modified_time" content="2020-10-12T12:49:35.375Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/12/VCBOpTEJax5vZtn.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/">
 
 
 <script id="page-configurations">
@@ -70,7 +75,7 @@
   };
 </script>
 
-  <title>类及类的成员2 | zpl-novice</title>
+  <title>翻硬币3 | zpl-novice</title>
   
 
 
@@ -200,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -213,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          类及类的成员2
+          翻硬币3
         </h1>
 
         <div class="post-meta">
@@ -224,7 +229,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-15 16:14:53 / 修改时间：20:39:53" itemprop="dateCreated datePublished" datetime="2020-01-15T16:14:53+08:00">2020-01-15</time>
+              <time title="创建时间：2020-10-12 20:13:40 / 修改时间：20:49:35" itemprop="dateCreated datePublished" datetime="2020-10-12T20:13:40+08:00">2020-10-12</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,8 +237,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
                   </a>
                 </span>
             </span>
@@ -244,7 +249,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>4k</span>
             </span>
 
         </div>
@@ -256,95 +261,142 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇博客接着上一篇的向下学习，将对静态成员、成员对象和封闭类、友元以及this指针进行介绍并说明它们的用法。</p>
+        <p>摘要：本篇将主要介绍登录以后，关卡界面的设计，主要包括关卡界面的背景、内容，以及各关卡选择按钮的封装，返回按钮的设计和场景之间的切换。  </p>
 <a id="more"></a>
+<p>当点击登录按钮以后，要切换到选择关卡场景中，因此首先新建一个窗口：<br><img src="https://i.loli.net/2020/10/12/VCBOpTEJax5vZtn.png" alt="翻硬币5.png"><br><img src="https://i.loli.net/2020/10/12/7fM2zwc1lSYeVJA.png" alt="翻硬币6.png"><br>在前面登录按钮的槽函数中，添加选择关卡场景的显示以及自身的隐藏代码：  </p>
+<pre><code>//将自身隐藏，显示选择关卡场景
+this-&gt;hide();
+choosescene-&gt;show();</code></pre><p>这样就会在点击登录后，进行主场景到选择关卡场景的切换：<br><img src="https://i.loli.net/2020/10/12/JqPy5RYj8MWE7Bk.png" alt="翻硬币7.png"><br>接下来对选择关卡场景进行配置，与先前所讲主场景相同，配置其大小，菜单栏，标题和背景图片：  </p>
+<pre><code>//配置选择关卡场景
+resize(380,588);
+//设置标题
+setWindowTitle(&quot;选择关卡&quot;);
+//创建菜单栏
+QMenuBar * bar = this-&gt;menuBar();
+this-&gt;setMenuBar(bar);
+//创建开始菜单
+QMenu * startMenu = bar-&gt;addMenu(&quot;开始&quot;);
+//创建按钮菜单项
+QAction * quitAction = startMenu-&gt;addAction(&quot;退出&quot;);
+ //点击退出 退出游戏
+connect(quitAction,&amp;QAction::triggered,[=](){this-&gt;close();});</code></pre><p>再来设计一个返回按钮，来通过该返回按钮从选择关卡场景返回到主场景，由于要给按钮添加背景图片，特效等，自己封装一个按钮控件来实现这些效果，创建MyPushButton，继承于QPushButton，对其构造函数进行重写来实现按下后图片切换的特效：  </p>
+<pre><code> MyPushButton::MyPushButton(QPushButton *parent) : QPushButton(parent)
+{
 
-<p>在上一篇中已经讲过了类的概念，知道类包括成员变量和成员函数两部分，而在C的知识学习中，也学习过静态变量这一概念。同样的，当在定义类时，根据需求的不同，我们可以定义为静态成员变量和静态成员函数。</p>
-<h2 id="静态成员变量和静态成员函数"><a href="#静态成员变量和静态成员函数" class="headerlink" title="静态成员变量和静态成员函数"></a>静态成员变量和静态成员函数</h2><p>静态成员的关键字为<code>static</code>，静态成员变量就是在定义时前面加了 <code>static</code>关键字的成员变量；静态成员函数就是在声明时前面加了<code>static</code>关键字的成员函数。<br>普通成员变量为每个对象有各自的一份，而静态成员变量一共就一份，为所有对象共享。普通成员函数必须作用于某个对象(例如在上一篇时钟代码中的设置时间函数，访问方式为<code>r.settime()</code>)，而静态成员函数并不具体作用于某个对象。因此静态成员不需要通过对象就能访问，可以直接<code>clock::settime()</code>访问，通过类名而不需要通过对象。它的本质上是全局变量和全局函数，<strong>因此必须在定义类的文件中静态成员变量进行一次声明，否则不行</strong>。静态成员函数内部不能访问非静态成员变量，设置静态成员的目的，是为了将和某些类紧密相关的全局变量和全局函数写到类里面，形式上成为一个整体。</p>
-<h2 id="成员对象和封闭类"><a href="#成员对象和封闭类" class="headerlink" title="成员对象和封闭类"></a>成员对象和封闭类</h2><p>成员对象指的是一个类的成员变量是另一个类的对象。包含成员对象的类叫封闭类。比如封闭类汽车的成员变量有类轮胎的一个实例化对象和类引擎的一个实例化对象，这两个成员对象。封闭类需要自定义构造函数，不能再用默认构造函数，因为有些成员对象无法默认初始化。在定义封闭类的构造函数时，添加初始化列表：</p>
-<p><code>类名：：构造函数（参数表）：成员变量1（参数表），成员变量2（参数表）,…{     }</code></p>
-<p>当封闭类对象生成时，先执行所有成员对象的构造函数，再执行封闭类的构造函数。成员对象的构造函数调用顺序和成员对象在类中的声明顺序一致与在初始化列表中出现的顺序无关。当封闭类的对象消亡时，先执行封闭类的析构函数，再执行成员对象的析构函数。析构函数调用顺序和构造函数调用顺序相反。</p>
-<pre><code>class Engine
-{
-    private:
-        int price;
-    public:
-        Engine(int p)
-       {
-           price = p;
-           cout &lt;&lt; &quot;Engine constructor is called&quot; &lt;&lt; endl;
-        }
-        ~Engine()
-        {
-            cout &lt;&lt; &quot;Engine deconstructor is called&quot; &lt;&lt; endl;
-        }
-};
-class tyer
-{
-    private :
-        int width, length;
-    public:
-        tyer(int w, int l) :width(w), length(l)
-        {
-            cout &lt;&lt; &quot;tyer constructor is called&quot; &lt;&lt; endl;
-        };
-        ~tyer()
-        {
-            cout &lt;&lt; &quot;tyer destructor is called&quot; &lt;&lt; endl;
-        }
-};
-class car
-{
-    private :
-        tyer ty;
-        Engine en;
-        int color;
-    public:
-        car(int col, int p, int w, int l);
-        ~car()
-        {
-            cout &lt;&lt; &quot;car deconstructor is called&quot; &lt;&lt; endl;
-        }
-};
-car::car(int col, int p, int w, int l) :color(col), en(p), ty(w, l)
-{
-    cout &lt;&lt; &quot;car constructor is called&quot; &lt;&lt; endl;
 }
-int main()
+MyPushButton::MyPushButton(QString normalImg,QString pressImg)
 {
-    car car1(2, 1, 4, 5);
-    return 0;
-}</code></pre><h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>在C++中，一个类中可以有<code>public、protected、private</code>三种属性的成员，通过对象可以访问<code>public</code>成员，只有本类中的函数可以访问本类的 <code>private</code>成员。现在，我们来介绍一种例外情况——友元（<code>friend</code>）。借助友元（<code>friend</code>），可以使得其他类中的成员函数以及全局范围内的函数访问当前类的<code>private</code>成员。就相当于我是你的朋友，有些你的东西我也可以借用。<br>友元包括友元函数和友元类。一个类的友元函数可以访问该类的私有成员。若A是B的友元类，则A的所有成员函数都可以访问B的私有成员。</p>
-<pre><code>class A
+       //成员变量normalImgPath保存正常显示图片路径
+       normalImgPath = normalImg;
+      //成员变量pressedImgPath保存按下后显示的图片
+       pressedImgPath = pressImg;
+    //创建QPixmap对象
+    QPixmap pixmap;
+       //判断是否能够加载正常显示的图片，若不能提示加载失败
+    bool ret = pixmap.load(normalImgPath);
+    if(!ret)
+        {
+            qDebug() &lt;&lt; normalImg &lt;&lt; &quot;加载图片失败!&quot;;
+    }
+    //设置图片的固定尺寸
+    this-&gt;setFixedSize( pixmap.width(), pixmap.height() );
+    //设置不规则图片的样式表
+    this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+    //设置图标
+    this-&gt;setIcon(pixmap);
+    //设置图标大小
+    this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+}
+void MyPushButton::mousePressEvent(QMouseEvent *e)
 {
-    private:
-        int a;
-    public:
-        A(int);
-        void show();
-        friend void add(A); 
- } ;
- A::A(int b)
- {
-     a=b;
- }
- void A::show()
- {
-     cout&lt;&lt;a;
- }
- void add(A A1)
- {
-     int b;
-     b=A1.a+1;
-     cout&lt;&lt;b&lt;&lt;endl;
- }
- int main()
- {
-     A A1(4);
-     add(A1);
-     A1.show();
-     return 0;
- }</code></pre><p>如上面代码所示，我定义了一个类A，又定义了一个友元函数<code>add()</code>，使得它可以访问A的私有成员。</p>
+    if(pressedImgPath != &quot;&quot;) //选中路径不为空，显示选中图片
+    {
+        QPixmap pixmap;
+        bool ret = pixmap.load(pressedImgPath);
+        if(!ret)
+        {
+            qDebug() &lt;&lt; pressedImgPath &lt;&lt; &quot;加载图片失败!&quot;;
+        } 
+
+        this-&gt;setFixedSize( pixmap.width(), pixmap.height() );
+        this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+        this-&gt;setIcon(pixmap);
+        this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+    }
+    //交给父类执行按下事件
+    return QPushButton::mousePressEvent(e);
+}
+void MyPushButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    if(normalImgPath != &quot;&quot;) //选中路径不为空，显示选中图片
+    {
+        QPixmap pixmap;
+        bool ret = pixmap.load(normalImgPath);
+        if(!ret)
+        {
+           qDebug() &lt;&lt; normalImgPath &lt;&lt; &quot;加载图片失败!&quot;;
+        }
+        this-&gt;setFixedSize( pixmap.width(), pixmap.height() );
+        this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+        this-&gt;setIcon(pixmap);
+        this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+    }
+    //交给父类执行 释放事件
+    return QPushButton::mouseReleaseEvent(e);
+}</code></pre><p>接下来在选择关卡场景中创建返回按钮，实现返回功能：  </p>
+<pre><code>//返回按钮
+backbutton = new MyPushButton(&quot;:/BackButton.png&quot;,&quot;:/BackButtonSelected.png&quot;);
+backbutton-&gt;setParent(this);
+backbutton-&gt;move(this-&gt;width()-backbutton-&gt;width(),this-&gt;height()-backbutton-&gt;height());
+//实现返回功能
+connect(backbutton,&amp;MyPushButton::clicked,[=](){
+        this-&gt;hide();
+        //触发自定义信号，关闭自身，该信号写到 signals下做声明
+        emit this-&gt;chooseSceneBack();
+         }
+    );</code></pre><p>可以看到，因为是从选择关卡场景返回到主场景，而选择关卡场景中并没有主场景的对象，为了实现返回功能，就需要在点击返回按钮时，由<strong>选择关卡场景来发送一个信号，在主场景中监听该信号</strong>：  </p>
+<pre><code>//实例化选择关卡场景
+choosescene = new chooselevelsecene;
+
+//监听选择关卡场景的自定义信号，接收到以后显示自身
+connect(choosescene,&amp;chooselevelsecene::chooseSceneBack,[=](){
+    this-&gt;show();
+}</code></pre><p>接下来就是关卡的显示，能够在点击关卡图标时切换到对应的具体关卡场景，因此用前面封装好的按钮类来创建：  </p>
+<pre><code> for(int i=0;i&lt;20;i++)
+{
+    MyPushButton * menuBtn = new MyPushButton(&quot;:/LevelIcon.png&quot;);
+           menuBtn-&gt;setParent(this);
+    menuBtn-&gt;move(60+(i%4)*70,130+(i/4)*70);
+    //按钮上显示的文字
+    QLabel * label = new QLabel;
+    label-&gt;setParent(this);
+    label-&gt;setFixedSize(menuBtn-&gt;width(),menuBtn-&gt;height());
+    label-&gt;setText(QString::number(i+1));
+    //设置居中
+    label-&gt;setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    label-&gt;move(60+(i%4)*70,130+(i/4)*70);
+    //鼠标事件穿透(按钮被label挡住)
+    label-&gt;setAttribute(Qt::WA_TransparentForMouseEvents,true);
+    //监听每个按钮的点击事件
+    connect(menuBtn,&amp;MyPushButton::clicked,[=]()
+    {
+        if(pscene == NULL)  //游戏场景不复用，直接移除掉换新的
+        {
+             this-&gt;hide();
+             //将点击的关卡号送给playsecen场景
+             pscene = new playscene(i+1);
+              pscene-&gt;show();
+              //监听关卡场景的自定义信号，接收到以后显示自身
+              connect(pscene,&amp;playscene::pSceneBack,[=](){
+                  this-&gt;show();
+                  delete  pscene;
+                  pscene = NULL;
+              }
+              );
+        }
+    });
+}</code></pre><p>为了能够显示关卡数字，在按钮位置增加label，同时设置label中字体居中，但这样带来了一个问题，就是<strong>按钮被label挡住，使得鼠标点击按钮时无反应，为了解决这个问题，设置鼠标事件穿透</strong>，又为了能够实现在点击关卡后能够切换到具体关卡场景，对每个按钮的点击事件进行监听，当按钮被点击后，创建关卡场景，同时把点击的关卡号送给关卡场景。  </p>
+<p>有关关卡场景的创建，构造函数的重载，以及关卡场景和选择关卡场景的切换，将在下一篇中进行介绍。选择关卡场景的实现图片如下所示：<br><img src="https://i.loli.net/2020/10/12/TaQDcs3rtb9GzwR.png" alt="翻硬币8.png">  </p>
 
     </div>
 
@@ -360,7 +412,7 @@ int main()
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/01/15/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%982/" title="类及类的成员2">https://zpl-novice.github.io/2020/01/15/类及类的成员2/</a>
+    <a href="https://zpl-novice.github.io/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/" title="翻硬币3">https://zpl-novice.github.io/2020/10/12/翻硬币3/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -377,13 +429,10 @@ int main()
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/13/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%981/" rel="prev" title="类及类的成员1">
-      <i class="fa fa-chevron-left"></i> 类及类的成员1
+    <a href="/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/" rel="prev" title="翻硬币2">
+      <i class="fa fa-chevron-left"></i> 翻硬币2
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/19/%E7%B1%BB%E5%8F%8A%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%983/" rel="next" title="类及类的成员3">
-      类及类的成员3 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -443,7 +492,6 @@ int main()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#静态成员变量和静态成员函数"><span class="nav-number">1.</span> <span class="nav-text">静态成员变量和静态成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员对象和封闭类"><span class="nav-number">2.</span> <span class="nav-text">成员对象和封闭类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元"><span class="nav-number">3.</span> <span class="nav-text">友元</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

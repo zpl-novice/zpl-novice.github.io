@@ -1,6 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币3</title>
+    <url>/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍登录以后，关卡界面的设计，主要包括关卡界面的背景、内容，以及各关卡选择按钮的封装，返回按钮的设计和场景之间的切换。  </p>
+<a id="more"></a>
+<p>当点击登录按钮以后，要切换到选择关卡场景中，因此首先新建一个窗口：<br><img src="https://i.loli.net/2020/10/12/VCBOpTEJax5vZtn.png" alt="翻硬币5.png"><br><img src="https://i.loli.net/2020/10/12/7fM2zwc1lSYeVJA.png" alt="翻硬币6.png"><br>在前面登录按钮的槽函数中，添加选择关卡场景的显示以及自身的隐藏代码：  </p>
+<pre><code>//将自身隐藏，显示选择关卡场景
+this-&gt;hide();
+choosescene-&gt;show();</code></pre><p>这样就会在点击登录后，进行主场景到选择关卡场景的切换：<br><img src="https://i.loli.net/2020/10/12/JqPy5RYj8MWE7Bk.png" alt="翻硬币7.png"><br>接下来对选择关卡场景进行配置，与先前所讲主场景相同，配置其大小，菜单栏，标题和背景图片：  </p>
+<pre><code>//配置选择关卡场景
+resize(380,588);
+//设置标题
+setWindowTitle(&quot;选择关卡&quot;);
+//创建菜单栏
+QMenuBar * bar = this-&gt;menuBar();
+this-&gt;setMenuBar(bar);
+//创建开始菜单
+QMenu * startMenu = bar-&gt;addMenu(&quot;开始&quot;);
+//创建按钮菜单项
+QAction * quitAction = startMenu-&gt;addAction(&quot;退出&quot;);
+ //点击退出 退出游戏
+connect(quitAction,&amp;QAction::triggered,[=](){this-&gt;close();});</code></pre><p>再来设计一个返回按钮，来通过该返回按钮从选择关卡场景返回到主场景，由于要给按钮添加背景图片，特效等，自己封装一个按钮控件来实现这些效果，创建MyPushButton，继承于QPushButton，对其构造函数进行重写来实现按下后图片切换的特效：  </p>
+<pre><code> MyPushButton::MyPushButton(QPushButton *parent) : QPushButton(parent)
+{
+
+}
+MyPushButton::MyPushButton(QString normalImg,QString pressImg)
+{
+       //成员变量normalImgPath保存正常显示图片路径
+       normalImgPath = normalImg;
+      //成员变量pressedImgPath保存按下后显示的图片
+       pressedImgPath = pressImg;
+    //创建QPixmap对象
+    QPixmap pixmap;
+       //判断是否能够加载正常显示的图片，若不能提示加载失败
+    bool ret = pixmap.load(normalImgPath);
+    if(!ret)
+        {
+            qDebug() &lt;&lt; normalImg &lt;&lt; &quot;加载图片失败!&quot;;
+    }
+    //设置图片的固定尺寸
+    this-&gt;setFixedSize( pixmap.width(), pixmap.height() );
+    //设置不规则图片的样式表
+    this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+    //设置图标
+    this-&gt;setIcon(pixmap);
+    //设置图标大小
+    this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+}
+void MyPushButton::mousePressEvent(QMouseEvent *e)
+{
+    if(pressedImgPath != &quot;&quot;) //选中路径不为空，显示选中图片
+    {
+        QPixmap pixmap;
+        bool ret = pixmap.load(pressedImgPath);
+        if(!ret)
+        {
+            qDebug() &lt;&lt; pressedImgPath &lt;&lt; &quot;加载图片失败!&quot;;
+        } 
+
+        this-&gt;setFixedSize( pixmap.width(), pixmap.height() );
+        this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+        this-&gt;setIcon(pixmap);
+        this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+    }
+    //交给父类执行按下事件
+    return QPushButton::mousePressEvent(e);
+}
+void MyPushButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    if(normalImgPath != &quot;&quot;) //选中路径不为空，显示选中图片
+    {
+        QPixmap pixmap;
+        bool ret = pixmap.load(normalImgPath);
+        if(!ret)
+        {
+           qDebug() &lt;&lt; normalImgPath &lt;&lt; &quot;加载图片失败!&quot;;
+        }
+        this-&gt;setFixedSize( pixmap.width(), pixmap.height() );
+        this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+        this-&gt;setIcon(pixmap);
+        this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+    }
+    //交给父类执行 释放事件
+    return QPushButton::mouseReleaseEvent(e);
+}</code></pre><p>接下来在选择关卡场景中创建返回按钮，实现返回功能：  </p>
+<pre><code>//返回按钮
+backbutton = new MyPushButton(&quot;:/BackButton.png&quot;,&quot;:/BackButtonSelected.png&quot;);
+backbutton-&gt;setParent(this);
+backbutton-&gt;move(this-&gt;width()-backbutton-&gt;width(),this-&gt;height()-backbutton-&gt;height());
+//实现返回功能
+connect(backbutton,&amp;MyPushButton::clicked,[=](){
+        this-&gt;hide();
+        //触发自定义信号，关闭自身，该信号写到 signals下做声明
+        emit this-&gt;chooseSceneBack();
+         }
+    );</code></pre><p>可以看到，因为是从选择关卡场景返回到主场景，而选择关卡场景中并没有主场景的对象，为了实现返回功能，就需要在点击返回按钮时，由<strong>选择关卡场景来发送一个信号，在主场景中监听该信号</strong>：  </p>
+<pre><code>//实例化选择关卡场景
+choosescene = new chooselevelsecene;
+
+//监听选择关卡场景的自定义信号，接收到以后显示自身
+connect(choosescene,&amp;chooselevelsecene::chooseSceneBack,[=](){
+    this-&gt;show();
+}</code></pre><p>接下来就是关卡的显示，能够在点击关卡图标时切换到对应的具体关卡场景，因此用前面封装好的按钮类来创建：  </p>
+<pre><code> for(int i=0;i&lt;20;i++)
+{
+    MyPushButton * menuBtn = new MyPushButton(&quot;:/LevelIcon.png&quot;);
+           menuBtn-&gt;setParent(this);
+    menuBtn-&gt;move(60+(i%4)*70,130+(i/4)*70);
+    //按钮上显示的文字
+    QLabel * label = new QLabel;
+    label-&gt;setParent(this);
+    label-&gt;setFixedSize(menuBtn-&gt;width(),menuBtn-&gt;height());
+    label-&gt;setText(QString::number(i+1));
+    //设置居中
+    label-&gt;setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    label-&gt;move(60+(i%4)*70,130+(i/4)*70);
+    //鼠标事件穿透(按钮被label挡住)
+    label-&gt;setAttribute(Qt::WA_TransparentForMouseEvents,true);
+    //监听每个按钮的点击事件
+    connect(menuBtn,&amp;MyPushButton::clicked,[=]()
+    {
+        if(pscene == NULL)  //游戏场景不复用，直接移除掉换新的
+        {
+             this-&gt;hide();
+             //将点击的关卡号送给playsecen场景
+             pscene = new playscene(i+1);
+              pscene-&gt;show();
+              //监听关卡场景的自定义信号，接收到以后显示自身
+              connect(pscene,&amp;playscene::pSceneBack,[=](){
+                  this-&gt;show();
+                  delete  pscene;
+                  pscene = NULL;
+              }
+              );
+        }
+    });
+}</code></pre><p>为了能够显示关卡数字，在按钮位置增加label，同时设置label中字体居中，但这样带来了一个问题，就是<strong>按钮被label挡住，使得鼠标点击按钮时无反应，为了解决这个问题，设置鼠标事件穿透</strong>，又为了能够实现在点击关卡后能够切换到具体关卡场景，对每个按钮的点击事件进行监听，当按钮被点击后，创建关卡场景，同时把点击的关卡号送给关卡场景。  </p>
+<p>有关关卡场景的创建，构造函数的重载，以及关卡场景和选择关卡场景的切换，将在下一篇中进行介绍。选择关卡场景的实现图片如下所示：<br><img src="https://i.loli.net/2020/10/12/TaQDcs3rtb9GzwR.png" alt="翻硬币8.png">  </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>翻硬币2</title>
     <url>/2020/10/08/%E7%BF%BB%E7%A1%AC%E5%B8%812/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍翻硬币游戏中登录界面的设计，主要包括标题的显示设计，以及用户名，密码等控件的调用和实现，还有如何将该项目与数据库相连接，能够在登录时调用数据库中的数据进行判断，并对用户信息进行保存。</p>
