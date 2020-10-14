@@ -46,24 +46,23 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将要介绍对象创建模式，其中包括工厂模式、抽象工厂、原型模式和builder模式，主要用来绕开new，来避免对象创建（new）过程中所导致的紧耦合（依赖具体类），从而支持对象创建的稳定。">
+  <meta name="description" content="摘要：本篇将主要介绍翻硬币场景的创建，主要包括翻金币构造函数的重载，使得能够将关卡号传入到翻硬币场景中，以及翻硬币场景的标题、背景和返回按钮的设计，还有游戏场景硬币按钮的实现。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="工厂模式、抽象工厂、原型模式和builder模式">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/09/12/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8Cbuilder%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:title" content="翻硬币4">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/10/14/%E7%BF%BB%E7%A1%AC%E5%B8%814/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将要介绍对象创建模式，其中包括工厂模式、抽象工厂、原型模式和builder模式，主要用来绕开new，来避免对象创建（new）过程中所导致的紧耦合（依赖具体类），从而支持对象创建的稳定。">
+<meta property="og:description" content="摘要：本篇将主要介绍翻硬币场景的创建，主要包括翻金币构造函数的重载，使得能够将关卡号传入到翻硬币场景中，以及翻硬币场景的标题、背景和返回按钮的设计，还有游戏场景硬币按钮的实现。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1.ax1x.com/2020/09/12/wdazQK.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/09/13/wwPfbj.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/09/13/wwPH2T.png">
-<meta property="og:image" content="https://s1.ax1x.com/2020/09/13/wwPbxU.png">
-<meta property="article:published_time" content="2020-09-12T11:59:34.216Z">
-<meta property="article:modified_time" content="2020-09-13T01:10:07.112Z">
+<meta property="og:image" content="https://i.loli.net/2020/10/14/jH28oBcUZd7VxaY.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/14/DCY5mgvu73xoazO.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/14/mAvlu3a9etEG7Fo.png">
+<meta property="article:published_time" content="2020-10-14T11:49:35.554Z">
+<meta property="article:modified_time" content="2020-10-14T12:40:36.813Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/12/wdazQK.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/14/jH28oBcUZd7VxaY.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/09/12/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8Cbuilder%E6%A8%A1%E5%BC%8F/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/10/14/%E7%BF%BB%E7%A1%AC%E5%B8%814/">
 
 
 <script id="page-configurations">
@@ -75,7 +74,7 @@
   };
 </script>
 
-  <title>工厂模式、抽象工厂、原型模式和builder模式 | zpl-novice</title>
+  <title>翻硬币4 | zpl-novice</title>
   
 
 
@@ -205,7 +204,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/09/12/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8Cbuilder%E6%A8%A1%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/10/14/%E7%BF%BB%E7%A1%AC%E5%B8%814/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -218,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          工厂模式、抽象工厂、原型模式和builder模式
+          翻硬币4
         </h1>
 
         <div class="post-meta">
@@ -227,24 +226,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-09-12 19:59:34" itemprop="dateCreated datePublished" datetime="2020-09-12T19:59:34+08:00">2020-09-12</time>
+              <time title="创建时间：2020-10-14 19:49:35 / 修改时间：20:40:36" itemprop="dateCreated datePublished" datetime="2020-10-14T19:49:35+08:00">2020-10-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-13 09:10:07" itemprop="dateModified" datetime="2020-09-13T09:10:07+08:00">2020-09-13</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
                   </a>
                 </span>
             </span>
@@ -255,7 +248,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>3.2k</span>
             </span>
 
         </div>
@@ -267,15 +260,109 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将要介绍对象创建模式，其中包括工厂模式、抽象工厂、原型模式和builder模式，主要用来绕开new，来避免对象创建（new）过程中所导致的紧耦合（依赖具体类），从而支持对象创建的稳定。</p>
+        <p>摘要：本篇将主要介绍翻硬币场景的创建，主要包括翻金币构造函数的重载，使得能够将关卡号传入到翻硬币场景中，以及翻硬币场景的标题、背景和返回按钮的设计，还有游戏场景硬币按钮的实现。</p>
 <a id="more"></a>
-<p><strong>对象创建模式是接口抽象之后的第一步工作。它可以绕开new，来避免对象创建（new）过程中所导致的紧耦合（依赖具体类），从而支持对象创建的稳定</strong>。  </p>
-<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><p><strong>在软件系统中，经常面临着创建对象的工作；由于需求的变化，需要创建的对象的具体类型经常变化</strong>。<br>如何应对这种变化？如何绕过常规的对象创建方法(new)，提供一种“封装机制”来避免客户程序和这种“具体对象创建工作”的紧耦合？<br>如一个分割器，可以分割二进制文件、文本文件、图片、视频等，我们<strong>可以设计一个抽象基类来使得这些具体对象依赖于抽象，这是面向接口编程的一步</strong>。<br><img src="https://s1.ax1x.com/2020/09/12/wdazQK.png" alt="wdazQK.png">  </p>
-<p>然而<strong>在创建对象时，若通过new来创建，等号右边又变成了具体实现，因此抽象依赖于具体实现，打破了依赖倒置原则</strong>。<br><img src="https://s1.ax1x.com/2020/09/13/wwPfbj.png" alt="wwPfbj.png">  </p>
-<p>如何解决这个问题？<br><strong>使用工厂模式，绕开new，定义一个用于创建对象的接口，这样就变成了将真正创建的对象通过多态延迟给子类中创建</strong>。<br><img src="https://s1.ax1x.com/2020/09/13/wwPH2T.png" alt="wwPH2T.png"><br><img src="https://s1.ax1x.com/2020/09/13/wwPbxU.png" alt="wwPbxU.png"><br>模式定义：<strong>定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使得一个类的实例化延迟（目的：解耦，手段：虚函数）到子类。</strong> ——《设计模式》GoF<br>总结：<br>Factory Method模式用于<strong>隔离类对象的使用者和具体类型之间的耦合关系</strong>。面对一个经常变化的具体类型，紧耦合关系(new)会导致软件的脆弱。<br>Factory Method模式通过面向对象的手法，将所要创建的具体对象工作延迟到子类，从而实现一种扩展（而非更改）的策略，较好地解决了这种紧耦合关系。<br><strong>Factory Method模式解决“单个对象”的需求变化。缺点在于要求创建方法/参数相同。<br>将对象抽象，将创建对象过程（new）也抽象，这样把对象和具体实现隔离。</strong>  </p>
-<h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p><strong>在软件系统中，经常面临着“一系列相互依赖的对象工作”；同时，由于需求的变化，往往存在更多系列对象的创建工作</strong>。<br>如何应对这种变化？如何<strong>绕过常规的对象创建方法(new)，提供一种“封装机制”来避免客户程序和这种“多系列具体对象创建工作”的紧耦合</strong>。<br>因为是相互依赖的对象，如上面单一职责模式中讲到的图形的形状和颜色，使用工厂模式无法完成两个系列类的创建，但使用抽象工厂，既包含形状又包含颜色，来完成对象的创建。<br><strong>提供一个接口，让该接口负责创建一系列”相关或者相互依赖的对象“，无需指定它们具体的类。</strong> ——《设计模式》GoF<br>总结：<br>如果没有应对”<strong>多系列对象创建</strong>“的需求变化，则没有必要使用Abstract Factory模式，这时候使用简单的工厂即可。<br>”系列对象“指的是在某一个特定系列的对象之间有相互依赖、或作用的关系。不同系列的对象之间不能相互依赖。<br><strong>Abstract Factory模式主要在于应用”新系列“的需求变动。其缺点在与难以应对”新对象“的需求变动</strong>。  </p>
-<h2 id="原型模式（prototype）"><a href="#原型模式（prototype）" class="headerlink" title="原型模式（prototype）"></a>原型模式（prototype）</h2><p>在软件系统中，经常面临着“<strong>某些结构复杂的对象</strong>”的创建工作；由于需求的变化，这些对象经常面临着剧烈的变化，但是它们却拥有比较稳定一致的接口。<br>如何应对这种变化？如何向“客户程序(使用这些对象的程序)”隔离出“这些易变对象”，从而使得依赖这些”易变对象“的客户程序不随着需求改变而改变。<br><strong>原型模式（Prototype Pattern）是用于创建重复的对象，同时又能保证性能。这种模式是实现了一个原型接口，该接口用于创建当前对象的克隆。当直接创建对象的代价比较大时，则采用这种模式。</strong><br>使用原型实例指定创建对象的种类，然后通过拷贝这些原型来创建新的对象。 ——《设计模式》GoF<br>总结：<br>Prototype模式同样用于隔离对象的使用者和具体类型(易变类)之间的耦合关系，它同样要求这些“易变类”拥有稳定的接口。<br><strong>Prototype模式对于“如何创建易变类的实体对象“采用”原型克隆“的方法来做， 它使得我们可以非常灵活地动态创建”拥有某些稳定接口“的新对象</strong>——所需工作仅仅是注册一个新类的对象(即原型)， 然后在任何需要的地方Clone。<br>Prototype模式中的Clone方法可以利用某些框架中的序列化来实现<strong>深拷贝</strong>。  </p>
-<h2 id="builder模式"><a href="#builder模式" class="headerlink" title="builder模式"></a>builder模式</h2><p>在软件系统中，有时候面临着<strong>“一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定</strong>。<br>如何应对这种变化？如何提供一种“封装机制”来隔离出“复杂对象的各个部分”的变化，从而保持系统中的“稳定构建算法”不随着需求改变而改变？<br><strong>将一个复杂对象的构建与其表示相分离，使得同样的构建过程(稳定)可以创建不同的表示(变化)</strong>。 ——《设计模式》GoF<br>总结：<br>Builder 模式主要用于“分步骤构建一个复杂的对象”。在这其中“分步骤”是一个稳定的算法，而复杂对象的各个部分则经常变化。<br>变化点在哪里，封装哪里—— Builder模式主要在于应对“复杂对象各个部分”的频繁需求变动。其缺点在于难以应对“分步骤构建算法”的需求变动。<br>在Builder模式中，要注意不同语言中构造器内调用虚函数的差别（C++(构造函数中不可以调用虚函数) vs. C#)。<br>builder模式与前面的template method模式比较像。  </p>
+<p>创建翻金币场景playscene，重写其构造函数：  </p>
+<pre><code>playscene::playscene(int index)
+{
+     this-&gt;levelindex=index;
+        //配置选择关卡场景
+        resize(380,588);
+    //设置标题
+        QString str = QString(&quot;关卡%1&quot;).arg(this-&gt;levelindex);
+     setWindowTitle(str);
+    //创建菜单栏
+        QMenuBar * bar = this-&gt;menuBar();
+        this-&gt;setMenuBar(bar);
+        //创建开始菜单
+     QMenu * startMenu = bar-&gt;addMenu(&quot;开始&quot;);
+        //创建按钮菜单项
+     QAction * quitAction = startMenu-&gt;addAction(&quot;退出&quot;);
+     //点击退出 退出游戏
+     connect(quitAction,&amp;QAction::triggered,[=](){this-&gt;close();});
+
+     //返回按钮
+     backbutton = new MyPushButton(&quot;:/BackButton.png&quot;,&quot;:/BackButtonSelected.png&quot;);
+         backbutton-&gt;setParent(this);
+        backbutton-&gt;move(this-&gt;width()-backbutton-&gt;width(),this-&gt;height()-backbutton-&gt;height());
+     //实现返回功能
+     connect(backbutton,&amp;MyPushButton::clicked,[=](){
+        this-&gt;hide();
+        //触发自定义信号，关闭自身，该信号写到 signals下做声明
+        emit this-&gt;pSceneBack();
+         }
+    );
+}</code></pre><p>与前面的两个场景一样，设计其标题、菜单栏和返回按钮，同样是使用封装的mypushbutton类创建返回按钮，当点击时，翻金币场景隐藏，发送一个自定义信号，选择关卡场景接收到该信号后显示，这样就实现了三个场景之间的切换。<br>接下来在左下角显示玩家的具体关卡标签，通过Qlabel来创建，设置其大小、位置和字体等：  </p>
+<pre><code>//右下角当前关卡标题
+QLabel * label = new QLabel;
+label-&gt;setParent(this);
+QFont font;
+font.setFamily(&quot;华文新魏&quot;);
+font.setPointSize(20);
+label-&gt;setFont(font);
+QString str2 = QString(&quot;Leavel: %1&quot;).arg(this-&gt;levelindex);
+label-&gt;setText(str2);
+//设置大小和位置
+label-&gt;setGeometry(QRect(20, this-&gt;height() - 50,120, 50));  </code></pre><p>当这些都创建完成后，进行游戏主场景的创建，首先创建金币的背景图片，这里背景图片也用label来创建，与选择关卡相同的方法，通过for循环创建并调整其位置：  </p>
+<pre><code>//创建金币的背景图片
+for(int i = 0 ; i &lt; 4;i++)
+{
+    for(int j = 0 ; j &lt; 4; j++)
+    {
+       //绘制背景图片
+       QLabel* label = new QLabel;
+       label-&gt;setGeometry(0,0,50,50);
+       label-&gt;setPixmap(QPixmap(&quot;:/BoardNode(1).png&quot;));
+       label-&gt;setParent(this);
+       label-&gt;move(80 + i*50,200+j*50);
+     }
+ }</code></pre><p>当完成上述步骤后，运行结果如下：<br><img src="https://i.loli.net/2020/10/14/jH28oBcUZd7VxaY.png" alt="翻硬币9.png">  </p>
+<p>可见能够正确的显示当前关卡标签以及游戏金币背景，再接下来就是要把金币放入其中，由于<strong>金币被点击后要能翻转，所以金币也是一个按钮，但其功能时实现了翻转特效</strong>，这与前面所封装的mypushbutton类功能不太一样，因此重新封装一个金币类MyCoin，也是继承于QPushbutton类：  </p>
+<pre><code>MyCoin::MyCoin(QString btnimg)
+{
+    QPixmap pix;
+    pix.load(btnimg);
+    this-&gt;setFixedSize( pix.width(), pix.height() );
+    this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+    this-&gt;setIcon(pix);
+    this-&gt;setIconSize(QSize(pix.width(),pix.height()));
+
+}</code></pre><p>重写其构造函数，首先具有传入参数，来表明该硬币是金币还是银币。然后设置硬币的背景图片、大小。<br>当设计完成以后，在翻硬币场景中对该金币类进行测试，在for循环中，创建金币对象，这里测试传入全为金币的图片，移动其位置，使其在金币背景上：  </p>
+<pre><code>//创建金币对象
+MyCoin * coin = new MyCoin(&quot;:/Coin0001.png&quot;);
+coin-&gt;setParent(this);
+coin-&gt;move(80 + i*50,200+j*50);</code></pre><p>运行结果如下所示：<br><img src="https://i.loli.net/2020/10/14/DCY5mgvu73xoazO.png" alt="翻硬币10.png"><br>可见基本实现了翻硬币场景的界面。  </p>
+<p>然而我们需要对每个关卡的界面进行初始化，若使用一个一个金币对象的方式去创建过于麻烦，因此<strong>创建一个关卡数据文件，来记录各个关卡的金币排列，将其数据传入来对关卡进行初始化</strong>。  </p>
+<p>因此金币是一个4x4的矩阵形式，所以使用二维数组来存储，为方便表示，可以用1表示金币，0表示银币，然后又有20个关卡，所以可以<strong>用map来存储，map的key值对应关卡号，map的value则是一个二维数组，利用vector&lt;vector<int>&gt;实现，来初始化关卡金币状态</strong>。  </p>
+<p>在dataconfig类中添加成员：  </p>
+<pre><code>QMap&lt;int, QVector&lt; QVector&lt;int&gt; &gt; &gt;mData;  </code></pre><p>然后在构造函数中定义二维数组，其中的值为我们想要的硬币初始化状态，将二维数组的值分别传入到mData的value中，以第1关卡为例：  </p>
+<pre><code> int array1[4][4] = {{1, 1, 1, 1},
+                   {1, 1, 0, 1},
+                   {1, 0, 0, 0},
+                   {1, 1, 0, 1} } ;
+
+QVector&lt; QVector&lt;int&gt;&gt; v;
+for(int i = 0 ; i &lt; 4;i++)
+{
+    QVector&lt;int&gt;v1;
+    for(int j = 0 ; j &lt; 4;j++)
+    {
+
+       v1.push_back(array1[i][j]);
+    }
+    v.push_back(v1);
+}
+
+mData.insert(1,v); </code></pre><p>为测试该关卡数据是否能传入到翻金币游戏中，在主函数中创建dataconfig对象，输出第一关的二维数组，查看是否与dataconfig中数据匹配：  </p>
+<pre><code>dataConfig config;
+for(int i=0;i&lt;4;i++)
+{
+   for(int j=0;j&lt;4;j++)
+   {
+       qDebug()&lt;&lt;config.mData[1][i][j]&lt;&lt;&quot; &quot;;
+   }
+}</code></pre><p>运行结果为：<br><img src="https://i.loli.net/2020/10/14/mAvlu3a9etEG7Fo.png" alt="翻硬币11.png"><br>可见与array1对应相同。  </p>
+<p>在下一篇中将介绍如何对各个关卡进行初始化，以及如何实现硬币的翻转特效。  </p>
 
     </div>
 
@@ -291,7 +378,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/09/12/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E3%80%81%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8Cbuilder%E6%A8%A1%E5%BC%8F/" title="工厂模式、抽象工厂、原型模式和builder模式">https://zpl-novice.github.io/2020/09/12/工厂模式、抽象工厂、原型模式和builder模式/</a>
+    <a href="https://zpl-novice.github.io/2020/10/14/%E7%BF%BB%E7%A1%AC%E5%B8%814/" title="翻硬币4">https://zpl-novice.github.io/2020/10/14/翻硬币4/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,13 +395,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/10/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%A1%A5%E6%A8%A1%E5%BC%8F/" rel="prev" title="装饰模式和桥模式">
-      <i class="fa fa-chevron-left"></i> 装饰模式和桥模式
+    <a href="/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/" rel="prev" title="翻硬币3">
+      <i class="fa fa-chevron-left"></i> 翻硬币3
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/09/14/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" rel="next" title="单例模式和享元模式">
-      单例模式和享元模式 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -374,7 +458,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工厂模式"><span class="nav-number">1.</span> <span class="nav-text">工厂模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂"><span class="nav-number">2.</span> <span class="nav-text">抽象工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型模式（prototype）"><span class="nav-number">3.</span> <span class="nav-text">原型模式（prototype）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#builder模式"><span class="nav-number">4.</span> <span class="nav-text">builder模式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

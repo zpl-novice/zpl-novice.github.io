@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币4</title>
+    <url>/2020/10/14/%E7%BF%BB%E7%A1%AC%E5%B8%814/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍翻硬币场景的创建，主要包括翻金币构造函数的重载，使得能够将关卡号传入到翻硬币场景中，以及翻硬币场景的标题、背景和返回按钮的设计，还有游戏场景硬币按钮的实现。</p>
+<a id="more"></a>
+<p>创建翻金币场景playscene，重写其构造函数：  </p>
+<pre><code>playscene::playscene(int index)
+{
+     this-&gt;levelindex=index;
+        //配置选择关卡场景
+        resize(380,588);
+    //设置标题
+        QString str = QString(&quot;关卡%1&quot;).arg(this-&gt;levelindex);
+     setWindowTitle(str);
+    //创建菜单栏
+        QMenuBar * bar = this-&gt;menuBar();
+        this-&gt;setMenuBar(bar);
+        //创建开始菜单
+     QMenu * startMenu = bar-&gt;addMenu(&quot;开始&quot;);
+        //创建按钮菜单项
+     QAction * quitAction = startMenu-&gt;addAction(&quot;退出&quot;);
+     //点击退出 退出游戏
+     connect(quitAction,&amp;QAction::triggered,[=](){this-&gt;close();});
+
+     //返回按钮
+     backbutton = new MyPushButton(&quot;:/BackButton.png&quot;,&quot;:/BackButtonSelected.png&quot;);
+         backbutton-&gt;setParent(this);
+        backbutton-&gt;move(this-&gt;width()-backbutton-&gt;width(),this-&gt;height()-backbutton-&gt;height());
+     //实现返回功能
+     connect(backbutton,&amp;MyPushButton::clicked,[=](){
+        this-&gt;hide();
+        //触发自定义信号，关闭自身，该信号写到 signals下做声明
+        emit this-&gt;pSceneBack();
+         }
+    );
+}</code></pre><p>与前面的两个场景一样，设计其标题、菜单栏和返回按钮，同样是使用封装的mypushbutton类创建返回按钮，当点击时，翻金币场景隐藏，发送一个自定义信号，选择关卡场景接收到该信号后显示，这样就实现了三个场景之间的切换。<br>接下来在左下角显示玩家的具体关卡标签，通过Qlabel来创建，设置其大小、位置和字体等：  </p>
+<pre><code>//右下角当前关卡标题
+QLabel * label = new QLabel;
+label-&gt;setParent(this);
+QFont font;
+font.setFamily(&quot;华文新魏&quot;);
+font.setPointSize(20);
+label-&gt;setFont(font);
+QString str2 = QString(&quot;Leavel: %1&quot;).arg(this-&gt;levelindex);
+label-&gt;setText(str2);
+//设置大小和位置
+label-&gt;setGeometry(QRect(20, this-&gt;height() - 50,120, 50));  </code></pre><p>当这些都创建完成后，进行游戏主场景的创建，首先创建金币的背景图片，这里背景图片也用label来创建，与选择关卡相同的方法，通过for循环创建并调整其位置：  </p>
+<pre><code>//创建金币的背景图片
+for(int i = 0 ; i &lt; 4;i++)
+{
+    for(int j = 0 ; j &lt; 4; j++)
+    {
+       //绘制背景图片
+       QLabel* label = new QLabel;
+       label-&gt;setGeometry(0,0,50,50);
+       label-&gt;setPixmap(QPixmap(&quot;:/BoardNode(1).png&quot;));
+       label-&gt;setParent(this);
+       label-&gt;move(80 + i*50,200+j*50);
+     }
+ }</code></pre><p>当完成上述步骤后，运行结果如下：<br><img src="https://i.loli.net/2020/10/14/jH28oBcUZd7VxaY.png" alt="翻硬币9.png">  </p>
+<p>可见能够正确的显示当前关卡标签以及游戏金币背景，再接下来就是要把金币放入其中，由于<strong>金币被点击后要能翻转，所以金币也是一个按钮，但其功能时实现了翻转特效</strong>，这与前面所封装的mypushbutton类功能不太一样，因此重新封装一个金币类MyCoin，也是继承于QPushbutton类：  </p>
+<pre><code>MyCoin::MyCoin(QString btnimg)
+{
+    QPixmap pix;
+    pix.load(btnimg);
+    this-&gt;setFixedSize( pix.width(), pix.height() );
+    this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+    this-&gt;setIcon(pix);
+    this-&gt;setIconSize(QSize(pix.width(),pix.height()));
+
+}</code></pre><p>重写其构造函数，首先具有传入参数，来表明该硬币是金币还是银币。然后设置硬币的背景图片、大小。<br>当设计完成以后，在翻硬币场景中对该金币类进行测试，在for循环中，创建金币对象，这里测试传入全为金币的图片，移动其位置，使其在金币背景上：  </p>
+<pre><code>//创建金币对象
+MyCoin * coin = new MyCoin(&quot;:/Coin0001.png&quot;);
+coin-&gt;setParent(this);
+coin-&gt;move(80 + i*50,200+j*50);</code></pre><p>运行结果如下所示：<br><img src="https://i.loli.net/2020/10/14/DCY5mgvu73xoazO.png" alt="翻硬币10.png"><br>可见基本实现了翻硬币场景的界面。  </p>
+<p>然而我们需要对每个关卡的界面进行初始化，若使用一个一个金币对象的方式去创建过于麻烦，因此<strong>创建一个关卡数据文件，来记录各个关卡的金币排列，将其数据传入来对关卡进行初始化</strong>。  </p>
+<p>因此金币是一个4x4的矩阵形式，所以使用二维数组来存储，为方便表示，可以用1表示金币，0表示银币，然后又有20个关卡，所以可以<strong>用map来存储，map的key值对应关卡号，map的value则是一个二维数组，利用vector&lt;vector<int>&gt;实现，来初始化关卡金币状态</strong>。  </p>
+<p>在dataconfig类中添加成员：  </p>
+<pre><code>QMap&lt;int, QVector&lt; QVector&lt;int&gt; &gt; &gt;mData;  </code></pre><p>然后在构造函数中定义二维数组，其中的值为我们想要的硬币初始化状态，将二维数组的值分别传入到mData的value中，以第1关卡为例：  </p>
+<pre><code> int array1[4][4] = {{1, 1, 1, 1},
+                   {1, 1, 0, 1},
+                   {1, 0, 0, 0},
+                   {1, 1, 0, 1} } ;
+
+QVector&lt; QVector&lt;int&gt;&gt; v;
+for(int i = 0 ; i &lt; 4;i++)
+{
+    QVector&lt;int&gt;v1;
+    for(int j = 0 ; j &lt; 4;j++)
+    {
+
+       v1.push_back(array1[i][j]);
+    }
+    v.push_back(v1);
+}
+
+mData.insert(1,v); </code></pre><p>为测试该关卡数据是否能传入到翻金币游戏中，在主函数中创建dataconfig对象，输出第一关的二维数组，查看是否与dataconfig中数据匹配：  </p>
+<pre><code>dataConfig config;
+for(int i=0;i&lt;4;i++)
+{
+   for(int j=0;j&lt;4;j++)
+   {
+       qDebug()&lt;&lt;config.mData[1][i][j]&lt;&lt;&quot; &quot;;
+   }
+}</code></pre><p>运行结果为：<br><img src="https://i.loli.net/2020/10/14/mAvlu3a9etEG7Fo.png" alt="翻硬币11.png"><br>可见与array1对应相同。  </p>
+<p>在下一篇中将介绍如何对各个关卡进行初始化，以及如何实现硬币的翻转特效。  </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>翻硬币3</title>
     <url>/2020/10/12/%E7%BF%BB%E7%A1%AC%E5%B8%813/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍登录以后，关卡界面的设计，主要包括关卡界面的背景、内容，以及各关卡选择按钮的封装，返回按钮的设计和场景之间的切换。  </p>
