@@ -1,6 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币5</title>
+    <url>/2020/10/18/%E7%BF%BB%E7%A1%AC%E5%B8%815/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍如何对各个关卡的金币进行初始化，以及怎么实现翻转功能。将上篇中介绍的关卡数据传入到各个关卡中，同时对金币属性进行扩展，创建翻转函数，来实现金币点击时的翻转特效。</p>
+<a id="more"></a>
+<p>在翻金币场景中创建二维数组来存储初始数据，将dataconfig中的数据传入到翻金币场景中：  </p>
+<pre><code> //初始化二维数组
+dataConfig config;
+for(int i = 0 ; i &lt; 4;i++)
+{
+    for(int j = 0 ; j &lt; 4; j++)
+    {
+        gameArray[i][j]=config.mData[this-&gt;levelindex][i][j];
+    }
+}</code></pre><p>然后在for循环中，根据二维数据创建金币或银币，来实现初始化：</p>
+<pre><code>//创建金币对象
+QString str;
+if(gameArray[i][j]==1)
+{
+     str = &quot;:/Coin0001.png&quot;;
+}
+else
+{
+     str = &quot;:/Coin0008.png&quot;;
+}
+MyCoin * coin = new MyCoin(str);
+coin-&gt;setParent(this);
+coin-&gt;move(83 + i*50,203+j*50);</code></pre><p>运行效果为：<br><img src="https://i.loli.net/2020/10/18/NwxHz2ZLnSUGbVc.png" alt="翻硬币13.png">  </p>
+<p>接下来实现翻转功能，首先对<strong>金币属性进行扩展，定义其x、y坐标，再定义一个标志位</strong>，1表示当前为金币，0表示当前为银币，然后在金币类中实现changeflag函数：  </p>
+<pre><code>void MyCoin::changeflag()
+{
+    //正面翻反面
+        if(this-&gt;flag==1)
+    {
+            timer1-&gt;start(80);
+            isdoing=true;   //开始作动画
+            this-&gt;flag=false;
+        }
+        //反面翻正面
+        else
+        {
+            timer2-&gt;start(80);
+           isdoing=true;   //开始作动画
+            this-&gt;flag=true;
+    }
+}</code></pre><p>可以看到，在函数中首先判断当前是正面还是反面，即是金币还是银币，然后分别启动相应的定时器，并将标志位取反。定时器需要在构造函数中定义，<strong>对定时器进行监听，当定时器触发后在槽函数中设置图片的翻转</strong>。</p>
+<pre><code> //监听正面翻反面的信号,翻转金币
+connect(timer1,&amp;QTimer::timeout,[=]()
+{
+    QPixmap pixmap;
+    QString str = QString(&quot;:/Coin000%1.png&quot;).arg(this-&gt;min++);
+    pixmap.load(str);
+    this-&gt;setFixedSize(pixmap.width(),pixmap.height() );
+    this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+    this-&gt;setIcon(pixmap);
+    this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+    if(this-&gt;min &gt; this-&gt;max) //如果大于最大值，重置最小值，并停止定时器
+    {
+         this-&gt;min = 1;
+         isdoing=false;   //停止作动画
+         timer1-&gt;stop();
+    }
+});
+//监听反面翻正面的信号,翻转金币
+connect(timer2,&amp;QTimer::timeout,[=]()
+{
+    QPixmap pixmap;
+    QString str = QString(&quot;:/Coin000%1.png&quot;).arg((this-&gt;max)--);
+    pixmap.load(str);
+    this-&gt;setFixedSize(pixmap.width(),pixmap.height() );
+    this-&gt;setStyleSheet(&quot;QPushButton{border:0px;}&quot;);
+    this-&gt;setIcon(pixmap);
+    this-&gt;setIconSize(QSize(pixmap.width(),pixmap.height()));
+    if(this-&gt;max &lt; this-&gt;min) //如果小于最小值，重置最大值，并停止定时器
+    {
+         this-&gt;max = 8;
+        isdoing=false;   //停止作动画
+         timer2-&gt;stop();
+    }
+});</code></pre><p>这样翻转函数就创建完成，只需要监听金币的点击事件即可，当点击以后启动翻转函数。  </p>
+<pre><code>connect(coin,&amp;MyCoin::clicked,[=]()
+       {
+           coin-&gt;changeflag();   //金币被点击时调用翻转函数
+           this-&gt;gameArray[i][j]=this-&gt;gameArray[i][j] == 0 ? 1 : 0;
+           //数组内部记录的标志同步修改
+       }
+        );</code></pre><p>接下来就是要在硬币翻转的过程中禁用按钮点击，这样可以避免硬币的连续点击翻转情况，等待翻转动画完成后再翻转，如上面代码中所示定义一个isdoing标志位，当动画开始翻转时为true，翻转完成后为false，然后重写鼠标点击事件，当isdoing为true时，点击无效。  </p>
+<pre><code>void MyCoin::mousePressEvent(QMouseEvent *e)
+{
+        if(this-&gt;isdoing==true)
+       {
+         return;
+     }
+     else
+    {
+        return QPushButton::mousePressEvent(e);
+    }
+}</code></pre>]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>翻硬币4</title>
     <url>/2020/10/14/%E7%BF%BB%E7%A1%AC%E5%B8%814/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍翻硬币场景的创建，主要包括翻金币构造函数的重载，使得能够将关卡号传入到翻硬币场景中，以及翻硬币场景的标题、背景和返回按钮的设计，还有游戏场景硬币按钮的实现。</p>
