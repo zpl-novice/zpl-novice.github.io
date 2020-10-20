@@ -46,35 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
+  <meta name="description" content="摘要：在上一篇中实现了金币自身的翻转，然而游戏规则是金币周围的硬币也需要翻转，因此本篇将主要介绍如何将周围的硬币跟随翻转，同时来判断胜利条件，当全为金币时胜利，弹出胜利图片。并且最后给游戏配上音效。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图的基本知识">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:title" content="翻硬币6">
+<meta property="og:url" content="https://zpl-novice.github.io/2020/10/20/%E7%BF%BB%E7%A1%AC%E5%B8%816/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。">
+<meta property="og:description" content="摘要：在上一篇中实现了金币自身的翻转，然而游戏规则是金币周围的硬币也需要翻转，因此本篇将主要介绍如何将周围的硬币跟随翻转，同时来判断胜利条件，当全为金币时胜利，弹出胜利图片。并且最后给游戏配上音效。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png">
-<meta property="og:image" content="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png">
-<meta property="article:published_time" content="2020-04-04T12:48:28.776Z">
-<meta property="article:modified_time" content="2020-04-04T13:46:58.361Z">
+<meta property="og:image" content="https://i.loli.net/2020/10/20/b9BkJuOVLDAYTyp.png">
+<meta property="article:published_time" content="2020-10-20T10:32:13.544Z">
+<meta property="article:modified_time" content="2020-10-20T10:56:48.566Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/20/b9BkJuOVLDAYTyp.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+<link rel="canonical" href="https://zpl-novice.github.io/2020/10/20/%E7%BF%BB%E7%A1%AC%E5%B8%816/">
 
 
 <script id="page-configurations">
@@ -86,7 +72,7 @@
   };
 </script>
 
-  <title>图的基本知识 | zpl-novice</title>
+  <title>翻硬币6 | zpl-novice</title>
   
 
 
@@ -216,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/10/20/%E7%BF%BB%E7%A1%AC%E5%B8%816/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -229,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          图的基本知识
+          翻硬币6
         </h1>
 
         <div class="post-meta">
@@ -240,7 +226,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-04 20:48:28 / 修改时间：21:46:58" itemprop="dateCreated datePublished" datetime="2020-04-04T20:48:28+08:00">2020-04-04</time>
+              <time title="创建时间：2020-10-20 18:32:13 / 修改时间：18:56:48" itemprop="dateCreated datePublished" datetime="2020-10-20T18:32:13+08:00">2020-10-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,8 +234,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
                   </a>
                 </span>
             </span>
@@ -260,7 +246,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>3k</span>
             </span>
 
         </div>
@@ -272,15 +258,98 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇开始将进入图这一数据结构的学习。图与前面所学的表和树有很大的不同，它的概念也比较多，因此在本篇中将主要介绍图的基本知识，便于后续学习。</p>
+        <p>摘要：在上一篇中实现了金币自身的翻转，然而游戏规则是金币周围的硬币也需要翻转，因此本篇将主要介绍如何将周围的硬币跟随翻转，同时来判断胜利条件，当全为金币时胜利，弹出胜利图片。并且最后给游戏配上音效。</p>
 <a id="more"></a>
-<p>线性表中数据元素是线性关系，都是只有一个直接前驱和直接后继，在树中数据之间有着明显的层次关系。图是一种比线性表和树更复杂的数据结构。在图形结构中，结点之间的关系可以是任意的，图中任意两个元素之间都可能相关。<br>图是由顶点的有穷非空集合和顶点之间的边的集合组成，通常表示为：G（V，E），其中G表示一个图，V是图G中顶点的集合，E是图G中边的集合。<br><img src="https://i.loli.net/2020/04/04/dO2chfXDGRHWtrC.png" alt=""><br>线性表中数据元素叫元素，树中则叫结点，而在图中叫顶点。有空表和空树，但是没有空图这个概念，即<strong>在图结构中，不允许没有顶点</strong>。顶点之间的逻辑关系用边来表示。<br>下面来讲解图的一些基本概念：<br>无向边是指两个顶点之间的边没有方向，(vi,vj)表示。任意的边都是无向边的图为无向图，如下所示。<br><img src="https://i.loli.net/2020/04/04/zLnTRXp8hIO64la.png" alt=""><br>有向边则是两个顶点之间的边有方向，也称为弧。&lt;vi,vj&gt;表示，其中vi称为弧尾，vj称为弧头。任意的边都是有向边的图为有向图，如下所示，A,D之间的边为&lt;A,D&gt;。<br><img src="https://i.loli.net/2020/04/04/wevfVTSqCX4NsK1.png" alt=""><br><strong>不存在顶点到自身的边，且同一条边不重复出现的图称为简单图</strong>，我们后面要学习的基本都是简单图。<br>在无向图中，如果任意两个顶点之间都存在边，则称为无向完全图。<br><img src="https://i.loli.net/2020/04/04/4ykQCLNx9uBY6Rf.png" alt=""><br>根据无向完全图的定义可得，N个顶点，共有<code>N*(N-1)/2</code>条边。<br>在有向图中，如果任意两个顶点之间都存在方向互为相反的两条弧，则称为有向完全图。<br><img src="https://i.loli.net/2020/04/04/SzKFP41e528sdGX.png" alt=""><br>根据有向完全图的定义可得，N个顶点，共有<code>N*(N-1)</code>条边。<br>与图的边或弧相关的数叫做权。这种带权的图通常称为网。权可以表示一个顶点到另一个顶点的距离或耗费。如下所示：<br><img src="https://i.loli.net/2020/04/04/9vSt6xuVFaQLjHs.png" alt=""><br>如果一个图的顶点和边都是另一个图的顶点和边的集合的子集，则这个图为另一个图的子图。如下所示，右边的图为左边图的子图。 </p>
-<p><img src="https://i.loli.net/2020/04/04/x4bEis1f5HeGtoC.png" alt="">  </p>
-<p>顶点V的度是和V相关联的边的数目。在有向图中，以顶点v为头的弧的数目称为v的入度，以顶点v为尾的弧的数目称为v的出度。<strong>V的度等于出度与入度之和</strong>。<br>路径的长度是路径上边或弧的数目。到自身的路径为回路，<strong>回路中各顶点只出现一次的叫简单回路</strong>。<br>如果图中任意两个顶点都是连通的（即有路径从一个顶点到另一个顶点），则为连通图。下图左边不是连通图，右边是。<br><img src="https://i.loli.net/2020/04/04/qt9gScJzkow1Xj4.png" alt=""><br>一个连通图的生成树是一个极小的连通子图，它含有图中全部的n个顶点，但只有足以构成一棵树的n-1条边。如果一个有向图恰有一个顶点的入度为0，其余顶点的入度均为1，则是一棵有向树。一个有向图的生成森林由若干棵有向树组成，含有图中全部顶点，但只有足以构成若干棵不相交的有向树的弧。如下图1的生成森林为图2和图3。<br><img src="https://i.loli.net/2020/04/04/kFPYGCHnBXjm41c.png" alt="">  </p>
-<h2 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h2><h3 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h3><p>图由顶点和边或弧两部分组成。合在一起比较困难，用两个结构来存储。<br>图的邻接矩阵存储方式是用两个数组来表示图。一个一维数组存储图中顶点信息，一个二维数组（称为邻接矩阵）存储图中边或弧的信息。设图G有n个顶点，则邻接矩阵是一个n*n的方阵。<br><img src="https://i.loli.net/2020/04/04/NeokVxmsgj7ptnO.png" alt=""><br><img src="https://i.loli.net/2020/04/04/oB5YhnTDV9IuRld.png" alt=""><br><img src="https://i.loli.net/2020/04/04/sSx1tyDhW8pTeFE.png" alt=""><br>邻接矩阵对于边数相对顶点较少的图，对空间会很大浪费。  </p>
-<h3 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h3><p>参考树的孩子表示法。<br>数组与链表相结合的存储方法称为邻接表。<br><img src="https://i.loli.net/2020/04/04/CTOmN4fAkzD6cbE.png" alt=""><br>在有向图中，若以顶点为弧尾来存储，则为邻接表（方便查找出度）。若以顶点为弧头来存储，为逆邻接表（方便查找入度）。<br><img src="https://i.loli.net/2020/04/04/j2WgFEHeclQYSLr.png" alt="">  </p>
-<h3 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h3><p>边集数组由两个一维数组组成。一个存储顶点的信息，一个存储边的信息。<br><img src="https://i.loli.net/2020/04/04/N3Dxs8krFKaZXQq.png" alt="">  </p>
-<p>此外，还有将邻接表与逆邻接表结合，既能得到出度又能得到入度的十字链表表示法，以及对无向图邻接表进行优化的邻接多重表表示法等。</p>
+<p>若要实现点击硬币时，周围的硬币也能跟随翻转，则首先<strong>需要一个二维数组来存储所有的金币</strong>。在前面介绍中已经定义过一个二维数组，但那个数组存储的是金币初始化情况，因此还需要再定义一个二维数组，类型为mycoin：  </p>
+<pre><code>//二维数组，维护金币
+MyCoin * coinArray[4][4];</code></pre><p>在创建硬币时将硬币同时记录在该数组中，在硬币被点击时对其上下左右界限进行判断，若有硬币存在在，则延时进行翻转：  </p>
+<pre><code>//翻周围硬币
+QTimer::singleShot(300, this,[=](){
+if(coin-&gt;posX+1&lt;=3)  //右侧金币可以翻转
+{
+    //翻转右侧金币
+    coinArray[coin-&gt;posX+1][coin-&gt;posY]-&gt;changeflag();
+    this-&gt;gameArray[coin-&gt;posX+1][coin-&gt;posY]=this-&gt;gameArray[coin-&gt;posX+1][coin-&gt;posY] == 0 ? 1 : 0;
+ }
+if(coin-&gt;posX-1&gt;=0)  //左侧金币可以翻转
+{
+    //翻转左侧金币
+    coinArray[coin-&gt;posX-1][coin-&gt;posY]-&gt;changeflag();
+    this-&gt;gameArray[coin-&gt;posX-1][coin-&gt;posY]=this-&gt;gameArray[coin-&gt;posX-1][coin-&gt;posY] == 0 ? 1 : 0;
+}
+if(coin-&gt;posY+1&lt;=3)  //上方金币可以翻转
+{
+   //翻转上方金币
+   coinArray[coin-&gt;posX][coin-&gt;posY+1]-&gt;changeflag();
+   this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY+1]=this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY+1] == 0 ? 1 : 0;
+}
+if(coin-&gt;posY-1&gt;=0)  //下方金币可以翻转
+{
+    //翻转下方金币
+    coinArray[coin-&gt;posX][coin-&gt;posY-1]-&gt;changeflag();
+    this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY-1]=this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY-1] == 0 ? 1 : 0;
+}</code></pre><p>这样就实现了翻硬币的完整功能。接下来对胜利条件进行判断，当所有硬币都为金币时胜利，因此需要一个标志位来判断当前所有硬币是否全为金币，创建一个bool型的变量iswin，初始值为true，接下来对每个硬币判断，若有一个为银币，就将iswin变为false，若全为金币，则iswin还是true，满足胜利条件：  </p>
+<pre><code>//判断是否胜利
+this-&gt;iswin=true;
+for(int i=0;i&lt;4;i++)
+{
+    for(int j=0;j&lt;4;j++)
+    {
+        if(coinArray[i][j]-&gt;flag==0)
+        {
+              iswin=false;
+              break;
+        }
+    }
+}</code></pre><p>当胜利时，需要弹出胜利图片，这里以动画掉落的形式呈现，提前创建好胜利图片，但将其移动到窗口以外，这样在窗口里是不显示的：  </p>
+<pre><code>//创建胜利图片
+QLabel* winLabel = new QLabel;
+QPixmap tmpPix;
+tmpPix.load(&quot;:/LevelCompletedDialogBg.png&quot;);
+winLabel-&gt;setGeometry(0,0,tmpPix.width(),tmpPix.height());
+winLabel-&gt;setPixmap(tmpPix);
+winLabel-&gt;setParent(this);
+winLabel-&gt;move( (this-&gt;width() - tmpPix.width())*0.5 , -tmpPix.height());</code></pre><p>可见y坐标为负值，图片看不见。当胜利时将该图片掉落下来，显示在窗口中，需要用到QPropertyAnimation函数：  </p>
+<pre><code>if(this-&gt;iswin==true)
+{
+    // qDebug()&lt;&lt;&quot; 胜利&quot;;
+    //弹出胜利图片
+    QPropertyAnimation * animation1 =  new QPropertyAnimation(winLabel,&quot;geometry&quot;);
+    animation1-&gt;setDuration(1000);
+    animation1-&gt;setStartValue(QRect(winLabel-&gt;x(),winLabel-&gt;y(),winLabel-&gt;width(),winLabel-&gt;height()));
+    animation1-&gt;setEndValue(QRect(winLabel-&gt;x(),winLabel-&gt;y()+124,winLabel-&gt;width(),winLabel-&gt;height()));
+    animation1-&gt;setEasingCurve(QEasingCurve::OutBounce);
+    animation1-&gt;start();
+ }</code></pre><p>这样胜利时为：<br><img src="https://i.loli.net/2020/10/20/b9BkJuOVLDAYTyp.png" alt="翻硬币14.png">  </p>
+<p>当胜利时同样要禁用金币的点击，因此需要一个标志位来标志金币是否胜利，同样的在金币类中添加一个iswin，当胜利中将所有金币的iswin改为true：   </p>
+<pre><code>if(this-&gt;iswin==true)
+{
+    //将所有按钮的胜利标志改为true
+    for(int i=0;i&lt;4;i++)
+    {
+        for(int j=0;j&lt;4;j++)
+        {
+             coinArray[i][j]-&gt;iswin=true;
+        }
+    }
+}</code></pre><p>当金币的iswin为true时禁用鼠标点击：  </p>
+<pre><code>void MyCoin::mousePressEvent(QMouseEvent *e)
+{
+    if(this-&gt;isdoing==true || this-&gt;iswin == true )
+    {
+        return;
+    }
+       else
+    {
+        return QPushButton::mousePressEvent(e);
+       }
+}</code></pre><p>再接下来就是音效的设置，为了游戏的完整性，对按钮的点击或者胜利场景时进行音效设置，需要用到库QSound，如登录和点击界面：  </p>
+<pre><code>//添加音效
+QSound *startSound = new QSound(&quot;:/TapButtonSound.wav&quot;,this);
+startSound-&gt;play(); //开始音效</code></pre><p>胜利时：  </p>
+<pre><code>//胜利音效
+QSound *winSound = new QSound(&quot;:/LevelWinSound.wav&quot;,this);
+winSound-&gt;play();</code></pre><p>当然为了使音效时间变长，可以循环次数播放。  </p>
 
     </div>
 
@@ -296,7 +365,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/04/04/%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/" title="图的基本知识">https://zpl-novice.github.io/2020/04/04/图的基本知识/</a>
+    <a href="https://zpl-novice.github.io/2020/10/20/%E7%BF%BB%E7%A1%AC%E5%B8%816/" title="翻硬币6">https://zpl-novice.github.io/2020/10/20/翻硬币6/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -313,13 +382,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/04/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%954/" rel="prev" title="排序算法4">
-      <i class="fa fa-chevron-left"></i> 排序算法4
+    <a href="/2020/10/18/%E7%BF%BB%E7%A1%AC%E5%B8%815/" rel="prev" title="翻硬币5">
+      <i class="fa fa-chevron-left"></i> 翻硬币5
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/07/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="next" title="拓扑排序">
-      拓扑排序 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -379,7 +445,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的存储"><span class="nav-number">1.</span> <span class="nav-text">图的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接矩阵"><span class="nav-number">1.1.</span> <span class="nav-text">邻接矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邻接表"><span class="nav-number">1.2.</span> <span class="nav-text">邻接表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边集数组"><span class="nav-number">1.3.</span> <span class="nav-text">边集数组</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

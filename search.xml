@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币6</title>
+    <url>/2020/10/20/%E7%BF%BB%E7%A1%AC%E5%B8%816/</url>
+    <content><![CDATA[<p>摘要：在上一篇中实现了金币自身的翻转，然而游戏规则是金币周围的硬币也需要翻转，因此本篇将主要介绍如何将周围的硬币跟随翻转，同时来判断胜利条件，当全为金币时胜利，弹出胜利图片。并且最后给游戏配上音效。</p>
+<a id="more"></a>
+<p>若要实现点击硬币时，周围的硬币也能跟随翻转，则首先<strong>需要一个二维数组来存储所有的金币</strong>。在前面介绍中已经定义过一个二维数组，但那个数组存储的是金币初始化情况，因此还需要再定义一个二维数组，类型为mycoin：  </p>
+<pre><code>//二维数组，维护金币
+MyCoin * coinArray[4][4];</code></pre><p>在创建硬币时将硬币同时记录在该数组中，在硬币被点击时对其上下左右界限进行判断，若有硬币存在在，则延时进行翻转：  </p>
+<pre><code>//翻周围硬币
+QTimer::singleShot(300, this,[=](){
+if(coin-&gt;posX+1&lt;=3)  //右侧金币可以翻转
+{
+    //翻转右侧金币
+    coinArray[coin-&gt;posX+1][coin-&gt;posY]-&gt;changeflag();
+    this-&gt;gameArray[coin-&gt;posX+1][coin-&gt;posY]=this-&gt;gameArray[coin-&gt;posX+1][coin-&gt;posY] == 0 ? 1 : 0;
+ }
+if(coin-&gt;posX-1&gt;=0)  //左侧金币可以翻转
+{
+    //翻转左侧金币
+    coinArray[coin-&gt;posX-1][coin-&gt;posY]-&gt;changeflag();
+    this-&gt;gameArray[coin-&gt;posX-1][coin-&gt;posY]=this-&gt;gameArray[coin-&gt;posX-1][coin-&gt;posY] == 0 ? 1 : 0;
+}
+if(coin-&gt;posY+1&lt;=3)  //上方金币可以翻转
+{
+   //翻转上方金币
+   coinArray[coin-&gt;posX][coin-&gt;posY+1]-&gt;changeflag();
+   this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY+1]=this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY+1] == 0 ? 1 : 0;
+}
+if(coin-&gt;posY-1&gt;=0)  //下方金币可以翻转
+{
+    //翻转下方金币
+    coinArray[coin-&gt;posX][coin-&gt;posY-1]-&gt;changeflag();
+    this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY-1]=this-&gt;gameArray[coin-&gt;posX][coin-&gt;posY-1] == 0 ? 1 : 0;
+}</code></pre><p>这样就实现了翻硬币的完整功能。接下来对胜利条件进行判断，当所有硬币都为金币时胜利，因此需要一个标志位来判断当前所有硬币是否全为金币，创建一个bool型的变量iswin，初始值为true，接下来对每个硬币判断，若有一个为银币，就将iswin变为false，若全为金币，则iswin还是true，满足胜利条件：  </p>
+<pre><code>//判断是否胜利
+this-&gt;iswin=true;
+for(int i=0;i&lt;4;i++)
+{
+    for(int j=0;j&lt;4;j++)
+    {
+        if(coinArray[i][j]-&gt;flag==0)
+        {
+              iswin=false;
+              break;
+        }
+    }
+}</code></pre><p>当胜利时，需要弹出胜利图片，这里以动画掉落的形式呈现，提前创建好胜利图片，但将其移动到窗口以外，这样在窗口里是不显示的：  </p>
+<pre><code>//创建胜利图片
+QLabel* winLabel = new QLabel;
+QPixmap tmpPix;
+tmpPix.load(&quot;:/LevelCompletedDialogBg.png&quot;);
+winLabel-&gt;setGeometry(0,0,tmpPix.width(),tmpPix.height());
+winLabel-&gt;setPixmap(tmpPix);
+winLabel-&gt;setParent(this);
+winLabel-&gt;move( (this-&gt;width() - tmpPix.width())*0.5 , -tmpPix.height());</code></pre><p>可见y坐标为负值，图片看不见。当胜利时将该图片掉落下来，显示在窗口中，需要用到QPropertyAnimation函数：  </p>
+<pre><code>if(this-&gt;iswin==true)
+{
+    // qDebug()&lt;&lt;&quot; 胜利&quot;;
+    //弹出胜利图片
+    QPropertyAnimation * animation1 =  new QPropertyAnimation(winLabel,&quot;geometry&quot;);
+    animation1-&gt;setDuration(1000);
+    animation1-&gt;setStartValue(QRect(winLabel-&gt;x(),winLabel-&gt;y(),winLabel-&gt;width(),winLabel-&gt;height()));
+    animation1-&gt;setEndValue(QRect(winLabel-&gt;x(),winLabel-&gt;y()+124,winLabel-&gt;width(),winLabel-&gt;height()));
+    animation1-&gt;setEasingCurve(QEasingCurve::OutBounce);
+    animation1-&gt;start();
+ }</code></pre><p>这样胜利时为：<br><img src="https://i.loli.net/2020/10/20/b9BkJuOVLDAYTyp.png" alt="翻硬币14.png">  </p>
+<p>当胜利时同样要禁用金币的点击，因此需要一个标志位来标志金币是否胜利，同样的在金币类中添加一个iswin，当胜利中将所有金币的iswin改为true：   </p>
+<pre><code>if(this-&gt;iswin==true)
+{
+    //将所有按钮的胜利标志改为true
+    for(int i=0;i&lt;4;i++)
+    {
+        for(int j=0;j&lt;4;j++)
+        {
+             coinArray[i][j]-&gt;iswin=true;
+        }
+    }
+}</code></pre><p>当金币的iswin为true时禁用鼠标点击：  </p>
+<pre><code>void MyCoin::mousePressEvent(QMouseEvent *e)
+{
+    if(this-&gt;isdoing==true || this-&gt;iswin == true )
+    {
+        return;
+    }
+       else
+    {
+        return QPushButton::mousePressEvent(e);
+       }
+}</code></pre><p>再接下来就是音效的设置，为了游戏的完整性，对按钮的点击或者胜利场景时进行音效设置，需要用到库QSound，如登录和点击界面：  </p>
+<pre><code>//添加音效
+QSound *startSound = new QSound(&quot;:/TapButtonSound.wav&quot;,this);
+startSound-&gt;play(); //开始音效</code></pre><p>胜利时：  </p>
+<pre><code>//胜利音效
+QSound *winSound = new QSound(&quot;:/LevelWinSound.wav&quot;,this);
+winSound-&gt;play();</code></pre><p>当然为了使音效时间变长，可以循环次数播放。  </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>翻硬币5</title>
     <url>/2020/10/18/%E7%BF%BB%E7%A1%AC%E5%B8%815/</url>
     <content><![CDATA[<p>摘要：本篇将主要介绍如何对各个关卡的金币进行初始化，以及怎么实现翻转功能。将上篇中介绍的关卡数据传入到各个关卡中，同时对金币属性进行扩展，创建翻转函数，来实现金币点击时的翻转特效。</p>
