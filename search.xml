@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>翻硬币7</title>
+    <url>/2020/10/22/%E7%BF%BB%E7%A1%AC%E5%B8%817/</url>
+    <content><![CDATA[<p>摘要：在上一篇已经实现了游戏本身的功能，在本篇将介绍如何将用户过关关卡数据写入到数据库中，这样使数据库实时记录用户关卡信息，最终实现排行榜的功能。</p>
+<a id="more"></a>
+<p>在最开始连接数据库中，新用户登录会自动向数据库插入，默认新用户的关卡为0，因此当用户通关时，我们需要将该关卡号更新到数据库中。因为是在翻金币场景中过关，而数据库在主场景中，因此需要使用信号来传递参数，在子场景中自定义信号，参数为关卡号，当胜利时，发送信号：  </p>
+<pre><code>signals:
+void pSceneBack();
+void levelsignal(int);  //发送过关关卡信号
+
+
+emit this-&gt;levelsignal(this-&gt;levelindex);</code></pre><p>同样的，在选择关卡场景中接收该信号，槽函数作用是同样发送一个带参数的自定义信号，将关卡号传给主场景：  </p>
+<pre><code>connect(pscene,&amp;playscene::levelsignal,this,&amp;chooselevelsecene::myslot);  
+
+void chooselevelsecene::myslot(int a)
+{
+    //qDebug()&lt;&lt;a;
+      emit levelsignal(a);
+}</code></pre><p>主场景中接收选择关卡场景传来的信号，然后在槽函数中对数据库进行操作，若关卡号大于用户当前数据库中关卡，进行修改：  </p>
+<pre><code>//监听选择关卡场景，接收到以后输出关卡号
+connect(choosescene,&amp;chooselevelsecene::levelsignal,this,&amp;MainWindow::myslot);  
+
+void MainWindow::myslot(int a)
+{
+    qDebug()&lt;&lt;a;
+    if(user_grade&lt;a)          //用户原关卡记录比当前通关关卡低，更新数据库
+       {
+        user_grade=a;
+        QSqlQuery temquery3(db);
+        QString cmd3 = QString(&quot;update account set grade=%1 where name = &apos;&quot;+ ui-&gt;lineEdituser-&gt;text()
+
+            +&quot;&apos;AND password = &apos;&quot;+ ui-&gt;lineEditpassword-&gt;text()+&quot;&apos;;&quot;).arg(this-&gt;user_grade);
+        temquery3.exec(cmd3);
+    }
+}</code></pre><p>比如在过完第二关时，数据库中用户关卡由0变为2，此时若再过第一关，数据依然为2。<br><img src="https://i.loli.net/2020/10/22/2fhQ6UWlEygNDBO.png" alt="翻硬币15.png"><br><img src="https://i.loli.net/2020/10/22/PKgNBkjrZLtSmOE.png" alt="翻硬币16.png">  </p>
+<p>接下来实现排行榜，首先通过ui界面在菜单栏建立两个新选项：<br><img src="https://i.loli.net/2020/10/25/cy16UBOsYlWXohV.png" alt="翻硬币17.png">  </p>
+<p>在打开排行榜的槽函数中建立表格视图，将数据库中数据导入到视图中显示：  </p>
+<pre><code>void MainWindow::sortslot()
+{
+    QSqlQueryModel *model=new QSqlQueryModel;
+        QString cmd=&quot;select name,grade from account order by grade desc&quot;;
+      model-&gt;setQuery(cmd,db);
+    model-&gt;setHeaderData(0,Qt::Horizontal,tr(&quot;用户名&quot;));
+    model-&gt;setHeaderData(1,Qt::Horizontal,tr(&quot;最高关卡&quot;));
+    resultview.setModel(model);
+    resultview.show();
+}</code></pre><p>这样当点击打开排行榜时就会显示：<br><img src="https://i.loli.net/2020/10/25/86xtpIRmfJyCBHF.png" alt="翻硬币18.png">  </p>
+<p>关闭排行榜的作用就是将视图隐藏。将数据库中的数据按照最高关卡的降序排列，最终实现了排行榜的功能。</p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>翻硬币6</title>
     <url>/2020/10/20/%E7%BF%BB%E7%A1%AC%E5%B8%816/</url>
     <content><![CDATA[<p>摘要：在上一篇中实现了金币自身的翻转，然而游戏规则是金币周围的硬币也需要翻转，因此本篇将主要介绍如何将周围的硬币跟随翻转，同时来判断胜利条件，当全为金币时胜利，弹出胜利图片。并且最后给游戏配上音效。</p>
