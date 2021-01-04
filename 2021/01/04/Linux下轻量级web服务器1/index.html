@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：在本篇开始将记录项目Linux下轻量级web服务器的实现，里面涉及到需要以前学习过的知识和需要新学习的知识，如TCP、HTTP、HTML、系统编程、网络编程和数据库等等。这也是一个将知识融合应用于实践的好机会。本篇将主要介绍web服务器的概念、HTML的学习以及对HTTP的简单复习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下轻量级web服务器1">
+<meta property="og:url" content="https://zpl-novice.github.io/2021/01/04/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A81/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：在本篇开始将记录项目Linux下轻量级web服务器的实现，里面涉及到需要以前学习过的知识和需要新学习的知识，如TCP、HTTP、HTML、系统编程、网络编程和数据库等等。这也是一个将知识融合应用于实践的好机会。本篇将主要介绍web服务器的概念、HTML的学习以及对HTTP的简单复习。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/04/siTIk8.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/04/si7StU.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/04/si7hv9.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/04/si7O8e.png">
+<meta property="article:published_time" content="2021-01-04T14:23:55.928Z">
+<meta property="article:modified_time" content="2021-01-04T14:43:40.698Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/01/04/siTIk8.png">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2021/01/04/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux下轻量级web服务器1 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2021/01/04/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux下轻量级web服务器1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-04 22:23:55 / 修改时间：22:43:40" itemprop="dateCreated datePublished" datetime="2021-01-04T22:23:55+08:00">2021-01-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.8k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：在本篇开始将记录项目Linux下轻量级web服务器的实现，里面涉及到需要以前学习过的知识和需要新学习的知识，如TCP、HTTP、HTML、系统编程、网络编程和数据库等等。这也是一个将知识融合应用于实践的好机会。本篇将主要介绍web服务器的概念、HTML的学习以及对HTTP的简单复习。</p>
+<a id="more"></a>
+<h1 id="web服务器概念"><a href="#web服务器概念" class="headerlink" title="web服务器概念"></a>web服务器概念</h1><p>Web服务器一般指网站服务器，是指驻留于因特网上某种类型计算机的程序，可以处理浏览器等Web客户端的请求并返回相应响应，也可以放置网站文件，让全世界浏览；可以放置数据文件，让全世界下载。我们平常生活中浏览网页等，都是在与web服务器通信，获取信息。  </p>
+<h1 id="HTML学习"><a href="#HTML学习" class="headerlink" title="HTML学习"></a>HTML学习</h1><p>因为要做web服务器，首先需要做一个浏览器界面，这可以通过html来简单实现。<br>html：Hyper Texture Markup Language 超文本标记语言。在计算机中以.html、.htm作为扩展名，可以被浏览器访问。<br>特点：<br>1.语法简洁，比较松散，以相应的英语单词关键字进行组合<br>2.html标签不区分大小写<br>3.大多数标签是成对出现的，有开始，有结束。如<code>&lt;html&gt;&lt;/html&gt;</code><br>4.不成对出现的称之为短标签。如<code>&lt;br/&gt;&lt;hr/&gt;</code><br>标签中可以有属性和属性值。如：<code>&lt;font color=”red”&gt;hello world&lt;/font&gt;</code></p>
+<p>html组成部分：<br><code>&lt;!doctype html&gt;</code>声明文档类型<br><code>&lt;html&gt;</code>文档的头部号和主体内容<code>&lt;/html&gt;</code>根标记<br><code>&lt;head&gt;</code>文档的头部信息<code>&lt;/head&gt;</code>头部标记 只能有一对<br><code>&lt;title&gt;</code>显示在浏览器窗口的标题栏中“网页名称”<code>&lt;/title&gt;</code> 位于<code>&lt;head&gt;</code>标记之内<br><code>&lt;body&gt;&lt;/body&gt;</code>主体标记位于<code>&lt;html&gt;</code>之内，<code>&lt;head&gt;</code>标记之后<br>html常用标签：<br>注释： <code>&lt;!--这是一个注释--&gt;</code><br>标题标签：标题分为5级，从h1到h6，h1最大，h6最小<br>文本标签：<code>&lt;font&gt;&lt;/font&gt;</code> 属性：color：文字颜色 size：文字大小<br>段落：<code>&lt;p&gt;  &lt;/p&gt;</code><br>换行：<code>&lt;br/&gt;</code><br>加粗：<code>&lt;strong&gt;&lt;/strong&gt;</code><br>下划线：<code>&lt;ins&gt;&lt;/ins&gt;</code><br>块容器：<code>&lt;div&gt;&lt;/div&gt;</code> ,换行是 <code>&lt;div&gt;</code> 固有的唯一格式表现。可以通过<code>&lt;div&gt;</code> 的 class 或 id 应用额外的样式。属性：align：对齐（left、center、right）<br>水平线：<code>&lt;hr/&gt;</code><br>图片标签：<code>&lt;img src=”3.gif” alt=”小岳岳” title=”我的天呐!” width=”300” height=”200” /&gt;</code><br>属性：src：图片的来源，必写属性   alt：替换文本，图片不显示时显示的文字  title：提示文本，鼠标放到图片上显示的文字 width：图片宽度  height：图片高度<br>超链接：<code>&lt;a href=”http://www.baidu.com”&gt; &lt;/a&gt;</code><br>表单标签：<code>&lt;form&gt;&lt;/form&gt;</code>，用于为用户输入创建html表单。表单能够包含input元素，比如文本字段、复选框、单选框、提交按钮等。表单用于向服务器传输数据。属性：<br><a href="https://imgchr.com/i/siTIk8" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/04/siTIk8.png" alt="siTIk8.png"></a><br>例：  </p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;这是一个标题&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt; Linux下C++的web服务器&lt;/h1&gt;
+    &lt;h2&gt;html学习&lt;/h2&gt;
+    &lt;font color=&quot;red&quot; size=&quot;5&quot;&gt;&lt;strong&gt;hello world!&lt;/strong&gt;&lt;/font&gt;
+    &lt;p&gt;html是超文本标记语言html&lt;ins&gt;是超文本标记语言html是超文本标记语言html是超文本标记语言&lt;/ins&gt;&lt;/p&gt;
+    &lt;hr color=&quot;green&quot; /&gt;
+    &lt;p&gt; html是超文本标记语言&lt;br/&gt; html是超文本标记语言&lt;/p&gt;
+    &lt;div class=&quot;text&quot;&gt;
+        &lt;div align=&quot;center&quot;&gt; html是超文本标记语言&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;img src=&quot;1.jpg&quot; alt=&quot;小岳岳&quot; title=&quot;我的天呐!&quot; width=&quot;300&quot; height=&quot;200&quot;/&gt;
+    想知道更多，请访问&lt;a href=&quot;http://www.baidu.com&quot;&gt;百度一下，你就知道&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>效果为：<br><a href="https://imgchr.com/i/si7StU" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/04/si7StU.png" alt="si7StU.png"></a>  </p>
+<h1 id="HTTP复习"><a href="#HTTP复习" class="headerlink" title="HTTP复习"></a>HTTP复习</h1><p>在这里主要复习http的请求消息和响应消息的格式，因为在搭建的web服务器中，需要我们去解析请求消息，然后进行处理并且封装成响应消息返回。<br><strong>请求消息（request）-浏览器给服务器发</strong>。<br>四部分：请求行、请求头、空行、请求数据<br><strong>请求行：说明请求类型，要访问的资源，以及使用的http版本</strong><br>请求头：说明服务器要使用的附加信息<br>空行：空行是必须要有的，即使没有请求数据<br>请求数据：也叫主体，可以添加任意的其它数据<br>例：  </p>
+<pre><code>GET /3.txt HTTP/1.1
+Host:img.mukewang.com
+User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64)
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36
+Accept:image/webp,image/*,*/*;q=0.8
+Accept-Encoding:gzip, deflate, sdch
+Accept-Language:zh-CN,zh;q=0.8
+/r/n 空行   (必须是/r/n，而不能只是/n)
+请求数据为空                //请求数据已经放在请求行（3.txt） 因此这里为空
+
+POST HTTP/1.1
+Host:www.wrox.com
+User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
+Content-Type:application/x-www-form-urlencoded
+Content-Length:40
+Connection: Keep-Alive
+/r/n 空行
+/3.txt                              //请求数据不为空</code></pre><p>注意post的请求数据不为空。<br>上面例子中，请求类型一个为GET一个为POST，不同的请求类型格式也略有不同。http请求类型：<br><a href="https://imgchr.com/i/si7hv9" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/04/si7hv9.png" alt="si7hv9.png"></a><br><strong>GET和POST的区别</strong>：<br><strong>GET把参数包含在URL中，POST通过request body传递参数。</strong>GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留。GET请求在URL中传送的参数是有长度限制。（大多数）浏览器通常都会限制url长度在2K个字节，而（大多数）服务器最多处理64K大小的url。GET产生一个TCP数据包；POST产生两个TCP数据包。对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；而对于POST，浏览器先发送header，服务器响应100（指示信息—表示请求已接收，继续处理）continue，浏览器再发送data，服务器响应200 ok（返回数据）。  </p>
+<p>当服务器收到浏览器发送来的请求报文时，需要解析该请求报文，判断get还是post，然后解析出报文所要访问的资源。然后发送响应消息。<br><strong>响应消息（response）-服务器给浏览器发</strong>。<br>四部分：状态行、消息报头、空行、响应正文<br><strong>状态行：包括http协议版本号，状态码，状态信息</strong><br>消息报头：说明客户端要使用的一些附加信息<br>空行：空行必须要有<br>响应正文：服务器返回给客户端的文本信息<br>例：  </p>
+<pre><code>HTTP/1.1 200 OK
+Server:micro_httpd
+Date:Fri,18xxxxx
+Content-Type:text/plain; charset=iso-8859-1 (必选项)  //告诉浏览器发送的数据是什么类型
+Content-Length:32    //发送的数据的长度
+Content-Language:zh-CN
+Connection:close
+/r/n 空行
+#include&lt;stdio.h&gt;                //响应正文
+int main()
+{
+     printf(“hello,world!”);
+    return 0;
+}</code></pre><p>http中的文件类型为：<br><a href="https://imgchr.com/i/si7O8e" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/04/si7O8e.png" alt="si7O8e.png"></a>  </p>
+<p>在下一篇中将会进入网络编程的复习。  </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2021/01/04/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A81/" title="Linux下轻量级web服务器1">https://zpl-novice.github.io/2021/01/04/Linux下轻量级web服务器1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/22/%E7%BF%BB%E7%A1%AC%E5%B8%817/" rel="prev" title="翻硬币7">
+      <i class="fa fa-chevron-left"></i> 翻硬币7
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#web服务器概念"><span class="nav-number">1.</span> <span class="nav-text">web服务器概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTML学习"><span class="nav-number">2.</span> <span class="nav-text">HTML学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP复习"><span class="nav-number">3.</span> <span class="nav-text">HTTP复习</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">222k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
