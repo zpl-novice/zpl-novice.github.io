@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux下轻量级web服务器2</title>
+    <url>/2021/01/06/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A82/</url>
+    <content><![CDATA[<p>摘要：本篇将主要对Linux网络编程进行复习，其中涉及到计算机网络的相关知识，也有Linux本身的函数学习，介绍如何实现基于TCP的C/S模型，并对多路IO转接服务器进行复习，了解多路IO转接服务器的思想和相关函数。</p>
+<a id="more"></a>
+<h2 id="套接字概念"><a href="#套接字概念" class="headerlink" title="套接字概念"></a>套接字概念</h2><p>socket本身有插座的意思，<strong>在Linux环境下，用于表示进程间网络通信的特殊文件类型。本质为内核借助缓冲区形成的伪文件。因此套接字有文件描述符fd</strong>。<br><img src="https://yanxuan.nosdn.127.net/387cec4869359caebe3bb778764f27d7.png" alt=""><br>套接字通信原理如下，欲<strong>建立连接的两个进程各自有一个socket来标识，那么这两个socket组成的socket pair就唯一标识一个连接</strong>。因此可以用<strong>Socket来描述网络连接的一对一关系</strong>。<br><img src="https://yanxuan.nosdn.127.net/7bb7963ccb6d18cd1df70ca1130f5cfd.png" alt="">  </p>
+<h3 id="网络字节序"><a href="#网络字节序" class="headerlink" title="网络字节序"></a>网络字节序</h3><p><strong>TCP/IP协议规定，网络数据流采用大端字节序，即低地址放在高字节，但是主机一般是小端字节序的，这样就会使得地址混乱，因此主机发送前需要做字节序的转换</strong>。常用的转换函数有：<br><img src="https://yanxuan.nosdn.127.net/7392de9da2f45fd30e39a8bc8ee5ede9.png" alt=""><br>32位的是IP地址，16位的是端口号。  </p>
+<h2 id="基本函数"><a href="#基本函数" class="headerlink" title="基本函数"></a>基本函数</h2><p><strong>socket函数：用来创建一个套接字文件。</strong><br><img src="https://yanxuan.nosdn.127.net/8988231fccc3f94a17ac82e5b07a2206.png" alt="">    </p>
+<p><strong>bind函数：将socket文件绑定一个固定的网络地址和端口号。</strong><br><img src="https://yanxuan.nosdn.127.net/b341a8f445d2233202851b44a4fbcc19.png" alt=""><br>其中addr数据类型需要用户自定义。  </p>
+<p><strong>listen函数：创建一个监听队列以存放待处理的客户连接。</strong><br><img src="https://ae01.alicdn.com/kf/H97cb1545f5ed4b6eac25b015a8d7323bY.jpg" alt=""><br>listen成功则返回0，失败则返回-1并设置error。  </p>
+<p><strong>accept函数：接受连接，如果没有客户端的连接请求，就阻塞等待。</strong><br><img src="https://yanxuan.nosdn.127.net/7e453331ab2c436009d795dd3839331c.png" alt="">  </p>
+<p><strong>connect函数：发起连接，用于向服务器请求连接。</strong><br><a href="https://imgchr.com/i/sZPnl4" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/06/sZPnl4.png" alt="sZPnl4.png"></a><br>客户端需要调用connect函数连接服务器，<strong>connect与bind的参数形式一致。区别在于bind的参数是自己的地址，而connct的参数是对方的地址</strong>。  </p>
+<h2 id="服务器编程"><a href="#服务器编程" class="headerlink" title="服务器编程"></a>服务器编程</h2><p>对服务器端编程，将服务器端接收的小写字符变成大写字符传回客户端：  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/socket.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;stdlib.h&gt;
+
+#define SERV_PORT 8080
+
+int main()
+{
+    int lfd,cfd;
+    int flag;
+    char buf[BUFSIZ];                      // Linux默认8K
+    int n；
+    struct sockaddr_in serv_addr ,clie_addr;;   //定义服务器和客户端sockaddr数据结构
+    socklen_t clie_addr_len;
+       lfd=socket(AF_INET,SOCK_STREAM,0);               //创建套接字文件
+       if(lfd==-1)
+    {
+        printf(&quot;create socket error&quot;);
+       }
+    serv_addr.sin_family = AF_INET;                  //协议族，IPv4
+    serv_addr.sin_port = htons(SERV_PORT);          //端口，注意网络字节序转换
+    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);  // INADDR_ANY系统自动生成IP
+
+    flag=bind(lfd,(struct sockaddr *)&amp;serv_addr,sizeof(serv_addr));  //强制类型转换
+       if(flag==-1)
+    {
+        printf(&quot;bind socket error&quot;);
+       }
+       flag=listen(lfd,128);                    //默认最大监听队列128
+    if(flag==-1)
+    {
+        printf(&quot;listen error&quot;);
+       }
+
+    clie_addr_len=sizeof(clie_addr);          //clie_addr_len是传入传出参数要初始化
+    cfd=accept(lfd, (struct sockaddr *)&amp;clie_addr,&amp;clie_addr_len);    
+    if(cfd==-1)
+    {
+         printf(“accept error”);
+    }
+    //阻塞等待
+
+    while(1)                                //循环读取
+    {
+            n=read(cfd,buf,sizeof(buf));             //通过buf读取客户端发送的数据
+            if(n==-1)
+            {
+            printf(&quot;read error&quot;);
+            }
+        for(int i=0;i&lt;n;i++)
+        {
+          buf[i]=toupper(buf[i]);         
+           }
+            write(cfd,buf,n);                   //将处理后的数据写回给客户端
+
+          flag=close(cfd);                   //关闭套接字文件
+        if(flag==-1)
+        {
+            printf(&quot;close error&quot;);
+           } 
+          flag=close(lfd);
+          if(flag==-1)
+        {
+            printf(&quot;close error&quot;);
+           }
+    }
+       return 0;
+}</code></pre><p>使用<strong>nc命令可以进行简单的网络连接</strong>，结果为：<br><a href="https://imgchr.com/i/sZPoNV" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/06/sZPoNV.png" alt="sZPoNV.png"></a><br>服务器端建立完成。  </p>
+<h2 id="多路I-O转接服务器"><a href="#多路I-O转接服务器" class="headerlink" title="多路I/O转接服务器"></a>多路I/O转接服务器</h2><p>多路I/O转接服务器也叫做多任务I/O服务器，该类服务器实现的主旨思想是，<strong>不再由应用程序自己监视客户端连接，取而代之由内核替应用程序监视文件</strong>。<br>在前面的介绍中，是由服务器也就是应用程序来不断监听客户端的连接和处理，然而这会<strong>降低效率和增加cpu的消耗。因为accept和read都是阻塞等待的。这种情况下，可以让内核作为服务器和客户端的转接者，由内核来监视客户端的连接请求，当收到连接请求后再发给服务器立即建立连接，建立连接后再交由内核监视客户端，当客户端有读或写请求后，发给服务器进行处理</strong>。<br><img src="https://yanxuan.nosdn.127.net/899f904919189a2c8b20035441acf7bb.png" alt=""><br>怎么驱使内核完成上述功能？1.select  2.poll  3.epoll<br>关于select、poll的用法及优缺点就不再写在这里，在Linux学习中已经详细介绍。在下篇将主要对epoll进行复习，并实现基于epoll的服务器。</p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux下轻量级web服务器1</title>
     <url>/2021/01/04/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A81/</url>
     <content><![CDATA[<p>摘要：在本篇开始将记录项目Linux下轻量级web服务器的实现，里面涉及到需要以前学习过的知识和需要新学习的知识，如TCP、HTTP、HTML、系统编程、网络编程和数据库等等。这也是一个将知识融合应用于实践的好机会。本篇将主要介绍web服务器的概念、HTML的学习以及对HTTP的简单复习。</p>

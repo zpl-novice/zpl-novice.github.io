@@ -46,21 +46,30 @@
   };
 </script>
 
-  <meta name="description" content="摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。">
+  <meta name="description" content="摘要：本篇将主要对Linux网络编程进行复习，其中涉及到计算机网络的相关知识，也有Linux本身的函数学习，介绍如何实现基于TCP的C&#x2F;S模型，并对多路IO转接服务器进行复习，了解多路IO转接服务器的思想和相关函数。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++ 11新特性1">
-<meta property="og:url" content="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/index.html">
+<meta property="og:title" content="Linux下轻量级web服务器2">
+<meta property="og:url" content="https://zpl-novice.github.io/2021/01/06/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A82/index.html">
 <meta property="og:site_name" content="zpl-novice">
-<meta property="og:description" content="摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。">
+<meta property="og:description" content="摘要：本篇将主要对Linux网络编程进行复习，其中涉及到计算机网络的相关知识，也有Linux本身的函数学习，介绍如何实现基于TCP的C&#x2F;S模型，并对多路IO转接服务器进行复习，了解多路IO转接服务器的思想和相关函数。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png">
-<meta property="article:published_time" content="2020-02-15T06:08:07.830Z">
-<meta property="article:modified_time" content="2020-02-26T07:33:20.063Z">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/387cec4869359caebe3bb778764f27d7.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/7bb7963ccb6d18cd1df70ca1130f5cfd.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/7392de9da2f45fd30e39a8bc8ee5ede9.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/8988231fccc3f94a17ac82e5b07a2206.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/b341a8f445d2233202851b44a4fbcc19.png">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H97cb1545f5ed4b6eac25b015a8d7323bY.jpg">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/7e453331ab2c436009d795dd3839331c.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/06/sZPnl4.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/06/sZPoNV.png">
+<meta property="og:image" content="https://yanxuan.nosdn.127.net/899f904919189a2c8b20035441acf7bb.png">
+<meta property="article:published_time" content="2021-01-06T13:37:42.897Z">
+<meta property="article:modified_time" content="2021-01-06T14:12:11.680Z">
 <meta property="article:author" content="zpl">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png">
+<meta name="twitter:image" content="https://yanxuan.nosdn.127.net/387cec4869359caebe3bb778764f27d7.png">
 
-<link rel="canonical" href="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/">
+<link rel="canonical" href="https://zpl-novice.github.io/2021/01/06/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A82/">
 
 
 <script id="page-configurations">
@@ -72,7 +81,7 @@
   };
 </script>
 
-  <title>C++ 11新特性1 | zpl-novice</title>
+  <title>Linux下轻量级web服务器2 | zpl-novice</title>
   
 
 
@@ -202,7 +211,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2021/01/06/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/touxiang.jpg">
@@ -215,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C++ 11新特性1
+          Linux下轻量级web服务器2
         </h1>
 
         <div class="post-meta">
@@ -224,24 +233,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-02-15 14:08:07" itemprop="dateCreated datePublished" datetime="2020-02-15T14:08:07+08:00">2020-02-15</time>
+              <time title="创建时间：2021-01-06 21:37:42 / 修改时间：22:12:11" itemprop="dateCreated datePublished" datetime="2021-01-06T21:37:42+08:00">2021-01-06</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-26 15:33:20" itemprop="dateModified" datetime="2020-02-26T15:33:20+08:00">2020-02-26</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
-                    <span itemprop="name">C++知识学习</span>
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
                   </a>
                 </span>
             </span>
@@ -252,7 +255,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.7k</span>
+              <span>2.3k</span>
             </span>
 
         </div>
@@ -264,101 +267,87 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>摘要：本篇将介绍C++ 11的新特性。这里的11指的是一个版号。C++是在不断更新的，使得程序更加稳定安全，功能也更加强大。因为要介绍的新特性有许多，所以将会分为两篇介绍，本篇将主要介绍统一初始化、auto关键字、decltype关键字、智能指针和空指针等。其他部分将会在下一篇中进行讲解。</p>
+        <p>摘要：本篇将主要对Linux网络编程进行复习，其中涉及到计算机网络的相关知识，也有Linux本身的函数学习，介绍如何实现基于TCP的C/S模型，并对多路IO转接服务器进行复习，了解多路IO转接服务器的思想和相关函数。</p>
 <a id="more"></a>
-<p>1998年是C++标准委员会成立的第一年，以后每五年视实际需要更新一次标准，它开发于1998年并于2003年更新，统称为C++ 98或者C++ 03，国际标准化组织于2011年9月1号出版发布ISO/IEC 14882:2011，称为C++ 11。相比于C++98/03，C++ 11则带来了数量可观的变化，其中包含了约140个新特性，以及对C++03标准中约600个缺陷的修正，这使得C++ 11更像是从C++ 98/03中孕育出的一种新语言。相比较而言，C++ 11能更好地用于系统开发和库开发、语法更加泛华和简单化、更加稳定和安全，不仅功能更强大，而且能提升程序员的开发效率。   </p>
-<h2 id="统一的初始化"><a href="#统一的初始化" class="headerlink" title="统一的初始化"></a>统一的初始化</h2><p>初始化是程序必不可少的，不管是一个简单的数组，还是一个对象，我们都需要对其建立时进行初始化。而在以前的定义中，若要定义一个动态数组v，其中的元素为1 2 3 4 5，定义如下：  </p>
-<pre><code>vector&lt;int&gt; v;
-v.push_back(1);
-v.push_back(2);
-v.push_back(3);
-v.push_back(4);
-v.push_back(4);</code></pre><p>可以看到是很麻烦的，而在C++ 11中，我们可以像初始化普通数组一样去初始化自定义类型，用<code>{}</code>进行初始化，如：</p>
-<pre><code>vector&lt;int&gt; v{1,2,3,4,5};
-int arr[3]{1,2,3};
-string s{&quot;hello&quot;};
-int *p=new int[20]{1,2,3};</code></pre><p>即使在类里面也可以省略构造函数，对成员变量默认初始值：  </p>
-<pre><code>class B
-{
-    public:
-        int m=20;
-        int n;
-};</code></pre><p>对类的对象实例进行初始化：</p>
-<pre><code>A obj1;
-A obj2{5};
-A obj3{};</code></pre><p>当中A是一个类，设其有多个构造函数，则obj1和obj3调用的就是无参构造函数，obj2调用的是单参数构造函数。以前我们也用圆括号来定义，如<code>A obj(2)</code>虽然这样也可以，但是括号里必须有参数，不然就变成了函数对象。<strong>所以统一的初始化解决了这种混乱现象</strong>。用统一的初始化方法使得语法更加简单，提高了效率，非常的实用。</p>
-<h2 id="auto和decltype关键字"><a href="#auto和decltype关键字" class="headerlink" title="auto和decltype关键字"></a>auto和decltype关键字</h2><p>在C语言中也有auto关键字，使用auto关键字的变量，称为自动变量，是具有自动存储器的局部变量。而在C++ 11中，它被赋予了新的含义，作为一个新的类型指示符来指示编译器，编译器可以自动判断变量的类型。示例如下：  </p>
-<pre><code>auto i=100;         // i是int
-auto p= new A();    //p是A*
-auto k=34343LL;    //k是long long
-map&lt;string,int,greater&lt;string&gt;&gt; mp;
-for(auto i=mp.begin;i!=map.end();++i)
-cout&lt;&lt;i-&gt;first&lt;&lt;”,”&lt;&lt;i-&gt;second;  </code></pre><p>迭代器i的类型是<code>map&lt;string,int,greater&lt;string&gt;&gt;::iterator</code>，使用auto自动定义类型就可以不用再写这么长的代码来定义了。当然这只是auto的简单用法，它还有更大的作用。</p>
-<pre><code>class A
-{
-};
-A operator+(int n,A &amp;a)
-{
-    return a;
-}
-template&lt;class T1,class T2&gt;
-auto add(T1 x,T2 y)-&gt;decltype(x+y)
-{
-    return x+y;
- } 
-int main()
-{ 
-    auto d=add(100,0.5);        
-    auto k=add(100,A());       
-    return 0;
-}</code></pre><p>代码中定义了一个类A，然后重载了<code>+</code>运算符，重载为普通函数，使得<code>n+A的对象</code>返回值为A的对象，又定义了一个函数模板，函数为<code>add</code>，使两个T1和T2类型的变量相加，由于并不知道相加后返回值是什么类型，所以使用auto关键字。<code>-&gt;decltype(x+y)</code>表示的也是返回值类型，decltype关键字会在下面介绍。在主函数里使用<code>add</code>函数将100和0.5加起来，显然结果是100.5，所以d应该是double型的变量。然后将100与A对象加起来，由于前面重载了<code>+</code>运算符，所以结果为A的对象，k是A类型。通过这段代码可以看到auto关键字在函数编写上有很大的作用，在很多情况下我们是无法确定返回值类型的，尤其在遇到模板相关时，这时，使用auto关键字就会带来很大的方便。<br>decltype关键字的作用是求表达式的类型。示例如下：  </p>
-<pre><code>int i;
-double t; 
-structA{double x;}; 
-const A* a=new A();
+<h2 id="套接字概念"><a href="#套接字概念" class="headerlink" title="套接字概念"></a>套接字概念</h2><p>socket本身有插座的意思，<strong>在Linux环境下，用于表示进程间网络通信的特殊文件类型。本质为内核借助缓冲区形成的伪文件。因此套接字有文件描述符fd</strong>。<br><img src="https://yanxuan.nosdn.127.net/387cec4869359caebe3bb778764f27d7.png" alt=""><br>套接字通信原理如下，欲<strong>建立连接的两个进程各自有一个socket来标识，那么这两个socket组成的socket pair就唯一标识一个连接</strong>。因此可以用<strong>Socket来描述网络连接的一对一关系</strong>。<br><img src="https://yanxuan.nosdn.127.net/7bb7963ccb6d18cd1df70ca1130f5cfd.png" alt="">  </p>
+<h3 id="网络字节序"><a href="#网络字节序" class="headerlink" title="网络字节序"></a>网络字节序</h3><p><strong>TCP/IP协议规定，网络数据流采用大端字节序，即低地址放在高字节，但是主机一般是小端字节序的，这样就会使得地址混乱，因此主机发送前需要做字节序的转换</strong>。常用的转换函数有：<br><img src="https://yanxuan.nosdn.127.net/7392de9da2f45fd30e39a8bc8ee5ede9.png" alt=""><br>32位的是IP地址，16位的是端口号。  </p>
+<h2 id="基本函数"><a href="#基本函数" class="headerlink" title="基本函数"></a>基本函数</h2><p><strong>socket函数：用来创建一个套接字文件。</strong><br><img src="https://yanxuan.nosdn.127.net/8988231fccc3f94a17ac82e5b07a2206.png" alt="">    </p>
+<p><strong>bind函数：将socket文件绑定一个固定的网络地址和端口号。</strong><br><img src="https://yanxuan.nosdn.127.net/b341a8f445d2233202851b44a4fbcc19.png" alt=""><br>其中addr数据类型需要用户自定义。  </p>
+<p><strong>listen函数：创建一个监听队列以存放待处理的客户连接。</strong><br><img src="https://ae01.alicdn.com/kf/H97cb1545f5ed4b6eac25b015a8d7323bY.jpg" alt=""><br>listen成功则返回0，失败则返回-1并设置error。  </p>
+<p><strong>accept函数：接受连接，如果没有客户端的连接请求，就阻塞等待。</strong><br><img src="https://yanxuan.nosdn.127.net/7e453331ab2c436009d795dd3839331c.png" alt="">  </p>
+<p><strong>connect函数：发起连接，用于向服务器请求连接。</strong><br><a href="https://imgchr.com/i/sZPnl4" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/06/sZPnl4.png" alt="sZPnl4.png"></a><br>客户端需要调用connect函数连接服务器，<strong>connect与bind的参数形式一致。区别在于bind的参数是自己的地址，而connct的参数是对方的地址</strong>。  </p>
+<h2 id="服务器编程"><a href="#服务器编程" class="headerlink" title="服务器编程"></a>服务器编程</h2><p>对服务器端编程，将服务器端接收的小写字符变成大写字符传回客户端：  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/socket.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;stdlib.h&gt;
 
-decltype(a) x1; //x1是A*类型
-decltype(i) x2; //x2是int类型
-decltype(a-&gt;X) x3; //x3是double类型</code></pre><p>x2的类型由<code>decltype(i)</code>决定，i是int型，所以x2是int类型，其他同理。</p>
-<h2 id="智能指针和空指针"><a href="#智能指针和空指针" class="headerlink" title="智能指针和空指针"></a>智能指针和空指针</h2><p>首先介绍一下空指针，平常定义指针为空时：</p>
-<pre><code>int *p=NULL;</code></pre><p>在C++ 11新特性里增加了空指针nullptr，定义时：</p>
-<pre><code>int *p=nullptr;</code></pre><p>其实这里的两个指针p是相等的，而空指针的作用是使得更能体现指针的特征。同时空指针可以转换成布尔变量，输出的结果为false。</p>
-<pre><code>bool b=nullptr;  //b=false</code></pre><p>智能指针shared_ptr的头文件为<code>&lt;memory&gt;</code>，通过shared_ptr的构造函数，可以让shared_ptr对象托管一个new运算符返回的指针。写法如下：</p>
-<pre><code>shared_ptr&lt;T&gt; ptr(new T);</code></pre><p>其中T可以是int，char，类名等各种类型。此后ptr就可以像<code>T*</code>类型的指针一样来使用，即*ptr就是用new动态分配的那个对象，而且不必操心释放内存的事。多个shared_ptr对象可以同时托管一个指针，系统会维护一个托管计数。当无shared_ptr托管该指针时，delete该指针。shared_ptr对象不能托管指向动态分配的数组的指针，否则程序运行会出错。具体示例如下：  </p>
-<pre><code>struct A
+#define SERV_PORT 8080
+
+int main()
 {
-    int n;
-    A(int m=0):n(m)
+    int lfd,cfd;
+    int flag;
+    char buf[BUFSIZ];                      // Linux默认8K
+    int n；
+    struct sockaddr_in serv_addr ,clie_addr;;   //定义服务器和客户端sockaddr数据结构
+    socklen_t clie_addr_len;
+       lfd=socket(AF_INET,SOCK_STREAM,0);               //创建套接字文件
+       if(lfd==-1)
     {
+        printf(&quot;create socket error&quot;);
+       }
+    serv_addr.sin_family = AF_INET;                  //协议族，IPv4
+    serv_addr.sin_port = htons(SERV_PORT);          //端口，注意网络字节序转换
+    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);  // INADDR_ANY系统自动生成IP
+
+    flag=bind(lfd,(struct sockaddr *)&amp;serv_addr,sizeof(serv_addr));  //强制类型转换
+       if(flag==-1)
+    {
+        printf(&quot;bind socket error&quot;);
+       }
+       flag=listen(lfd,128);                    //默认最大监听队列128
+    if(flag==-1)
+    {
+        printf(&quot;listen error&quot;);
+       }
+
+    clie_addr_len=sizeof(clie_addr);          //clie_addr_len是传入传出参数要初始化
+    cfd=accept(lfd, (struct sockaddr *)&amp;clie_addr,&amp;clie_addr_len);    
+    if(cfd==-1)
+    {
+         printf(“accept error”);
     }
-    ~A()
+    //阻塞等待
+
+    while(1)                                //循环读取
     {
-        cout&lt;&lt;n&lt;&lt;&quot;  ~A&quot;&lt;&lt;endl;
+            n=read(cfd,buf,sizeof(buf));             //通过buf读取客户端发送的数据
+            if(n==-1)
+            {
+            printf(&quot;read error&quot;);
+            }
+        for(int i=0;i&lt;n;i++)
+        {
+          buf[i]=toupper(buf[i]);         
+           }
+            write(cfd,buf,n);                   //将处理后的数据写回给客户端
+
+          flag=close(cfd);                   //关闭套接字文件
+        if(flag==-1)
+        {
+            printf(&quot;close error&quot;);
+           } 
+          flag=close(lfd);
+          if(flag==-1)
+        {
+            printf(&quot;close error&quot;);
+           }
     }
- } ;
- int main()
- {
-     A* p=new A(2);
-     shared_ptr&lt;A&gt; ptr1(p);    //ptr1托管A(2) 
-     cout&lt;&lt;ptr1-&gt;n&lt;&lt;endl;
-     shared_ptr&lt;A&gt; ptr2(ptr1);  //ptr2也托管A(2)
-     cout&lt;&lt;(*ptr2).n&lt;&lt;endl;
-     A* p1=new A(3);
-     shared_ptr&lt;A&gt; ptr3(p1);   //ptr3托管A(3)
-     cout&lt;&lt;ptr3-&gt;n&lt;&lt;endl;
-     ptr2.reset();            //ptr2放弃托管A(2)
-    if(!ptr2)
-    {
-        cout&lt;&lt;&quot;ptr2 is null&quot;&lt;&lt;endl;
-     } 
-    ptr2=ptr3;               //ptr2托管A(3)
-    cout&lt;&lt;ptr2-&gt;n&lt;&lt;endl;
-    shared_ptr&lt;A&gt; ptr4;
- //    ptr4.reset(p);            // 不增加托管计数，会使得释放2次，出错 
-     cout&lt;&lt;&quot;end&quot;&lt;&lt;endl;
-     return 0;
- }</code></pre><p>定义了一个类A，成员变量n，然后构造函数和析构函数。在主函数里定义指针p指向new出的A(2)，然后用智能指针定义ptr1托管p，即ptr1指向A(2)，输出n值验证。然后定义了智能指针ptr2，也托管A(2)，这是A(2)的托管计数为2。又定义了一个指针p1指向A(3)，智能指针ptr3托管A(3)，这是令ptr2放弃托管A(2)，判断一下它为空指针，再令其托管A(3)。这样到最后相当于ptr1托管A(2)，ptr2和ptr3托管A(3)。因此最后结束的时候删除A(2)和A(3)。运行结果为：<br><img src="https://i.loli.net/2020/02/15/Ut9judkxXmWCTYn.png" alt=""><br>智能指针中需要注意一点，可以看到上面代码中的被注释掉的一句<code>ptr4.reset(p);</code>，这句的意思是使ptr4托管p即ptr4指向A(2)，但是编译器却认为这个p与ptr1托管的p是不同的，即不增加托管次数，将它们当作两个指针。所以当结束的时候，A(2)就会被删除2次，因此出错。</p>
-<p>在下篇中将会继续对C++ 11新特性进行介绍，比如右值引用、move语义、Lambda表达式等，它们也都有着很大的作用。</p>
+       return 0;
+}</code></pre><p>使用<strong>nc命令可以进行简单的网络连接</strong>，结果为：<br><a href="https://imgchr.com/i/sZPoNV" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/06/sZPoNV.png" alt="sZPoNV.png"></a><br>服务器端建立完成。  </p>
+<h2 id="多路I-O转接服务器"><a href="#多路I-O转接服务器" class="headerlink" title="多路I/O转接服务器"></a>多路I/O转接服务器</h2><p>多路I/O转接服务器也叫做多任务I/O服务器，该类服务器实现的主旨思想是，<strong>不再由应用程序自己监视客户端连接，取而代之由内核替应用程序监视文件</strong>。<br>在前面的介绍中，是由服务器也就是应用程序来不断监听客户端的连接和处理，然而这会<strong>降低效率和增加cpu的消耗。因为accept和read都是阻塞等待的。这种情况下，可以让内核作为服务器和客户端的转接者，由内核来监视客户端的连接请求，当收到连接请求后再发给服务器立即建立连接，建立连接后再交由内核监视客户端，当客户端有读或写请求后，发给服务器进行处理</strong>。<br><img src="https://yanxuan.nosdn.127.net/899f904919189a2c8b20035441acf7bb.png" alt=""><br>怎么驱使内核完成上述功能？1.select  2.poll  3.epoll<br>关于select、poll的用法及优缺点就不再写在这里，在Linux学习中已经详细介绍。在下篇将主要对epoll进行复习，并实现基于epoll的服务器。</p>
 
     </div>
 
@@ -374,7 +363,7 @@ decltype(a-&gt;X) x3; //x3是double类型</code></pre><p>x2的类型由<code>dec
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zpl-novice.github.io/2020/02/15/C++11%E6%96%B0%E7%89%B9%E6%80%A71/" title="C++ 11新特性1">https://zpl-novice.github.io/2020/02/15/C++11新特性1/</a>
+    <a href="https://zpl-novice.github.io/2021/01/06/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A82/" title="Linux下轻量级web服务器2">https://zpl-novice.github.io/2021/01/06/Linux下轻量级web服务器2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -391,13 +380,10 @@ decltype(a-&gt;X) x3; //x3是double类型</code></pre><p>x2的类型由<code>dec
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/13/STL%E7%AE%97%E6%B3%95/" rel="prev" title="STL算法">
-      <i class="fa fa-chevron-left"></i> STL算法
+    <a href="/2021/01/04/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A81/" rel="prev" title="Linux下轻量级web服务器1">
+      <i class="fa fa-chevron-left"></i> Linux下轻量级web服务器1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/18/C++11%E6%96%B0%E7%89%B9%E6%80%A72/" rel="next" title="C++11新特性2">
-      C++11新特性2 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -457,7 +443,7 @@ decltype(a-&gt;X) x3; //x3是double类型</code></pre><p>x2的类型由<code>dec
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#统一的初始化"><span class="nav-number">1.</span> <span class="nav-text">统一的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#auto和decltype关键字"><span class="nav-number">2.</span> <span class="nav-text">auto和decltype关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#智能指针和空指针"><span class="nav-number">3.</span> <span class="nav-text">智能指针和空指针</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#套接字概念"><span class="nav-number">1.</span> <span class="nav-text">套接字概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络字节序"><span class="nav-number">1.1.</span> <span class="nav-text">网络字节序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本函数"><span class="nav-number">2.</span> <span class="nav-text">基本函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器编程"><span class="nav-number">3.</span> <span class="nav-text">服务器编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多路I-O转接服务器"><span class="nav-number">4.</span> <span class="nav-text">多路I&#x2F;O转接服务器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
