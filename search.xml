@@ -1,6 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux下轻量级web服务器3</title>
+    <url>/2021/01/08/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A83/</url>
+    <content><![CDATA[<p>摘要：本篇将介绍用epoll实现的多路I/O转接服务器，epoll是Linux下创建高并发服务器的首选模型，通过对epoll的学习也能为后面搭建web服务器打下良好的基础。</p>
+<a id="more"></a>
+<p><strong>epoll是Linux下多路IO接口复用select/poll的增强版本。它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统CPU利用率，它可以直接返回发生事件的文件描述符而不再只返回数量。目前，epoll是Linux下创建高并发服务器的首选模型。</strong><br>epoll除了提供select/poll那种IO事件的<strong>电平触发（Level Triggered，LT）外，还提供了边沿触发（Edge Triggered，ET）</strong>，这就使得用户空间程序有可能缓存IO状态，减少epoll_wait/epoll_pwait的调用，提高应用程序效率。  </p>
+<h2 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h2><p>epoll_create:创建一个<strong>epoll句柄（红黑树的根结点）</strong>，参数size用来告诉内核监听的文件描述符的个数，跟内存大小有关。<br><img src="https://yanxuan.nosdn.127.net/c9ca404b1d49cc5c7259799de5017d9d.png" alt=""><br>通过在用户空间调用epoll_create函数创建句柄，返回一个文件描述符epfd，如pcb文件描述符表中的3号epfd，其实<strong>创建了以epfd为根结点的红黑树</strong>。在Linux内核中很多代码都是采用红黑树来完成的。<br><img src="https://yanxuan.nosdn.127.net/e238960ef1699bebbc8b4d49139a5a85.png" alt="">  </p>
+<p>epoll_ctl: 控制某个epoll监控的文件描述符上的事件：注册、修改、删除。<br><img src="https://yanxuan.nosdn.127.net/58886c41dda8f438af846e9d6fbde684.png" alt=""><br><img src="https://yanxuan.nosdn.127.net/09252ab9cfd1518b5ece570cbb082ab3.png" alt=""><br>第一个参数为epfd，红黑树的树根。第二个则是<strong>动作，对红黑树的子结点进行增加、修改和删除</strong>。第三个是要监控的文件描述符，第四个则是对应<strong>事件结构体</strong>。其中有两个结构体成员，第一个就是读、写、异常事件，第二个则是<strong>数据联合体</strong>，可以是fd、泛型指针、32位或64位数，这里传fd（实现直接返回发生事件的文件描述符）。  </p>
+<p>epoll_wait: 等待所监控的文件描述符上有事件的产生，类似于select调用。<br><img src="https://yanxuan.nosdn.127.net/0e565c7815dd9a7d965bb252526bf230.png" alt=""> </p>
+<p>第一个参数同样是红黑树的根，第二个跟epoll_ctl中不同，是一个<strong>结构体数组</strong>（数组元素是2中的事件，<code>struct epoll_event evt[100]</code>），第三个表示数组的大小，第四个则是时间，与select中作用相同。<br>同时<strong>结构体数组是传出参数，将发生事件的文件描述符放入数组中传出</strong>。根据返回值大小就可以循环取出所有发生事件的文件描述符，并能知道它们发生的事件类型。</p>
+<h2 id="编程实现"><a href="#编程实现" class="headerlink" title="编程实现"></a>编程实现</h2><p>服务器端代码：  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;arpa/inet.h&gt;
+#include&lt;sys/epoll.h&gt;
+#include&lt;ctype.h&gt;
+#include&lt;sys/socket.h&gt;
+
+#define SERV_PORT 8080
+#define OPEN_MAX 3000
+
+int main()
+{
+       int lfd,cfd,efd;
+        int flag;
+       char buf[BUFSIZ];
+        int i,n,num;
+        struct sockaddr_in serv_addr,clie_addr;
+        socklen_t clie_addr_len;
+        lfd=socket(AF_INET,SOCK_STREAM,0);
+        if(lfd==-1)
+        {
+        printf(&quot;create socket error&quot;);
+        }
+
+        int opt=1;
+        setsockopt(lfd,SOL_SOCKET,SO_REUSEADDR,&amp;opt,sizeof(opt));      //端口复用，防止2MSL时端口不可用
+
+       serv_addr.sin_family=AF_INET;
+       serv_addr.sin_port=htons(SERV_PORT);
+        serv_addr.sin_addr.s_addr=htonl(INADDR_ANY);
+         flag=bind(lfd,(struct sockaddr *)&amp;serv_addr,sizeof(serv_addr));
+        if(flag==-1)
+        {
+        printf(&quot;bind socket error&quot;);
+       }  
+         flag=listen(lfd,20);
+       if(flag==-1)
+        {
+        printf(&quot;listen error&quot;);
+        }
+
+        efd=epoll_create(OPEN_MAX);          //创建epoll红黑树根节点
+      if(efd==-1)
+       {
+        printf(&quot;create epoll error&quot;);
+      }
+        struct epoll_event evt,ep[OPEN_MAX];     
+        evt.events=EPOLLIN;
+        evt.data.fd=lfd;
+        flag=epoll_ctl(efd,EPOLL_CTL_ADD,lfd,&amp;evt);
+        if(flag==-1)
+        {
+        printf(&quot;add error&quot;);
+        }
+
+       for(;;)
+       {
+        n=epoll_wait(efd,ep,OPEN_MAX,-1);       //内核循环阻塞监听
+        if(n==-1)
+        {
+                printf(&quot;epoll wait error&quot;);
+        }
+
+        for(i=0;i&lt;n;i++)                      //满足条件的被写入ep数组中，遍历读取
+        {
+            if(ep[i].events!=EPOLLIN)           //不满足读事件，跳过不处理
+            {
+                continue;
+            }
+              if(ep[i].data.fd==lfd)               //lfd的读事件，建立连接
+              {
+                clie_addr_len=sizeof(clie_addr);
+                cfd=accept(lfd,(struct sockaddr *)&amp;clie_addr,&amp;clie_addr_len);
+                if(cfd==-1)
+                {
+                    printf(&quot;accept error&quot;);
+                }
+                evt.events=EPOLLIN;
+                evt.data.fd=cfd;
+                flag=epoll_ctl(efd,EPOLL_CTL_ADD,cfd,&amp;evt);  //将建立好连接的cfd添加到红黑树上，进行监听
+                if(flag==-1)
+                {
+                     printf(&quot;add error&quot;);
+                }
+                 }
+              else                                   //不是lfd，即传输数据
+              {
+                   int sockfd=ep[i].data.fd;
+                   num=read(sockfd,buf,sizeof(buf));       
+                   if(num&lt;0)
+                   {
+                            printf(&quot;read error&quot;);
+                   }    
+                   if(num==0)                            //无数据传输，从红黑树摘下该结点
+                   {
+                        flag=epoll_ctl(efd,EPOLL_CTL_DEL,sockfd,NULL);
+                        if(flag==-1)
+                         {
+                            printf(&quot;delete error&quot;);
+                          }
+                        close(sockfd);
+                   }
+                   else
+                   {
+                        for(i=0;i&lt;num;i++)
+                          {
+                            buf[i]=toupper(buf[i]);
+                          }
+                           write(sockfd,buf,num);
+                    }    
+                 }
+           }
+          }
+
+       close(lfd);
+       close(efd);
+       return 0;
+}</code></pre><p>运行测试结果为：<br><a href="https://imgchr.com/i/sK4559" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/08/sK4559.png" alt="sK4559.png"></a><br>即通过epoll成功实现了多路I/O转接服务器。    </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux下轻量级web服务器2</title>
     <url>/2021/01/06/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A82/</url>
     <content><![CDATA[<p>摘要：本篇将主要对Linux网络编程进行复习，其中涉及到计算机网络的相关知识，也有Linux本身的函数学习，介绍如何实现基于TCP的C/S模型，并对多路IO转接服务器进行复习，了解多路IO转接服务器的思想和相关函数。</p>
