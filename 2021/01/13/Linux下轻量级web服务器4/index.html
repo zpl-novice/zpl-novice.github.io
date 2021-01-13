@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将对上篇讲解的epoll模型作些补充，主要包括epoll的边沿触发，非阻塞IO，除此之外会介绍一种事件处理模型reactor，后面搭建的web服务器将会采用这种模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下轻量级web服务器4">
+<meta property="og:url" content="https://zpl-novice.github.io/2021/01/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A84/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将对上篇讲解的epoll模型作些补充，主要包括epoll的边沿触发，非阻塞IO，除此之外会介绍一种事件处理模型reactor，后面搭建的web服务器将会采用这种模型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/13/sU83Nt.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/13/sU84ER.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/13/sUYi7j.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/13/sUYauD.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/13/sUYbvT.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/13/sUYxa9.png">
+<meta property="article:published_time" content="2021-01-13T14:44:50.350Z">
+<meta property="article:modified_time" content="2021-01-13T15:41:05.675Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/01/13/sU83Nt.png">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2021/01/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux下轻量级web服务器4 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2021/01/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux下轻量级web服务器4
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-13 22:44:50 / 修改时间：23:41:05" itemprop="dateCreated datePublished" datetime="2021-01-13T22:44:50+08:00">2021-01-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.9k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将对上篇讲解的epoll模型作些补充，主要包括epoll的边沿触发，非阻塞IO，除此之外会介绍一种事件处理模型reactor，后面搭建的web服务器将会采用这种模型。  </p>
+<a id="more"></a>
+<h2 id="边沿触发ET"><a href="#边沿触发ET" class="headerlink" title="边沿触发ET"></a>边沿触发ET</h2><p>水平触发通知：如果文件描述符上可以非阻塞地执行I/O系统调用，此时认为它已经就绪，触发通知。select、poll就是水平触发。<br>边沿触发通知：如果文件描述符自上次状态检查以来有了新的I/O活动(比如新的输入)，此时需要触发通知。<strong>epoll既可以水平触发，也可以边沿触发</strong>。<br>当采用水平触发通知时，我们可以在任意时刻检查文件描述符的就绪状态。这表示当我们确定了文件描述符处于就绪状态时（比如存在有输入数据），就可以对其执行一些I/O操作，然后重复检查文件描述符，看看是否仍然处于就绪态（比如还有更多的输入数据），此时我们就能执行更多的I/O。<br>与之相反的是，当我们<strong>采用边沿触发时，只有当I/O事件发生时我们才会收到通知</strong>。还是上个例子，如果这次我们采用epoll的边沿触发模式监听一个文件描述符的可读，当可读就绪时，epoll会触发一个通知，如果我们此时不立即处理该事件，当下次再调用epoll监听时，<strong>虽然该文件描述符的状态是可读的，但是此时epoll并不会再给应用程序发送通知。因为在边沿触发工作模式下，只有下一个新的I/O事件到来时，才会再次发送通知</strong>。<br><a href="https://imgchr.com/i/sU83Nt" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/13/sU83Nt.png" alt="sU83Nt.png"></a><br>例如，客户端向服务器端发送了1000B的数据，epoll监听返回给服务器端处理，但服务器只读取了500B的数据，还剩下500B的数据未读。若<strong>采用水平触发，epoll还会继续返回，提醒服务器将剩下的数据读取。而若采用边沿触发，epoll不再返回，直到有新的数据到来，epoll才会返回(读取上次剩下的数据，若不需要，清空缓冲区)</strong>。<br><a href="https://imgchr.com/i/sU84ER" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/13/sU84ER.png" alt="sU84ER.png"></a><br>水平触发优、缺点及应用场景：<br>优点：当进行socket通信的时候，保证了数据的完整输出，进行IO操作的时候，如果还有数据，就会一直的通知你。<br>缺点：由于只要还有数据，内核就会不停的从内核空间转到用户空间，所有占用了大量内核资源，试想一下当有大量数据到来的时候，每次读取一个字节，这样就会不停的进行切换。内核资源的浪费严重。效率来讲也是很低的。<br>边沿触发优、缺点及应用场景：<br>优点：<strong>每次内核只会通知一次，大大减少了内核资源的浪费，提高效率</strong>。<br><strong>缺点：不能保证数据的完整。不能及时的取出所有的数据</strong>。<br><strong>应用场景：处理大数据。使用non-block模式的socket</strong>。  </p>
+<h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><p>可以看到，<strong>边沿触发ET的效率是要比LT高的，它能减少epoll_wait调用的次数</strong>，但是为了使得数据被读取完全，保证数据的完整，在ET触发时，需要循环调用read读取数据，直至读完，但这时存在一个问题，若我们要一次读取50B，而此刻只有20B，则read就会阻塞等待。为了解决这个问题，需要将read设置为<strong>非阻塞</strong>。<br><a href="https://imgchr.com/i/sUYi7j" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/13/sUYi7j.png" alt="sUYi7j.png"></a><br><strong>通过fcntl函数可以修改文件描述符的非阻塞</strong>。  </p>
+<h2 id="reactor模式"><a href="#reactor模式" class="headerlink" title="reactor模式"></a>reactor模式</h2><p><strong>reactor是一种事件处理模式，它用于处理多个客户端并发的向服务端请求服务的场景</strong>。每种服务在服务端可能由多个方法组成。<strong>reactor会解耦并发请求的服务并分发给对应的事件处理器来处理</strong>。目前，许多流行的开源框架都用到了reactor模式，如：netty、node.js等，包括java的nio。<br>reactor主要由以下几个角色构成：handle、Synchronous Event Demultiplexer、Initiation Dispatcher、Event Handler、Concrete Event Handler<br>Handle<br>handle在linux中一般称为<strong>文件描述符</strong>，而在window称为句柄，两者的含义一样。handle是事件的发源地。比如一个网络socket、磁盘文件等。而发生在handle上的事件可以有connection、ready for read、ready for write等。<br>Synchronous Event Demultiplexer<br>同步事件分离器，<strong>本质上是系统调用。比如linux中的select、poll、epoll等</strong>。比如，select方法会一直阻塞直到handle上有事件发生时才会返回。<br>Event Handler<br><strong>事件处理器，其会定义一些回调方法或者称为钩子函数</strong>，当handle上有事件发生时，回调方法便会执行，一种事件处理机制。  </p>
+<p>Concrete Event Handler<br>具体的事件处理器，实现了Event Handler。在回调方法中会实现具体的业务逻辑。<br>Initiation Dispatcher<br>初始分发器，也是<strong>reactor角色，提供了注册、删除与转发event handler的方法</strong>。当Synchronous Event Demultiplexer检测到handle上有事件发生时，便会通知initiation dispatcher调用特定的event handler的回调方法。  </p>
+<p>单reactor单线程模型：<br><a href="https://imgchr.com/i/sUYauD" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/13/sUYauD.png" alt="sUYauD.png"></a><br>Reactor线程，负责多路分离套接字，有新连接到来触发connect 事件之后，交由Acceptor进行处理，有IO读写事件之后交给hanlder处理。<br>Acceptor主要任务就是构建handler，在获取到和client相关的SocketChannel之后，绑定到相应的hanlder上，对应的SocketChannel有读写事件之后，基于racotor 分发,hanlder就可以处理了（所有的IO事件都绑定到selector上，由Reactor分发）。<br>该模型适用于处理器链中业务处理组件能快速完成的场景。不过，这种单线程模型不能充分利用多核资源，所以实际使用的不多。<br>单reactor多线程模型：<br><a href="https://imgchr.com/i/sUYbvT" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/13/sUYbvT.png" alt="sUYbvT.png"></a><br>相对于第一种单线程的模式来说，在处理业务逻辑，也就是<strong>获取到IO的读写事件之后，交由线程池来处理，这样可以减小主reactor的性能开销</strong>，从而更专注的做事件分发工作了，从而提升整个应用的吞吐。  </p>
+<p><strong>多reactor多线程模型</strong>：<br><a href="https://imgchr.com/i/sUYxa9" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/13/sUYxa9.png" alt="sUYxa9.png"></a><br>第三种模型比起第二种模型，是将Reactor分成两部分：<br>1.mainReactor负责监听server socket，用来处理新连接的建立，将建立的socketChannel指定注册给subReactor。<br>2.subReactor维护自己的selector, 基于mainReactor 注册的socketChannel多路分离IO读写事件，读写网络数据，对业务处理的功能，另其扔给worker线程池来完成。  </p>
+<p><strong>mainReactor主要是用来处理网络IO连接建立操作，通常一个线程就可以处理，而subReactor主要做和建立起来的socket做数据交互和事件业务处理操作，它的个数上一般是和CPU个数等同，每个subReactor一个线程来处理。</strong><br><strong>此种模型中，每个模块的工作更加专一，耦合度更低，性能和稳定性也大量的提升，支持的可并发客户端数量可达到上百万级别</strong>。<br>关于此种模型的应用，目前有很多优秀的矿建已经在应用了，比如mina和netty等。上述中去掉线程池的第三种形式的变种，也是Netty NIO的默认模式。  </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2021/01/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A84/" title="Linux下轻量级web服务器4">https://zpl-novice.github.io/2021/01/13/Linux下轻量级web服务器4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/08/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A83/" rel="prev" title="Linux下轻量级web服务器3">
+      <i class="fa fa-chevron-left"></i> Linux下轻量级web服务器3
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#边沿触发ET"><span class="nav-number">1.</span> <span class="nav-text">边沿触发ET</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞IO"><span class="nav-number">2.</span> <span class="nav-text">非阻塞IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reactor模式"><span class="nav-number">3.</span> <span class="nav-text">reactor模式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">230k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
