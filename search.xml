@@ -1,6 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux下轻量级web服务器5</title>
+    <url>/2021/01/17/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A85/</url>
+    <content><![CDATA[<p>摘要：本篇将主要介绍开源库libevent以及它的使用。libevent库本身是一个典型的reactor模型，它是一个高性能的网络库，在linux下支持select、poll、epoll。  </p>
+<a id="more"></a>
+<p>libevent库封装了多路IO转接相关的函数，专注于高并发网络。libevent可移植，可在windows、linux等多个平台使用，而前面所讲的epoll只能在linux下使用。<br>libevent库使用流程：<br>1.创建一个事件处理框架<br>2.创建一个事件<br>3.事件添加到事件处理框架中<br>4.开始事件循环<br>5.释放资源  </p>
+<h2 id="事件处理框架event-base"><a href="#事件处理框架event-base" class="headerlink" title="事件处理框架event_base"></a>事件处理框架event_base</h2><p><strong>使用libevent之前需要分配一个或多个<code>event_base</code>结构体</strong>。每个<code>event_base</code>结构体持有一个事件集合，可以检测以确定哪个事件是激活的。<br><em>相当于epoll红黑树的树根<br>*底座<br>*抽象层，完成对event_base的封装<br>*每个event_base都有一种用于检测哪种事件已经就绪的“方法”，或者说后端。<br><a href="https://imgchr.com/i/syCKD1" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syCKD1.png" alt="syCKD1.png"></a><br>创建<code>event_base</code>:<br>`struct event_base</em> event_base_new(void); <code>失败返回NULL  
+释放</code>event_base<code>:</code>event_base_free(struct event_base * base);`  </p>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>在epoll模型里只介绍了EPOLLIN和EPOLLOUT事件，libevent对很多事件进行了封装，其中没有缓冲区的事件为：<br><a href="https://imgchr.com/i/syCRrn" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syCRrn.png" alt="syCRrn.png"></a><br>在<strong>创建事件时同时定义了事件类型，已经事件发生时的回调函数</strong>。  </p>
+<p>添加事件到<code>event_base</code>:<br><a href="https://imgchr.com/i/syPEZt" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syPEZt.png" alt="syPEZt.png"></a><br>从<code>event_base</code>中删除事件：<br><code>int event_del(struct event *ev);</code>  </p>
+<p>释放事件：<br><code>void event_free(struct event *event);</code></p>
+<p><strong>开启事件循环</strong>：<br><code>int event_base_dispatch(struct event_base *base);</code><br>将一直运行，直到没有已经注册的事件。  </p>
+<p>带缓冲区的事件bufferevent：<br>bufferevent是libevent为IO缓冲区操作提供的一种通用机制。bufferevent由一个底层的传输端口（如套接字），一个读取缓冲区和一个写入缓冲区组成。<br>与通常的事件在底层传输端口已经就绪，可以读取或写入的时候执行回调不同的是，<strong>bufferevent在读取或者写入了足够量的数据之后调用用户提供的回调</strong>。<br>回调（缓冲区对应的操作）：<br>每个bufferevent有两个数据相关的回调：<br>一个读取回调：<br>从底层传输端口读取了任意量的数据之后会调用读取回调（默认）<br>一个写入回调：<br>输出缓冲区中足够量的数据被清空到底层传输端口后写入回调会被调用（默认）<br>注意只要输出缓冲区中有数据，就会自动发送，写回调只是通知发送成功。<br><strong>缓冲区中数据存储：队列</strong>。<br>创建bufferevent：<br><a href="https://imgchr.com/i/syiWNV" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syiWNV.png" alt="syiWNV.png"></a><br>给读写缓冲区设置回调：<br><a href="https://imgchr.com/i/syiIc4" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syiIc4.png" alt="syiIc4.png"></a><br>设置缓冲区可用：<br><a href="https://imgchr.com/i/syiojJ" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syiojJ.png" alt="syiojJ.png"></a><br><strong>链接监听器-evconnlistener</strong>：<br><a href="https://imgchr.com/i/syi7u9" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syi7u9.png" alt="syi7u9.png"></a>  </p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>用libevent读取FIFO中的数据将其转换成大写输出，服务器端（读端）：  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;sys/stat.h&gt;
+#include&lt;string.h&gt;
+#include&lt;fcntl.h&gt;
+#include&lt;event2/event.h&gt;
+#include&lt;ctype.h&gt;
+
+void read_cb(evutil_socket_t fd,short what,void *arg)
+{
+    //读管道
+       char buf[1024]={0};
+       int len=read(fd,buf,sizeof(buf));
+       for(int i=0;i&lt;strlen(buf)+1;i++)
+      {
+           buf[i]=toupper(buf[i]);
+     }
+       printf(&quot;buf is:%s&quot;,buf);
+}
+
+int main()
+{
+        unlink(&quot;myfifo&quot;);  //若已存在该管道，删除
+        //创建有名管道
+        mkfifo(&quot;myfifo&quot;,0664);  //权限为664
+
+     int fd=open(&quot;myfifo&quot;,O_RDONLY | O_NONBLOCK);  //打开文件，非阻塞读
+        if(fd==-1)
+     {
+        printf(&quot;open error&quot;);
+     }
+
+     //创建base
+     struct event_base* base=NULL;   //初始化为空
+     base=event_base_new();
+     //创建事件
+     struct event * ev=NULL;  //初始化为空
+        ev=event_new(base,fd,EV_READ,read_cb,NULL);  //定义事件类型，模式，回调函数
+     //添加事件
+     event_add(ev,NULL);
+     //开启循环
+     event_base_dispatch(base);
+
+     //循环结束释放资源
+     event_free(ev);
+     event_base_free(base);
+     close(fd);
+
+        return 0;
+}</code></pre><p><a href="https://imgchr.com/i/syFA4f" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syFA4f.png" alt="syFA4f.png"></a><br><strong>在编译时要加上libevent库，-levent</strong>  </p>
+<p>客户端（写端）：  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/types.h&gt;
+#include&lt;sys/stat.h&gt;
+#include&lt;string.h&gt;
+#include&lt;fcntl.h&gt;
+#include&lt;event2/event.h&gt;
+#include&lt;ctype.h&gt;
+
+void write_cb(evutil_socket_t fd,short what,void *arg)
+{
+    //写管道
+       char buf[20]=&quot;hello world&quot;;
+       write(fd,buf,sizeof(buf));
+       printf(&quot;buf is:%s&quot;,buf);
+}
+
+int main()
+{
+    //读端会创建fifo，写端直接打开
+    int fd=open(&quot;myfifo&quot;,O_WRONLY | O_NONBLOCK);  //打开文件，非阻塞写
+    if(fd==-1)
+    {
+        printf(&quot;write error&quot;);
+    }
+
+    //创建base
+       struct event_base* base=NULL;   //初始化为空
+       base=event_base_new();
+       //创建事件
+       struct event * ev=NULL;  //初始化为空
+    ev=event_new(base,fd,EV_WRITE,write_cb,NULL);  //定义事件类型，模式，回调函数
+    //添加事件
+    event_add(ev,NULL);
+    //开启循环
+    event_base_dispatch(base);
+
+    //循环结束释放资源
+    event_free(ev);
+    event_base_free(base);
+    close(fd);
+
+        return 0;
+}</code></pre><p><a href="https://imgchr.com/i/syFGCT" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/17/syFGCT.png" alt="syFGCT.png"></a><br>当<strong>启动read端后，会创建myfifo，再启动write端，会写入hello world，read端读取后转为大写输出，由于未设置持续触发，因此直接退出循环</strong>。  </p>
+<p>上述是对libevent库的学习和简单使用，libevent库是一个功能十分强大的开源库，后面web服务器的编写会在很大程度上借鉴libevent库中回调函数的思想。  </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux下轻量级web服务器4</title>
     <url>/2021/01/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A84/</url>
     <content><![CDATA[<p>摘要：本篇将对上篇讲解的epoll模型作些补充，主要包括epoll的边沿触发，非阻塞IO，除此之外会介绍一种事件处理模型reactor，后面搭建的web服务器将会采用这种模型。  </p>
