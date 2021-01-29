@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将在前面学习的基础上，开始对web服务器的实现，首先从最简易的版本，即单线程简单功能开始。主要实现了webserver类，如何对webserver初始化，以及如何与浏览器建立连接，读取浏览器发送的请求消息，将响应消息发送给浏览器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下轻量级web服务器6">
+<meta property="og:url" content="https://zpl-novice.github.io/2021/01/28/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A86/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将在前面学习的基础上，开始对web服务器的实现，首先从最简易的版本，即单线程简单功能开始。主要实现了webserver类，如何对webserver初始化，以及如何与浏览器建立连接，读取浏览器发送的请求消息，将响应消息发送给浏览器。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/29/yC2IPS.png">
+<meta property="article:published_time" content="2021-01-28T13:00:36.169Z">
+<meta property="article:modified_time" content="2021-01-29T04:17:45.417Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/01/29/yC2IPS.png">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2021/01/28/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux下轻量级web服务器6 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2021/01/28/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux下轻量级web服务器6
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 21:00:36" itemprop="dateCreated datePublished" datetime="2021-01-28T21:00:36+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-29 12:17:45" itemprop="dateModified" datetime="2021-01-29T12:17:45+08:00">2021-01-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.6k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将在前面学习的基础上，开始对web服务器的实现，首先从最简易的版本，即单线程简单功能开始。主要实现了webserver类，如何对webserver初始化，以及如何与浏览器建立连接，读取浏览器发送的请求消息，将响应消息发送给浏览器。</p>
+<a id="more"></a>
+<h2 id="修改工作目录"><a href="#修改工作目录" class="headerlink" title="修改工作目录"></a>修改工作目录</h2><p>第一步是修改进程的工作目录，将其<strong>切换到资源目录</strong>下，这样用户请求资源时可直接获取。<br>chdir函数:<br><a href="https://imgchr.com/i/yC2IPS" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/01/29/yC2IPS.png" alt="yC2IPS.png"></a><br>成功返回0，失败返回-1。<br>代码：  </p>
+<pre><code>int flag=chdir(&quot;/root/文档/webserver&quot;);
+if(flag==-1)
+{
+    printf(&quot;chdir error&quot;); 
+        exit(1);
+}</code></pre><h2 id="webserver"><a href="#webserver" class="headerlink" title="webserver"></a>webserver</h2><p>建立一个webserver对象，包含：<br><strong>（1）初始化功能，即创建套接字，绑定ip地址和端口号，监听，创建epoll模型，将要监听的套接字加入到epoll红黑树上</strong>。<br><strong>（2）事件派发函数，对不同的事件进行不同的处理</strong>。<br><strong>（3）接受连接成员函数，接受连接并添加到epoll树上。<br>（4）读成员函数，对浏览器发送的请求消息进行解析。<br>（5）写成员函数，封装好响应消息发送给浏览器</strong>。    </p>
+<p>webserver.h:  </p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;sys/socket.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;arpa/inet.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;fcntl.h&gt;
+#include&lt;sys/epoll.h&gt;
+#include&lt;string.h&gt;
+using namespace std;
+
+class webserver
+{
+      public:
+        webserver(int port);   //构造函数
+        void init();                //初始化
+        void web_read(int sockfd);  //读成员函数
+           void web_write(int sockfd);  //写成员函数
+        void web_accept(int lfd);  //接受连接成员函数
+        void reactor();            //事件派发
+        ~webserver();         //析构函数
+    private:
+        int lfd;
+        int cfd;
+        int opt;
+        int efd;
+        int sockfd;
+        int flag;
+        int n;
+        int num;
+        int action;
+        char buf[BUFSIZ];
+        int serv_port;
+        struct sockaddr_in serv_addr;
+        struct sockaddr_in clie_addr;
+        socklen_t clie_addr_len;
+        struct epoll_event evt;
+        struct epoll_event ep[3000];
+};
+
+#endif</code></pre><p>在webserver类的头文件里定义了相关的成员变量和成员函数。  </p>
+<p>其中构造函数设置为带参数的，将端口号传入。析构函数用来关闭文件：  </p>
+<pre><code>webserver::webserver(int port)
+{
+        serv_port=port;
+}  
+webserver::~webserver()
+{
+        close(lfd);
+        close(cfd);
+        close(efd);
+}  </code></pre><p>初始化函数init():  </p>
+<pre><code>void webserver::init()
+{
+        lfd=socket(AF_INET,SOCK_STREAM,0);  //创建套接字
+     if(lfd==-1)
+        {
+     cout&lt;&lt;&quot;create socket error&quot;;
+        }
+        opt=1;
+        setsockopt(lfd,SOL_SOCKET,SO_REUSEADDR,&amp;opt,sizeof(opt));  //设置端口复用
+        serv_addr.sin_family=AF_INET;
+     serv_addr.sin_port=htons(serv_port);
+     serv_addr.sin_addr.s_addr=htonl(INADDR_ANY);  
+           flag=bind(lfd,(struct sockaddr *)&amp;serv_addr,sizeof(serv_addr));  //绑定
+      if(flag==-1)
+     {
+         cout&lt;&lt;&quot;bind error&quot;;
+        }
+        flag=listen(lfd,20);      //监听
+     if(flag==-1)
+     {
+        cout&lt;&lt;&quot;listen error&quot;;
+        }
+     efd=epoll_create(3000);   //创建epoll红黑树
+     if(efd==-1)
+     {
+        cout&lt;&lt;&quot;create epoll error&quot;;
+     }
+     evt.data.fd=lfd;
+     evt.events=EPOLLIN;
+     flag=epoll_ctl(efd,EPOLL_CTL_ADD,lfd,&amp;evt);  //将lfd添加到红黑树上
+      if(efd==-1)
+     {
+        cout&lt;&lt;&quot;add epoll error&quot;;
+        }
+}</code></pre><p>事件派发函数reactor()：  </p>
+<pre><code>void webserver::reactor()
+{
+       for(;;)
+    {
+        n=epoll_wait(efd,ep,3000,-1);   //循环阻塞监听
+        if(n==-1)
+          {
+              cout&lt;&lt;&quot;epoll wait error&quot;;
+           }
+        for(int i=0;i&lt;n;i++)     //遍历数组，调用对应事件
+        {
+            if(ep[i].data.fd==lfd)
+            {
+                   web_accept(lfd);
+            }
+            else
+            {
+                sockfd=ep[i].data.fd;
+                    web_read(sockfd);      //调用读函数解析请求消息
+                web_write(sockfd);     //调用写函数发送响应消息
+             }
+        }
+    }
+}</code></pre><p><strong>在reactor成员函数里对epoll红黑树上的事件进行循环监听，当有返回值时，遍历传出的数组，对不同的事件调用不同的处理函数，如建立连接、传输数据等</strong>。  </p>
+<p>建立连接函数web_accept():  </p>
+<pre><code>void webserver::web_accept(int lfd)     //建立连接，添加到树上
+{
+    clie_addr_len=sizeof(clie_addr);
+    cfd=accept(lfd,(struct sockaddr*)&amp;clie_addr,&amp;clie_addr_len);
+    flag=fcntl(cfd,F_GETFL);   //设置为非阻塞读
+    flag |= O_NONBLOCK;
+    fcntl(cfd,F_SETFL,flag);
+    if(cfd==-1)
+    {
+        cout&lt;&lt;&quot;accept error&quot;;
+    }
+    evt.events=EPOLLIN | EPOLLET;  //ET触发模式
+    evt.data.fd=cfd;
+    flag=epoll_ctl(efd,EPOLL_CTL_ADD,cfd,&amp;evt);
+    if(flag==-1)
+    {
+        cout&lt;&lt;&quot;add epoll error&quot;;
+    }        
+}</code></pre><p>调用accept函数建立连接，并<strong>将传输数据的套接字cfd设置为非阻塞读和ET模式</strong>，将其添加到红黑树上监听。  </p>
+<p>读成员函数web_read():  </p>
+<pre><code>void webserver::web_read(int sockfd)
+{   
+    num=read(sockfd,buf,sizeof(buf));
+    if(num&lt;0)
+    {
+        cout&lt;&lt;&quot;read error&quot;;
+    }
+    if(num==0)               //无数据传输，从树上摘除
+    {
+        flag=epoll_ctl(efd,EPOLL_CTL_DEL,sockfd,NULL);
+    }
+    else
+    {
+        action=20;
+        char method[12],path[100],protocol[12];
+        sscanf(buf,&quot;%[^ ] %[^ ] %[^ \r\n]&quot;,method,path,protocol);
+        if(strcmp(method,&quot;GET&quot;)==0)
+        {
+            if(strcmp(path,&quot;/&quot;)==0)
+            {
+                action=0;          //登陆界面
+            }
+            if(strcmp(path,&quot;/mainsceen&quot;)==0)
+            {
+                action=10;          //主界面
+            }
+        }
+        cout&lt;&lt;buf;
+    }
+}</code></pre><p><strong>解析连接后发送的请求报文，使用非阻塞读将浏览器发送的数据全部读出，再用正则表达式将请求行截取出来，如GET /mainsceen HTTP/1.1，对不同的请求行设定不同的标志，以此来进行对应的响应</strong>。在上述代码中对请求/miansceen设定action为10，对请求/设定action为0，其它的action都为20。  </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2021/01/28/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A86/" title="Linux下轻量级web服务器6">https://zpl-novice.github.io/2021/01/28/Linux下轻量级web服务器6/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/17/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A85/" rel="prev" title="Linux下轻量级web服务器5">
+      <i class="fa fa-chevron-left"></i> Linux下轻量级web服务器5
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/29/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A87/" rel="next" title="Linux下轻量级web服务器7">
+      Linux下轻量级web服务器7 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改工作目录"><span class="nav-number">1.</span> <span class="nav-text">修改工作目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webserver"><span class="nav-number">2.</span> <span class="nav-text">webserver</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">240k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
