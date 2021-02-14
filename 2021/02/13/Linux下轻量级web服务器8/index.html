@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将对web服务器的功能进行扩展，对前面所述mainsceen中的3个按钮分别设置不同的动作和子界面，完成界面间的跳转以及图片、音频、文本的查看和下载功能。主要涉及逻辑和html界面的设计。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下轻量级web服务器8">
+<meta property="og:url" content="https://zpl-novice.github.io/2021/02/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A88/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将对web服务器的功能进行扩展，对前面所述mainsceen中的3个按钮分别设置不同的动作和子界面，完成界面间的跳转以及图片、音频、文本的查看和下载功能。主要涉及逻辑和html界面的设计。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHpCD.jpg">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHCgH.jpg">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHPvd.jpg">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHFKA.jpg">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHVVP.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHZUf.jpg">
+<meta property="article:published_time" content="2021-02-13T11:46:07.763Z">
+<meta property="article:modified_time" content="2021-02-14T03:42:15.352Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/02/14/ysHpCD.jpg">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2021/02/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux下轻量级web服务器8 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2021/02/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux下轻量级web服务器8
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-13 19:46:07" itemprop="dateCreated datePublished" datetime="2021-02-13T19:46:07+08:00">2021-02-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-14 11:42:15" itemprop="dateModified" datetime="2021-02-14T11:42:15+08:00">2021-02-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将对web服务器的功能进行扩展，对前面所述mainsceen中的3个按钮分别设置不同的动作和子界面，完成界面间的跳转以及图片、音频、文本的查看和下载功能。主要涉及逻辑和html界面的设计。</p>
+<a id="more"></a>
+<p>在mainsceen.html中可知，当点击图片时发送表单数据，请求action为11，音频为12，文档为13。在读函数里对这些进行匹配：  </p>
+<pre><code>if(strcmp(path,&quot;/11?&quot;)==0)
+{
+action=11;          //图片界面
+}
+if(strcmp(path,&quot;/12?&quot;)==0)
+{
+action=12;          //音频界面
+}
+if(strcmp(path,&quot;/13?&quot;)==0)
+{
+action=13;          //文档界面
+}</code></pre><p>在写函数里对这些事件进行相应的处理：  </p>
+<pre><code>else if(action==11)      //图片界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/picture.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}
+else if(action==12)      //音频界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/voice.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}
+else if(action==13)    //文本界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/text.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>首先发送响应头，这三个事件因为响应都是新开一个网页，因此响应类型都是发送html文件，分别是picture.html、voice.html、text.html。<br>picture.html：  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;C++&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;图片&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;C++.jpg&quot; title=&quot;C++&quot;/&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;form action=&quot;15&quot; method=&quot;get&quot;&gt;
+     &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;下载&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;
+&lt;br/&gt;
+&lt;/html&gt;</code></pre><p>将图片显示出来，并提供按钮下载，当点击该下载按钮时，发送action为15的请求表单，同样的，在读函数里捕捉该请求，在写函数里进行响应：  </p>
+<pre><code> else if(action==15)
+ {
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:application/octet-stream\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/C++.jpg&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>这里<strong>content-type选择application/octet-stream用来下载文件</strong>。  </p>
+<p>voice.html:  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;The Oath&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;音频&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;video width=&quot;906&quot; height=&quot;506&quot; controls&gt;
+&lt;source src=&quot;TheOath.ogg&quot; type=&quot;video/ogg&quot;&gt;
+&lt;/video&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;form action=&quot;17&quot; method=&quot;get&quot;&gt;
+     &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;下载&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;
+&lt;br/&gt;
+&lt;/html&gt;</code></pre><p>在音频界面因为是用<strong>firefox浏览器，所以将音频存成.ogg格式，使用<video>标签来将音频嵌入界面</strong>。同样的设置下载按钮。  </p>
+<pre><code> else if(action==17)
+ {
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:video/mpeg4\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/TheOath.mp4&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>text.html：  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;hello&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;文档&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;textarea rows=&quot;10&quot; cols=&quot;20&quot;&gt;
+#include&lt;iostream&gt;
+using namespace std;
+int main(){
+    cout&lt;&lt;&quot;hello world!&quot;;
+    return 0;
+}
+&lt;/textarea&gt;
+&lt;br/&gt;
+&lt;form action=&quot;18&quot; method=&quot;get&quot;&gt;
+     &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;下载&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;
+&lt;br/&gt;
+&lt;/html&gt;</code></pre><p>文档界面与图片和音频界面类似，显示文档内容加下载按钮。  </p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>登录主界面，点击图片按钮：<br><a href="https://imgchr.com/i/ysHpCD" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHpCD.jpg" alt="ysHpCD.jpg"></a><br>点击下载：<br><a href="https://imgchr.com/i/ysHCgH" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHCgH.jpg" alt="ysHCgH.jpg"></a><br>再点开音频界面：<br><a href="https://imgchr.com/i/ysHPvd" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHPvd.jpg" alt="ysHPvd.jpg"></a><br>点击下载：<br><a href="https://imgchr.com/i/ysHFKA" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHFKA.jpg" alt="ysHFKA.jpg"></a><br>点开文档界面：<br><a href="https://imgchr.com/i/ysHVVP" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHVVP.png" alt="ysHVVP.png"></a><br>点击下载：<br><a href="https://imgchr.com/i/ysHZUf" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHZUf.jpg" alt="ysHZUf.jpg"></a><br>可见主界面相关功能已基本实现。  </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2021/02/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A88/" title="Linux下轻量级web服务器8">https://zpl-novice.github.io/2021/02/13/Linux下轻量级web服务器8/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/29/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A87/" rel="prev" title="Linux下轻量级web服务器7">
+      <i class="fa fa-chevron-left"></i> Linux下轻量级web服务器7
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/" rel="next" title="Linux下轻量级web服务器9">
+      Linux下轻量级web服务器9 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">1.</span> <span class="nav-text">测试</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">251k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

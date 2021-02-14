@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://zpl-novice.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘要：本篇将在主界面实现完成的基础上，增加注册登录用户验证等界面的实现。需要使用数据库来完成，在本篇将主要介绍如何设计登录界面，来实现用户验证。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下轻量级web服务器9">
+<meta property="og:url" content="https://zpl-novice.github.io/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/index.html">
+<meta property="og:site_name" content="zpl-novice">
+<meta property="og:description" content="摘要：本篇将在主界面实现完成的基础上，增加注册登录用户验证等界面的实现。需要使用数据库来完成，在本篇将主要介绍如何设计登录界面，来实现用户验证。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysHRRe.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysH7If.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysbpd0.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysbkz4.png">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/14/ysbVy9.png">
+<meta property="article:published_time" content="2021-02-14T03:42:57.963Z">
+<meta property="article:modified_time" content="2021-02-14T04:01:23.645Z">
+<meta property="article:author" content="zpl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/02/14/ysHRRe.png">
+
+<link rel="canonical" href="https://zpl-novice.github.io/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Linux下轻量级web服务器9 | zpl-novice</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zpl-novice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Advanced road</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zpl-novice.github.io/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="zpl">
+      <meta itemprop="description" content="you never konw what you can do till you try">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zpl-novice">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux下轻量级web服务器9
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-14 11:42:57 / 修改时间：12:01:23" itemprop="dateCreated datePublished" datetime="2021-02-14T11:42:57+08:00">2021-02-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.3k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘要：本篇将在主界面实现完成的基础上，增加注册登录用户验证等界面的实现。需要使用数据库来完成，在本篇将主要介绍如何设计登录界面，来实现用户验证。  </p>
+<a id="more"></a>
+<p>首先是选择界面，界面显示内容为新用户和登录两个按钮。<br>judge.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;WebServer&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;欢迎访问&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;br/&gt;
+    &lt;form action=&quot;1&quot; method=&quot;get&quot;&gt;
+         &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;新用户&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;br/&gt;
+            &lt;form action=&quot;2&quot; method=&quot;get&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot; &gt;已有账号&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+
+
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在输入ip地址和端口号以后，响应消息为发送judge.html。网页显示为：<br><a href="https://imgchr.com/i/ysHRRe" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHRRe.png" alt="ysHRRe.png"></a><br>对两个按钮设置不同的action和请求消息，当点击新用户时进入注册界面。<br>register.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign up&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;注册&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+         &lt;form action=&quot;4&quot; method=&quot;post&quot;&gt;
+            &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+            &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;用户密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+            &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;注册&lt;/button&gt;&lt;/div&gt;
+         &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在<strong>注册界面，提交用户注册的账号密码，在数据库中进行验证，若满足条件，添加到数据库中，跳转到登录界面。不满足条件，则跳转到注册错误界面</strong>。<br><a href="https://imgchr.com/i/ysH7If" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysH7If.png" alt="ysH7If.png"></a><br>关于数据库相关的操作会在下篇详细介绍。<br>registererror.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign up&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;注册&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+            &lt;form action=&quot;5&quot; method=&quot;post&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;用户密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;注册&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;div  align=&quot;center&quot;&gt;提示：该用户名被注册.&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p><a href="https://imgchr.com/i/ysbpd0" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysbpd0.png" alt="ysbpd0.png"></a>  </p>
+<p>注意<strong>注册和登录时用的是POST方法，因此需要从发送消息里提取出用户名和密码</strong>。<br>注册成功以后会跳转到登录界面：<br>login.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign in&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;登录&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+            &lt;form action=&quot;3&quot; method=&quot;post&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;登录密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;确定&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>同样的对登录时提交的用户名和密码在数据库中进行操作，若正确则跳转到前面设计的主界面mainsceen，若错误则跳转到登录出错界面。<br><a href="https://imgchr.com/i/ysbkz4" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysbkz4.png" alt="ysbkz4.png"></a><br>loginerror.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign in&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;登录&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+            &lt;form action=&quot;3&quot; method=&quot;post&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;登录密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;确定&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;br/&gt;
+           &lt;div  align=&quot;center&quot;&gt;提示：用户名或密码错误，请重试&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在登录出错界面会提示用户名或密码错误，请重新登录。<br><a href="https://imgchr.com/i/ysbVy9" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysbVy9.png" alt="ysbVy9.png"></a><br>上述基本上完成了注册登录等界面的设计。<br>对注册和登录时POST方法发送的<strong>用户名和密码进行读取</strong>：<br>先定义存储账号密码的数组：  </p>
+<pre><code>char user[20]={0},password[20]={0};</code></pre><p>再：  </p>
+<pre><code>if(strcmp(method,&quot;POST&quot;)==0)
+{
+    //匹配post输入账号密码
+    cout&lt;&lt;num&lt;&lt;endl;
+    int m=n=0;
+    for(int j=num-1;j&gt;num-100;j--)   //密码个数
+    {
+    if(buf[j]==&apos;=&apos;)
+    {
+        break;
+    }
+    m++;
+    }
+    for(int j=num-11-m;j&gt;num-100;j--)   //用户名个数
+    {
+    if(buf[j]==&apos;=&apos;)
+    {
+        break;
+    }
+    n++;
+    }
+    for(int j=0;j&lt;m;j++)          //密码
+    {
+    password[j]=buf[j+num-m];
+    }
+    for(int j=0;j&lt;n;j++)          //用户名
+    {
+    user[j]=buf[j+num-10-m-n];
+    }
+}</code></pre><p><strong>通过POST提交表单数据样式计算出用户名和密码个数，从读取的buf中提取出用户名和密码</strong>。   </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>zpl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zpl-novice.github.io/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/" title="Linux下轻量级web服务器9">https://zpl-novice.github.io/2021/02/14/Linux下轻量级web服务器9/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A88/" rel="prev" title="Linux下轻量级web服务器8">
+      <i class="fa fa-chevron-left"></i> Linux下轻量级web服务器8
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zpl"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">zpl</p>
+  <div class="site-description" itemprop="description">you never konw what you can do till you try</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zpl-novice" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zpl-novice" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1262517791@qq.com" title="E-Mail → mailto:1262517791@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zpl</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">251k</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

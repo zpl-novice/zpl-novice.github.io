@@ -1,6 +1,365 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux下轻量级web服务器9</title>
+    <url>/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/</url>
+    <content><![CDATA[<p>摘要：本篇将在主界面实现完成的基础上，增加注册登录用户验证等界面的实现。需要使用数据库来完成，在本篇将主要介绍如何设计登录界面，来实现用户验证。  </p>
+<a id="more"></a>
+<p>首先是选择界面，界面显示内容为新用户和登录两个按钮。<br>judge.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;WebServer&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;欢迎访问&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;br/&gt;
+    &lt;form action=&quot;1&quot; method=&quot;get&quot;&gt;
+         &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;新用户&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;br/&gt;
+            &lt;form action=&quot;2&quot; method=&quot;get&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot; &gt;已有账号&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+
+
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在输入ip地址和端口号以后，响应消息为发送judge.html。网页显示为：<br><a href="https://imgchr.com/i/ysHRRe" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHRRe.png" alt="ysHRRe.png"></a><br>对两个按钮设置不同的action和请求消息，当点击新用户时进入注册界面。<br>register.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign up&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;注册&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+         &lt;form action=&quot;4&quot; method=&quot;post&quot;&gt;
+            &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+            &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;用户密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+            &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;注册&lt;/button&gt;&lt;/div&gt;
+         &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在<strong>注册界面，提交用户注册的账号密码，在数据库中进行验证，若满足条件，添加到数据库中，跳转到登录界面。不满足条件，则跳转到注册错误界面</strong>。<br><a href="https://imgchr.com/i/ysH7If" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysH7If.png" alt="ysH7If.png"></a><br>关于数据库相关的操作会在下篇详细介绍。<br>registererror.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign up&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;注册&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+            &lt;form action=&quot;5&quot; method=&quot;post&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;用户密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;注册&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;div  align=&quot;center&quot;&gt;提示：该用户名被注册.&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p><a href="https://imgchr.com/i/ysbpd0" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysbpd0.png" alt="ysbpd0.png"></a>  </p>
+<p>注意<strong>注册和登录时用的是POST方法，因此需要从发送消息里提取出用户名和密码</strong>。<br>注册成功以后会跳转到登录界面：<br>login.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign in&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;登录&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+            &lt;form action=&quot;3&quot; method=&quot;post&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;登录密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;确定&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>同样的对登录时提交的用户名和密码在数据库中进行操作，若正确则跳转到前面设计的主界面mainsceen，若错误则跳转到登录出错界面。<br><a href="https://imgchr.com/i/ysbkz4" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysbkz4.png" alt="ysbkz4.png"></a><br>loginerror.html :  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Sign in&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;登录&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+    &lt;div class=&quot;login&quot;&gt;
+            &lt;form action=&quot;3&quot; method=&quot;post&quot;&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot; placeholder=&quot;用户名&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;登录密码&quot; required=&quot;required&quot;&gt;&lt;/div&gt;&lt;br/&gt;
+                    &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;确定&lt;/button&gt;&lt;/div&gt;
+            &lt;/form&gt;
+    &lt;br/&gt;
+           &lt;div  align=&quot;center&quot;&gt;提示：用户名或密码错误，请重试&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在登录出错界面会提示用户名或密码错误，请重新登录。<br><a href="https://imgchr.com/i/ysbVy9" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysbVy9.png" alt="ysbVy9.png"></a><br>上述基本上完成了注册登录等界面的设计。<br>对注册和登录时POST方法发送的<strong>用户名和密码进行读取</strong>：<br>先定义存储账号密码的数组：  </p>
+<pre><code>char user[20]={0},password[20]={0};</code></pre><p>再：  </p>
+<pre><code>if(strcmp(method,&quot;POST&quot;)==0)
+{
+    //匹配post输入账号密码
+    cout&lt;&lt;num&lt;&lt;endl;
+    int m=n=0;
+    for(int j=num-1;j&gt;num-100;j--)   //密码个数
+    {
+    if(buf[j]==&apos;=&apos;)
+    {
+        break;
+    }
+    m++;
+    }
+    for(int j=num-11-m;j&gt;num-100;j--)   //用户名个数
+    {
+    if(buf[j]==&apos;=&apos;)
+    {
+        break;
+    }
+    n++;
+    }
+    for(int j=0;j&lt;m;j++)          //密码
+    {
+    password[j]=buf[j+num-m];
+    }
+    for(int j=0;j&lt;n;j++)          //用户名
+    {
+    user[j]=buf[j+num-10-m-n];
+    }
+}</code></pre><p><strong>通过POST提交表单数据样式计算出用户名和密码个数，从读取的buf中提取出用户名和密码</strong>。   </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux下轻量级web服务器8</title>
+    <url>/2021/02/13/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A88/</url>
+    <content><![CDATA[<p>摘要：本篇将对web服务器的功能进行扩展，对前面所述mainsceen中的3个按钮分别设置不同的动作和子界面，完成界面间的跳转以及图片、音频、文本的查看和下载功能。主要涉及逻辑和html界面的设计。</p>
+<a id="more"></a>
+<p>在mainsceen.html中可知，当点击图片时发送表单数据，请求action为11，音频为12，文档为13。在读函数里对这些进行匹配：  </p>
+<pre><code>if(strcmp(path,&quot;/11?&quot;)==0)
+{
+action=11;          //图片界面
+}
+if(strcmp(path,&quot;/12?&quot;)==0)
+{
+action=12;          //音频界面
+}
+if(strcmp(path,&quot;/13?&quot;)==0)
+{
+action=13;          //文档界面
+}</code></pre><p>在写函数里对这些事件进行相应的处理：  </p>
+<pre><code>else if(action==11)      //图片界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/picture.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}
+else if(action==12)      //音频界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/voice.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}
+else if(action==13)    //文本界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/text.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>首先发送响应头，这三个事件因为响应都是新开一个网页，因此响应类型都是发送html文件，分别是picture.html、voice.html、text.html。<br>picture.html：  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;C++&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;图片&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;C++.jpg&quot; title=&quot;C++&quot;/&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;form action=&quot;15&quot; method=&quot;get&quot;&gt;
+     &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;下载&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;
+&lt;br/&gt;
+&lt;/html&gt;</code></pre><p>将图片显示出来，并提供按钮下载，当点击该下载按钮时，发送action为15的请求表单，同样的，在读函数里捕捉该请求，在写函数里进行响应：  </p>
+<pre><code> else if(action==15)
+ {
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:application/octet-stream\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/C++.jpg&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>这里<strong>content-type选择application/octet-stream用来下载文件</strong>。  </p>
+<p>voice.html:  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;The Oath&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;音频&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;video width=&quot;906&quot; height=&quot;506&quot; controls&gt;
+&lt;source src=&quot;TheOath.ogg&quot; type=&quot;video/ogg&quot;&gt;
+&lt;/video&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;form action=&quot;17&quot; method=&quot;get&quot;&gt;
+     &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;下载&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;
+&lt;br/&gt;
+&lt;/html&gt;</code></pre><p>在音频界面因为是用<strong>firefox浏览器，所以将音频存成.ogg格式，使用<video>标签来将音频嵌入界面</strong>。同样的设置下载按钮。  </p>
+<pre><code> else if(action==17)
+ {
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:video/mpeg4\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/TheOath.mp4&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>text.html：  </p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;hello&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;5&quot;&gt; &lt;strong&gt;文档&lt;/strong&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;textarea rows=&quot;10&quot; cols=&quot;20&quot;&gt;
+#include&lt;iostream&gt;
+using namespace std;
+int main(){
+    cout&lt;&lt;&quot;hello world!&quot;;
+    return 0;
+}
+&lt;/textarea&gt;
+&lt;br/&gt;
+&lt;form action=&quot;18&quot; method=&quot;get&quot;&gt;
+     &lt;div align=&quot;center&quot;&gt;&lt;button type=&quot;submit&quot;&gt;下载&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;
+&lt;br/&gt;
+&lt;/html&gt;</code></pre><p>文档界面与图片和音频界面类似，显示文档内容加下载按钮。  </p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>登录主界面，点击图片按钮：<br><a href="https://imgchr.com/i/ysHpCD" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHpCD.jpg" alt="ysHpCD.jpg"></a><br>点击下载：<br><a href="https://imgchr.com/i/ysHCgH" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHCgH.jpg" alt="ysHCgH.jpg"></a><br>再点开音频界面：<br><a href="https://imgchr.com/i/ysHPvd" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHPvd.jpg" alt="ysHPvd.jpg"></a><br>点击下载：<br><a href="https://imgchr.com/i/ysHFKA" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHFKA.jpg" alt="ysHFKA.jpg"></a><br>点开文档界面：<br><a href="https://imgchr.com/i/ysHVVP" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHVVP.png" alt="ysHVVP.png"></a><br>点击下载：<br><a href="https://imgchr.com/i/ysHZUf" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/14/ysHZUf.jpg" alt="ysHZUf.jpg"></a><br>可见主界面相关功能已基本实现。  </p>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux下轻量级web服务器7</title>
     <url>/2021/01/29/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A87/</url>
     <content><![CDATA[<p>摘要：本篇将继续上一篇实现写成员函数，发送响应报文给浏览器，以及在主函数中调用webserver类，完成web服务器的功能，对该服务器进行简单测试，初步实现简单的web服务器。  </p>
