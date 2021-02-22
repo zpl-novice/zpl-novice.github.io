@@ -1,6 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux下轻量级web服务器10</title>
+    <url>/2021/02/22/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A810/</url>
+    <content><![CDATA[<p>摘要：本篇是上一篇的补充，主要介绍数据库相关函数，已经整个注册登录操作代码的实现，选择的数据库为MySQL，因此需要复习巩固一下数据库相关知识。</p>
+<a id="more"></a>
+<p>当获得用户名和密码后，就要开始数据库相关的操作，这里使用<strong>C++的&lt;mysql/mysql.h&gt;库</strong>，里面封装了数据库相关操作的函数。  </p>
+<pre><code>mysql=NULL;
+mysql=mysql_init(mysql);
+if (mysql == NULL)
+{
+        cout &lt;&lt; &quot;Error:&quot; &lt;&lt; mysql_error(mysql);
+        exit(1);
+}         
+mysql=mysql_real_connect(mysql,&quot;localhost&quot;,&quot;root&quot;,&quot;123456&quot;,&quot;webserver&quot;,3306,NULL, 0);          //连接的数据库名账号密码端口等
+ if (mysql == NULL)
+ {
+       cout &lt;&lt; &quot;Error: &quot; &lt;&lt; mysql_error(mysql);
+       exit(1);
+  }
+  cout&lt;&lt;&quot;open mysql&quot;&lt;&lt;endl;</code></pre><p> 首先<strong>创建一个指向数据库MYSQL的指针，调用<code>mysql_init</code>函数来初始化，初始化成功以后调用<code>mysql_real_connect</code>函数连接到指定的数据库</strong>，该函数参数为数据库账号密码、数据库名、端口等。<br>在数据库webserver中创建表info用来存储账号密码，其中用<strong>户名设置为主键，密码设置为非空</strong>。<br><a href="https://imgchr.com/i/y7ciod" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/02/22/y7ciod.png" alt="y7ciod.png"></a><br>注册：<br>在注册时需要对数据库中的info表进行查询是否已注册了该用户，若有该用户名跳转到注册出错界面，若没有该用户名，在数据库中新增该账号密码，并跳转到登录界面。   </p>
+<pre><code> if(strcmp(path,&quot;/4&quot;)==0)
+{
+    char buff[128]=&quot;insert into info values(&apos;&quot;;   //拼接sql语句在数据库中注册
+    strcat(buff,user);
+    strcat(buff,&quot;&apos;,&apos;&quot;);
+    strcat(buff,password);
+    strcat(buff,&quot;&apos;);&quot;);
+    int ret=mysql_query(mysql,buff);       //成功返回0
+    cout&lt;&lt;123&lt;&lt;buff&lt;&lt;123&lt;&lt;endl;
+    cout&lt;&lt;123&lt;&lt;ret&lt;&lt;123&lt;&lt;endl;
+    if(ret==0)
+    {
+        action=4;          //注册成功跳转到登陆界面
+    }
+    else{
+        action=5;          //注册失败跳转到注册错误界面
+    }        
+}</code></pre><p>主要在于使用strcat拼接好sql语句<code>insert into info values(&#39;user&#39;,&#39;password&#39;);</code>，使用<code>mysql_query</code>函数在数据库中注册。</p>
+<pre><code> else if(action==4)   //注册成功后跳转到登陆界面
+ {
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/login.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}
+else if(action==5)   //注册失败跳转到注册出错界面
+ {
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/registererror.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>登录：  </p>
+<pre><code>if(strcmp(path,&quot;/3&quot;)==0)
+{
+    char bufff[128]=&quot;select * from info where user=&apos;&quot;;   //拼接sql语句在数据库中查询
+    strcat(bufff,user);
+    strcat(bufff,&quot;&apos; and password=&apos;&quot;);
+    strcat(bufff,password);
+    strcat(bufff,&quot;&apos;;&quot;);
+    int res=mysql_query(mysql,bufff);           
+    MYSQL_RES *result=mysql_store_result(mysql);       //从表中检索完整的结果集
+    int num_rows=mysql_num_rows(result);         //返回结果集中的行数
+    cout&lt;&lt;123&lt;&lt;num_rows&lt;&lt;123&lt;&lt;endl;          
+    if(num_rows==1){
+        action=10;          //登陆成功后主界面
+    }
+    else{
+        action=6;          //登陆失败界面
+    }
+}</code></pre><p>同样拼接sql语句在数据库中查询。   </p>
+<pre><code>else if(action==6)   //登陆失败界面
+{
+    sprintf(buf,&quot;HTTP/1.1 200 OK\r\n&quot;);  //状态行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;Content-Type:text/html;charset=UTF-8\r\n&quot;);  //消息报头
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    sprintf(buf,&quot;\r\n&quot;);  //空行
+    cout&lt;&lt;buf;
+    send(sockfd,buf,strlen(buf),0);   //发送
+    int fd=open(&quot;/root/文档/webserver/loginerror.html&quot;,O_RDONLY);  //响应正文
+    if(fd==-1)
+    {
+        cout&lt;&lt;&quot;error 404&quot;;
+    }
+        int len=0;                       //循环读取发送
+     while((len=read(fd,buf,sizeof(buf)))&gt;0)
+    {
+        send(sockfd,buf,len,0);   //发送
+    cout&lt;&lt;buf;
+    }
+    close(fd);
+}</code></pre><p>注意当<strong>查询和注册完以后，需要断开和数据库的连接</strong>：   </p>
+<pre><code>mysql_close(mysql);    </code></pre>]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux下轻量级web服务器9</title>
     <url>/2021/02/14/Linux%E4%B8%8B%E8%BD%BB%E9%87%8F%E7%BA%A7web%E6%9C%8D%E5%8A%A1%E5%99%A89/</url>
     <content><![CDATA[<p>摘要：本篇将在主界面实现完成的基础上，增加注册登录用户验证等界面的实现。需要使用数据库来完成，在本篇将主要介绍如何设计登录界面，来实现用户验证。  </p>
